@@ -147,6 +147,15 @@ footer .sig{font:700 16px var(--he);color:var(--ink)}
 .src li{font-size:15.5px;word-break:break-word}
 @media (max-width:560px){body{font-size:17px}.num{font-size:34px;min-width:44px}.card{padding:16px}.fbar .tc{min-width:0}}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* the film section */
+.reel{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2.25fr);gap:18px;align-items:start;margin:22px 0 6px}
+.reel figure{margin:0}
+.reel video{width:100%;display:block;background:#0B0B10;border-radius:18px;box-shadow:0 30px 70px -36px rgba(14,14,16,.75)}
+.reel-v video{aspect-ratio:9/16}.reel-h video{aspect-ratio:16/9}
+.reel figcaption{font:700 14px/1.4 var(--heD);color:var(--muted);margin-top:8px}
+@media (max-width:760px){.reel{grid-template-columns:1fr}.reel-v{max-width:420px;margin-inline:auto;width:100%}}
+img.cmp{width:100%;display:block;border-radius:14px;margin:14px 0}
 </style>
 </head>
 <body>
@@ -181,6 +190,31 @@ footer .sig{font:700 16px var(--he);color:var(--ink)}
     <span class="chip">פוסט ה-UI morph: <b>~0.93–0.98M</b> צפיות</span>
     <span class="chip">Opus 5.5 יצא: <b>22.9.2026</b></span>
   </div>
+</section>
+
+<!-- ============ THE FILM ============ -->
+<section class="sec" id="s0" data-toc="הסרט: עשוי בשיטה">
+  <div class="sh"><span class="num">▶</span><div><h2>הסרט: 27 שניות, ‏60fps, עשוי כולו בשיטה הזו</h2><p class="sub">קובץ HTML אחד ופונקציה אחת של זמן. כל פריים צולם ב-Playwright, הסרט הורכב ב-ffmpeg, והמוזיקה והאפקטים אמיתיים, כל אחד ממוקם לפי השיא הנמדד שלו.</p></div></div>
+  <div class="reel">
+    <figure class="reel-v"><video controls playsinline preload="metadata" poster="media/poster-9x16.jpg" src="media/motion-in-code-9x16.mp4"></video><figcaption>‏9:16 · רילס / טיקטוק</figcaption></figure>
+    <figure class="reel-h"><video controls playsinline preload="metadata" poster="media/poster-16x9.jpg" src="media/motion-in-code-16x9.mp4"></video><figcaption>‏16:9 · יוטיוב / לינקדאין</figcaption></figure>
+  </div>
+  <div class="chips">
+    <span class="chip"><b>1602</b> פריימים לכל פורמט</span>
+    <span class="chip"><b>0</b> קפיצות פריים בודדות</span>
+    <span class="chip">אפקטים נוחתים <b>+7 עד +17ms</b> אחרי הביט</span>
+    <span class="chip">עוצמה <b>‎−13.6 LUFS</b></span>
+  </div>
+  <h3>שיעור שלא מופיע במאמר: אותה תנועה, שני כיווני אמנות</h3>
+  <p>הגרסה הראשונה (מימין) עבדה טכנית: אותו תזמון, אותם קפיצים, אותו סאונד. ובכל זאת היא נראתה "אנמית". הגרסה השנייה (משמאל) לא הזיזה אף שנייה בתזמון. היא שינתה רק את השפה הוויזואלית:</p>
+  <img class="cmp" src="media/v1-vs-v2.jpg" alt="השוואה: גרסה 1 בנייר חיוור מימין, גרסה 2 בסגנון מגזין משמאל, באותם שלושה רגעים בסרט" loading="lazy">
+  <ul>
+    <li><b>דף צבע מלא שמתחלף על הביט הראשון של כל תיבה</b> (שחור, ציאן, מג׳נטה) במקום נייר חיוור קבוע. ההחלפה היא מגב קשיח עם פס צבע מוביל, לא פייד.</li>
+    <li><b>טיפוגרפיה בקנה מידה של מגזין:</b> כותרת Rubik 900 בגודל 150px מעוגנת לימין, במקום 104px באמצע. כותרות המשנה ב-Anton במקום מונו דק.</li>
+    <li><b>מספרי פוליו ענקיים</b> (01–07) שיוצאים מגבולות הפריים. זו שכבת עומק בלי שום תוכן נוסף.</li>
+    <li><b>קווים עבים (4–9px) ובלי אפור:</b> כל צבע על המסך הוא צבע מותג.</li>
+  </ul>
+  <div class="why"><b>המסקנה</b>השיטה נותנת תנועה ותזמון ברמת סטודיו, אבל לא טעם. את הטעם צריך לכתוב כבריף ויזואלי מפורש: פלטה, קנה מידה של טיפוגרפיה, מה קורה לרקע על כל ביט. אם לא כותבים אותו, המודל בוחר ברירת מחדל "בטוחה", כלומר חיוורת.</div>
 </section>
 
 <!-- ============ 1 TL;DR ============ -->
