@@ -3,7 +3,7 @@
 import json, subprocess, re, os, sys
 import numpy as np
 os.chdir(r'C:\Users\User\yuvwork\tanya-line')
-C = json.load(open('cues.json', encoding='utf-8')); A_DIR = C['assets']; A = json.load(open(os.path.join(A_DIR, 'analysis.json')))
+C = json.load(open(sys.argv[1] if len(sys.argv) > 1 else 'cues.json', encoding='utf-8')); A_DIR = C['assets']; A = json.load(open(os.path.join(A_DIR, 'analysis.json')))
 SR, DUR = 48000, C['dur']; n = int(round(DUR * SR))
 PK = {k.rsplit('-', 1)[0]: (k, v['peak']) for k, v in A['sfx'].items()}
 cache = {}

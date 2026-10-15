@@ -9,13 +9,14 @@ import { clamp, lerp, inv, out3, in3, io3, spring, logLerp, rgba, mix, rr, rrc, 
 import { slamWords, neonRing, SPECTRUM } from '../../src/ui.js';
 import { Path, rrLoop, resample, cumLen, idxAt, ptAt, mspring, crit, align, canon, natIdx, strokeLine, hotTip, toUnit, unitCum, viewOf, projLL, globeLine, greatCircle, pnoise } from './engine.js';
 import { F, FONT_CHECK, HE, NAVY, NAVY2, WHITE, GOLD, ORANGE, CORAL, CYAN, PINK, FIRE, HOT, shadow2, popS, chip, gradFire, riseLine, wrap, fitFont, pin, flame, penDot } from './draw.js';
-import { LAND110, LAND50, BORDERS50, PLACES, FIG } from './data.js';
+import { LAND110, LAND50, BORDERS50, PLACES, FIG, REB, B770 } from './data.js';
 
 /* ---------------- clock ---------------- */
 const BPM = 128.09, B = 60 / BPM, bt = k => k * B, NB = 128, NFR = 3598, T = NFR / 60;
 const N = 8000;                                   // points per drawable line (the traced portrait needs more than 1200; see doc)
 const SKY_TOP = '#AFCBEF', SKY_LOW = '#DDE9F9';
 const Q = new URLSearchParams(location.search), LN = Q.get('L') === 'v' ? 'v' : 'h';
+const CUT = Q.get('cut') === '770', NFR_OUT = CUT ? 4048 : NFR;     // ?cut=770: a 16-beat phrase (770 + the Rebbe) inserted at b88
 const LAYOUTS = {
   h: { W: 1920, H: 1080, lw: 5, fig: { ox: 250, oy: 92, s: 0.9 }, hd: { R: 1060, ys: [290, 440, 590], size: 150, maxW: 860 }, kick: [960, 668, 60],
        cap: [1872, 60, 'r'], chip20: [1060, 420], bookN: { cx: 960, cy: 540, w: 460, h: 640, r: 34 }, nameChip: [960, 948],
@@ -459,11 +460,11 @@ function sky(g, t) {
   const gr = g.createLinearGradient(0, 0, 0, H); gr.addColorStop(0, top); gr.addColorStop(1, low); g.fillStyle = gr; g.fillRect(0, 0, W, H);
 }
 const VIEW_KEYS = [[75, [26.87, 50.3]], [76.9, [138.6, -34.93]], [78.9, [31.05, -17.83]], [80.9, [29.89, 31.2]], [83.2, [31.24, 30.04]]];
-function globeDayView(t) {
+function globeDayView(t) { return viewOf(...globeDayLL(t)); }
+function globeDayLL(t) {
   let l = VIEW_KEYS[0][1][0], p = VIEW_KEYS[0][1][1];
   for (let i = 1; i < VIEW_KEYS.length; i++) { const s = crit(t - bt(VIEW_KEYS[i][0]), 5.2); l += (VIEW_KEYS[i][1][0] - VIEW_KEYS[i - 1][1][0]) * s; p += (VIEW_KEYS[i][1][1] - VIEW_KEYS[i - 1][1][1]) * s; }
-  p = lerp(18, p, 1) - 14; // tilt a little south of each place so its label sits on the disc
-  return viewOf(l, p);
+  return [l, p - 14];   // centre a little south of each place so the pin and its label sit on the disc
 }
 const RING_A0 = LN === 'h' ? -Math.PI / 2 : Math.PI / 2;
 const DPINS = [['slavuta', 'סלאוויטא · 1796', 78], ['adelaide', 'אדלייד', 80], ['harare', 'הרארה', 82], ['alexandria', 'אלכסנדריה', 84], ['cairo', 'קהיר', 85]];
@@ -580,7 +581,7 @@ function pens(g, t) {
 }
 
 /* ---------------- frame ---------------- */
-function drawFrame(g, t) {
+function drawMain(g, t) {
   const b = t / B; curP = mainLine(t);
   if (b < 48) drawNight(g, t, curP);
   else if (t < bt(48) + FLOOD_D + 0.02) {
@@ -595,6 +596,76 @@ function drawFrame(g, t) {
   overlays(g, t); pens(g, t);
 }
 
+/* ================= 770 cut (?cut=770): one 16-beat phrase inserted at b88 =================
+   the globe turns to New York · the limb flows into 770 Eastern Parkway · then into the Lubavitcher Rebbe (traced from the
+   user's image) · then back into the same limb, so b104 hands over to the main film's b88 exactly.
+   Facts (en.wikipedia.org): 770 Eastern Parkway, Crown Heights, Brooklyn — World Headquarters of Chabad-Lubavitch, bought 1940;
+   Menachem Mendel Schneerson 1902–1994; "the Rebbes of Chabad taught that it is a sacred duty to publish and distribute this book as widely as possible". */
+const C0 = bt(88), CL = 16 * B, cbt = c => C0 + c * B;
+const CST = LN === 'h' ? { cx: 580, cy: 560, mw: 840, mh: 830 } : { cx: 540, cy: 1090, mw: 960, mh: 760 };
+let CODA = null; const codaBuf = new Float32Array(2 * N);
+function fitPts(src, cx, cy, mw, mh) {
+  const [x0, y0, x1, y1] = src.box, s = Math.min(mw / (x1 - x0), mh / (y1 - y0)), P = new Float32Array(src.pts.length);
+  for (let i = 0; i < P.length; i += 2) { P[i] = cx + (src.pts[i] - (x0 + x1) / 2) * s; P[i + 1] = cy + (src.pts[i + 1] - (y0 + y1) / 2) * s; }
+  return resample(P, N);
+}
+function buildCoda() {
+  const A0 = new Float32Array(mainLine(C0)); curP = A0;
+  const S7 = fitPts(B770, CST.cx, CST.cy, CST.mw, CST.mh), SR = fitPts(REB, CST.cx, CST.cy, CST.mw * 0.9, CST.mh);
+  const c1 = canon(S7, align(A0, S7, false, N), N), c2 = canon(SR, align(c1, SR, false, N), N);
+  CODA = { A0, M: [{ t: cbt(2), P: c1 }, { t: cbt(7), P: c2 }, { t: cbt(13), P: A0 }], st: STAG.def(null, 0.5), LL0: globeDayLL(C0), pen0: penAt(C0) };
+}
+function codaLine(t) {
+  const out = codaBuf; out.set(CODA.A0); let prev = CODA.A0;
+  for (const m of CODA.M) { if (t < m.t) break; for (let i = 0; i < N; i++) { const x = mspring(t - m.t - CODA.st[i]); if (!x) continue; out[2 * i] += (m.P[2 * i] - prev[2 * i]) * x; out[2 * i + 1] += (m.P[2 * i + 1] - prev[2 * i + 1]) * x; } prev = m.P; }
+  return out;
+}
+function codaLL(t) {
+  const [l0, p0] = CODA.LL0, ny = [PLACES.e770[0], PLACES.e770[1] - 14], a = crit(t - cbt(0.2), 5.2), b = crit(t - cbt(12.4), 5.2);
+  return [l0 + (ny[0] - l0) * a + (l0 - ny[0]) * b, p0 + (ny[1] - p0) * a + (p0 - ny[1]) * b];
+}
+function codaPen(t, P) {
+  const src = [[C0, () => CODA.pen0], [cbt(1.3), () => { const [x, y] = projLL(PLACES.e770[0], PLACES.e770[1], viewOf(...codaLL(t)), D.RD, D.gxD, D.gyD); return [x, y]; }],
+               [cbt(2), () => [P[0], P[1]]], [cbt(14.6), () => CODA.pen0]];
+  let [x, y] = src[0][1]();
+  for (let k = 1; k < src.length && t >= src[k][0]; k++) { const a = src[k - 1][1](), b = src[k][1](), s = crit(t - src[k][0], 12); x += (b[0] - a[0]) * s; y += (b[1] - a[1]) * s; }
+  return [x, y];
+}
+function drawCoda(g, t) {
+  const c = (t - C0) / B, V = viewOf(...codaLL(t)), R = D.RD, P = codaLine(t);
+  sky(g, C0);
+  g.lineCap = 'round'; g.lineJoin = 'round'; g.strokeStyle = NAVY; g.lineWidth = 3;
+  L110.forEach((r, i) => {   // the land un-draws while the globe turns, and draws back in before the hand-over
+    const f = c < 8 ? 1 - clamp((t - cbt(1.9) - R110[i] * 0.3 * B) / (0.5 * B)) : clamp((t - cbt(13.4) - R110[i] * 0.5 * B) / (0.5 * B));
+    if (f > 0) globeLine(g, r.U, r.C, f, V, R, D.gxD, D.gyD);
+  });
+  for (const [pl, label] of DPINS) {
+    const [x, y, z] = projLL(PLACES[pl][0], PLACES[pl][1], V, R, D.gxD, D.gyD), vis = clamp((z - 0.05) * 5);
+    const s = (c < 8 ? 1 - in3(inv(C0 + 0.3, C0 + 0.48, t)) : popS(t, cbt(14.2), null)) * vis; if (s <= 0.002) continue;
+    pin(g, x, y, s, NAVY, GOLD);
+    g.save(); g.translate(x, y); g.scale(s, s); g.translate(-x, -y);
+    chip(g, t, c < 8 ? C0 - 10 : cbt(14.25), null, x + 26, y - 38 + (pl === 'cairo' ? LABEL * 2.1 : 0), label, { size: LABEL, fill: NAVY, ink: WHITE, anchor: 'l' }); g.restore();
+  }
+  { // New York: 770
+    const [x, y, z] = projLL(PLACES.e770[0], PLACES.e770[1], V, R, D.gxD, D.gyD), vis = clamp((z - 0.05) * 5), s = popS(t, cbt(1.5), cbt(2.4)) * vis;
+    pin(g, x, y, s, gradFire(g, x - 20, x + 20), NAVY);
+    if (s > 0.002) { g.save(); g.translate(x, y); g.scale(vis, vis); g.translate(-x, -y); placeChips(g, t, x, y, cbt(1.55), cbt(2.4), '770 · ברוקלין, ניו יורק', null, false); g.restore(); }
+  }
+  strokeLine(g, P, 0, N - 1, () => NAVY, LW);
+  dayChip(g, t, 'מרכז חב״ד העולמי · מאז 1940', 91.5, 94.6);
+  dayHead(g, t, '770.', 91, 94.6, 0, 0);
+  dayHead(g, t, 'איסטערן פארקוויי.', 92, 94.65, 1);
+  dayChip(g, t, '1902–1994', 96.5, 100.4);
+  dayHead(g, t, 'הרבי מליובאוויטש.', 96, 100.4, 0, 1);
+  dayHead(g, t, 'להפיץ את התניא.', 98, 100.45, 1, 2);
+  const [px, py] = codaPen(t, P); penDot(g, px, py, t, T, 1, 0);
+}
+function drawFrame(g, t) {
+  if (!CUT || t < C0) return drawMain(g, t);
+  if (t < C0 + CL) return drawCoda(g, t);
+  return drawMain(g, t - CL);
+}
+
 /* ---------------- mount: fonts first, then data, then the first seek ---------------- */
 const cv = document.getElementById('c'), SCALE = +(Q.get('scale') || 1);
 cv.width = Math.round(W * SCALE); cv.height = Math.round(H * SCALE);
@@ -605,7 +676,7 @@ window.__ready = (async () => {
   await document.fonts.ready;
   window.__fontsOk = FONT_CHECK.every(f => document.fonts.check(f, 'אבג abc'));
   if (!window.__fontsOk) throw new Error('fonts missing');
-  buildMorphs(); buildPasses(); buildEnter();
+  buildMorphs(); buildPasses(); buildEnter(); if (CUT) buildCoda();
   // the caption leaves when the un-drawing pen has removed the last stroke of the bust
   const fb = FIG.breaks[FIG.kinds.indexOf('bust')] / (FIG.pts.length / 2), sB = fb * FIG_L;
   for (let tt = bt(120); tt < bt(127); tt += 1 / 240) if (figS(tt) < sB) { CAP_OUT = tt; break; }
@@ -615,7 +686,7 @@ window.__ready = (async () => {
     const span = shutter / fps;
     for (let i = 0; i < n; i++) { const ts = Math.max(0, t - span / 2 + span * (i + 0.5) / n); frame(sctx, ts); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1 / (i + 1); ctx.drawImage(scratch, 0, 0); ctx.globalAlpha = 1; }
   };
-  window.FILM = { B, BPM, DUR: T, NB, NFR, layout: LN, W, H };
+  window.FILM = { B, BPM, DUR: NFR_OUT / 60, NB: NB + (CUT ? 16 : 0), NFR: NFR_OUT, cut: CUT ? '770' : 'main', layout: LN, W, H };
   frame(ctx, 0);
   return true;
 })();

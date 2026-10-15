@@ -46,3 +46,21 @@ Night b0–48 (dot · traced figure · book · RTL timeline 2026→1745 · limb 
 - Book title rising during a morph looks detached — schedule text after the line settles.
 - The navy→fire ink change must wait until the dusk sky is dark, or the line vanishes on the orange horizon.
 - AAC adds ~1 dB of true peak over the WAV.
+
+## The 770 cut (`?cut=770`) — added after delivery
+The user sent two more SVGs (VTracer colour traces): 770 Eastern Parkway and the Lubavitcher Rebbe. The main film above is unchanged (re-verified after the change: same frame count, no pops, same loudness). A second cut inserts one 16-beat phrase at b88, after the day globe:
+
+| beat | on screen | words |
+|---:|---|---|
+| 88–90 | the globe turns to New York; land un-draws; pin pops | "770 · ברוקלין, ניו יורק" |
+| 90–95 | the limb flows into 770 Eastern Parkway (one line) | "770." · "איסטערן פארקוויי." · chip "מרכז חב״ד העולמי · מאז 1940" |
+| 95–101 | 770 flows into the Lubavitcher Rebbe (one line) | "הרבי מליובאוויטש." · chip "1902–1994" · "להפיץ את התניא." |
+| 101–104 | the Rebbe flows back into the same limb; land and pins return | — |
+| 104→ | the main film's b88 onward, 16 beats later | |
+
+- Implementation: `drawFrame` time-warp — t < b88 main film, b88–104 `drawCoda`, after that the main film at t − 16 beats. The coda's line is its own sum-of-springs chain starting and ending on the main line's exact state at b88, so the hand-over is seamless. 144 beats = 4048 frames.
+- Facts (en.wikipedia.org, local copies in `yuvwork/chabad/facts`): 770 Eastern Parkway, Crown Heights, Brooklyn = World Headquarters of Chabad-Lubavitch, bought 1940 (coordinates 40.669021, −73.94287 from its page); Menachem Mendel Schneerson 1902–1994; "the Rebbes of Chabad taught that it is a sacred duty to publish and distribute this book as widely as possible" (Tanya article) → "להפיץ את התניא.". "איסטערן פארקוויי" is the Yiddish spelling given on Wikipedia.
+- Drawings: 770 is authored as strokes over the user's image (three gables, bay window, door, windows, steps, garden wall); the Rebbe is iso-luminance contours (gaussian σ 2, levels .30/.45/.62) inside the head plus an authored hat crown and under-brim edge. Canny edges on a posterised image gave region seams, not a face — rejected. Strokes are ordered by a multi-start nearest-neighbour search (closed loops entered at their nearest point) and every join is routed along ink already drawn (Dijkstra over the stroke graph, gap jumps ×4), so travel retraces lines instead of cutting across the face.
+- Outputs: `tanya-line-770-16x9.mp4` / `-9x16.mp4` (CRF 14, 26.3 / 25.6 MiB) + chat copies (9.7 / 8.6 MiB). QA: 4048 frames, pops none, first-vs-last diff 0.006 / 0.005, −13.9 LUFS, −2.8 dBTP.
+- Audio: `cues770.json` = main cues shifted 16 beats from b88 + whooshes / pops / chimes for the phrase. The song simply continues (A New Life is 99 s long).
+- Not committed: the SVGs and PNG references (user assets). `data.js` carries the derived line traces.
