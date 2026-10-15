@@ -191,9 +191,10 @@ export function makeTodWorld(renderer, scene, { waterY = -4.5, size = 4.5, disto
     key.position.copy(sun).multiplyScalar(50); key.color.copy(col('#FFFFFF', '#FFB37A', tod)); key.intensity = 2.0 + 0.4 * tod;
     hemi.color.copy(col('#CFE6FF', '#FFB98A', tod)); hemi.groundColor.copy(col('#0F2A55', '#0B1440', tod));
     renderer.toneMappingExposure = D.exposure + (K.exposure - D.exposure) * tod;
-    if (Math.abs(tod - envTod) > 0.02 || !envRT) {   // reflections follow the sky
-      envScene.add(sky.dome); const rt = pmrem.fromScene(envScene, 0, 0.1, 10000); scene.add(sky.dome);
-      if (envRT) envRT.dispose(); envRT = rt; scene.environment = rt.texture; envTod = tod;
+    const tq = Math.round(tod / 0.025) * 0.025;     // reflections follow the sky, quantised so they never depend on render history
+    if (tq !== envTod || !envRT) {
+      u.tod.value = tq; u.time.value = 0; envScene.add(sky.dome); const rt = pmrem.fromScene(envScene, 0, 0.1, 10000); scene.add(sky.dome); u.tod.value = tod; u.time.value = t;
+      if (envRT) envRT.dispose(); envRT = rt; scene.environment = rt.texture; envTod = tq;
     }
   }
   return { sky, water, update };
