@@ -7,9 +7,11 @@ Built on the method published by [@twoclipping](https://x.com/twoclipping), with
 ```
 kit/
   src/core.js      math (springs, sum-of-springs, log zoom), brand themes (phoenix · spectrum), type, colour spreads, render API
-  src/ui.js        cards with real radius + depth, typing, cursor + click, press squash, counters, bars
-  src/world.js     three.js: procedural phone with a LIVE screen, phoenix sunset sky (shader), ocean, PBR env
-  films/kit-demo/  full example: input → type (camera tracks caret) → click → card → lands on a 3D phone → sea → sky → logo
+  src/ui.js        cards with radius + depth, neon glow edges, slam type, popping typing, cursor + click, chips, counters, bars
+  src/world.js     three.js: procedural phone + laptop with LIVE screens, 3D cards, day↔sunset sky (shader, clouds), ocean, PBR env
+  films/launch/    the flagship (68 beats, ~33 s): neon prompt in a day sky → 16th-note typing → click → card burst → 3D carousel
+                   snapping on beats → iPhone + MacBook (lid opens on the beat) → day→sunset time-lapse → neon stats → logo
+  films/kit-demo/  shorter example: input → type (camera tracks caret) → click → card → lands on a 3D phone → sea → sky → logo
   films/motion-in-code-v2/standalone.html   2D magazine-style example (7 rules film)
   build.mjs        bundles a film + three.js + brand PNGs into ONE self-contained film.html
   qa/qa.py         stills / per-beat contact sheet / single-frame pop detector (works headless, SwiftShader WebGL)
@@ -37,5 +39,5 @@ Open `film.html?L=h` (or `?L=v`) in a browser and call `seek(3.2)` in the consol
 6. 2D→3D handoff: the 3D surface faces the camera (parallel to the image plane) at the handoff, the 2D card lands on its projected rect, the card's shadow shrinks to zero as it touches.
 7. One hero 3D shot per explainer. The rest is fast, clean UI motion.
 8. Stills gate: look at one frame per beat before rendering anything.
-9. Brand: navy `#12163F` · phoenix fire `#FFC74E → #FF8F3A → #F56B49` · light denim `#AFCBEF`. Rubik 900 / Assistant (HE), Anton (EN), JetBrains Mono (code). Radius 24–48px on cards, 999px on pills.
+9. Brand (Phoenix Day default): day sky + light denim `#AFCBEF`, navy ink `#12163F`, phoenix fire `#FFC74E → #FF8F3A → #F56B49`, neon spectrum edges. Rubik 900 / Assistant (HE), Anton (EN), JetBrains Mono (code). Radius 24–48px on cards, 999px on pills.
 10. Music: Mixkit (free licence, no redistribution of the raw files, so audio is never committed here).

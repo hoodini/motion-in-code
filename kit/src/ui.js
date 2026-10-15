@@ -3,7 +3,7 @@
    cards with real radius and depth · an input box that types · a cursor
    that clicks · a button that becomes something else · counters.
    ===================================================================== */
-import { clamp, lerp, inv, out3, spring, sk, rr, rrc, circle, rgba, gradPaint } from './core.js';
+import { clamp, lerp, inv, out3, in3, spring, sk, rr, rrc, circle, rgba, gradPaint } from './core.js';
 
 /** a premium card: generous radius, layered shadow (contact + ambient), optional top rim light */
 export function card(x, cx, cy, w, h, r, { fill = '#FFFFFF', shadow = 'rgba(5,8,30,.55)', depth = 1, rim = null, stroke = null, strokeW = 2 } = {}) {
@@ -51,3 +51,68 @@ export function bars(x, t, X, Y, W, H, values, times, paint, gap = 0.28, r = 14)
   values.forEach((v, i) => { const s = spring(t - times[i], 13, 0.72); if (s <= 0) return; const bh = H * v * s; rr(x, X + i * bw * (1 + gap), Y - bh, bw, bh, Math.min(r, bh / 2, bw / 2)); x.fillStyle = paint; x.fill(); });
 }
 export { rgba };
+
+/* ===================== neon + kinetic type (v2) ===================== */
+export const SPECTRUM = ['#5DE4E9', '#4FA3FF', '#8B6CFF', '#FF66C4', '#FF8F3A', '#FFC74E', '#5DE4E9'];
+/** a glowing neon edge around a rounded rect: rotating conic gradient, blurred halo + crisp line.
+ *  angle rotates the colours; power scales the halo (pulse it on beats). */
+export function neonRing(x, cx, cy, w, h, r, angle, { lw = 4, glow = 22, stops = SPECTRUM, power = 1 } = {}) {
+  if (w <= 1 || h <= 1) return;
+  const g = x.createConicGradient(angle, cx, cy); stops.forEach((c, i) => g.addColorStop(i / (stops.length - 1), c));
+  x.save(); x.strokeStyle = g;
+  x.filter = `blur(${glow * power}px)`; x.lineWidth = lw * 5 * power; rrc(x, cx, cy, w, h, r); x.stroke();
+  x.filter = `blur(${glow * 0.35 * power}px)`; x.lineWidth = lw * 2.2; rrc(x, cx, cy, w, h, r); x.stroke();
+  x.filter = 'none'; x.lineWidth = lw; rrc(x, cx, cy, w, h, r); x.stroke();
+  x.restore();
+}
+/** words SLAM in: each one lands with a visible spring (scale overshoot + drop), on its own time.
+ *  RTL by default, anchored at opt.right (or centred at cx). exit: shrink into its baseline. */
+export function slamWords(x, t, words, cx, y, size, fontFn, color, times, tOut, opt = {}) {
+  if (t < Math.min(...times)) return;
+  if (tOut != null && t > tOut + 0.3) return;
+  x.save(); x.font = fontFn(size); x.direction = opt.ltr ? 'ltr' : 'rtl'; if (opt.spacing) x.letterSpacing = opt.spacing;
+  if (opt.maxW) { const tot0 = words.map(w => x.measureText(w).width).reduce((a, b) => a + b, 0) + size * (opt.gap ?? 0.3) * (words.length - 1); if (tot0 > opt.maxW) { size *= opt.maxW / tot0; x.font = fontFn(size); } }
+  const gap = size * (opt.gap ?? 0.3), ws = words.map(w => x.measureText(w).width), total = ws.reduce((a, b) => a + b, 0) + gap * (words.length - 1);
+  if (opt.right != null) cx = opt.right - total / 2;
+  let pos = opt.ltr ? cx - total / 2 : cx + total / 2;
+  const w0 = opt.w ?? 24, z0 = opt.z ?? 0.42, from = opt.from ?? 1.55;
+  words.forEach((w, i) => {
+    const ti = times[i], xl = opt.ltr ? pos : pos - ws[i];
+    if (t >= ti) {
+      const s = spring(t - ti, w0, z0), out = tOut == null ? 0 : in3(inv(tOut + i * 0.02, tOut + 0.17 + i * 0.02, t));
+      const sc = (1 + (from - 1) * (1 - s)) * (1 - out), dy = (1 - s) * size * 0.32 + out * size * 0.2, rot = (1 - s) * (opt.rot ?? -0.05);
+      if (sc > 0.001) {
+        x.save(); x.translate(xl + ws[i] / 2, y - size * 0.34 + dy); x.rotate(rot); x.scale(sc, sc); x.translate(-(xl + ws[i] / 2), -(y - size * 0.34));
+        if (opt.marker && opt.marker.i === i) { const m = spring(t - ti - 0.05, 16, 0.6); x.fillStyle = opt.marker.paint; rr(x, xl - size * 0.14, y - size * 0.8, (ws[i] + size * 0.28) * clamp(m, 0, 1.2), size * 0.98, size * 0.16); x.fill(); }
+        x.fillStyle = opt.colors ? opt.colors[i] : color; x.textAlign = 'left'; x.fillText(w, xl, y);
+        x.restore();
+      }
+    }
+    pos += opt.ltr ? ws[i] + gap : -(ws[i] + gap);
+  });
+  x.restore();
+}
+/** RTL typing where every character pops in on its own spring. xr = right edge of the text. returns caret x. */
+export function popType(x, t, text, xr, y, fontFn, size, color, times) {
+  const ch = Array.from(text); x.save(); x.font = fontFn(size); x.direction = 'rtl'; x.textAlign = 'left'; x.fillStyle = color;
+  let caret = xr, acc = '';
+  ch.forEach((c, i) => {
+    const prevW = x.measureText(acc).width; acc += c; const wTot = x.measureText(acc).width, left = xr - wTot, cw = wTot - prevW;
+    if (t < times[i]) return; caret = left;
+    if (c === ' ') return;
+    const s = spring(t - times[i], 28, 0.42), sc = 0.15 + 0.85 * s;
+    x.save(); x.translate(left + cw / 2, y - size * 0.3); x.scale(sc, sc); x.translate(-(left + cw / 2), -(y - size * 0.3));
+    x.fillText(c, left, y + (1 - s) * size * 0.25); x.restore();
+  });
+  x.restore(); return caret;
+}
+/** a pill chip with a neon edge that pops in on a spring */
+export function neonChip(x, t, t0, cx, cy, text, { size = 30, fontFn, fill = '#FFFFFF', ink = '#12163F', angle = 0, padX = 30 } = {}) {
+  const s = spring(t - t0, 18, 0.5); if (s <= 0.001) return;
+  x.save(); x.font = fontFn(size); const tw = x.measureText(text).width, w = tw + padX * 2, h = size * 1.9;
+  x.translate(cx, cy); x.scale(s, s);
+  neonRing(x, 0, 0, w, h, h / 2, angle, { lw: 3, glow: 12 });
+  rrc(x, 0, 0, w, h, h / 2); x.fillStyle = fill; x.fill();
+  x.fillStyle = ink; x.textAlign = 'center'; x.direction = /[֐-׿]/.test(text) ? 'rtl' : 'ltr'; x.fillText(text, 0, size * 0.36);
+  x.restore();
+}
