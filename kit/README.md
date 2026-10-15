@@ -9,8 +9,11 @@ kit/
   src/core.js      math (springs, sum-of-springs, log zoom), brand themes (phoenix · spectrum), type, colour spreads, render API
   src/ui.js        cards with radius + depth, neon glow edges, slam type, popping typing, cursor + click, chips, counters, bars
   src/world.js     three.js: procedural phone + laptop with LIVE screens, 3D cards, day↔sunset sky (shader, clouds), ocean, PBR env
+  src/people.js    people drawn in code: squat / run / push-up / sit-with-phone poses (feet planted, IK arms), drawPerson
   films/launch/    the flagship (68 beats, ~33 s): neon prompt in a day sky → 16th-note typing → click → card burst → 3D carousel
                    snapping on beats → iPhone + MacBook (lid opens on the beat) → day→sunset time-lapse → neon stats → logo
+  films/fitness/   product story (84 beats, ~40 s): the problem in a dark room → heartbeat → drop → dive into the app, scroll, tap
+                   → people training in sync with the phone → 30-day streak + chart → three reasons → CTA
   films/kit-demo/  shorter example: input → type (camera tracks caret) → click → card → lands on a 3D phone → sea → sky → logo
   films/motion-in-code-v2/standalone.html   2D magazine-style example (7 rules film)
   build.mjs        bundles a film + three.js + brand PNGs into ONE self-contained film.html
