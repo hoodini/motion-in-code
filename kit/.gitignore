@@ -1,0 +1,7 @@
+node_modules/
+qa_out/
+brand/*.png
+films/*/film.html
+films/*/film_qa.html
+*.mp4
+*.wav

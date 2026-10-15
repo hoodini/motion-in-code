@@ -1,0 +1,10 @@
+{
+  "name": "yuv-motion-kit",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Code-only motion graphics for YUV.AI: one pure seek(t) per film, Playwright frame capture, ffmpeg, beat-synced real audio. 2D canvas + three.js.",
+  "type": "module",
+  "scripts": { "build": "node build.mjs" },
+  "dependencies": { "three": "0.170.0" },
+  "devDependencies": { "esbuild": "0.24.0", "playwright": "^1.48.0" }
+}

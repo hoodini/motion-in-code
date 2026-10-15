@@ -1,0 +1,125 @@
+{
+ "dur": 15.7008,
+ "assets": "C:\\Users\\User\\yuvwork\\mic",
+ "music": {
+  "file": "music/cat-walk-371.mp3",
+  "S0": 9.052,
+  "gain": -2
+ },
+ "cues": [
+  [
+   "pop_light",
+   0.02,
+   -8
+  ],
+  [
+   "swoosh_small",
+   0.335,
+   -12
+  ],
+  [
+   "swoosh_fast",
+   1.1376,
+   -10
+  ],
+  [
+   "pop_light",
+   4.7477,
+   -10
+  ],
+  [
+   "swoosh_small",
+   4.964,
+   -13
+  ],
+  [
+   "click_select",
+   5.319,
+   -5
+  ],
+  [
+   "swoosh_fast",
+   5.5115,
+   -9
+  ],
+  [
+   "impact_deep",
+   5.5503,
+   -3
+  ],
+  [
+   "whoosh_air",
+   6.1516,
+   -8
+  ],
+  [
+   "swoosh_small",
+   6.9029,
+   -9
+  ],
+  [
+   "success",
+   7.4004,
+   -6
+  ],
+  [
+   "pop_hard",
+   7.8929,
+   -10
+  ],
+  [
+   "pop_hard",
+   8.5867,
+   -10
+  ],
+  [
+   "pop_hard",
+   9.2805,
+   -10
+  ],
+  [
+   "whoosh_cine",
+   11.1931,
+   -9
+  ],
+  [
+   "sparkle",
+   12.7657,
+   -7
+  ],
+  [
+   "pop_long",
+   13.1207,
+   -8
+  ],
+  [
+   "click_tone",
+   13.4132,
+   -10
+  ],
+  [
+   "click_tone",
+   13.8757,
+   -10
+  ]
+ ],
+ "slices": [
+  [
+   "sfx/type_soft-1396.mp3",
+   17.4,
+   2.729,
+   1.8501,
+   -9
+  ]
+ ],
+ "mux": [
+  [
+   "film_h_silent.mp4",
+   "C:\\Users\\User\\Videos\\motion-in-code\\kit-demo-16x9.mp4"
+  ],
+  [
+   "film_v_silent.mp4",
+   "C:\\Users\\User\\Videos\\motion-in-code\\kit-demo-9x16.mp4"
+  ]
+ ]
+}
