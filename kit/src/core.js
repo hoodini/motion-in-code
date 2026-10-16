@@ -67,20 +67,23 @@ export function makeTheme(name = 'phoenix') {
 }
 
 /* ---------- type ----------
-   Hebrew (Yuval, 16.10.2026; replaces Rubik + Assistant):
-   - Karantina is the default: Bold for headlines (he, he8, he7 all map to 700, its heaviest weight), Regular for text (body).
-     It is condensed: as tall as Rubik at the same px but about a third narrower, so size up ~1.25x where space allows.
+   Hebrew (Yuval, 16.10.2026; replaces Rubik):
+   - Karantina for headlines and short display text: he, he8, he7 all map to 700 (its heaviest weight); body = Regular for
+     short captions, chips and labels. It is condensed: as tall as Rubik at the same px but about a third narrower.
+   - Assistant (text = 500, textB = 700) for any running text: paragraphs, lists, tables, anything over ~2 lines.
+     Karantina paragraphs proved hard to read; Bona Nova SC turns English into small caps, so it is not for AI/tech text.
    - Torah / Jewish topics: Bona Nova SC instead (torah = Bold headlines, torahR = text, torahI = quotes).
    - Gveret Levin (hand) only for a handwritten note or a signature. */
 export const FT = {
   he: s => `700 ${s}px Karantina, sans-serif`, he8: s => `700 ${s}px Karantina, sans-serif`, he7: s => `700 ${s}px Karantina, sans-serif`,
   body: s => `400 ${s}px Karantina, sans-serif`,
+  text: s => `500 ${s}px Assistant, sans-serif`, textB: s => `700 ${s}px Assistant, sans-serif`,
   torah: s => `700 ${s}px "Bona Nova SC", serif`, torahR: s => `400 ${s}px "Bona Nova SC", serif`, torahI: s => `italic 400 ${s}px "Bona Nova SC", serif`,
   hand: s => `400 ${s}px "Gveret Levin", cursive`,
   en: s => `400 ${s}px Anton, Impact, sans-serif`,
   mono: s => `500 ${s}px "JetBrains Mono", ui-monospace, monospace`, monoB: s => `700 ${s}px "JetBrains Mono", ui-monospace, monospace`
 };
-export const FONT_FACES = ['700 100px Karantina', '400 40px Karantina', '700 60px "Bona Nova SC"', '400 40px "Bona Nova SC"', 'italic 400 40px "Bona Nova SC"', '400 60px "Gveret Levin"', '400 100px Anton', '500 30px "JetBrains Mono"', '700 30px "JetBrains Mono"'];
+export const FONT_FACES = ['700 100px Karantina', '400 40px Karantina', '700 60px "Bona Nova SC"', '400 40px "Bona Nova SC"', 'italic 400 40px "Bona Nova SC"', '400 60px "Gveret Levin"', '500 30px Assistant', '700 30px Assistant', '400 100px Anton', '500 30px "JetBrains Mono"', '700 30px "JetBrains Mono"'];
 export function fitSize(x, text, fontFn, size, maxW) { x.font = fontFn(size); const w = x.measureText(text).width; return w > maxW ? size * maxW / w : size; }
 
 /* ---------- shapes ---------- */

@@ -42,5 +42,5 @@ Open `film.html?L=h` (or `?L=v`) in a browser and call `seek(3.2)` in the consol
 6. 2D→3D handoff: the 3D surface faces the camera (parallel to the image plane) at the handoff, the 2D card lands on its projected rect, the card's shadow shrinks to zero as it touches.
 7. One hero 3D shot per explainer. The rest is fast, clean UI motion.
 8. Stills gate: look at one frame per beat before rendering anything.
-9. Brand (Phoenix Day default): day sky + light denim `#AFCBEF`, navy ink `#12163F`, phoenix fire `#FFC74E → #FF8F3A → #F56B49`, neon spectrum edges. Hebrew: Karantina (Bold headlines, Regular text; condensed, so size up ~1.25x), Bona Nova SC for Torah and Jewish topics, Gveret Levin only for a handwritten note or signature. Anton (EN), JetBrains Mono (code). Radius 24–48px on cards, 999px on pills.
+9. Brand (Phoenix Day default): day sky + light denim `#AFCBEF`, navy ink `#12163F`, phoenix fire `#FFC74E → #FF8F3A → #F56B49`, neon spectrum edges. Hebrew: Karantina for headlines and short display text (condensed, so size up ~1.25x), Assistant for paragraphs and any running text, Bona Nova SC for Torah and Jewish topics, Gveret Levin only for a handwritten note or signature. Anton (EN), JetBrains Mono (code). Radius 24–48px on cards, 999px on pills.
 10. Music: Mixkit (free licence, no redistribution of the raw files, so audio is never committed here).
