@@ -8,7 +8,7 @@
 <meta property="og:title" content="Motion in Code — איך Claude מייצר סרטוני השקה בקוד">
 <meta property="og:description" content="השיטה של @twoclipping, מפורקת לפירורים עם מעבדות אינטראקטיביות. YUV.AI">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Gveret+Levin&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&family=Karantina:wght@300;400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Gveret+Levin&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&family=Karantina:wght@300;400;700&family=Assistant:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <meta name="theme-color" content="#12163F">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='f' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23FFC74E'/%3E%3Cstop offset='.5' stop-color='%23FF8F3A'/%3E%3Cstop offset='1' stop-color='%23F56B49'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='18' fill='%2312163F'/%3E%3Ccircle cx='32' cy='32' r='13' fill='url(%23f)'/%3E%3C/svg%3E">
 <style>
@@ -31,8 +31,8 @@
   --sh-amb:0 36px 80px -30px rgba(5,8,30,.46);
   --sh:var(--sh-con),var(--sh-amb);
   --r:28px; --r-s:18px;
-  --he:'Karantina',system-ui,sans-serif; --heD:'Karantina',system-ui,sans-serif; --hand:'Gveret Levin',cursive;
-  /* Hebrew: Karantina Bold for headlines, Regular for text; Gveret Levin only for handwriting/signatures; Bona Nova SC for Torah topics */
+  --he:'Karantina',system-ui,sans-serif; --heD:'Karantina',system-ui,sans-serif; --hand:'Gveret Levin',cursive; --body:'Assistant',system-ui,sans-serif;
+  /* Hebrew: Karantina for headlines and short display text; Assistant for paragraphs and running text; Gveret Levin only for handwriting/signatures; Bona Nova SC for Torah topics */
   --en:'Anton',Impact,sans-serif; --lat:'Inter',system-ui,sans-serif; --mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
   --gut:max(16px,calc((100% - 1180px) / 2));
   /* surface tokens (cloud by default; each surface class re-points them) */
@@ -42,11 +42,11 @@
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--yuv-cloud);color:var(--fg);font:400 31px/1.6 var(--he);letter-spacing:.02em;word-spacing:.08em;overflow-x:hidden}
+body{margin:0;background:var(--yuv-cloud);color:var(--fg);font:500 21px/1.65 var(--body);overflow-x:hidden}
 ::selection{background:var(--yuv-gold);color:var(--yuv-navy)}
 a{color:var(--link,var(--yuv-navy));font-weight:700;text-underline-offset:4px;text-decoration-thickness:2px;text-decoration-color:var(--yuv-orange)}
 a:hover{color:var(--link-h,var(--orange-t))}
-code,kbd{font-family:var(--mono);font-weight:500;font-size:.6em;letter-spacing:0;word-spacing:0;direction:ltr;unicode-bidi:isolate;background:var(--code-bg);padding:.1em .5em;border-radius:999px}
+code,kbd{font-family:var(--mono);font-weight:500;font-size:.84em;letter-spacing:0;word-spacing:0;direction:ltr;unicode-bidi:isolate;background:var(--code-bg);padding:.1em .5em;border-radius:999px}
 .ltr{direction:ltr;unicode-bidi:isolate}
 .wrap{max-width:1180px;margin:0 auto;padding:0 16px}
 b,strong{font-weight:700}
@@ -79,7 +79,7 @@ main{display:block}
 .hero::before,.sec::before{content:attr(data-folio);position:absolute;top:0;left:-.035em;transform:translateY(-24%);font:400 clamp(280px,56vw,1000px)/.8 var(--en);letter-spacing:0;color:var(--folio);direction:ltr;pointer-events:none;z-index:0;white-space:nowrap}
 .s-navy::before{color:transparent;-webkit-text-stroke:5px var(--yuv-orange);opacity:.32}
 .hero>*,.sec>*{position:relative;z-index:1}
-.sec>p,.sec>ul,.sec>ol,.hero .lead{max-width:900px}
+.sec>p,.sec>ul,.sec>ol,.hero .lead{max-width:780px}
 
 /* kicker row: chip + 6px rule to the margin */
 .sh{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:22px 16px;margin-bottom:clamp(22px,3vw,40px)}
@@ -113,7 +113,8 @@ li::marker{color:var(--acc-t);font-weight:800}
 .kicker i{width:10px;height:10px;border-radius:999px;background:var(--yuv-fire);display:inline-block}
 h1{font:700 clamp(88px,16vw,240px)/.88 var(--heD);letter-spacing:0;margin:28px 0 18px}
 .deck{font:700 clamp(36px,4.4vw,62px)/1 var(--heD);margin:0 0 20px;max-width:900px}
-.lead{font:400 clamp(28px,2.5vw,34px)/1.55 var(--he);color:var(--muted)}
+.hero>.sub{font:500 17px/1.6 var(--body);margin-top:6px}
+.lead{font:500 clamp(21px,1.9vw,24px)/1.6 var(--body);color:var(--muted)}
 .chips{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0}
 .chip{border-radius:999px;background:var(--card);color:var(--fg);padding:6px 18px;font:700 24px/1.2 var(--he);box-shadow:var(--sh-con)}
 .chip b{color:var(--acc-t)}
@@ -136,13 +137,13 @@ h1{font:700 clamp(88px,16vw,240px)/.88 var(--heD);letter-spacing:0;margin:28px 0
 .why b:first-child,.warn b:first-child,.ex b:first-child,.def b:first-child{display:block;font:700 34px/1.15 var(--heD);margin-bottom:4px}
 .warn b:first-child{color:var(--yuv-gold)}
 .sec>.tldr{list-style:none;padding:0;counter-reset:t;display:grid;gap:14px;max-width:none}
-.tldr li{counter-increment:t;display:flex;gap:20px;align-items:flex-start;padding:20px 26px;margin:0;border-radius:var(--r);background:var(--card);font-size:clamp(28px,2.6vw,34px);line-height:1.5}
+.tldr li{counter-increment:t;display:flex;gap:20px;align-items:flex-start;padding:20px 26px;margin:0;border-radius:var(--r);background:var(--card);font-size:clamp(20px,1.8vw,23px);line-height:1.55}
 .tldr li::before{content:counter(t,decimal-leading-zero);font:400 clamp(40px,4vw,56px)/1 var(--en);color:var(--yuv-navy);min-width:1.3em}
 
 /* ---------- tables (no hairlines: navy head, zebra rows) ---------- */
-table{width:100%;border-collapse:separate;border-spacing:0;font:400 25px/1.5 var(--he);margin:20px 0;border-radius:var(--r);overflow:hidden;background:var(--card);box-shadow:var(--sh)}
+table{width:100%;border-collapse:separate;border-spacing:0;font:500 18px/1.5 var(--body);margin:20px 0;border-radius:var(--r);overflow:hidden;background:var(--card);box-shadow:var(--sh)}
 th,td{padding:14px 18px;text-align:start;vertical-align:top}
-th{font:700 25px/1.25 var(--heD);background:var(--yuv-navy);color:#fff}
+th{font:700 23px/1.2 var(--heD);background:var(--yuv-navy);color:#fff}
 .s-navy th{background:var(--yuv-navy-3);color:var(--yuv-gold)}
 tr:nth-child(even) td{background:var(--card-2)}
 .tbl{overflow-x:auto;margin:20px 0;border-radius:var(--r)}
@@ -158,7 +159,7 @@ tr:nth-child(even) td{background:var(--card-2)}
 .code .cp{position:absolute;top:12px;right:12px;border:0;border-radius:999px;background:var(--yuv-fire);color:var(--yuv-navy);font:700 19px/1.1 var(--he);padding:6px 16px;cursor:pointer}
 .code:not(:has(.lbl)) pre{padding-top:56px}
 .code .lbl{display:block;font:500 12.5px var(--mono);color:var(--yuv-gold);padding:16px 112px 0 24px}
-.tr{background:var(--card);color:var(--fg);border-radius:var(--r);padding:18px 24px;margin:-6px 0 22px;font-size:27px;line-height:1.55;box-shadow:var(--sh-con)}
+.tr{background:var(--card);color:var(--fg);border-radius:var(--r);padding:18px 24px;margin:-6px 0 22px;font-size:18.5px;line-height:1.6;box-shadow:var(--sh-con)}
 .tr::before{content:"תרגום";display:inline-block;font:700 19px/1.4 var(--heD);background:var(--yuv-fire);color:var(--yuv-navy);padding:0 12px;border-radius:999px;margin-inline-end:10px}
 details{background:var(--card);color:var(--fg);border-radius:var(--r);margin:16px 0;box-shadow:var(--sh-con);overflow:hidden}
 details>summary{cursor:pointer;padding:16px 24px;font:700 31px/1.15 var(--heD);list-style:none;display:flex;gap:12px;align-items:center}
@@ -211,7 +212,7 @@ input[type=checkbox]{accent-color:var(--yuv-orange);width:18px;height:18px}
 
 /* ---------- pipeline & anatomy ---------- */
 .pipe{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch;direction:ltr;margin:20px 0}
-.pipe .st{flex:1 1 150px;background:var(--card);color:var(--fg);border-radius:var(--r);padding:16px 18px;font:400 23px/1.45 var(--he);direction:rtl;box-shadow:var(--sh-con)}
+.pipe .st{flex:1 1 150px;background:var(--card);color:var(--fg);border-radius:var(--r);padding:16px 18px;font:500 15.5px/1.5 var(--body);direction:rtl;box-shadow:var(--sh-con)}
 .pipe .st b{display:block;font:400 20px var(--en);letter-spacing:2px;direction:ltr;text-align:left;color:var(--acc-t);margin-bottom:4px}
 .pipe .ar{align-self:center;font:400 26px var(--en);color:var(--yuv-orange)}
 .blocks{display:flex;flex-wrap:wrap;gap:10px;direction:ltr;margin:14px 0}
@@ -229,22 +230,22 @@ img.cmp{width:100%;display:block;border-radius:var(--r);margin:18px 0;box-shadow
 
 /* ---------- sources & footer ---------- */
 .src{max-width:none}
-.src li{font-size:25px;line-height:1.5;word-break:break-word}
-footer{background:var(--yuv-navy-3);color:rgba(255,255,255,.8);padding:clamp(60px,7vw,100px) var(--gut) clamp(130px,17vw,250px);font:400 25px/1.55 var(--he);position:relative;overflow:hidden}
+.src li{font-size:17px;line-height:1.55;word-break:break-word}
+footer{background:var(--yuv-navy-3);color:rgba(255,255,255,.8);padding:clamp(60px,7vw,100px) var(--gut) clamp(130px,17vw,250px);font:500 17px/1.6 var(--body);position:relative;overflow:hidden}
 footer::before{content:"YUV.AI";position:absolute;bottom:-.16em;left:-.03em;font:400 clamp(130px,19vw,300px)/.8 var(--en);color:transparent;-webkit-text-stroke:3px rgba(255,143,58,.3);direction:ltr;pointer-events:none}
 footer>*{position:relative}
 footer .sig{font:400 clamp(54px,6vw,86px)/1.1 var(--hand);color:#fff;margin-bottom:6px}
-footer .bio{max-width:860px;font-size:28px;color:rgba(255,255,255,.86)}
+footer .bio{max-width:760px;font-size:20px;color:rgba(255,255,255,.86)}
 footer .links{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0 26px;direction:ltr;justify-content:flex-end}
 footer .links a{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:9px 16px;background:rgba(255,255,255,.07);color:var(--yuv-orange);font:700 15px var(--lat);text-decoration:none}
 footer .links a:hover{background:rgba(255,143,58,.16)}
 footer .links svg{width:18px;height:18px;fill:currentColor}
 footer .links .tx{font:800 14px var(--lat);width:18px;text-align:center}
-footer .credit{max-width:900px;font-size:23px;color:rgba(255,255,255,.66)}
+footer .credit{max-width:860px;font-size:15.5px;color:rgba(255,255,255,.66)}
 footer{--link:var(--yuv-gold);--link-h:#fff}
 
 @media (max-width:560px){
-  body{font-size:25px;line-height:1.6}
+  body{font-size:18.5px;line-height:1.65}
   .card{padding:18px}
   .fbar .tc{min-width:0}
   .why,.warn,.ex,.def{padding:16px 18px;padding-inline-start:28px}
@@ -963,7 +964,7 @@ Ask me for: the topic and the ONE idea the viewer must leave with, the Hebrew sc
 </inputs>
 
 <direction>
-YUV.AI motion style (Phoenix Day), 2D with at most one 3D hero moment, one continuous take: every scene is made out of the previous one. Objects change shape instead of fading: text rises out of a mask line, a pill grows into a card, a fire flood pours out of one object and later shrinks back into another. Palette: a bright sky base (gradient #5EA9F2 > #93CBFF > #DDF0FF, or a real sky), light denim #AFCBEF or cloud #EEF3FB for dense content, navy #12163F for type and UI, and the phoenix fire gradient (#FFC74E > #FF8F3A > #F56B49) as the one accent: keywords sit on a fire marker block behind navy text, sweeping right-to-left. A rotating neon conic edge (cyan, blue, violet, pink, orange, gold) goes only around the key input or CTA and pulses on the beat. Phoenix Night (navy base, white type, gold kickers) only for drama: the drop, a sunset, the end card. Hebrew type is Karantina: Bold for headlines at magazine scale (150-200px at 1080p; it is condensed, so go big), anchored right; Regular for captions and body text. Torah and Jewish topics use Bona Nova SC instead (Bold for headlines). Gveret Levin only for a handwritten note or a signature. English labels in Anton uppercase; code in JetBrains Mono. Giant Anton folio numerals bleed off the frame. Hebrew is RTL: words enter from the right, numbers and Latin stay LTR inside RTL lines. Pills and inputs are fully round (999px), cards 36-48px, never 8-12px; shadows are two layers tinted navy. Short-phrase captions (1-3 words) may hard-cut on their own layer; scenes never cut. The camera makes one move per scene on eased keyframes and never zooms in and back out. If there is a talking-head video: graphics never cover my face; put big words behind me and captions in front of me for depth.
+YUV.AI motion style (Phoenix Day), 2D with at most one 3D hero moment, one continuous take: every scene is made out of the previous one. Objects change shape instead of fading: text rises out of a mask line, a pill grows into a card, a fire flood pours out of one object and later shrinks back into another. Palette: a bright sky base (gradient #5EA9F2 > #93CBFF > #DDF0FF, or a real sky), light denim #AFCBEF or cloud #EEF3FB for dense content, navy #12163F for type and UI, and the phoenix fire gradient (#FFC74E > #FF8F3A > #F56B49) as the one accent: keywords sit on a fire marker block behind navy text, sweeping right-to-left. A rotating neon conic edge (cyan, blue, violet, pink, orange, gold) goes only around the key input or CTA and pulses on the beat. Phoenix Night (navy base, white type, gold kickers) only for drama: the drop, a sunset, the end card. Hebrew type is Karantina: Bold for headlines at magazine scale (150-200px at 1080p; it is condensed, so go big), anchored right; Karantina Regular for short captions and labels; Assistant 500-700 for any running text (paragraphs, lists, tables). Torah and Jewish topics use Bona Nova SC instead, for headlines and text (Bold headlines). Gveret Levin only for a handwritten note or a signature. English labels in Anton uppercase; code in JetBrains Mono. Giant Anton folio numerals bleed off the frame. Hebrew is RTL: words enter from the right, numbers and Latin stay LTR inside RTL lines. Pills and inputs are fully round (999px), cards 36-48px, never 8-12px; shadows are two layers tinted navy. Short-phrase captions (1-3 words) may hard-cut on their own layer; scenes never cut. The camera makes one move per scene on eased keyframes and never zooms in and back out. If there is a talking-head video: graphics never cover my face; put big words behind me and captions in front of me for depth.
 Banned: crossfades, blur-ins, any glow other than the neon edge, particles, lens flares, camera shake, bouncy easing, holds longer than 1s, the retired palettes (purple #5E17EB + yellow #FFEC00, flat magenta + cyan, pale paper or grey pages), anything that looks like a template.
 </direction>
 
