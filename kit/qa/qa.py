@@ -17,12 +17,14 @@ out = pathlib.Path(args.pop(0) if args else 'qa_out'); out.mkdir(parents=True, e
 html = film.read_text(encoding='utf-8'); FS = os.environ.get('KIT_FONTS')
 if FS:
     faces = []
-    spec = {'rubik': ('Rubik', [700, 800, 900], ['hebrew', 'latin']), 'assistant': ('Assistant', [600, 700, 800], ['hebrew', 'latin']), 'anton': ('Anton', [400], ['latin']), 'jetbrains-mono': ('JetBrains Mono', [400, 500, 700], ['latin', 'greek'])}
+    spec = {'karantina': ('Karantina', [300, 400, 700], ['hebrew', 'latin']), 'bona-nova-sc': ('Bona Nova SC', [400, 700], ['hebrew', 'latin']), 'gveret-levin': ('Gveret Levin', [400], ['hebrew', 'latin']), 'anton': ('Anton', [400], ['latin']), 'jetbrains-mono': ('JetBrains Mono', [400, 500, 700], ['latin', 'greek'])}
     for pkg, (fam, ws, subs) in spec.items():
         for w in ws:
             for s in subs:
                 f = pathlib.Path(FS) / pkg / 'files' / f'{pkg}-{s}-{w}-normal.woff2'
                 if f.exists(): faces.append(f"@font-face{{font-family:'{fam}';font-weight:{w};src:url('file://{f}') format('woff2');}}")
+                fi = pathlib.Path(FS) / pkg / 'files' / f'{pkg}-{s}-{w}-italic.woff2'
+                if fi.exists(): faces.append(f"@font-face{{font-family:'{fam}';font-weight:{w};font-style:italic;src:url('file://{fi}') format('woff2');}}")
     html = re.sub(r'<!--FONTS-->.*?<!--/FONTS-->', '<style>' + ''.join(faces) + '</style>', html, flags=re.S)
 qa = film.with_name(film.stem + '_qa.html'); qa.write_text(html, encoding='utf-8')
 errs = []

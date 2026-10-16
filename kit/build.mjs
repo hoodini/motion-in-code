@@ -13,7 +13,7 @@ const html = `<!doctype html>
 <head>
 <meta charset="utf-8">
 <title>${name} — YUV.AI motion kit</title>
-<!--FONTS--><link href="https://fonts.googleapis.com/css2?family=Anton&family=Assistant:wght@600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Rubik:wght@700;800;900&display=block" rel="stylesheet"><!--/FONTS-->
+<!--FONTS--><link href="https://fonts.googleapis.com/css2?family=Anton&family=Bona+Nova+SC:ital,wght@0,400;0,700;1,400&family=Gveret+Levin&family=JetBrains+Mono:wght@400;500;700&family=Karantina:wght@300;400;700&display=block" rel="stylesheet"><!--/FONTS-->
 <style>html,body{margin:0;background:#12163F;overflow:hidden}canvas{display:block}</style>
 </head>
 <body>

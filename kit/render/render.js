@@ -15,7 +15,7 @@ const f0 = +f0s, f1 = +f1s, SUB = +(subs || 6);
   const url = 'file:///' + path.resolve(film).replace(/\\/g, '/') + '?L=' + L + (extra ? '&' + extra : '');
   await page.goto(url);
   await page.evaluate(() => window.__ready);
-  const fontsOk = await page.evaluate(() => ['900 100px Rubik', '400 100px Anton', '700 30px "JetBrains Mono"'].every(f => document.fonts.check(f, 'אבג abc')));
+  const fontsOk = await page.evaluate(() => ['700 100px Karantina', '400 100px Anton', '700 30px "JetBrains Mono"'].every(f => document.fonts.check(f, 'אבג abc')));
   console.log('fonts ok:', fontsOk);
   if (!fontsOk) { console.error('FONTS NOT LOADED - abort'); process.exit(2); }
   const ff = spawn('ffmpeg', ['-y', '-v', 'error', '-f', 'image2pipe', '-framerate', '60', '-c:v', 'png', '-i', '-',

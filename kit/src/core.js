@@ -66,14 +66,21 @@ export function makeTheme(name = 'phoenix') {
   return { name, K: T.K, M: T.M, C: T.C, W, on, PAL };
 }
 
-/* ---------- type ---------- */
+/* ---------- type ----------
+   Hebrew (Yuval, 16.10.2026; replaces Rubik + Assistant):
+   - Karantina is the default: Bold for headlines (he, he8, he7 all map to 700, its heaviest weight), Regular for text (body).
+     It is condensed: as tall as Rubik at the same px but about a third narrower, so size up ~1.25x where space allows.
+   - Torah / Jewish topics: Bona Nova SC instead (torah = Bold headlines, torahR = text, torahI = quotes).
+   - Gveret Levin (hand) only for a handwritten note or a signature. */
 export const FT = {
-  he: s => `900 ${s}px Rubik, Assistant, sans-serif`, he8: s => `800 ${s}px Rubik, Assistant, sans-serif`, he7: s => `700 ${s}px Rubik, Assistant, sans-serif`,
-  body: s => `700 ${s}px Assistant, Rubik, sans-serif`,
+  he: s => `700 ${s}px Karantina, sans-serif`, he8: s => `700 ${s}px Karantina, sans-serif`, he7: s => `700 ${s}px Karantina, sans-serif`,
+  body: s => `400 ${s}px Karantina, sans-serif`,
+  torah: s => `700 ${s}px "Bona Nova SC", serif`, torahR: s => `400 ${s}px "Bona Nova SC", serif`, torahI: s => `italic 400 ${s}px "Bona Nova SC", serif`,
+  hand: s => `400 ${s}px "Gveret Levin", cursive`,
   en: s => `400 ${s}px Anton, Impact, sans-serif`,
   mono: s => `500 ${s}px "JetBrains Mono", ui-monospace, monospace`, monoB: s => `700 ${s}px "JetBrains Mono", ui-monospace, monospace`
 };
-export const FONT_FACES = ['900 100px Rubik', '800 40px Rubik', '700 40px Rubik', '700 40px Assistant', '400 100px Anton', '500 30px "JetBrains Mono"', '700 30px "JetBrains Mono"'];
+export const FONT_FACES = ['700 100px Karantina', '400 40px Karantina', '700 60px "Bona Nova SC"', '400 40px "Bona Nova SC"', 'italic 400 40px "Bona Nova SC"', '400 60px "Gveret Levin"', '400 100px Anton', '500 30px "JetBrains Mono"', '700 30px "JetBrains Mono"'];
 export function fitSize(x, text, fontFn, size, maxW) { x.font = fontFn(size); const w = x.measureText(text).width; return w > maxW ? size * maxW / w : size; }
 
 /* ---------- shapes ---------- */
