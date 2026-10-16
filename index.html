@@ -8,182 +8,279 @@
 <meta property="og:title" content="Motion in Code — איך Claude מייצר סרטוני השקה בקוד">
 <meta property="og:description" content="השיטה של @twoclipping, מפורקת לפירורים עם מעבדות אינטראקטיביות. YUV.AI">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Assistant:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&family=Rubik:wght@700;800;900&display=swap" rel="stylesheet">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%230E0E10'/%3E%3Ccircle cx='32' cy='32' r='12' fill='%23FF2EA0'/%3E%3C/svg%3E">
-<style>:root{
-  --ink:#0E0E10; --ink2:#2A2A31; --muted:#5D5D69; --paper:#F6F6F3; --white:#fff;
-  --mag:#FF2EA0; --mag-d:#D1157F; --cyan:#16D6E8; --cyan-d:#0A9FB0; --yellow:#FFD60A;
-  --line:rgba(14,14,16,.12); --glass:rgba(255,255,255,.66);
-  --shadow:0 24px 60px -34px rgba(14,14,16,.45);
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Assistant:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&family=Rubik:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#12163F">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='f' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23FFC74E'/%3E%3Cstop offset='.5' stop-color='%23FF8F3A'/%3E%3Cstop offset='1' stop-color='%23F56B49'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='18' fill='%2312163F'/%3E%3Ccircle cx='32' cy='32' r='13' fill='url(%23f)'/%3E%3C/svg%3E">
+<style>
+/* ============================================================
+   YUV.AI · Phoenix Day (yuv-design-system v2)
+   navy shirt · phoenix fire · light denim · clear sky
+   ============================================================ */
+@property --a{syntax:'<angle>';inherits:false;initial-value:0deg}
+:root{
+  --yuv-navy:#12163F; --yuv-navy-2:#1E2357; --yuv-navy-3:#0B0E2A;
+  --yuv-denim:#AFCBEF; --yuv-cloud:#EEF3FB;
+  --yuv-gold:#FFC74E; --yuv-orange:#FF8F3A; --yuv-coral:#F56B49;
+  --yuv-fire:linear-gradient(135deg,#FFC74E 0%,#FF8F3A 50%,#F56B49 100%);
+  --yuv-raspberry:#D74270; --yuv-azure:#5EA1C1;
+  --yuv-sky-1:#F4FBFF; --yuv-sky-2:#DDF0FF; --yuv-sky-3:#BDE1FF; --yuv-sky-4:#93CBFF; --yuv-sky-5:#5EA9F2; --yuv-sky-6:#2C78D2;
+  --yuv-sky:linear-gradient(180deg,#5EA9F2 0%,#93CBFF 40%,#DDF0FF 100%);
+  --yuv-neon:conic-gradient(from var(--a),#5DE4E9,#4FA3FF,#8B6CFF,#FF66C4,#FF8F3A,#FFC74E,#5DE4E9);
+  --orange-t:#B4501A;              /* brand orange, deepened for small text on light (AA) */
+  --sh-con:0 6px 18px -6px rgba(5,8,30,.38);
+  --sh-amb:0 36px 80px -30px rgba(5,8,30,.46);
+  --sh:var(--sh-con),var(--sh-amb);
+  --r:28px; --r-s:18px;
   --he:'Assistant',system-ui,sans-serif; --heD:'Rubik','Assistant',system-ui,sans-serif;
-  --en:'Anton',Impact,sans-serif; --mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+  --en:'Anton',Impact,sans-serif; --lat:'Inter',system-ui,sans-serif; --mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+  --gut:max(16px,calc((100% - 1180px) / 2));
+  /* surface tokens (cloud by default; each surface class re-points them) */
+  --bg:var(--yuv-cloud); --fg:var(--yuv-navy); --muted:#3B4472; --card:#fff; --card-2:#F5F8FD;
+  --acc-t:var(--orange-t); --folio:rgba(18,22,63,.055); --code-bg:rgba(18,22,63,.08);
   color-scheme:light;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--paper);color:var(--ink);font:400 18px/1.75 var(--he);overflow-x:hidden}
-body::before{content:"";position:fixed;inset:-20vmax;z-index:-1;pointer-events:none;
-  background:radial-gradient(38vmax 38vmax at 85% 8%,rgba(255,46,160,.16),transparent 70%),
-             radial-gradient(42vmax 42vmax at 8% 92%,rgba(22,214,232,.16),transparent 70%);}
-a{color:var(--mag-d);text-underline-offset:3px}
-code,kbd{font-family:var(--mono);font-size:.86em;direction:ltr;unicode-bidi:isolate;background:rgba(14,14,16,.06);padding:.08em .38em}
+body{margin:0;background:var(--yuv-cloud);color:var(--fg);font:600 19px/1.65 var(--he);overflow-x:hidden}
+::selection{background:var(--yuv-gold);color:var(--yuv-navy)}
+a{color:var(--link,var(--yuv-navy));font-weight:700;text-underline-offset:4px;text-decoration-thickness:2px;text-decoration-color:var(--yuv-orange)}
+a:hover{color:var(--link-h,var(--orange-t))}
+code,kbd{font-family:var(--mono);font-weight:500;font-size:.84em;direction:ltr;unicode-bidi:isolate;background:var(--code-bg);padding:.1em .5em;border-radius:999px}
 .ltr{direction:ltr;unicode-bidi:isolate}
-.wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+b,strong{font-weight:800}
 
-/* top bar */
-.bar{position:sticky;top:0;z-index:50;background:rgba(246,246,243,.78);backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3);border-bottom:1px solid var(--line)}
-.bar .wrap{display:flex;align-items:center;gap:14px;height:54px}
-.brand{font:400 20px/1 var(--en);letter-spacing:.04em;white-space:nowrap;direction:ltr}
-.brand b{color:var(--mag);font-weight:400}
-.navbtn{margin-inline-start:auto;border:1px solid var(--line);background:var(--white);border-radius:999px;padding:6px 14px;font:700 15px var(--he);cursor:pointer;color:var(--ink)}
-.prog{position:absolute;bottom:-1px;inset-inline-start:0;height:3px;background:linear-gradient(90deg,var(--cyan),var(--mag));width:0}
-.toc{display:none;position:fixed;top:54px;inset-inline-end:0;z-index:49;width:min(360px,100vw);max-height:calc(100vh - 54px);overflow:auto;background:rgba(255,255,255,.92);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-inline-start:1px solid var(--line);padding:12px 0;box-shadow:var(--shadow)}
+/* ---------- surfaces ---------- */
+.s-sky{background:var(--yuv-sky);--card:rgba(255,255,255,.84);--card-2:rgba(255,255,255,.62);--folio:rgba(18,22,63,.075)}
+.s-cloud{background:var(--yuv-cloud)}
+.s-denim{background:var(--yuv-denim);--bg:var(--yuv-denim);--muted:#232D5C;--card:var(--yuv-cloud);--card-2:#fff;--folio:rgba(18,22,63,.085);--code-bg:rgba(18,22,63,.1)}
+.s-navy{--link:var(--yuv-gold);--link-h:#fff;background:var(--yuv-navy);--bg:var(--yuv-navy);--fg:#fff;--muted:rgba(255,255,255,.76);--card:var(--yuv-navy-2);--card-2:#272D68;--acc-t:var(--yuv-gold);--folio:transparent;--code-bg:rgba(255,255,255,.12);color-scheme:dark}
+.s-fire{background:var(--yuv-fire);--bg:#FF8F3A;--muted:rgba(18,22,63,.84);--card:rgba(255,255,255,.5);--card-2:rgba(255,255,255,.36);--acc-t:var(--yuv-navy);--folio:rgba(120,36,0,.1)}
+
+/* ---------- top bar ---------- */
+.bar{position:sticky;top:0;z-index:50;background:rgba(18,22,63,.92);backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);color:#fff;box-shadow:0 12px 30px -20px rgba(5,8,30,.8)}
+.bar .wrap{display:flex;align-items:center;gap:16px;height:62px;max-width:none;padding:0 var(--gut)}
+.brand{font:400 24px/1 var(--en);letter-spacing:.02em;white-space:nowrap;direction:ltr;color:#fff;display:flex;align-items:baseline;gap:12px}
+.brand b{color:var(--yuv-orange);font-weight:400}
+.brand small{font:400 15px/1 var(--en);letter-spacing:3px;color:var(--yuv-gold)}
+.navbtn{margin-inline-start:auto;border:2px solid rgba(255,255,255,.3);background:transparent;border-radius:999px;padding:7px 18px;font:800 15px var(--he);cursor:pointer;color:#fff}
+.navbtn:hover{border-color:var(--yuv-gold);color:var(--yuv-gold)}
+.prog{position:absolute;bottom:-2px;inset-inline-start:0;height:4px;background:var(--yuv-fire);width:0;border-radius:999px}
+.toc{display:none;position:fixed;top:62px;inset-inline-end:0;z-index:49;width:min(380px,100vw);max-height:calc(100vh - 62px);overflow:auto;background:var(--yuv-navy-2);color:#fff;padding:14px 0 18px;box-shadow:var(--sh);border-end-start-radius:var(--r)}
 .toc.open{display:block}
-.toc a{display:flex;gap:10px;padding:7px 18px;color:var(--ink);text-decoration:none;font-weight:600;font-size:16px}
-.toc a:hover{background:rgba(255,46,160,.08)}
-.toc a span{font:400 14px var(--en);color:var(--mag);min-width:26px;direction:ltr}
+.toc a{display:flex;gap:14px;align-items:baseline;padding:8px 22px;color:#fff;text-decoration:none;font:700 16px/1.35 var(--he)}
+.toc a:hover{background:rgba(255,255,255,.07)}
+.toc a span{font:400 16px var(--en);letter-spacing:1px;color:var(--yuv-gold);min-width:30px;direction:ltr}
 
-/* hero */
-.hero{padding:44px 0 10px}
-.kicker{display:inline-flex;gap:8px;align-items:center;font:700 14px var(--he);letter-spacing:.02em;color:var(--muted);background:var(--white);border:1px solid var(--line);border-radius:999px;padding:5px 14px}
-.kicker i{width:8px;height:8px;border-radius:999px;background:var(--mag);display:inline-block}
-h1{font:900 clamp(34px,6vw,64px)/1.08 var(--heD);margin:18px 0 12px;letter-spacing:-.01em}
-h1 .hl,h2 .hl{background:linear-gradient(transparent 58%,rgba(255,46,160,.32) 58%)}
-.lead{font-size:clamp(18px,2.2vw,21px);color:var(--ink2);max-width:780px}
-.chips{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0}
-.chip{border-radius:999px;background:var(--white);border:1px solid var(--line);padding:4px 13px;font-size:15px;font-weight:600}
-.chip b{color:var(--mag-d)}
+/* ---------- section frame: full-bleed spreads + giant folios ---------- */
+main{display:block}
+.hero,.sec{position:relative;overflow:hidden;color:var(--fg);padding:clamp(76px,10vw,150px) var(--gut) clamp(64px,8vw,120px);scroll-margin-top:62px}
+.hero::before,.sec::before{content:attr(data-folio);position:absolute;top:0;left:-.035em;transform:translateY(-24%);font:400 clamp(280px,56vw,1000px)/.8 var(--en);letter-spacing:0;color:var(--folio);direction:ltr;pointer-events:none;z-index:0;white-space:nowrap}
+.s-navy::before{color:transparent;-webkit-text-stroke:5px var(--yuv-orange);opacity:.32}
+.hero>*,.sec>*{position:relative;z-index:1}
+.sec>p,.sec>ul,.sec>ol,.hero .lead{max-width:62ch}
 
-/* sections */
-.sec{padding:56px 0 8px;scroll-margin-top:60px}
-.sh{display:flex;gap:14px;align-items:flex-start;margin-bottom:8px}
-.num{font:400 44px/1 var(--en);color:transparent;-webkit-text-stroke:1.5px var(--ink);direction:ltr;min-width:58px}
-h2{font:900 clamp(26px,3.6vw,38px)/1.18 var(--heD);margin:2px 0 6px}
-h3{font:800 22px/1.3 var(--heD);margin:28px 0 8px}
-h4{font:800 18px/1.3 var(--heD);margin:18px 0 4px}
-.sub{color:var(--muted);font-size:17px;margin:0}
-p{margin:10px 0}
-ul,ol{padding-inline-start:22px}
-li{margin:4px 0}
-.card{background:var(--glass);backdrop-filter:blur(18px) saturate(1.3);-webkit-backdrop-filter:blur(18px) saturate(1.3);border:1px solid rgba(255,255,255,.85);box-shadow:var(--shadow);padding:22px;margin:18px 0}
-.card.flat{box-shadow:none;background:rgba(255,255,255,.5)}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-@media (max-width:760px){.grid2,.grid3{grid-template-columns:1fr}}
-.why,.warn,.ex,.def{padding:12px 16px;margin:14px 0;border-inline-start:4px solid var(--mag);background:rgba(255,46,160,.06)}
-.warn{border-color:var(--cyan-d);background:rgba(22,214,232,.08)}
-.ex{border-color:var(--ink);background:rgba(14,14,16,.04)}
-.def{border-color:var(--yellow);background:rgba(255,214,10,.12)}
-.why b:first-child,.warn b:first-child,.ex b:first-child,.def b:first-child{display:block;font-family:var(--heD);font-weight:800;margin-bottom:2px}
+/* kicker row: chip + 6px rule to the margin */
+.sh{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:22px 16px;margin-bottom:clamp(22px,3vw,40px)}
+.sh::after{content:"";grid-row:1;grid-column:2;height:6px;border-radius:999px;background:var(--fg)}
+.sh>div{grid-column:1/-1;grid-row:2}
+.num{grid-row:1;grid-column:1;font:400 clamp(18px,1.8vw,22px)/1 var(--en);letter-spacing:3px;direction:ltr;padding:9px 18px 8px;border-radius:999px;background:var(--yuv-navy);color:var(--yuv-gold);white-space:nowrap}
+.num::after{content:" / 19";color:rgba(255,255,255,.55)}
+#s0 .num::after{content:" REEL"}
+.s-navy .num{background:var(--yuv-gold);color:var(--yuv-navy)}
+.s-navy .num::after{color:rgba(18,22,63,.6)}
+.s-navy .sh::after{background:var(--yuv-gold)}
+
+h1,h2,h3,h4{color:inherit;text-wrap:balance}
+h2{font:900 clamp(40px,6.2vw,92px)/1.02 var(--heD);letter-spacing:-.012em;margin:0 0 16px;max-width:17ch}
+h3{font:800 clamp(26px,2.7vw,38px)/1.15 var(--heD);margin:clamp(40px,5vw,64px) 0 12px;max-width:28ch}
+h4{font:800 21px/1.3 var(--heD);margin:20px 0 6px}
+.sub{color:var(--muted);font:600 clamp(19px,1.7vw,23px)/1.5 var(--he);margin:0;max-width:56ch}
+p{margin:12px 0}
+ul,ol{padding-inline-start:24px}
+li{margin:6px 0}
+li::marker{color:var(--acc-t);font-weight:800}
+.hl{background:var(--yuv-fire);color:var(--yuv-navy);padding:0 .14em;border-radius:.16em;-webkit-box-decoration-break:clone;box-decoration-break:clone}
 .term{font-size:.86em;color:var(--muted)}
-.tldr{list-style:none;padding:0;counter-reset:t}
-.tldr li{counter-increment:t;display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
-.tldr li::before{content:counter(t,decimal-leading-zero);font:400 22px/1.4 var(--en);color:var(--mag)}
-table{width:100%;border-collapse:collapse;font-size:16px;margin:12px 0}
-th,td{border-bottom:1px solid var(--line);padding:9px 8px;text-align:start;vertical-align:top}
-th{font-family:var(--heD);font-weight:800;background:rgba(14,14,16,.04)}
-.tbl{overflow-x:auto}
-.yes{color:#0b8a4a;font-weight:800}.no{color:#c0175f;font-weight:800}
 
-/* code */
-.code{position:relative;background:var(--ink);color:#EDEDF2;margin:12px 0;direction:ltr}
-.code pre{margin:0;padding:16px 16px 14px;overflow:auto;font:400 13.5px/1.6 var(--mono);white-space:pre-wrap;word-break:break-word;max-height:520px}
-.code .cp{position:absolute;top:8px;right:8px;border:0;border-radius:999px;background:var(--mag);color:#fff;font:700 13px var(--he);padding:4px 12px;cursor:pointer}
-.code .lbl{display:block;font:400 12px var(--mono);color:#9aa;padding:8px 92px 0 16px}
-.tr{background:var(--white);border:1px solid var(--line);padding:12px 16px;margin:-6px 0 14px;font-size:16.5px}
-.tr::before{content:"תרגום";display:inline-block;font:800 13px var(--heD);background:var(--yellow);padding:0 8px;margin-inline-end:8px}
-details{border:1px solid var(--line);background:rgba(255,255,255,.6);margin:12px 0}
-details>summary{cursor:pointer;padding:12px 16px;font:800 17px var(--heD);list-style:none;display:flex;gap:10px;align-items:center}
+/* ---------- hero (Phoenix Day: sky) ---------- */
+.hero{background:var(--yuv-sky);padding-top:clamp(56px,7vw,104px)}
+.hero::after{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(60vmax 22vmax at 78% 18%,rgba(255,255,255,.55),transparent 70%),
+             radial-gradient(48vmax 16vmax at 12% 64%,rgba(255,255,255,.45),transparent 70%)}
+.kicker{display:inline-flex;gap:10px;align-items:center;font:800 15px var(--he);color:var(--yuv-navy);background:rgba(255,255,255,.84);border-radius:999px;padding:7px 18px;box-shadow:var(--sh-con)}
+.kicker i{width:10px;height:10px;border-radius:999px;background:var(--yuv-fire);display:inline-block}
+h1{font:900 clamp(60px,11vw,168px)/.95 var(--heD);letter-spacing:-.02em;margin:28px 0 18px}
+.deck{font:800 clamp(26px,3.2vw,44px)/1.18 var(--heD);margin:0 0 20px;max-width:22ch}
+.lead{font:600 clamp(19px,1.8vw,22px)/1.6 var(--he);color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0}
+.chip{border-radius:999px;background:var(--card);color:var(--fg);padding:7px 16px;font:700 16px var(--he);box-shadow:var(--sh-con)}
+.chip b{color:var(--acc-t)}
+
+/* ---------- cards & callouts ---------- */
+.card{background:var(--card);color:var(--fg);border-radius:var(--r);padding:clamp(20px,2.4vw,32px);margin:22px 0;box-shadow:var(--sh)}
+.card.flat{background:var(--card-2);box-shadow:var(--sh-con)}
+.card h4:first-child{margin-top:0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media (max-width:760px){.grid2,.grid3{grid-template-columns:1fr}}
+.why,.warn,.ex,.def{position:relative;overflow:hidden;border-radius:var(--r);padding:20px 26px;padding-inline-start:36px;margin:24px 0;background:var(--card);color:var(--fg);box-shadow:var(--sh-con);max-width:900px}
+.why::before,.warn::before,.ex::before,.def::before{content:"";position:absolute;inset-block:0;inset-inline-start:0;width:9px;background:var(--rail)}
+.why{--rail:var(--yuv-fire)}
+.warn{--link:var(--yuv-gold);--link-h:#fff;--rail:var(--yuv-gold);background:var(--yuv-navy);color:#fff;--acc-t:var(--yuv-gold);--code-bg:rgba(255,255,255,.12)}
+.s-navy .warn{background:var(--yuv-navy-3)}
+.ex{--rail:var(--yuv-navy)}
+.s-navy .ex{--rail:var(--yuv-denim)}
+.def{--rail:var(--yuv-sky-6);background:var(--yuv-sky-2);color:var(--yuv-navy);--acc-t:var(--orange-t);--code-bg:rgba(18,22,63,.08)}
+.why b:first-child,.warn b:first-child,.ex b:first-child,.def b:first-child{display:block;font:800 20px/1.3 var(--heD);margin-bottom:4px}
+.warn b:first-child{color:var(--yuv-gold)}
+.sec>.tldr{list-style:none;padding:0;counter-reset:t;display:grid;gap:14px;max-width:none}
+.tldr li{counter-increment:t;display:flex;gap:20px;align-items:flex-start;padding:20px 26px;margin:0;border-radius:var(--r);background:var(--card);font-size:clamp(19px,1.7vw,22px)}
+.tldr li::before{content:counter(t,decimal-leading-zero);font:400 clamp(40px,4vw,56px)/1 var(--en);color:var(--yuv-navy);min-width:1.3em}
+
+/* ---------- tables (no hairlines: navy head, zebra rows) ---------- */
+table{width:100%;border-collapse:separate;border-spacing:0;font:600 16.5px/1.5 var(--he);margin:20px 0;border-radius:var(--r);overflow:hidden;background:var(--card);box-shadow:var(--sh)}
+th,td{padding:14px 18px;text-align:start;vertical-align:top}
+th{font:800 16px/1.35 var(--heD);background:var(--yuv-navy);color:#fff}
+.s-navy th{background:var(--yuv-navy-3);color:var(--yuv-gold)}
+tr:nth-child(even) td{background:var(--card-2)}
+.tbl{overflow-x:auto;margin:20px 0;border-radius:var(--r)}
+.tbl table{margin:0}
+.yes{color:var(--yuv-sky-6);font-weight:800}.no{color:var(--yuv-raspberry);font-weight:800}
+.s-navy .yes{color:var(--yuv-sky-4)}.s-navy .no{color:var(--yuv-coral)}
+
+/* ---------- code ---------- */
+.code{position:relative;background:var(--yuv-navy-3);color:#E7ECFA;border-radius:var(--r);margin:20px 0;direction:ltr;box-shadow:var(--sh);overflow:hidden}
+.code::before{content:"";position:absolute;inset:0 0 auto;height:1px;background:linear-gradient(90deg,rgba(255,255,255,.22),transparent 70%)}
+.s-navy .code{box-shadow:var(--sh),inset 0 0 0 1px rgba(255,255,255,.08)}
+.code pre{margin:0;padding:16px 24px 22px;overflow:auto;font:500 14px/1.65 var(--mono);white-space:pre-wrap;word-break:break-word;max-height:540px}
+.code .cp{position:absolute;top:12px;right:12px;border:0;border-radius:999px;background:var(--yuv-fire);color:var(--yuv-navy);font:800 14px var(--he);padding:6px 16px;cursor:pointer}
+.code:not(:has(.lbl)) pre{padding-top:56px}
+.code .lbl{display:block;font:500 12.5px var(--mono);color:var(--yuv-gold);padding:16px 112px 0 24px}
+.tr{background:var(--card);color:var(--fg);border-radius:var(--r);padding:18px 24px;margin:-6px 0 22px;font-size:17.5px;box-shadow:var(--sh-con)}
+.tr::before{content:"תרגום";display:inline-block;font:800 14px/1.6 var(--heD);background:var(--yuv-fire);color:var(--yuv-navy);padding:0 12px;border-radius:999px;margin-inline-end:10px}
+details{background:var(--card);color:var(--fg);border-radius:var(--r);margin:16px 0;box-shadow:var(--sh-con);overflow:hidden}
+details>summary{cursor:pointer;padding:18px 24px;font:800 19px var(--heD);list-style:none;display:flex;gap:12px;align-items:center}
 details>summary::-webkit-details-marker{display:none}
-details>summary::before{content:"+";font:400 22px/1 var(--en);color:var(--mag);width:16px}
+details>summary::before{content:"+";font:400 28px/1 var(--en);color:var(--yuv-orange);width:18px}
 details[open]>summary::before{content:"–"}
-details>.in{padding:0 16px 14px}
+details>.in{padding:0 24px 20px}
 
-/* labs */
-.lab{background:var(--white);border:1px solid var(--line);margin:18px 0;box-shadow:var(--shadow)}
-.lab .lh{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--line);font:800 16px var(--heD)}
-.lab .lh::before{content:"LAB";font:400 13px var(--en);letter-spacing:.08em;background:var(--ink);color:#fff;padding:2px 8px;border-radius:999px}
-.lab .lb{padding:14px 16px}
-.lab canvas{width:100%;display:block;background:var(--paper);touch-action:none}
-.ctrls{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;margin:12px 0 2px}
-.ctrls label{display:flex;align-items:center;gap:8px;font-weight:700;font-size:15px}
+/* ---------- labs (always a light instrument card, on any surface) ---------- */
+.lab{--link:var(--yuv-navy);--link-h:var(--orange-t);--fg:var(--yuv-navy);--muted:#3B4472;--card:#fff;--card-2:var(--yuv-cloud);--acc-t:var(--orange-t);--code-bg:rgba(18,22,63,.08);
+  background:#fff;color:var(--yuv-navy);border-radius:var(--r);margin:28px 0;box-shadow:var(--sh);overflow:hidden}
+.lab .lh{display:flex;align-items:center;gap:12px;padding:16px 22px;font:800 18px/1.3 var(--heD);background:var(--yuv-cloud)}
+.lab .lh::before{content:"LAB";font:400 15px/1 var(--en);letter-spacing:3px;background:var(--yuv-navy);color:var(--yuv-gold);padding:6px 12px 5px;border-radius:999px}
+.lab .lb{padding:18px 22px 22px}
+.lab canvas{width:100%;display:block;background:var(--yuv-cloud);border-radius:var(--r-s);touch-action:none}
+.ctrls{display:flex;flex-wrap:wrap;gap:12px 22px;align-items:center;margin:14px 0 2px}
+.ctrls label{display:flex;align-items:center;gap:8px;font:700 16px var(--he)}
 .ctrls output{font:500 13.5px var(--mono);min-width:54px;direction:ltr;display:inline-block}
-input[type=range]{accent-color:var(--mag);width:150px}
-.btn{border:0;border-radius:999px;background:var(--ink);color:#fff;font:700 15px var(--he);padding:7px 16px;cursor:pointer}
-.btn.m{background:var(--mag)}.btn.o{background:transparent;color:var(--ink);border:1.5px solid var(--ink)}
-.btn:focus-visible,.navbtn:focus-visible{outline:3px solid var(--cyan);outline-offset:2px}
-.readout{font:500 14px/1.7 var(--mono);direction:ltr;text-align:left;background:rgba(14,14,16,.04);padding:8px 12px;margin-top:10px;white-space:pre-wrap}
-.seg{display:inline-flex;border:1.5px solid var(--ink);border-radius:999px;overflow:hidden}
-.seg button{border:0;background:transparent;font:700 14px var(--he);padding:6px 14px;cursor:pointer;color:var(--ink)}
-.seg button.on{background:var(--ink);color:#fff}
+input[type=range]{accent-color:var(--yuv-orange);width:160px}
+input[type=checkbox]{accent-color:var(--yuv-orange);width:18px;height:18px}
+.btn{border:0;border-radius:999px;background:var(--yuv-navy);color:#fff;font:800 16px var(--he);padding:9px 20px;cursor:pointer;box-shadow:var(--sh-con)}
+.btn.m{background:var(--yuv-fire);color:var(--yuv-navy)}
+.btn.o{background:transparent;color:var(--yuv-navy);border:2px solid var(--yuv-navy);box-shadow:none}
+.btn:focus-visible,.navbtn:focus-visible,.blocks button:focus-visible,.seg button:focus-visible{outline:3px solid var(--yuv-sky-6);outline-offset:3px}
+.readout{font:500 14px/1.7 var(--mono);direction:ltr;text-align:left;background:var(--yuv-cloud);border-radius:var(--r-s);padding:12px 16px;margin-top:12px;white-space:pre-wrap}
+.seg{display:inline-flex;border:2px solid var(--yuv-navy);border-radius:999px;overflow:hidden}
+.seg button{border:0;background:transparent;font:800 14px var(--he);padding:7px 16px;cursor:pointer;color:var(--yuv-navy)}
+.seg button.on{background:var(--yuv-navy);color:#fff}
 
-/* film */
-.film{background:var(--ink);padding:10px;margin:22px 0 8px;box-shadow:0 40px 80px -40px rgba(14,14,16,.7)}
-.film canvas{width:100%;aspect-ratio:16/9;display:block;background:var(--paper)}
-.fbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:10px 4px 2px;color:#fff;direction:ltr}
-.fbar .btn{background:var(--mag)}
+/* ---------- the hero film player ---------- */
+.film{position:relative;isolation:isolate;background:var(--yuv-navy);border-radius:var(--r);padding:12px;margin:clamp(30px,4vw,52px) 0 16px;box-shadow:var(--sh)}
+.film canvas{width:100%;aspect-ratio:16/9;display:block;background:var(--yuv-sky-3);border-radius:20px}
+.fbar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:12px 6px 4px;color:#fff;direction:ltr}
+.fbar .btn{background:var(--yuv-fire);color:var(--yuv-navy);box-shadow:none}
 .fbar input[type=range]{flex:1;min-width:160px;width:auto}
-.fbar .tc{font:500 13px var(--mono);color:#cfd;min-width:230px}
-.fbar label{font:600 14px var(--he);display:flex;gap:6px;align-items:center;direction:rtl}
-.ruler{position:relative;height:16px;margin:0 4px;direction:ltr}
-.ruler i{position:absolute;top:2px;width:1px;height:8px;background:#667}
-.ruler i.bar4{height:12px;background:#aab}
-.ruler i.drop{width:3px;height:14px;background:var(--mag)}
+.fbar .tc{font:500 13px var(--mono);color:rgba(255,255,255,.8);min-width:230px}
+.fbar label{font:700 15px var(--he);display:flex;gap:6px;align-items:center;direction:rtl}
+.ruler{position:relative;height:16px;margin:6px 6px 0;direction:ltr}
+.ruler i{position:absolute;top:2px;width:2px;height:8px;border-radius:2px;background:rgba(255,255,255,.3)}
+.ruler i.bar4{height:12px;background:rgba(255,255,255,.7)}
+.ruler i.drop{width:4px;height:14px;background:var(--yuv-orange)}
 
-/* pipeline */
-.pipe{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch;direction:ltr;margin:16px 0}
-.pipe .st{flex:1 1 140px;background:var(--white);border:1.5px solid var(--ink);padding:10px 12px;font-size:14.5px;direction:rtl}
-.pipe .st b{display:block;font:400 18px var(--en);letter-spacing:.03em;direction:ltr;text-align:left}
-.pipe .ar{align-self:center;font:400 22px var(--en);color:var(--mag)}
+/* neon edge: the "AI is thinking" ring (inputs, the primary CTA, one key card) */
+@keyframes neonSpin{to{--a:360deg}}
+.neon{position:relative;isolation:isolate}
+.neon::before,.neon::after{content:"";position:absolute;inset:-4px;padding:4px;border-radius:inherit;background:var(--yuv-neon);pointer-events:none;z-index:-1;
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;
+  mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;animation:neonSpin 4.2s linear infinite}
+.neon::after{inset:-12px;padding:12px;filter:blur(20px);opacity:.75}
 
-/* anatomy */
-.blocks{display:flex;flex-wrap:wrap;gap:8px;direction:ltr;margin:10px 0}
-.blocks button{border:1.5px solid var(--ink);background:var(--white);border-radius:999px;padding:6px 14px;font:500 14px var(--mono);cursor:pointer}
-.blocks button.on{background:var(--mag);border-color:var(--mag);color:#fff}
+/* ---------- pipeline & anatomy ---------- */
+.pipe{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch;direction:ltr;margin:20px 0}
+.pipe .st{flex:1 1 150px;background:var(--card);color:var(--fg);border-radius:var(--r);padding:16px 18px;font:600 15px/1.5 var(--he);direction:rtl;box-shadow:var(--sh-con)}
+.pipe .st b{display:block;font:400 20px var(--en);letter-spacing:2px;direction:ltr;text-align:left;color:var(--acc-t);margin-bottom:4px}
+.pipe .ar{align-self:center;font:400 26px var(--en);color:var(--yuv-orange)}
+.blocks{display:flex;flex-wrap:wrap;gap:10px;direction:ltr;margin:14px 0}
+.blocks button{border:2px solid var(--fg);background:transparent;color:var(--fg);border-radius:999px;padding:8px 18px;font:700 14px var(--mono);cursor:pointer}
+.blocks button.on{background:var(--yuv-fire);border-color:transparent;color:var(--yuv-navy)}
 .anat{min-height:220px}
 
-footer{margin:70px 0 0;padding:28px 0 40px;border-top:1px solid var(--line);color:var(--muted);font-size:15px}
-footer .sig{font:700 16px var(--he);color:var(--ink)}
-.src li{font-size:15.5px;word-break:break-word}
-@media (max-width:560px){body{font-size:17px}.num{font-size:34px;min-width:44px}.card{padding:16px}.fbar .tc{min-width:0}}
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-
-/* the film section */
-.reel{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2.25fr);gap:18px;align-items:start;margin:22px 0 6px}
+/* ---------- reels ---------- */
+.reel{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2.25fr);gap:22px;align-items:start;margin:26px 0 8px}
 .reel figure{margin:0}
-.reel video{width:100%;display:block;background:#0B0B10;border-radius:18px;box-shadow:0 30px 70px -36px rgba(14,14,16,.75)}
+.reel video{width:100%;display:block;background:var(--yuv-navy-3);border-radius:var(--r);box-shadow:var(--sh)}
 .reel-v video{aspect-ratio:9/16}.reel-h video{aspect-ratio:16/9}
-.reel figcaption{font:700 14px/1.4 var(--heD);color:var(--muted);margin-top:8px}
-@media (max-width:760px){.reel{grid-template-columns:1fr}.reel-v{max-width:420px;margin-inline:auto;width:100%}}
-img.cmp{width:100%;display:block;border-radius:14px;margin:14px 0}
+.reel figcaption{font:700 15px/1.4 var(--he);color:var(--muted);margin-top:10px}
+img.cmp{width:100%;display:block;border-radius:var(--r);margin:18px 0;box-shadow:var(--sh)}
+
+/* ---------- sources & footer ---------- */
+.src{max-width:none}
+.src li{font-size:16px;word-break:break-word}
+footer{background:var(--yuv-navy-3);color:rgba(255,255,255,.8);padding:clamp(60px,7vw,100px) var(--gut) clamp(130px,17vw,250px);font:600 16px/1.65 var(--he);position:relative;overflow:hidden}
+footer::before{content:"YUV.AI";position:absolute;bottom:-.16em;left:-.03em;font:400 clamp(130px,19vw,300px)/.8 var(--en);color:transparent;-webkit-text-stroke:3px rgba(255,143,58,.3);direction:ltr;pointer-events:none}
+footer>*{position:relative}
+footer .sig{font:900 clamp(28px,3.4vw,44px)/1.1 var(--heD);color:#fff;margin-bottom:10px}
+footer .bio{max-width:60ch;color:rgba(255,255,255,.86)}
+footer .links{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0 26px;direction:ltr;justify-content:flex-end}
+footer .links a{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:9px 16px;background:rgba(255,255,255,.07);color:var(--yuv-orange);font:700 15px var(--lat);text-decoration:none}
+footer .links a:hover{background:rgba(255,143,58,.16)}
+footer .links svg{width:18px;height:18px;fill:currentColor}
+footer .links .tx{font:800 14px var(--lat);width:18px;text-align:center}
+footer .credit{max-width:70ch;font-size:15px;color:rgba(255,255,255,.66)}
+footer{--link:var(--yuv-gold);--link-h:#fff}
+
+@media (max-width:560px){
+  body{font-size:17.5px}
+  .card{padding:18px}
+  .fbar .tc{min-width:0}
+  .why,.warn,.ex,.def{padding:16px 18px;padding-inline-start:28px}
+  .tldr li{padding:16px 18px;gap:14px}
+  th,td{padding:11px 12px}
+  .brand small{display:none}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.neon::before,.neon::after{animation:none}}
 </style>
 </head>
 <body>
 <header class="bar"><div class="wrap">
-  <div class="brand">YUV<b>.</b>AI · MOTION IN CODE</div>
+  <div class="brand"><span>YUV<b>.</b>AI</span><small>MOTION IN CODE</small></div>
   <button class="navbtn" id="tocBtn" aria-expanded="false" aria-controls="toc">תוכן עניינים</button>
 </div><div class="prog" id="prog"></div></header>
 <nav class="toc" id="toc" aria-label="תוכן עניינים"></nav>
 
-<main class="wrap">
+<main>
 
 <!-- ============ HERO ============ -->
-<section class="hero" id="top">
+<section class="hero" id="top" data-folio="00">
   <span class="kicker"><i></i>מחקר עומק · 15.10.2026 · השיטה של <span class="ltr">@twoclipping</span></span>
-  <h1>וידאו <span class="hl">שהוא קוד</span>:<br>איך Claude מייצר סרטוני השקה ברמת סטודיו — בלי After Effects</h1>
+  <h1>וידאו <span class="hl">שהוא קוד</span>.</h1>
+  <p class="deck">איך Claude מייצר סרטוני השקה ברמת סטודיו, בלי After Effects</p>
   <p class="lead">הסרטון למטה הוא לא קובץ וידאו. הוא תוכנה קטנה שמציירת אותו בזמן אמת, פריים אחרי פריים, מתוך מספר אחד בלבד: <b>הזמן</b>. בדיוק כמו הסרטונים של <span class="ltr">@twoclipping</span>, רק קטן יותר. לחצו Play, תגררו את הסרגל לכל נקודה — ואז נפרק אותו ביחד, מהיסוד, פירור אחרי פירור.</p>
-  <div class="film" id="film">
+  <div class="film neon" id="film">
     <canvas id="filmCanvas" width="1280" height="720" aria-label="סרטון הדגמה שמצויר בקוד"></canvas>
     <div class="ruler" id="filmRuler" aria-hidden="true"></div>
     <div class="fbar">
-      <button class="btn" id="filmPlay">▶ Play</button>
+      <button class="btn neon" id="filmPlay">▶ Play</button>
       <input type="range" id="filmScrub" min="0" max="9" step="0.0166667" value="0" aria-label="זמן בסרטון">
       <span class="tc" id="filmTC">t = 0.000s · frame 0 · beat 0</span>
       <label><input type="checkbox" id="filmBlur"> מושן בלר</label>
       <label><input type="checkbox" id="filmSound" checked> סאונד</label>
     </div>
   </div>
-  <p class="sub">סרגל הביטים מתחת לתמונה: כל קו הוא ביט (חצי שנייה, כי השיר ב-120 פעימות לדקה), הקו הוורוד הוא ה"דרופ" — הרגע שבו המוזיקה מתפוצצת. המוזיקה והאפקטים כאן מסונתזים בדפדפן לצורך ההדגמה בלבד; השיטה המקורית דורשת סאונד אמיתי (ונראה למה).</p>
+  <p class="sub">סרגל הביטים מתחת לתמונה: כל קו הוא ביט (חצי שנייה, כי השיר ב-120 פעימות לדקה), הקו הכתום הוא ה"דרופ" — הרגע שבו המוזיקה מתפוצצת. המוזיקה והאפקטים כאן מסונתזים בדפדפן לצורך ההדגמה בלבד; השיטה המקורית דורשת סאונד אמיתי (ונראה למה).</p>
   <div class="chips">
     <span class="chip">היוצר: <b>zero</b> · <span class="ltr">@twoclipping</span></span>
     <span class="chip">המאמר: <b>28.9.2026</b></span>
@@ -193,7 +290,7 @@ img.cmp{width:100%;display:block;border-radius:14px;margin:14px 0}
 </section>
 
 <!-- ============ THE FILM ============ -->
-<section class="sec" id="s0" data-toc="הסרט: עשוי בשיטה">
+<section class="sec s-navy" id="s0" data-folio="REEL" data-toc="הסרט: עשוי בשיטה">
   <div class="sh"><span class="num">▶</span><div><h2>הסרט: 27 שניות, ‏60fps, עשוי כולו בשיטה הזו</h2><p class="sub">קובץ HTML אחד ופונקציה אחת של זמן. כל פריים צולם ב-Playwright, הסרט הורכב ב-ffmpeg, והמוזיקה והאפקטים אמיתיים, כל אחד ממוקם לפי השיא הנמדד שלו.</p></div></div>
   <div class="reel">
     <figure class="reel-v"><video controls playsinline preload="metadata" poster="media/poster-9x16.jpg" src="media/motion-in-code-9x16.mp4"></video><figcaption>‏9:16 · רילס / טיקטוק</figcaption></figure>
@@ -251,7 +348,7 @@ img.cmp{width:100%;display:block;border-radius:14px;margin:14px 0}
 </section>
 
 <!-- ============ 1 TL;DR ============ -->
-<section class="sec" id="s1" data-toc="בשורה התחתונה">
+<section class="sec s-fire" id="s1" data-folio="01" data-toc="בשורה התחתונה">
   <div class="sh"><span class="num">01</span><div><h2>בשורה התחתונה — בלי מילה אחת של ז'רגון</h2><p class="sub">חמישה משפטים. כל השאר בעמוד הוא ההוכחה והפירוק שלהם.</p></div></div>
   <ol class="tldr">
     <li><div><b>קלוד לא מצייר וידאו. הוא כותב תוכנה שמציירת כל תמונה בסרטון.</b> שאלה ויזואלית ("תעשה משהו יפה") הופכת לשאלה של קוד ("מה המיקום של הכפתור בשנייה 4.2?") — ובשאלות של קוד קלוד מצוין, מדויק ועקבי.</div></li>
@@ -263,7 +360,7 @@ img.cmp{width:100%;display:block;border-radius:14px;margin:14px 0}
 </section>
 
 <!-- ============ 2 WHO ============ -->
-<section class="sec" id="s2" data-toc="מי, מה ומתי">
+<section class="sec s-cloud" id="s2" data-folio="02" data-toc="מי, מה ומתי">
   <div class="sh"><span class="num">02</span><div><h2>מי זה <span class="ltr">@twoclipping</span>, ומה בדיוק הוא פרסם</h2><p class="sub">עובדות עם מקורות. מה שלא הצלחתי לאמת — כתוב במפורש.</p></div></div>
   <div class="card">
     <p><b>zero</b> (<span class="ltr">@twoclipping</span> ב-X) הוא יוצר שהתפוצץ בשבוע ההשקה של Claude Opus 5.5 (שיצא ב-22 בספטמבר 2026). הפוסט הראשון שלו — "צורה אחת שמשתנה דרך תריסר מצבי ממשק על הביט" — עלה ב-24.9 ונמדד בכ-978 אלף צפיות ו-11.9 אלף לייקים (מדידה אחרת, מאוחרת: 933 אלף). הוא פרסם יחד עם הסרטונים את הפרומפטים המלאים והזמין במפורש להעתיק אותם ("steal it").</p>
@@ -281,7 +378,7 @@ img.cmp{width:100%;display:block;border-radius:14px;margin:14px 0}
 </section>
 
 <!-- ============ 3 TRANSLATION ============ -->
-<section class="sec" id="s3" data-toc="התרגום המלא">
+<section class="sec s-denim" id="s3" data-folio="03" data-toc="התרגום המלא">
   <div class="sh"><span class="num">03</span><div><h2>המאמר — בתרגום מלא לעברית</h2><p class="sub">נאמן למקור. השמטתי רק שתי שורות של "שמרו בסימניות / תנו לייק". הפרומפטים נשארים באנגלית (כדי להדביק) ומתחתם תרגום. מונחים טכניים מוסברים בסוגריים במקום הראשון שבו הם מופיעים.</p></div></div>
 
   <div class="card">
@@ -357,7 +454,7 @@ img.cmp{width:100%;display:block;border-radius:14px;margin:14px 0}
 </section>
 
 <!-- ============ 4 FRAMES ============ -->
-<section class="sec" id="s4" data-toc="יסוד: מה זה וידאו">
+<section class="sec s-cloud" id="s4" data-folio="04" data-toc="יסוד: מה זה וידאו">
   <div class="sh"><span class="num">04</span><div><h2>יסוד: מה זה בכלל "וידאו"?</h2><p class="sub">לפני כל טריק — מה הדבר עצמו, פיזית.</p></div></div>
   <p><b>וידאו הוא רצף של תמונות סטילס</b> שמוצגות מהר מאוד אחת אחרי השנייה. כל תמונה כזו נקראת <b>פריים</b> (frame). העין והמוח לא מספיקים לראות "קפיצות" בין התמונות, ולכן הם מחברים אותן לתנועה רציפה — כמו ספר דפדוף.</p>
   <p><b>FPS</b> (Frames Per Second) = כמה תמונות מוצגות בשנייה. ב-60fps כל תמונה מוצגת ‎1/60 שנייה ≈ 16.7 מילישניות. <b>למה 60 ולא 30?</b> כי רוב המסכים מתרעננים 60 פעם בשנייה, ובתנועה מהירה (כפתור שגדל, מצלמה שנדחפת) ב-30fps כל צעד גדול פי 2 והעין מתחילה להבחין ב"מדרגות". המחיר: פי 2 תמונות לייצר.</p>
@@ -371,12 +468,12 @@ img.cmp{width:100%;display:block;border-radius:14px;margin:14px 0}
 </section>
 
 <!-- ============ 5 WHY CODE ============ -->
-<section class="sec" id="s5" data-toc="הטריק המרכזי: וידאו כקוד">
+<section class="sec s-navy" id="s5" data-folio="05" data-toc="הטריק המרכזי: וידאו כקוד">
   <div class="sh"><span class="num">05</span><div><h2>הטריק המרכזי: להפוך בעיה של פיקסלים לבעיה של קוד</h2><p class="sub">למה זה עובד דווקא עם מודל שפה — ודווקא עכשיו.</p></div></div>
   <p>יש שתי דרכים שונות לגמרי שבהן AI יכול "לעשות וידאו":</p>
   <div class="grid2">
     <div class="card flat"><h4>דרך א׳: מודל וידאו (Veo, Sora, Flux Video)</h4><p>המודל מייצר <b>פיקסלים</b> ישירות — הוא "מנחש" איך התמונה הבאה צריכה להיראות לפי סטטיסטיקה של מיליוני סרטונים. מצוין לצילום מציאותי. גרוע בדברים שדורשים דיוק: טקסט נכון, צבע מותג מדויק, כפתור שנשאר אותו כפתור, תזמון למילישנייה. ואי אפשר "לתקן רק את השנייה הרביעית" — מייצרים מחדש והכל משתנה.</p></div>
-    <div class="card flat"><h4>דרך ב׳: מודל שפה שכותב קוד (השיטה הזו)</h4><p>Claude לא מייצר פיקסל אחד. הוא כותב <b>תוכנה</b> — דף אינטרנט — שמציירת כל פריים. הטקסט מדויק כי הוא טקסט אמיתי. הצבע מדויק כי הוא <code>#FF2EA0</code>. ואם השנייה הרביעית לא טובה, משנים שלוש שורות קוד — וכל שאר הסרטון נשאר זהה בבית.</p></div>
+    <div class="card flat"><h4>דרך ב׳: מודל שפה שכותב קוד (השיטה הזו)</h4><p>Claude לא מייצר פיקסל אחד. הוא כותב <b>תוכנה</b> — דף אינטרנט — שמציירת כל פריים. הטקסט מדויק כי הוא טקסט אמיתי. הצבע מדויק כי הוא <code>#FF8F3A</code>. ואם השנייה הרביעית לא טובה, משנים שלוש שורות קוד — וכל שאר הסרטון נשאר זהה בבית.</p></div>
   </div>
   <p><b>למה זה מתאים דווקא ל-LLM?</b> מודל שפה הוא, בבסיסו, מכונה שכותבת טקסט — וקוד הוא טקסט עם חוקים חדים. כשהופכים "תעשה אנימציה יפה" ל"תכתוב פונקציה שמחזירה את רוחב הכפתור בזמן t", לוקחים את המשימה מהתחום שבו המודל חלש (ניחוש ויזואלי) לתחום שבו הוא הכי חזק (קוד מדויק, ארוך ועקבי). למה זה פרץ דווקא עם Opus 5.5? אין מדידה ישירה של "יכולת מושן", אבל מה שהקהילה מצביעה עליו הוא חוש תזמון וקצב טוב באופן חריג, ויחד איתו שני דברים שהשיטה דורשת: לכתוב ולתחזק קובץ קוד ארוך בלי לשבור אותו, ו<b>לראות</b> תמונות.</p>
   <div class="why"><b>החלק שכולם מפספסים: לקלוד יש עיניים</b>Claude Code יכול לפתוח קובץ PNG ו"לראות" אותו. לכן הלולאה היא: לכתוב קוד → לצלם כמה פריימים → להסתכל עליהם → לתקן. זה ההבדל בין "פרומפט אחד ותקווה" לבין תהליך שמשתפר את עצמו. וזו גם הסיבה ל"גיליונות המגע" בשלב 1: מודל לא יכול לצפות בוידאו, אבל הוא יכול לקרוא תמונה אחת שיש בה 30 פריימים קטנים. ולמה דווקא 2 פריימים לשנייה? כי ב-120 BPM יש בדיוק ביט כל חצי שנייה — כלומר תמונה אחת לכל ביט.</div>
@@ -392,7 +489,7 @@ img.cmp{width:100%;display:block;border-radius:14px;margin:14px 0}
 </section>
 
 <!-- ============ 6 SEEK ============ -->
-<section class="sec" id="s6" data-toc="seek(t): פונקציה טהורה של זמן">
+<section class="sec s-cloud" id="s6" data-folio="06" data-toc="seek(t): פונקציה טהורה של זמן">
   <div class="sh"><span class="num">06</span><div><h2><code>seek(t)</code>: כל פריים הוא פונקציה טהורה של הזמן</h2><p class="sub">הכלל הטכני הכי חשוב בכל הפרומפטים: "no CSS transitions, no timers, no state between frames".</p></div></div>
   <p><b>פונקציה</b> היא מכונה: נכנס ערך, יוצא ערך. <b>פונקציה טהורה</b> היא כזו שאותו קלט תמיד נותן אותו פלט, ושלא תלויה בשום דבר אחר — לא בשעון של המחשב, לא במה שקרה קודם. <code>seek(t)</code> מקבלת זמן <code>t</code> בשניות (למשל 4.2) ומציירת את המסך <b>בדיוק</b> כפי שהוא צריך להיראות ברגע הזה. מכלום. בלי לזכור שום דבר.</p>
   <div class="code"><span class="lbl">film.html — the minimal shape of every film</span><button class="cp">העתק</button><pre>&lt;div id="dot"&gt;&lt;/div&gt;
@@ -426,7 +523,7 @@ seek(0);
 </section>
 
 <!-- ============ 7 EASING ============ -->
-<section class="sec" id="s7" data-toc="Easing: איך דברים מאיצים">
+<section class="sec s-denim" id="s7" data-folio="07" data-toc="Easing: איך דברים מאיצים">
   <div class="sh"><span class="num">07</span><div><h2>Easing: למה תנועה "ליניארית" נראית רובוטית</h2><p class="sub">השכבה הראשונה של "טעם" — ואיך היא נראית כמספרים.</p></div></div>
   <p>נניח שכפתור צריך לזוז מנקודה A לנקודה B בשנייה אחת. הדרך הפשוטה: בכל רגע הוא עבר את אותו אחוז מהדרך שעבר מהזמן (‏50% מהזמן = 50% מהדרך). זה נקרא <b>ליניארי</b>, וזה נראה מכני — כי שום דבר בעולם לא זז ככה. מכונית מאיצה, נוסעת, ומאטה. יד מרימה כוס, מאיצה, ומאטה לפני השולחן.</p>
   <p><b>Easing</b> היא פונקציה שממירה "כמה מהזמן עבר" (u, בין 0 ל-1) ל"כמה מהדרך עברנו" (גם בין 0 ל-1). בהתחלה בלי נוסחאות — תסתכלו על הכדורים:</p>
@@ -439,7 +536,7 @@ seek(0);
 </section>
 
 <!-- ============ 8 SPRINGS ============ -->
-<section class="sec" id="s8" data-toc="קפיצים בנוסחה סגורה">
+<section class="sec s-cloud" id="s8" data-folio="08" data-toc="קפיצים בנוסחה סגורה">
   <div class="sh"><span class="num">08</span><div><h2>קפיצים "בנוסחה סגורה" — הסוד של התחושה הפיזיקלית</h2><p class="sub">"Springs are closed-form step responses" — מה כל מילה אומרת, ולמה בדיוק ככה.</p></div></div>
   <p><b>אינטואיציה קודם:</b> דמיינו משקולת שתלויה על קפיץ, ואתם מזיזים בבת אחת את נקודת התלייה 10 ס״מ למטה. המשקולת לא קופצת מיד למקום החדש: היא מאיצה לכיוונו, עוברת אותו קצת, חוזרת, ומתייצבת. שני דברים קובעים איך זה ייראה:</p>
   <ul>
@@ -474,7 +571,7 @@ seek(0);
 </section>
 
 <!-- ============ 9 MORPH ============ -->
-<section class="sec" id="s9" data-toc="Morph במקום Fade">
+<section class="sec s-denim" id="s9" data-folio="09" data-toc="Morph במקום Fade">
   <div class="sh"><span class="num">09</span><div><h2>לשנות צורה במקום להעלים: Morph מול Fade</h2><p class="sub">חוק מס׳ 1 ו-2 ב"מה גורם לזה להיראות יקר". למה זה עובד על המוח.</p></div></div>
   <p><b>Fade (קרוספייד)</b> = התמונה הישנה נעשית שקופה בזמן שהחדשה מופיעה. באמצע, שתיהן חצי-שקופות אחת על השנייה. <b>Morph</b> = אותו אובייקט עצמו משנה רוחב, גובה, פינות וצבע — עד שהוא הופך לדבר הבא.</p>
   <div class="lab"><div class="lh">אותו מעבר — פעמיים</div><div class="lb">
@@ -482,12 +579,12 @@ seek(0);
     <div class="ctrls"><label>התקדמות <input type="range" id="mfU" min="0" max="1" step="0.001" value="0.5"><output id="mfO">0.50</output></label><button class="btn" id="mfPlay">▶ נגן</button></div>
   </div></div>
   <p><b>למה המוח מעדיף Morph:</b> מערכת הראייה שלנו בנויה לעקוב אחרי <b>אובייקטים</b> לאורך זמן (קביעות אובייקט). כשהכפתור עצמו גדל לעמוד, העין לא מאבדת אותו לרגע — ולכן המוח קורא סיבה-ותוצאה: "לחצתי, והדבר הזה נפתח". בפייד, יש רגע שבו העין רואה שני דברים חצי-שקופים ולא יודעת במה להתמקד; הקשר הסיבתי נשבר והתוצאה מרגישה כמו "שקופית הבאה" במצגת. מכאן "it looks like a powerpoint".</p>
-  <div class="def"><b>הגדרה: Shared element (אלמנט משותף)</b>בפרומפט: <i>"Every handoff between layers is a shared element: the lime flood carries a copy of the bubble's words, the button carries its own label into the page."</i> כשאובייקט עובר משכבה אחת לאחרת (למשל מהטלפון אל מסך מלא), הוא לוקח <b>איתו את התוכן שלו</b>. בסרטון למעלה: הגלולה עם <code>seek(t)</code> גדלה לכרטיס, והכפתור הוורוד שבכרטיס הוא זה שמציף את המסך בדרופ — לא צבע שמופיע משום מקום.</div>
+  <div class="def"><b>הגדרה: Shared element (אלמנט משותף)</b>בפרומפט: <i>"Every handoff between layers is a shared element: the lime flood carries a copy of the bubble's words, the button carries its own label into the page."</i> כשאובייקט עובר משכבה אחת לאחרת (למשל מהטלפון אל מסך מלא), הוא לוקח <b>איתו את התוכן שלו</b>. בסרטון למעלה: הגלולה עם <code>seek(t)</code> גדלה לכרטיס, והכפתור הכתום שבכרטיס הוא זה שמציף את המסך בדרופ — לא צבע שמופיע משום מקום.</div>
   <div class="warn"><b>"הצפה" (flood) — שני המספרים מהפרומפטים</b>"A flood must clear the farthest corner and take about 0.35s, or it reads as a flash." עיגול שמתרחב צריך להגיע לרדיוס = המרחק מהמרכז שלו <b>לפינה הרחוקה ביותר</b> של המסך — אחרת נשאר משולש לא צבוע בפינה. ו-0.35 שנייה: מהר יותר, ב-60fps חצי מסך משתנה בפריים אחד או שניים — העין רואה "הבזק" ולא תנועה; לאט יותר, זה כבר לא מרגיש כמו פיצוץ על הדרופ.</div>
 </section>
 
 <!-- ============ 10 CAMERA ============ -->
-<section class="sec" id="s10" data-toc="מצלמה: זום לוגריתמי">
+<section class="sec s-cloud" id="s10" data-folio="10" data-toc="מצלמה: זום לוגריתמי">
   <div class="sh"><span class="num">10</span><div><h2>המצלמה: טרנספורמציה אחת, וזום "במרחב לוגריתמי"</h2><p class="sub">"The camera is one transform on a container... zoom interpolated in log space."</p></div></div>
   <p>אין באמת מצלמה בדף אינטרנט. "מצלמה" = <b>קופסה אחת שעוטפת את כל העולם</b>, ועליה מפעילים הזזה והגדלה (transform). להגדיל את הקופסה פי 2 סביב נקודה = "זום פי 2 על הנקודה". כל התנועה של המצלמה היא רשימה קצרה של מפתחות <code>[זמן, זום, x, y]</code> וביניהם easing.</p>
   <p><b>למה "לוגריתמי"?</b> זום הוא <b>כפלי</b>: מ-1 ל-2 זה "פי 2", ומ-2 ל-4 זה גם "פי 2" — והעין חווה את שניהם כאותו מרחק. אם מחשבים זום ליניארית מ-1 ל-16, באמצע הזמן הזום הוא 8.5 — כלומר כבר עברנו פי 8.5 מתוך פי 16. העין מרגישה זינוק מטורף בהתחלה וזחילה בסוף. במרחב לוגריתמי (<code>z = a·(b/a)<sup>u</sup></code>) באמצע הזמן הזום הוא 4 = ‏√16: מחצית הדרך <b>התפיסתית</b>. המהירות שהעין חווה היא קצב השינוי של <code>ln(z)</code> — וזה בדיוק מה שהגרף מתחת מודד.</p>
@@ -498,13 +595,13 @@ seek(0);
   </div></div>
   <ul>
     <li><b>"one move per scene"</b> — תנועת מצלמה אחת לכל סצנה. שתי תנועות בו-זמנית (זום + פאן לכיוון אחר) = העין לא יודעת לאן להסתכל.</li>
-    <li><b>"never zooms in and out back to back"</b> — זום-אין ומיד זום-אאוט נראה כמו מצלמה שלא החליטה. בסרטון למעלה: המצלמה נדחפת פנימה לפני הדרופ, ואת החזרה ל-1 היא עושה <b>בזמן שההצפה הוורודה מכסה את כל המסך</b> — שינוי מצלמה על משטח בצבע אחיד הוא בלתי נראה. זה טריק עריכה קלאסי.</li>
+    <li><b>"never zooms in and out back to back"</b> — זום-אין ומיד זום-אאוט נראה כמו מצלמה שלא החליטה. בסרטון למעלה: המצלמה נדחפת פנימה לפני הדרופ, ואת החזרה ל-1 היא עושה <b>בזמן שההצפה הכתומה מכסה את כל המסך</b> — שינוי מצלמה על משטח בצבע אחיד הוא בלתי נראה. זה טריק עריכה קלאסי.</li>
     <li><b>"Never put will-change on anything the camera scales"</b> — <code>will-change</code> אומר לדפדפן "צלם את האלמנט הזה כתמונה ותזיז את התמונה". כשמגדילים תמונה כזו — הטקסט מטושטש. בלעדיו הדפדפן מצייר את הטקסט מחדש בכל גודל, חד.</li>
   </ul>
 </section>
 
 <!-- ============ 11 MUSIC ============ -->
-<section class="sec" id="s11" data-toc="המוזיקה היא השעון">
+<section class="sec s-denim" id="s11" data-folio="11" data-toc="המוזיקה היא השעון">
   <div class="sh"><span class="num">11</span><div><h2>המוזיקה היא השעון: BPM, ביטים, דרופ וסאונד לפי שיא</h2><p class="sub">"Something happens on every beat" — ואיך מחשב "שומע" את הביט.</p></div></div>
   <p><b>BPM</b> (Beats Per Minute) = כמה פעימות בדקה. 120 BPM = ‏2 פעימות בשנייה = ביט כל 0.5 שנייה. <b>תיבה</b> (bar) = 4 ביטים. <b>דאונביט</b> = הביט הראשון בתיבה, החזק. <b>דרופ</b> = הרגע שבו אחרי בנייה כל הכלים נכנסים בבת אחת — שיא האנרגיה.</p>
   <p>ברגע שיודעים את ה-BPM, כל תכנון הסרטון הופך לטבלה: ביט 0 — זה קורה, ביט 1 — זה. בגלל זה הפרומפטים מדברים בביטים ולא בשניות. בדקתי את המספרים שלו — הם מדויקים:</p>
@@ -549,7 +646,7 @@ seek(0);
 </section>
 
 <!-- ============ 12 MOTION BLUR ============ -->
-<section class="sec" id="s12" data-toc="מושן בלר מתת-פריימים">
+<section class="sec s-cloud" id="s12" data-folio="12" data-toc="מושן בלר מתת-פריימים">
   <div class="sh"><span class="num">12</span><div><h2>מושן בלר מתת-פריימים: למה 4 משאיר "רוחות רפאים" ו-8 לא</h2><p class="sub">"8 subframes per frame blended with ffmpeg tmix" — כל מילה, כל מספר.</p></div></div>
   <p><b>הבעיה:</b> מצלמה אמיתית פותחת את התריס לפרק זמן (למשל חצי מזמן הפריים — "תריס 180°"). מה שזז בזמן הזה נמרח בתמונה. זה ה"מושן בלר", והמוח רגיל אליו כל כך שבלעדיו תנועה מהירה נראית "מגמגמת" ומלאכותית. אבל צילום מסך של דפדפן הוא <b>רגע אחד אינסופית קצר</b> — אפס מריחה.</p>
   <p><b>הפתרון:</b> לכל פריים סופי, מצלמים N "תת-פריימים" בזמנים צפופים בתוך חלון התריס, ומחשבים <b>ממוצע</b> פיקסל-פיקסל. ממוצע של 8 מיקומים קרובים של עיגול = עיגול מרוח. <b>ffmpeg tmix</b> הוא בדיוק פילטר שממצע N פריימים רצופים.</p>
@@ -572,7 +669,7 @@ ffmpeg -framerate 480 -i sub_%06d.png \
 </section>
 
 <!-- ============ 13 QA ============ -->
-<section class="sec" id="s13" data-toc="קלוד בודק את עצמו">
+<section class="sec s-denim" id="s13" data-folio="13" data-toc="קלוד בודק את עצמו">
   <div class="sh"><span class="num">13</span><div><h2>"It checks its own work": בקרת איכות שקלוד עושה לבד</h2><p class="sub">החוק השביעי — והסיבה שהתוצאה לא נראית כמו "פרומפט אחד ותקווה".</p></div></div>
   <p>כל פרומפט שלו נגמר ב-<code>&lt;start&gt;</code> שמחייב: <b>לפני כתיבת הסרט המלא</b> — מפת ביטים ו-4 סטילס לאישור. ואחרי הרינדור — שתי בדיקות: פריים אחד לכל ביט, וסריקת "pops".</p>
   <h3>בדיקה 1: גיליון מגע — פריים אחד לכל ביט</h3>
@@ -589,7 +686,7 @@ ffmpeg -framerate 480 -i sub_%06d.png \
 </section>
 
 <!-- ============ 14 PIPELINE ============ -->
-<section class="sec" id="s14" data-toc="הצנרת המלאה">
+<section class="sec s-navy" id="s14" data-folio="14" data-toc="הצנרת המלאה">
   <div class="sh"><span class="num">14</span><div><h2>הצנרת המלאה: מקובץ HTML ל-MP4</h2><p class="sub">עכשיו, כשכל חלק מוגדר, אפשר לראות את כל השרשרת.</p></div></div>
   <div class="pipe">
     <div class="st"><b>REFERENCE</b>סרטון השראה → 2fps → גיליונות מגע → מבנה ביטים</div><span class="ar">→</span>
@@ -631,7 +728,7 @@ await browser.close();</pre></div>
 </section>
 
 <!-- ============ 15 ANATOMY ============ -->
-<section class="sec" id="s15" data-toc="אנטומיה של הפרומפט">
+<section class="sec s-cloud" id="s15" data-folio="15" data-toc="אנטומיה של הפרומפט">
   <div class="sh"><span class="num">15</span><div><h2>אנטומיה של הפרומפט: 6 בלוקים, ולמה כל אחד עובד על LLM</h2><p class="sub">כל הפרומפטים שלו בנויים בדיוק באותו שלד. לחצו על בלוק.</p></div></div>
   <div class="blocks" id="anBlocks"></div>
   <div class="card anat" id="anBody"></div>
@@ -639,7 +736,7 @@ await browser.close();</pre></div>
 </section>
 
 <!-- ============ 16 FLYOVER ============ -->
-<section class="sec" id="s16" data-toc="בונוס: פרומפט ה-Fly-over">
+<section class="sec s-denim" id="s16" data-folio="16" data-toc="בונוס: פרומפט ה-Fly-over">
   <div class="sh"><span class="num">16</span><div><h2>בונוס: פרומפט ה-Fly-over התלת-ממדי ששלחת</h2><p class="sub">אותו שלד בדיוק — אבל כאן הוא שובר את חוק ה"2D only" שלו, ובכוונה.</p></div></div>
   <details><summary>הפרומפט המלא + תרגום</summary><div class="in">
     <div class="code"><span class="lbl">original · paste into Claude Code</span><button class="cp">העתק</button><pre data-prompt="fly"></pre></div>
@@ -668,7 +765,7 @@ await browser.close();</pre></div>
 </section>
 
 <!-- ============ 17 CRITIQUE ============ -->
-<section class="sec" id="s17" data-toc="ניתוח ביקורתי: מה מוגזם">
+<section class="sec s-cloud" id="s17" data-folio="17" data-toc="ניתוח ביקורתי: מה מוגזם">
   <div class="sh"><span class="num">17</span><div><h2>מה אפשר להבין מזה — כולל מה מוגזם</h2><p class="sub">השיטה מצוינת. הכותרת שלה — פחות.</p></div></div>
   <div class="tbl"><table>
     <tr><th>הטענה</th><th>מה נכון</th><th>מה מוגזם / חסר</th></tr>
@@ -683,7 +780,7 @@ await browser.close();</pre></div>
 </section>
 
 <!-- ============ 18 ADOPT ============ -->
-<section class="sec" id="s18" data-toc="איך אנחנו מאמצים את זה">
+<section class="sec s-sky" id="s18" data-folio="18" data-toc="איך אנחנו מאמצים את זה">
   <div class="sh"><span class="num">18</span><div><h2>איך אנחנו מאמצים את זה מעכשיו — YUV.AI Motion Method</h2><p class="sub">מה כבר יש לנו מ-EP01–EP06, מה משתנה, והפרומפט שלנו.</p></div></div>
   <div class="tbl"><table>
     <tr><th>רכיב</th><th>מה עשינו עד היום</th><th>מעכשיו</th></tr>
@@ -702,14 +799,26 @@ await browser.close();</pre></div>
 </section>
 
 <!-- ============ 19 SOURCES ============ -->
-<section class="sec" id="s19" data-toc="מקורות">
+<section class="sec s-denim" id="s19" data-folio="19" data-toc="מקורות">
   <div class="sh"><span class="num">19</span><div><h2>מקורות</h2><p class="sub">כל הקישורים נבדקו כחיים ב-15.10.2026.</p></div></div>
   <ol class="src" id="srcList"></ol>
 </section>
 
 <footer>
-  <div class="sig">יובל אבידני | yuv.ai | <span class="ltr">@yuvalav</span></div>
-  <p>כל התוכן והפרומפטים המקוריים שייכים ל-zero (<a href="https://x.com/twoclipping" target="_blank" rel="noopener" class="ltr">@twoclipping</a>). העמוד הזה הוא ניתוח ותרגום לצורכי לימוד. כל המעבדות מחושבות בזמן אמת בדפדפן שלך — אין כאן אף מספר מזויף.</p>
+  <div class="sig">יובל אבידני</div>
+  <p class="bio">מגיש פינת AI בחדשות 12, GitHub Star כפול, AWS Gen AI Superstar, מייסד YUV.AI. בונה, מלמד, ומשגר AI שעובד.</p>
+  <nav class="links" aria-label="קישורים">
+    <a href="https://yuv.ai" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm6.9 6h-2.9a15.7 15.7 0 0 0-1.4-3.6A8 8 0 0 1 18.9 8ZM12 4.1c.8 1.1 1.5 2.4 1.9 3.9h-3.8c.4-1.5 1.1-2.8 1.9-3.9ZM4.3 14a8 8 0 0 1 0-4h3.3a16.5 16.5 0 0 0 0 4H4.3Zm.8 2h2.9c.3 1.3.8 2.5 1.4 3.6A8 8 0 0 1 5.1 16Zm2.9-8H5.1a8 8 0 0 1 4.3-3.6C8.8 5.5 8.3 6.7 8 8Zm4 11.9c-.8-1.1-1.5-2.4-1.9-3.9h3.8c-.4 1.5-1.1 2.8-1.9 3.9Zm2.3-5.9H9.7a14.7 14.7 0 0 1 0-4h4.6a14.7 14.7 0 0 1 0 4Zm.3 5.6c.6-1.1 1.1-2.3 1.4-3.6h2.9a8 8 0 0 1-4.3 3.6Zm1.8-5.6a16.5 16.5 0 0 0 0-4h3.3a8 8 0 0 1 0 4h-3.3Z"/></svg><span>yuv.ai</span></a>
+    <a href="https://linktr.ee/yuvai" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m13.73635 5.85251 4.00467-4.11665 2.3248 2.3808-4.20064 4.00466h5.9085v3.30473h-5.9365l4.22865 4.10766-2.3248 2.3338L12.0005 12.099l-5.74052 5.76852-2.3248-2.3248 4.22864-4.10766h-5.9375V8.12132h5.9085L3.93417 4.11666l2.3248-2.3808 4.00468 4.11665V0h3.4727zm-3.4727 10.30614h3.4727V24h-3.4727z"/></svg><span>Linktree</span></a>
+    <a href="https://x.com/yuvalav" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.234 10.162 22.977 0h-2.072l-7.591 8.824L7.251 0H.258l9.168 13.343L.258 24H2.33l8.016-9.318L16.749 24h6.993zm-2.837 3.299-.929-1.329L3.076 1.56h3.182l5.965 8.532.929 1.329 7.754 11.09h-3.182z"/></svg><span>@yuvalav</span></a>
+    <a href="https://instagram.com/yuval_770" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"/></svg><span>Instagram</span></a>
+    <a href="https://www.tiktok.com/@yuval.ai" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg><span>TikTok</span></a>
+    <a href="https://youtube.com/@yuv-ai" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg><span>YouTube</span></a>
+    <a href="https://github.com/hoodini" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg><span>GitHub</span></a>
+    <a href="https://www.linkedin.com/in/yuval-avidani-87081474/" target="_blank" rel="noopener"><span class="tx" aria-hidden="true">in</span><span>LinkedIn</span></a>
+    <a href="https://facebook.com/yuval.avidani" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"/></svg><span>Facebook</span></a>
+  </nav>
+  <p class="credit">כל התוכן והפרומפטים המקוריים שייכים ל-zero (<a href="https://x.com/twoclipping" target="_blank" rel="noopener" class="ltr">@twoclipping</a>). העמוד הזה הוא ניתוח ותרגום לצורכי לימוד. כל המעבדות מחושבות בזמן אמת בדפדפן שלך — אין כאן אף מספר מזויף.</p>
 </footer>
 </main>
 
@@ -853,8 +962,8 @@ Ask me for: the topic and the ONE idea the viewer must leave with, the Hebrew sc
 </inputs>
 
 <direction>
-YUV.AI motion style, 2D, one continuous take: every scene is made out of the previous one. Objects change shape instead of fading: text rises out of a mask line, a pill grows into a card, a magenta flood pours out of one object and later shrinks back into another. Paper-white canvas #F6F6F3, ink #0E0E10, magenta #FF2EA0 as the single accent, cyan #16D6E8 only for small data highlights, keywords on a yellow #FFD60A marker that sweeps right-to-left. Hebrew display in Rubik 800-900, Hebrew captions in Assistant 600-800 (never thinner than 500), English labels in Anton uppercase, code in JetBrains Mono. Hebrew is RTL: words enter from the right, numbers and Latin stay LTR inside RTL lines. Corners are 0 or fully round (999px), nothing in between. Short-phrase captions (1-3 words) may hard-cut on their own layer; scenes never cut. The camera makes one move per scene on eased keyframes and never zooms in and back out. If there is a talking-head video: graphics never cover my face; put big words behind me and captions in front of me for depth.
-Banned: crossfades, blur-ins, glows, particles, lens flares, camera shake, bouncy easing, holds longer than 1s, the purple-and-yellow palette, anything that looks like a template.
+YUV.AI motion style (Phoenix Day), 2D with at most one 3D hero moment, one continuous take: every scene is made out of the previous one. Objects change shape instead of fading: text rises out of a mask line, a pill grows into a card, a fire flood pours out of one object and later shrinks back into another. Palette: a bright sky base (gradient #5EA9F2 > #93CBFF > #DDF0FF, or a real sky), light denim #AFCBEF or cloud #EEF3FB for dense content, navy #12163F for type and UI, and the phoenix fire gradient (#FFC74E > #FF8F3A > #F56B49) as the one accent: keywords sit on a fire marker block behind navy text, sweeping right-to-left. A rotating neon conic edge (cyan, blue, violet, pink, orange, gold) goes only around the key input or CTA and pulses on the beat. Phoenix Night (navy base, white type, gold kickers) only for drama: the drop, a sunset, the end card. Hebrew display in Rubik 900 at magazine scale (124-160px at 1080p), anchored right; Hebrew captions in Assistant 600-800 (never thinner than 500); English labels in Anton uppercase; code in JetBrains Mono. Giant Anton folio numerals bleed off the frame. Hebrew is RTL: words enter from the right, numbers and Latin stay LTR inside RTL lines. Pills and inputs are fully round (999px), cards 36-48px, never 8-12px; shadows are two layers tinted navy. Short-phrase captions (1-3 words) may hard-cut on their own layer; scenes never cut. The camera makes one move per scene on eased keyframes and never zooms in and back out. If there is a talking-head video: graphics never cover my face; put big words behind me and captions in front of me for depth.
+Banned: crossfades, blur-ins, any glow other than the neon edge, particles, lens flares, camera shake, bouncy easing, holds longer than 1s, the retired palettes (purple #5E17EB + yellow #FFEC00, flat magenta + cyan, pale paper or grey pages), anything that looks like a template.
 </direction>
 
 <structure>
@@ -1068,7 +1177,10 @@ if (typeof module !== 'undefined') module.exports = E;
 'use strict';
 const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
-const C = { ink: '#0E0E10', paper: '#F6F6F3', mag: '#FF2EA0', cyan: '#16D6E8', cyanD: '#0A9FB0', muted: '#5D5D69', line: 'rgba(14,14,16,.14)', yellow: '#FFD60A', white: '#fff' };
+// Phoenix Day: navy ink on cloud, fire accent; gold only on navy; sky-6 for a second series; raspberry for playheads
+const C = { ink: '#12163F', paper: '#EEF3FB', mag: '#FF8F3A', magT: '#B4501A', cyan: '#FFC74E', cyanD: '#2C78D2', muted: '#4A5280', line: 'rgba(18,22,63,.14)', yellow: '#D74270', white: '#fff' };
+function fireFill(x, x0, y0, x1, y1) { const g = x.createLinearGradient(x0, y0, x1, y1); g.addColorStop(0, '#FFC74E'); g.addColorStop(0.5, '#FF8F3A'); g.addColorStop(1, '#F56B49'); return g; }
+function skyFill(x, H) { const g = x.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#5EA9F2'); g.addColorStop(0.4, '#93CBFF'); g.addColorStop(1, '#DDF0FF'); return g; }
 const DPR = Math.min(2, window.devicePixelRatio || 1);
 const { clamp, lerp, inv, ease, spring, springKeys, logLerp } = E;
 const FONT_HE = '"Rubik","Assistant",system-ui,sans-serif', FONT_EN = '"Anton",Impact,sans-serif', FONT_MONO = '"JetBrains Mono",ui-monospace,monospace', FONT_BODY = '"Assistant",system-ui,sans-serif';
@@ -1132,7 +1244,7 @@ function drawCursor(x, X, Y, s) {
 }
 function drawFilm(x, t) {
   const k = x.canvas.width / FILM.W; x.setTransform(k, 0, 0, k, 0, 0);
-  x.fillStyle = C.paper; x.fillRect(0, 0, 1280, 720);
+  x.fillStyle = skyFill(x, 720); x.fillRect(0, 0, 1280, 720);
   // ---------------- world (under the camera) ----------------
   if (t < 4.36) {
     const cam = camAt(t);
@@ -1156,10 +1268,10 @@ function drawFilm(x, t) {
           const L = len * ease.outCubic(inv(t0, t0 + 0.35, t)); if (L <= 0) return;
           rr(x, right - L, top + i * 62, L, hh, 999); x.fillStyle = col; x.fill();
         });
-        // the CTA: a magenta pill pops on beat 7.5
+        // the CTA: a fire pill pops on beat 7.5
         const cs = spring(t - 3.75, 16, 0.7);
-        if (cs > 0.01) { const [cx, cy] = ctaPos(t); rr(x, cx - 80 * cs, cy - 28 * cs, 160 * cs, 56 * cs, 999); x.fillStyle = C.mag; x.fill();
-          if (cs > 0.6) txt(x, 'שגר', cx, cy + 1, { color: '#fff', font: `800 ${Math.round(26 * cs)}px ${FONT_HE}`, align: 'center', base: 'middle', rtl: true }); }
+        if (cs > 0.01) { const [cx, cy] = ctaPos(t); rr(x, cx - 80 * cs, cy - 28 * cs, 160 * cs, 56 * cs, 999); x.fillStyle = fireFill(x, cx - 80, cy - 28, cx + 80, cy + 28); x.fill();
+          if (cs > 0.6) txt(x, 'שגר', cx, cy + 1, { color: C.ink, font: `800 ${Math.round(26 * cs)}px ${FONT_HE}`, align: 'center', base: 'middle', rtl: true }); }
         x.restore();
       }
     }
@@ -1173,7 +1285,7 @@ function drawFilm(x, t) {
   }
   // ---------------- screen space: the flood ----------------
   const fl = floodAt(t);
-  if (fl) { x.beginPath(); x.arc(fl[0], fl[1], Math.max(0, fl[2]), 0, Math.PI * 2); x.fillStyle = C.mag; x.fill(); }
+  if (fl) { x.beginPath(); x.arc(fl[0], fl[1], Math.max(0, fl[2]), 0, Math.PI * 2); x.fillStyle = fireFill(x, 0, 0, 1280, 720); x.fill(); }
   // words on the drop, one per beat, rising out of a mask line
   if (t > 4.45 && t < 6.3) {
     const words = ['בונים.', 'מרנדרים.', 'משיקים.'], times = [4.5, 5.0, 5.5];
@@ -1183,7 +1295,7 @@ function drawFilm(x, t) {
     let xr = 640 + tot / 2;
     words.forEach((w, i) => {
       const dy = 120 * (1 - ease.outCubic(inv(times[i], times[i] + 0.35, t))) + 130 * ease.inCubic(inv(6.0, 6.28, t));
-      x.fillStyle = '#fff'; x.textAlign = 'right'; x.fillText(w, xr, 400 + dy); xr -= ws[i] + gap;
+      x.fillStyle = C.ink; x.textAlign = 'right'; x.fillText(w, xr, 400 + dy); xr -= ws[i] + gap;
     });
     x.restore();
   }
@@ -1205,18 +1317,18 @@ function drawFilm(x, t) {
       const X = lerp(dX, fx, s);
       x.save(); x.translate(X, yb); x.scale(s, s); x.fillStyle = C.ink; x.textAlign = 'center'; x.fillText(ch, 0, 0); x.restore();
     });
-    x.beginPath(); x.arc(lerp(640, dX, p), lerp(360, dY, p), lerp(22, rp, p) * pulse, 0, Math.PI * 2); x.fillStyle = C.mag; x.fill();
+    x.beginPath(); x.arc(lerp(640, dX, p), lerp(360, dY, p), lerp(22, rp, p) * pulse, 0, Math.PI * 2); x.fillStyle = fireFill(x, dX - 22, dY - 22, dX + 22, dY + 22); x.fill();
     if (t > 7.45) {
       x.beginPath(); x.rect(0, yb + 30, 1280, 60); x.clip();
       const dy = 50 * (1 - ease.outCubic(inv(7.5, 7.85, t)));
-      x.letterSpacing = '7px'; txt(x, 'FLY HIGH WITH AI', 640, yb + 70 + dy, { color: C.muted, font: `500 24px ${FONT_MONO}`, align: 'center' });
+      x.letterSpacing = '7px'; txt(x, 'FLY HIGH WITH AI', 640, yb + 70 + dy, { color: C.ink, font: `500 24px ${FONT_MONO}`, align: 'center' });
     }
     x.restore();
   }
   // HUD: the only input is t
   const fh = floodAt(t), onMag = !!fh && Math.hypot(80 - fh[0], 40 - fh[1]) < fh[2];
-  txt(x, `seek(${t.toFixed(3)})`, 28, 40, { color: onMag ? 'rgba(255,255,255,.85)' : C.muted, font: `500 18px ${FONT_MONO}` });
-  if (t >= 3.98 && t < 4.6) txt(x, 'beat 8 · DROP', 28, 66, { color: onMag ? '#fff' : C.mag, font: `500 16px ${FONT_MONO}` });
+  txt(x, `seek(${t.toFixed(3)})`, 28, 40, { color: onMag ? 'rgba(18,22,63,.85)' : 'rgba(18,22,63,.7)', font: `500 18px ${FONT_MONO}` });
+  if (t >= 3.98 && t < 4.6) txt(x, 'beat 8 · DROP', 28, 66, { color: C.ink, font: `700 16px ${FONT_MONO}` });
 }
 
 /* ---------- film player ---------- */
@@ -1282,7 +1394,7 @@ function initTimer() {
     axes(x, X, Y, w, h, { title: 'זמן האנימציה שנתפס בכל פריים', xl: 'frame →', yl: 'animation time (s)' });
     poly(x, tT.map((v, i) => [X + i / (N - 1) * w, Y + h - v / maxT * h]), C.mag, 2.5);
     poly(x, sT.map((v, i) => [X + i / (N - 1) * w, Y + h - v / maxT * h]), C.ink, 2.5);
-    txt(x, 'timer', X + w - 40, Y + 16, { color: C.mag, font: `700 13px ${FONT_MONO}` });
+    txt(x, 'timer', X + w - 40, Y + 16, { color: C.magT, font: `700 13px ${FONT_MONO}` });
     txt(x, 'seek(t)', X + w - 60, Y + h - sT[N - 1] / maxT * h - 8, { color: C.ink, font: `700 13px ${FONT_MONO}` });
   }
   function drawBall(c, t, col) { const x = ctx2(c); x.fillStyle = C.paper; x.fillRect(0, 0, 420, 120); x.strokeStyle = C.line; x.beginPath(); x.moveTo(30, 60); x.lineTo(390, 60); x.stroke(); x.beginPath(); x.arc(ballX(t), 60, 18, 0, 7); x.fillStyle = col; x.fill(); }
@@ -1327,7 +1439,7 @@ function initSpring() {
     const my = v => Y + gh - (v - lo) / (hi - lo) * gh, mx = t => X + t / T * gw;
     const targets = multi ? [[0, 380], [0.35, 200], [0.7, 300]] : [[0, 380]];
     targets.forEach(([t0, v], i) => { const t1 = targets[i + 1] ? targets[i + 1][0] : T; poly(x, [[mx(t0), my(v)], [mx(t1), my(v)]], C.muted, 1, [4, 4]); });
-    if (!multi) { const band = 0.02 * 336; x.fillStyle = 'rgba(22,214,232,.12)'; x.fillRect(X, my(380 + band), gw, my(380 - band) - my(380 + band)); }
+    if (!multi) { const band = 0.02 * 336; x.fillStyle = 'rgba(44,120,210,.12)'; x.fillRect(X, my(380 + band), gw, my(380 - band) - my(380 + band)); }
     const pts = []; for (let i = 0; i <= 300; i++) { const t = i / 300 * T; pts.push([mx(t), my(val(t))]); }
     poly(x, pts, C.mag, 2.5);
     x.strokeStyle = C.yellow; x.lineWidth = 2; x.beginPath(); x.moveTo(mx(tp), Y); x.lineTo(mx(tp), Y + gh); x.stroke();
@@ -1418,7 +1530,7 @@ function initZoom() {
     const A = sp(zl), B = sp(zg), mx = Math.max(...A.map(p => p[1]), ...B.map(p => p[1]));
     poly(x, A.map(([t, v]) => [X + t * w, Y + h - v / mx * h]), C.ink, 2.5); poly(x, B.map(([t, v]) => [X + t * w, Y + h - v / mx * h]), C.mag, 2.5);
     x.strokeStyle = C.yellow; x.lineWidth = 2; x.beginPath(); x.moveTo(X + u * w, Y); x.lineTo(X + u * w, Y + h); x.stroke();
-    txt(x, 'linear', X + 0.1 * w, Y + 20, { color: C.ink, font: `700 13px ${FONT_MONO}` }); txt(x, 'log space', X + 0.55 * w, Y + 20, { color: C.mag, font: `700 13px ${FONT_MONO}` });
+    txt(x, 'linear', X + 0.1 * w, Y + 20, { color: C.ink, font: `700 13px ${FONT_MONO}` }); txt(x, 'log space', X + 0.55 * w, Y + 20, { color: C.magT, font: `700 13px ${FONT_MONO}` });
   }
   const r = bindRange('#zmU', '#zmO', v => v.toFixed(2), v => { u = v; draw(); });
   $('#zmPlay').addEventListener('click', () => { playing = !playing; st = performance.now(); if (playing) requestAnimationFrame(tick); });
@@ -1461,12 +1573,12 @@ function initBeat() {
     const env = an.env, on = an.onset, me = Math.max(...env), mo = Math.max(...on);
     poly(x, Array.from(env, (v, i) => [X + i / env.length * w, 200 - v / me * 50]), C.ink, 1.5);
     x.strokeStyle = C.mag; x.lineWidth = 1.5; x.beginPath(); for (let i = 0; i < on.length; i++) { if (on[i] < mo * 0.05) continue; const xx = X + i / on.length * w; x.moveTo(xx, 280); x.lineTo(xx, 280 - on[i] / mo * 60); } x.stroke();
-    txt(x, 'energy (RMS)', X + 6, 156, { font: `600 11px ${FONT_MONO}` }); txt(x, 'onsets', X + 6, 226, { font: `600 11px ${FONT_MONO}`, color: C.mag });
+    txt(x, 'energy (RMS)', X + 6, 156, { font: `600 11px ${FONT_MONO}` }); txt(x, 'onsets', X + 6, 226, { font: `600 11px ${FONT_MONO}`, color: C.magT });
     // detected grid
-    for (let t = an.firstBeat; t < dur; t += an.beatLen) { x.strokeStyle = 'rgba(10,159,176,.55)'; x.lineWidth = 1; x.beginPath(); x.moveTo(mx(t), 140); x.lineTo(mx(t), 152); x.stroke(); }
+    for (let t = an.firstBeat; t < dur; t += an.beatLen) { x.strokeStyle = 'rgba(44,120,210,.55)'; x.lineWidth = 1; x.beginPath(); x.moveTo(mx(t), 140); x.lineTo(mx(t), 152); x.stroke(); }
     txt(x, `detected grid · ${an.bpm.toFixed(1)} BPM`, X + w - 6, 138, { font: `600 11px ${FONT_MONO}`, color: C.cyanD, align: 'right' });
     x.strokeStyle = C.mag; x.lineWidth = 3; x.beginPath(); x.moveTo(mx(an.drop), 14); x.lineTo(mx(an.drop), 288); x.stroke();
-    txt(x, 'DROP', mx(an.drop) + 5, 24, { font: `700 12px ${FONT_MONO}`, color: C.mag });
+    txt(x, 'DROP', mx(an.drop) + 5, 24, { font: `700 12px ${FONT_MONO}`, color: C.magT });
     if (ph >= 0) { x.strokeStyle = C.yellow; x.lineWidth = 2.5; x.beginPath(); x.moveTo(mx(ph), 10); x.lineTo(mx(ph), 290); x.stroke(); }
   }
   bindRange('#btB', '#btBO', null, v => { bpm = v; });
@@ -1492,7 +1604,7 @@ function initPeak() {
     x.strokeStyle = C.ink; x.lineWidth = 1; x.beginPath(); const per = Math.max(1, Math.floor(s.length / fw));
     for (let i = 0; i < fw; i++) { let m = 0; for (let j = 0; j < per; j++) m = Math.max(m, Math.abs(s[i * per + j] || 0)); x.moveTo(X + i, 55 - m * 80); x.lineTo(X + i, 55 + m * 80); } x.stroke();
     const px = X + pk / (s.length / sr) * fw; x.strokeStyle = C.mag; x.lineWidth = 2.5; x.beginPath(); x.moveTo(px, 12); x.lineTo(px, 98); x.stroke();
-    txt(x, `${type}.mp3 · peak at ${pk.toFixed(3)} s`, X + 4, 116, { font: `600 12px ${FONT_MONO}`, color: C.mag });
+    txt(x, `${type}.mp3 · peak at ${pk.toFixed(3)} s`, X + 4, 116, { font: `600 12px ${FONT_MONO}`, color: C.magT });
     // timeline: 4 beats, event on beat 2
     const TX = 360, TW = 480, T = 2.0, mx = t => TX + t / T * TW;
     x.fillStyle = C.paper; x.fillRect(TX, 10, TW, 190);
@@ -1638,7 +1750,7 @@ function initFly() {
   for (let t = 0.01; t < T; t += 0.01) { const v = (cr(t + 0.005) - cr(t - 0.005)) / 0.01 / 770; keySpeed.push([mx(t), sy(v)]); if (t > 1.8 && t < 7.1) worstK = Math.max(worstK, Math.abs(v - E.flySpeed(t))); }
   poly(x, keySpeed, C.cyanD, 2);
   poly(x, pts.filter((_, i) => i % 5 === 0).map(p => [mx(p[0]), sy(p[2] / 770)]), C.mag, 2.5);
-  txt(x, 'speed curve, integrated (the prompt)', X + 8, 40, { color: C.mag, font: `700 12px ${FONT_MONO}` });
+  txt(x, 'speed curve, integrated (the prompt)', X + 8, 40, { color: C.magT, font: `700 12px ${FONT_MONO}` });
   txt(x, 'position keys every 0.5 s → wobbly speed', X + 8, 56, { color: C.cyanD, font: `700 12px ${FONT_MONO}` });
   axes(x, X, 200, w, 90, { title: 'מיקום במורד הדף (אינטגרל של המהירות)', xl: 't (s) →' });
   const maxP = pts[pts.length - 1][1]; poly(x, pts.filter((_, i) => i % 5 === 0).map(p => [mx(p[0]), 290 - p[1] / maxP * 86]), C.ink, 2.5);
