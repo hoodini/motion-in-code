@@ -1,0 +1,26 @@
+{
+  "name": "yuv-motion-catalog",
+  "private": true,
+  "type": "module",
+  "description": "Source of catalog.html: live demos of elements you can ask Claude to use in code-only motion design.",
+  "scripts": { "build": "node build.mjs" },
+  "dependencies": {
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "recharts": "3.2.1",
+    "@radix-ui/react-tabs": "1.1.13",
+    "@radix-ui/react-switch": "1.2.6",
+    "@radix-ui/react-slider": "1.3.6",
+    "@radix-ui/react-progress": "1.1.7",
+    "class-variance-authority": "0.7.1",
+    "clsx": "2.1.1",
+    "tailwind-merge": "2.6.0",
+    "lucide-react": "0.468.0",
+    "simple-icons": "15.15.0",
+    "three": "0.170.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.24.0",
+    "tailwindcss": "3.4.17"
+  }
+}

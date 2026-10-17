@@ -1,0 +1,1135 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>קטלוג המושן · YUV.AI</title>
+<meta name="description" content="קטלוג חי של אבני בניין לסרטוני מושן עם AI: גרפים של Recharts, ממשק shadcn/ui, אייקונים ולוגואים רשמיים, טיפוגרפיה קינטית, תלת-ממד ב-three.js ואפקטים. כל אלמנט עם הדגמה חיה, הסבר מאפס ופרומפט מלא.">
+<meta property="og:title" content="קטלוג המושן: מה אפשר לבקש מ-Claude">
+<meta property="og:description" content="18 אלמנטים חיים, 9 מושגי יסוד, 18 פרומפטים מלאים ובונה פרומפטים. בלי ידע קודם. YUV.AI">
+<meta property="og:image" content="https://hoodini.github.io/motion-in-code/media/readme/social-preview.jpg">
+<meta property="og:image:width" content="1280"><meta property="og:image:height" content="640">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Gveret+Levin&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&family=Karantina:wght@300;400;700&family=Assistant:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#12163F">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='f' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23FFC74E'/%3E%3Cstop offset='.5' stop-color='%23FF8F3A'/%3E%3Cstop offset='1' stop-color='%23F56B49'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='18' fill='%2312163F'/%3E%3Ccircle cx='32' cy='32' r='13' fill='url(%23f)'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="catalog/site.css">
+<link rel="stylesheet" href="catalog/tw.css">
+<link rel="stylesheet" href="catalog/catalog.css">
+<script type="module" src="catalog/main.js"></script>
+</head>
+<body>
+<header class="bar"><div class="wrap">
+  <a class="brand" href="index.html" style="text-decoration:none"><span>YUV<b>.</b>AI</span><small>MOTION CATALOG</small></a>
+  <a class="home" href="index.html">לעמוד השיטה</a>
+  <button class="navbtn" id="tocBtn" aria-expanded="false" aria-controls="toc">תוכן עניינים</button>
+</div><div class="prog" id="prog"></div></header>
+<nav class="toc" id="toc" aria-label="תוכן עניינים"></nav>
+
+<main>
+
+<!-- ============ HERO ============ -->
+<section class="hero cat-hero" id="top">
+  <div class="hero-top">
+    <div class="hero-txt">
+      <div class="hkick"><b>YUV.AI · MOTION CATALOG</b><i></i></div>
+      <h1>מה אפשר<br><span class="hl">לבקש</span>.</h1>
+      <p class="deck">קטלוג חי של אבני בניין לסרטוני מושן עם AI, מוסבר מאפס</p>
+      <p class="hmono"><span class="nb">Recharts · shadcn/ui · Lucide</span> · <span class="nb">Simple Icons · three.js</span></p>
+      <a class="hcta neon" href="#c0"><span>▶</span>מתחילים מהיסודות</a><a class="hcta2" href="#c8">ישר לבונה הפרומפטים</a>
+    </div>
+    <div class="cat-stage" data-demo="hero-particles" data-variant="hero" data-notb><div class="stage"></div><span class="hint">גררו כדי לסובב</span></div>
+  </div>
+  <p class="lead"><b>סרטון מושן</b> (motion graphics) הוא סרטון שבו הכל מצויר ומונפש ולא מצולם: טקסט, גרפים, אייקונים וצורות. בדרך כלל עושים אותו בתוכנה After Effects של Adobe; כאן כותבים אותו כקוד. כל מה שזז בעמוד הזה הוא קוד שרץ עכשיו בדפדפן שלכם. אין כאן אף קובץ וידאו. כל אלמנט הוא משהו שאפשר לבקש מ-Claude לשלב בסרטון, וליד כל אחד יש שלושה דברים: <b>הדגמה חיה</b> שאפשר לגרור בה את הזמן, <b>הסבר מאפס</b> (מה זה, איך זה עובד מתחת למכסה, מתי כן ומתי לא), ו<b>פרומפט מלא</b> להעתקה. לא צריך רקע ב-After Effects או בתכנות: כל מונח מוסבר במקום שבו הוא מופיע לראשונה. בעמוד הזה <b>אלמנט</b> הוא אבן בניין שלמה שאפשר להכניס לסרטון, כמו גרף או טלפון תלת-ממדי.</p>
+  <div class="stats"><span><b>18</b>אלמנטים חיים</span><span><b>9</b>מושגי יסוד</span><span><b>18</b>פרומפטים מלאים</span><span><b>1</b>בונה פרומפטים</span></div>
+</section>
+
+<!-- ============ HOW TO READ ============ -->
+<section class="sec s-cloud" id="how" data-folio="?" data-toc="איך לקרוא את הקטלוג">
+  <div class="sh"><span class="num">HOW</span><div><h2>איך לקרוא את הקטלוג</h2><p class="sub">ארבעה חלקים בכל כרטיס, ודוגמה אחת שמלווה את כל העמוד.</p></div></div>
+  <div class="legend">
+    <div><i>LIVE</i><b>הדגמה</b>כל הדגמה מצוירת מתוך מספר אחד: הזמן. הסרגל שמתחתיה הוא השעון. גררו אותו לכל רגע ותראו בדיוק את התמונה (הפריים) של אותו רגע. כך בדיוק מצלמים סרטון.</div>
+    <div><i>WHAT · HOW</i><b>מה ואיך</b>מה רואים, ואיך זה עובד מתחת למכסה, צעד אחרי צעד. כולל מה הספרייה (קוד מוכן שמישהו אחר כתב, מוסבר ב-0.3) עושה בשבילכם, כדי שתדעו מה אתם מבקשים.</div>
+    <div><i>FIT</i><b>מתי כן, מתי לא</b>איפה האלמנט משרת את הסיפור, ואיפה הוא רק מוסיף רעש. אלמנט יפה במקום הלא נכון מחליש סרטון.</div>
+    <div><i>PROMPT</i><b>פרומפט</b>פרומפט שלם, מוכן להדבקה ב-Claude Code: Claude שעובד ישירות על המחשב שלכם, כותב קבצים, מריץ פקודות ובודק את התוצאה. אפשר להשתמש בפרומפט לבד, או לשלב כמה אלמנטים בבונה הפרומפטים שבסוף.</div>
+  </div>
+  <div class="def"><b>הדוגמה שמלווה את העמוד: "קצב"</b>"קצב" היא אפליקציית כושר בדיונית בעברית. כל אלמנט בקטלוג מוצג כסצנה אפשרית בסרטון ההשקה שלה: הגרף מראה את ההתקדמות של המתאמן, הממשק (מה שרואים ולוחצים עליו במסך: כפתורים, שדות, תפריטים) מראה את האפליקציה עצמה, הטלפון התלת-ממדי מציג אותה על מכשיר. כך רואים לא רק <b>מה</b> כל אלמנט, אלא <b>איפה</b> הוא נכנס בסיפור. את הסרט המלא של "קצב", שנבנה באותה שיטה, אפשר לראות ב<a href="index.html#s0">עמוד השיטה</a>.</div>
+  <h3>כל האלמנטים במבט אחד</h3>
+  <div class="idx" id="idx"></div>
+</section>
+
+<!-- ============ 00 FOUNDATIONS ============ -->
+<section class="sec s-denim" id="c0" data-folio="00" data-toc="יסודות: 9 מושגים">
+  <div class="sh"><span class="num">00</span><div><h2>תשעה מושגים, ואז הכל מובן</h2><p class="sub">בלי אפטר אפקטס ובלי רקע בתכנות. כל מושג נבנה על הקודם, אז כדאי לקרוא לפי הסדר.</p></div></div>
+
+  <div class="step"><span class="k">0.1</span><h3>סרטון הוא ערימה של תמונות</h3><p class="sub">ואם אפשר לצייר כל תמונה לפי דרישה, אפשר לייצר סרטון.</p></div>
+  <div class="body">
+    <p>סרטון הוא רצף מהיר של תמונות דוממות. כל תמונה כזו נקראת <b>פריים</b> (frame). כשהתמונות מתחלפות מהר מספיק, העין כבר לא רואה תמונות נפרדות אלא תנועה רציפה. כמה מהר? זה ה-<b>fps</b>, ראשי תיבות של frames per second, פריימים בשנייה. בקולנוע מקובל 24, ברשת 30, ובסרטוני מושן של ממשקים 60. למה לא מספיק 24? כי מצלמה מורחת תנועה מהירה (טשטוש תנועה), והמריחה ממלאת את הפער בין התמונות. תמונה שמצוירת בקוד חדה לגמרי, ולכן ב-24 או ב-30 רואים בה קפיצות. ב-60 הקפיצות קטנות מספיק, וגם מסכי טלפונים מתרעננים לפחות 60 פעמים בשנייה.</p>
+    <div class="pic" aria-hidden="true"><span class="fr"><i style="left:8%"></i></span><span class="ar">›</span><span class="fr"><i style="left:22%"></i></span><span class="ar">›</span><span class="fr"><i style="left:42%"></i></span><span class="ar">›</span><span class="fr"><i style="left:60%"></i></span><span class="ar">›</span><span class="fr"><i style="left:70%"></i></span><span class="ar">›</span><span class="fr"><i style="left:72%"></i></span></div>
+    <p>המחיר של 60: יותר תמונות לחשב. סרטון של 30 שניות ב-60fps הוא 30 × 60 = <b>1,800 תמונות</b>. כל תמונה בנויה מ<b>פיקסלים</b>, ריבועים זעירים בצבע אחד, וה<b>רזולוציה</b> אומרת כמה כאלה יש: 1920×1080 הן 1,920 פיקסלים לרוחב ו-1,080 לגובה. היחס בין הרוחב לגובה הוא <b>יחס התמונה</b>: ‏16:9 הוא מסך שוכב (יוטיוב, מצגות), ו-9:16 הוא מסך עומד (רילס, טיקטוק, שורטס).</p>
+    <p>ומכאן התובנה שעליה עומד כל הקטלוג: <b>כדי לייצר סרטון, מספיק לדעת לצייר את תמונה מספר N.</b> אם יש לכם דרך לצייר כל פריים לפי דרישה, אפשר לבקש את פריים 0, ואז 1, ואז 2, עד 1,799, ולהדביק אותם יחד. זה כל הסוד של "וידאו שהוא קוד".</p>
+  </div>
+
+  <div class="step"><span class="k">0.2</span><h3>דף אינטרנט: שלוש שפות, שלוש שכבות</h3><p class="sub">למה דפדפן הוא מנוע הציור הכי טוב לסרטוני AI.</p></div>
+  <div class="body">
+    <p>מאיפה מגיעות התמונות? מדף אינטרנט. הדפדפן (כרום, למשל) הוא מנוע ציור חינמי ועוצמתי להפליא: הוא יודע לצייר טקסט בכל שפה, כולל עברית מימין לשמאל, כל פונט, צורות, תמונות, וידאו, ואפילו תלת-ממד. ו-Claude כותב קוד של דפי אינטרנט בשטף, כי זה סוג הקוד הנפוץ ביותר ברשת.</p>
+    <p>דף אינטרנט בנוי משלוש שפות, וכל אחת אחראית על שכבה אחרת. בהדגמה למטה יש כפתור אחד מהסרטון של קצב. כבו ודלקו כל שכבה ותראו מה היא תורמת:</p>
+    <ul>
+      <li><b>HTML</b> אומר <b>מה יש</b> על המסך: "יש כפתור, ועליו כתוב התחל אימון". כל פריט כזה, כפתור או כותרת או תמונה, נקרא <b>אלמנט</b>.</li>
+      <li><b>CSS</b> אומר <b>איך זה נראה</b>: כתום, מעוגל לגמרי, בפונט קרנטינה. בלי CSS תראו את הכפתור האפור והבסיסי של הדפדפן.</li>
+      <li><b>JavaScript</b> (JS בקיצור) אומר <b>מה קורה</b>. אצלנו: איך הכפתור משתנה עם הזמן. בלי JS הכפתור קופא.</li>
+    </ul>
+  </div>
+  <article class="el" id="e-layers">
+    <div class="el-h"><span class="el-n">LAB 0.2</span><h3>שלוש השכבות של כפתור אחד</h3><div class="el-tags"><span>HTML</span><span>CSS</span><span>JS</span></div></div>
+    <div class="el-demo" data-demo="basics-layers"><div class="stage"></div><div class="tb-host"></div></div>
+  </article>
+  <div class="body">
+    <p>שורות ה-JS בהדגמה משתמשות ב-<code>seek</code> וב-<code>spring</code>. לא צריך להבין אותן עכשיו; הן מוסברות בצעדים 0.7 ו-0.8.</p>
+    <p>ואיך מדף כזה יוצא קובץ וידאו? בעזרת שני כלים חינמיים. <b>Playwright</b> הוא כלי של מיקרוסופט שפותח דפדפן בלתי נראה ומפעיל אותו מתוך קוד: "פתח את הדף, קבע את הזמן ל-0.5 שניות, צלם", וחוזר חלילה 1,800 פעמים. <b>ffmpeg</b> היא תוכנה ותיקה שמדביקה את התמונות, יחד עם המוזיקה, לקובץ MP4 אחד. היא גם <b>דוחסת</b>: 1,800 תמונות מלאות שוקלות כמה ג׳יגה-בייט, וקובץ MP4 שומר בעיקר את מה שהשתנה בין תמונה לתמונה ומוותר על הבדלים זעירים, ולכן הוא קטן פי מאות. המחיר: פרטים עדינים, כמו מעבר צבע איטי, עלולים להיפגע.</p>
+  </div>
+
+  <div class="step"><span class="k">0.3</span><h3>ספרייה, npm ורישיון</h3><p class="sub">למה לא כותבים כל דבר מאפס, ולמה חשוב לנקוב בשם המדויק.</p></div>
+  <div class="body">
+    <p><b>ספרייה</b> היא קוד שמישהו אחר כתב, בדק ושיתף, כדי שלא תצטרכו לכתוב אותו בעצמכם. לצייר גרף נכון, עם צירים, שנתות, תוויות ומרווחים, זו עבודה של שבועות. ספרייה כמו Recharts עושה את זה בעשר שורות. <b>npm</b> הוא המאגר הגדול בעולם של ספריות JavaScript, והוא חינמי: הפקודה <code>npm install recharts</code> מורידה את הספרייה לפרויקט. ספרייה שארוזה בשביל npm נקראת <b>חבילה</b> (package), ויש לה מספר גרסה כמו 3.2.1. המספר הראשון עולה כשהגרסה החדשה כבר לא תואמת לקוד שנכתב לישנה, האמצעי כשמוסיפים יכולת בלי לשבור כלום, והאחרון כשמתקנים תקלה. לכן מציינים גרסה: אם Claude מכיר את גרסה 2 והפרויקט מתקין את 3, חלק מהקוד עלול לא לעבוד. (פקודה כזו מקלידים ב<b>טרמינל</b>, חלון טקסט שבו נותנים למחשב הוראות. בפועל, Claude Code מקליד אותה בשבילכם.)</p>
+    <p>למה זה חשוב בפרומפט? כי Claude מכיר היטב את הספריות הפופולריות ואת הדרך הנכונה להשתמש בהן. כשאתם כותבים "גרף שטח של Recharts", הוא יודע בדיוק מה לבנות. כשאתם כותבים רק "גרף", הוא עלול לאלתר גרסה ביתית שנראית ממוצעת. <b>שם מדויק הופך בקשה עמומה למטרה ברורה.</b></p>
+    <p><b>רישיון</b> הוא האישור המשפטי להשתמש בקוד. כל אלמנט בקטלוג מסומן ברישיון שלו, ושלושה סוגים חוזרים:</p>
+    <ul>
+      <li><b>MIT ו-ISC</b>: מותר כמעט הכל, גם בעבודה מסחרית ללקוח. התנאי היחיד הוא להשאיר את הודעת זכויות היוצרים בקוד.</li>
+      <li><b>Apache 2.0</b>: דומה, ומוסיף הגנה מפני תביעות פטנטים.</li>
+      <li><b>CC0</b>: נחלת הכלל. אין שום תנאי.</li>
+    </ul>
+    <div class="warn"><b>רישיון קוד הוא לא רישיון לסימן מסחרי</b>קובץ הלוגו (בפורמט SVG, שנכיר ב-0.5) יכול להיות חופשי לגמרי, והלוגו עצמו עדיין <b>סימן מסחרי</b>: שם או סמל שהחוק שומר לחברה, כדי שאף אחד לא יציג את עצמו כאילו הוא החברה או פועל מטעמה. מותר להראות לוגו כדי לציין שמוצר עובד עם השירות שלה, אבל אסור לרמוז שהחברה ממליצה עליכם, ורוב החברות אוסרות בהנחיות המותג שלהן לעוות את הלוגו או לצבוע אותו מחדש. ויש כלים שחינמיים רק עד גודל מסוים: Remotion, כלי ליצירת סרטונים מקוד שנכיר בפרק 07, חינמי ליחידים ולחברות של עד שלושה עובדים. לפני עבודה מסחרית, בדקו.</div>
+  </div>
+
+  <div class="step"><span class="k">0.4</span><h3>רכיב ו-React</h3><p class="sub">אבני לגו עם הגדרות, ולמה הן מושלמות לווידאו.</p></div>
+  <div class="body">
+    <p><b>רכיב</b> (component) הוא אבן בניין שאפשר להשתמש בה שוב ושוב, עם הגדרות. כמו לבנת לגו שמגיעה בכמה צבעים וגדלים: אותו כפתור יכול להיות כתום או שקוף, גדול או קטן. ההגדרות האלה נקראות <b>props</b>. <b>React</b> היא ספרייה של Meta לבניית ממשקים מתוך רכיבים. במקום להגיד לדפדפן "תזיז את זה, תצבע את זה", מתארים לה <b>איך המסך צריך להיראות</b> בהינתן הנתונים. בכל פעם שהתיאור משתנה, React משווה אותו לתיאור הקודם ומשנה בדף רק את מה שבאמת השתנה.</p>
+    <p>וזה בדיוק מה שווידאו צריך. מחשבים מהזמן את הנתונים של הפריים ("בשנייה 3.6 ההתקדמות היא 72%"), נותנים אותם ל-React, והיא מציירת בדיוק את הפריים הזה. אותו קלט נותן תמיד אותה תמונה. <b>פונקציה</b> היא מתכון בקוד: מכניסים לה ערך (קלט) והיא מחזירה תוצאה (פלט), למשל זמן נכנס ואחוז התקדמות יוצא. לפונקציה שאין לה זיכרון נסתר, והתוצאה שלה תלויה רק בקלט, קוראים <b>פונקציה טהורה</b>:</p>
+    <div class="code"><span class="lbl">a React component that is a pure function of time</span><pre>function Frame({ t }) {                       // t = the time in seconds
+  const progress = Math.min(100, t * 20);     // 0% at t=0, 100% at t=5
+  return &lt;Progress value={progress} /&gt;;       // a ready-made progress-bar component
+}</pre></div>
+    <p>ההתקדמות היא t כפול 20, אבל לא יותר מ-100 (<code>Math.min</code> בוחר את הקטן מבין השניים). את המספר מעבירים לרכיב מוכן שמצייר פס התקדמות (<code>Progress</code>, נכיר אותו בפרק 02).</p>
+  </div>
+
+  <div class="step"><span class="k">0.5</span><h3>וקטור מול רסטר</h3><p class="sub">למה לוגו ואייקון צריכים להיות SVG.</p></div>
+  <div class="body">
+    <p>יש שתי דרכים לשמור תמונה. <b>וקטור</b> שומר <b>תיאור</b>: "עיגול, המרכז כאן, הרדיוס כזה, הצבע כתום". כשמגדילים, המחשב מצייר מחדש מהתיאור, ולכן הקצוות חדים בכל גודל. פורמט הווקטור של הרשת נקרא <b>SVG</b>. <b>רסטר</b> שומר <b>טבלה של פיקסלים</b> (PNG, JPG): כשמגדילים, כל פיקסל הופך לריבוע גדול, או נמרח אם מפעילים החלקה.</p>
+    <p>במושן זה קריטי, כי המצלמה עושה זום: דחיפה של פי 3 על לוגו היא הגדלה של פי 3. בהדגמה, שני הצדדים מציגים בדיוק את אותו אייקון. הגדילו את הזום וראו מה קורה לכל אחד:</p>
+  </div>
+  <article class="el" id="e-vector">
+    <div class="el-h"><span class="el-n">LAB 0.5</span><h3>אותו אייקון, שתי דרכים לשמור אותו</h3><div class="el-tags"><span>SVG</span><span>PNG</span></div></div>
+    <div class="el-demo" data-demo="basics-vector"><div class="stage"></div></div>
+  </article>
+  <div class="body"><p>הכלל: לוגואים, אייקונים, צורות וטקסט, תמיד וקטור. צילומים הם רסטר מטבעם, וזה בסדר, רק דאגו שהרזולוציה שלהם גבוהה מהגודל שבו יופיעו אחרי הזום.</p></div>
+
+  <div class="step"><span class="k">0.6</span><h3>שלוש דרכים לצייר: DOM, ‏Canvas, ‏WebGL</h3><p class="sub">ולמה חלקיקים ותלת-ממד צריכים את כרטיס המסך.</p></div>
+  <div class="body">
+    <ul>
+      <li><b>DOM</b> (קיצור של Document Object Model) הוא הדרך הרגילה. הדפדפן מחזיק כל אלמנט כאובייקט בזיכרון, עם כל הסגנונות שלו, מחשב מי נמצא איפה ומצייר. מצוין לטקסט ולממשקים, ואיטי כשיש אלפי אלמנטים, כי על כל אחד צריך לשמור ולחשב.</li>
+      <li><b>Canvas</b> הוא לוח ציור ריק של פיקסלים. נותנים לו פקודות ("צייר עיגול כאן") בכל פריים, והוא לא זוכר מה צויר. מהיר מאוד לאלפי צורות, אבל הכל עליכם: אין פריסה אוטומטית, אין שבירת שורות.</li>
+      <li><b>WebGL</b> היא דרך לצייר דרך <b>כרטיס המסך</b> (GPU). למעבד הרגיל יש מעט ליבות חזקות שעובדות אחת אחרי השנייה; לכרטיס מסך יש אלפי ליבות קטנות שמחשבות אלפי נקודות <b>במקביל</b>. לכן תלת-ממד ועשרות אלפי חלקיקים עוברים דרכו. הספרייה three.js הופכת אותו לנוח לשימוש.</li>
+    </ul>
+    <p>בהדגמה, אותן נקודות מצוירות בשלוש הדרכים, והזמן נמדד עכשיו במכשיר שלכם. הזיזו ל-30,000 ולחצו "מדוד עכשיו":</p>
+  </div>
+  <article class="el" id="e-cost">
+    <div class="el-h"><span class="el-n">LAB 0.6</span><h3>כמה עולה לצייר N נקודות</h3><div class="el-tags"><span>DOM</span><span>Canvas 2D</span><span>WebGL</span></div></div>
+    <div class="el-demo" data-demo="basics-cost"><div class="stage"></div></div>
+  </article>
+  <div class="body">
+    <p>למה המספר 16.7 מסומן? ב-60fps יש לכל פריים 1000 ÷ 60 = 16.7 אלפיות שנייה. מה שלוקח יותר, מגמגם <b>בצפייה חיה</b>. אבל שימו לב לניואנס החשוב: <b>כשמייצרים קובץ וידאו, אין תקציב.</b> ‏Playwright מחכה לכל פריים כמה שצריך, אז סצנה כבדה שמגמגמת ב<b>תצוגה המקדימה</b> (הניגון החי בדפדפן בזמן העבודה, לפני שמייצרים קובץ) תצא חלקה לגמרי בסרטון. בתנאי אחד, שהוא הנושא של הצעד הבא: שהדף מצייר כל פריים לפי מספר זמן שנותנים לו, ולא לפי השעון. התקציב חשוב לתצוגה המקדימה ולמהירות העבודה, לא לתוצאה.</p>
+  </div>
+
+  <div class="step"><span class="k">0.7</span><h3>השעון t: למה אנימציה של ספרייה שוברת וידאו</h3><p class="sub">הכלל שחל על כל אלמנט בקטלוג הזה.</p></div>
+  <div class="body">
+    <p>רוב הספריות מנפישות לפי <b>השעון שעל הקיר</b>: "תזיז את זה במשך שנייה וחצי של זמן אמיתי". בדפדפן זה מושלם. אבל בזמן צילום סרטון, כל פריים לוקח 100 עד 500 אלפיות שנייה לצלם, כי בכל צילום הדפדפן צריך לסיים לצייר, להפוך כ-2 מיליון פיקסלים לקובץ תמונה ולהעביר אותו לתוכנה שמצלמת. זה פי 6 עד 30 יותר מ-16.7 אלפיות השנייה של ניגון חי. בינתיים האנימציה של הספרייה ממשיכה לרוץ בזמן אמיתי, ותוך כמה פריימים היא כבר נגמרה. הסרטון קופץ.</p>
+    <p>הפתרון, שמופעל בכל הדגמה בעמוד: <b>מכבים את האנימציה של הספרייה ומחשבים הכל מתוך t</b>. פריים מספר i מקבל t = i ÷ 60, ומצייר את מה שצריך להיות על המסך ברגע הזה. כך פריים 37 הוא תמיד אותה תמונה, לא משנה כמה זמן לקח לצלם אותו. לפונקציה שמציירת את התמונה של רגע t קוראים <code>seek(t)</code>. ההדגמה מצלמת 12 פריימים בשתי השיטות, עם זמני צילום אקראיים כמו במציאות:</p>
+  </div>
+  <article class="el" id="e-clock">
+    <div class="el-h"><span class="el-n">LAB 0.7</span><h3>שעון קיר מול seek(t)</h3><div class="el-tags"><span>seek(t)</span><span>Playwright</span></div></div>
+    <div class="el-demo" data-demo="basics-clock"><div class="stage"></div></div>
+  </article>
+  <div class="body"><p>בשורה העליונה, הנקודה מגיעה לסוף כבר אחרי פריים או שניים, והשאר מבוזבזים. בשורה התחתונה, כל פריים מראה צעד קטן ושווה. בכל פרומפט בעמוד הזה תמצאו את המשפט שאוכף את זה. לרוב הספריות יש דרך לכבות את האנימציה המובנית שלהן: בספריית הגרפים Recharts (פרק 01) זו הגדרה אחת, <code>isAnimationActive={false}</code>. לרכיבי הממשק שנכיר בפרק 02 אין מתג כזה, ולכן מוחקים מהקוד שלהם את ההוראות שגורמות לדפדפן להנפיש לבד.</p></div>
+
+  <div class="step"><span class="k">0.8</span><h3>תנועה שנראית אמיתית: האטה וקפיץ</h3><p class="sub">למה תנועה במהירות קבועה נראית רובוטית.</p></div>
+  <div class="body">
+    <p>שום דבר בעולם לא זז במהירות קבועה: כדור מאיץ כשהוא נופל, דלת מאטה לפני שהיא נסגרת. תנועה במהירות קבועה (<b>ליניארית</b>) נראית לכן מכנית. <b>Easing</b>, או האטה, היא עקומה שממירה "כמה מהזמן עבר" (מ-0 עד 1) ל"כמה מהדרך עברנו". יש לה שלוש צורות נפוצות, ותראו את השמות שלהן בפרומפטים: <b>ease-in</b> מאיצה בהתחלה, <b>ease-out</b> מאטה בסוף, ו-<b>ease-in-out</b> עושה את שתיהן.</p>
+    <p><b>קפיץ</b> הוא עקומה שעוברת קצת את היעד וחוזרת, כמו דלת על ציר קפיצי. יש לו שתי הגדרות: <b>קשיחות</b> (כמה מהר הוא מגיע) ו<b>ריסון</b> (כמה מהר הקפיצות נבלמות: ריסון גבוה, פחות קפיצות). בקטלוג מחשבים את הקפיץ ב<b>נוסחה סגורה</b>: מציבים t ומקבלים מיד את המיקום, בלי לחשב את כל הפריימים שלפניו. לכן הוא מציית לכלל של t:</p>
+    <div class="code"><span class="lbl">a closed-form spring: position at time t, straight from the formula</span><pre>const spring = (t, w = 12, z = 0.8) =&gt; {    // w = frequency (higher = faster), z = damping, must stay below 1
+  if (t &lt;= 0) return 0;
+  const wd = w * Math.sqrt(1 - z * z);
+  return 1 - Math.exp(-z * w * t) * (Math.cos(wd * t) + (z * w / wd) * Math.sin(wd * t));
+};
+// spring(0.1) = 0.38, spring(0.2) = 0.79, spring(0.4) = 1.013 (just past the target), spring(0.6) = 1.005, then 1</pre></div>
+    <p>איך לקרוא את זה: בקוד, <b>w</b> היא הקשיחות (מספר גבוה יותר, קפיץ מהיר יותר; טכנית זו התדירות שלו) ו-<b>z</b> הוא הריסון. <code>Math.exp(…)</code> הוא הבלם, מספר שמתחיל ב-1 וקטן עם הזמן, ולכן התנודה דועכת. <code>cos</code> ו-<code>sin</code> עולות ויורדות בגל חלק ומחזורי בין ‎-1 ל-1, והן התנודה עצמה. (אם המיקום האופקי של נקודה הוא cos של t והאנכי הוא sin של t, הנקודה נעה במעגל. כך זזים העיגולים בכמה מהאפקטים בהמשך.) <b>z</b> חייב להישאר מתחת ל-1, כי ב-1 הנוסחה מחלקת באפס; 0.99 הוא כמעט בלי קפיצה. כשתראו בפרומפטים "closed-form springs", זה מה שזה אומר. מעבדה אינטראקטיבית שמאפשרת לשחק בקשיחות ובריסון יש ב<a href="index.html#s8">פרק הקפיצים בעמוד השיטה</a>.</p>
+  </div>
+
+  <div class="step"><span class="k">0.9</span><h3>איך מבקשים: שישה בלוקים</h3><p class="sub">השלד שעליו בנוי כל פרומפט בקטלוג.</p></div>
+  <div class="body">
+    <p>כל הפרומפטים כאן בנויים באותו שלד, שפיתח היוצר zero (<span class="ltr">@twoclipping</span>) לסרטוני ההשקה שלו. מודל שפה שלא מקבל הוראות מדויקות נותן את <b>הממוצע</b> של מה שראה, ובמושן הממוצע הוא "תבנית": רקע כהה, זוהר, חלקיקים ופייד (מעבר שבו תמונה אחת נמוגה לאט ומתחתיה מופיעה הבאה). ששת הבלוקים מוחקים את הממוצע:</p>
+    <ul>
+      <li><code>&lt;inputs&gt;</code>: מה Claude צריך לבקש מכם לפני שהוא מתחיל (נתונים, לוגו, מוזיקה), ומה לעשות אם לא נתתם.</li>
+      <li><code>&lt;direction&gt;</code>: הטעם. פורמט, צבעים בקוד מדויק, פונטים בשם, ורשימה של מה אסור. צבע מדויק נכתב כך: <code>#FF8F3A</code>. אלה שלושה זוגות תווים: כמה אדום, כמה ירוק וכמה כחול, מ-00 (כלום) עד FF (הכי הרבה, 255). הרבה אדום, קצת ירוק ומעט כחול נותנים כתום, וכך Claude מקבל בדיוק את הגוון.</li>
+      <li><code>&lt;structure&gt;</code>: מה קורה מתי, בביטים של המוזיקה. <b>ביט</b> הוא פעימה אחת של השיר, והקצב נמדד בפעימות לדקה (באנגלית BPM). ב-120 BPM: ‏60 שניות חלקי 120 = חצי שנייה לביט. 120 נפוץ במוזיקה פופולרית, והמספרים יוצאים עגולים: ביט אחד = 0.5 שנייה = 30 פריימים ב-60fps.</li>
+      <li><code>&lt;build&gt;</code>: איך לבנות. כאן נכנס כלל ה-t וההוראות הטכניות של כל ספרייה.</li>
+      <li><code>&lt;gotchas&gt;</code>: באגים מוכרים מראש, כדי ש-Claude ימנע מהם בכתיבה הראשונה.</li>
+      <li><code>&lt;start&gt;</code>: שער אישור זול. קודם <b>מפת ביטים</b> (רשימה של מה קורה על כל ביט) וארבע <b>סטילס</b> (תמונות בודדות מהסרט), ורק אחרי האישור שלכם הסרט המלא. זה זול, כי ארבע תמונות נוצרות בשניות, בעוד ש<b>הרינדור</b>, הפקת כל הפריימים לקובץ הסופי, לוקח דקות ארוכות.</li>
+    </ul>
+    <p>הפרומפטים באנגלית מסיבה מעשית: שמות הספריות, הפונקציות והמונחים הטכניים ממילא באנגלית, וכך הם עובדים בכל כלי. הטקסט שיופיע על המסך כתוב בתוכם בעברית. פירוק מלא של כל בלוק, ולמה הוא עובד על מודל שפה, יש ב<a href="index.html#s15">פרק האנטומיה בעמוד השיטה</a>.</p>
+  </div>
+</section>
+
+<!-- ============ 01 DATA ============ -->
+<section class="sec s-cloud" id="c1" data-folio="01" data-toc="נתונים וגרפים">
+  <div class="sh"><span class="num">01</span><div><h2>נתונים וגרפים</h2><p class="sub">הרגע שבו הסרטון מוכיח משהו: צמיחה, תוצאות, התקדמות.</p></div></div>
+  <div class="body">
+    <p>סרטון השקה טוב עונה על "למה להאמין לכם?", ולרוב התשובה היא מספר. בסרטון של קצב, זה הרגע שבו המתאמן רואה כמה התקדם בחודש. ארבעת האלמנטים כאן הם ארבע דרכים להראות מספר: קו שמתפתח בזמן, השוואה בין ימים, מספר אחד גדול, ואחוז מיעד.</p>
+    <p>הספרייה שבה משתמשים כאן היא <b>Recharts</b>: אוסף רכיבי React לגרפים, שמצייר אותם כ-SVG (כלומר וקטור, חד בכל זום). מתחת למכסה היא נעזרת בחלקים של ספרייה בשם D3 בשביל החישובים: איפה כל שנתה, איך מעגלים עקומה. היא חינמית ברישיון MIT, והגרסה הנוכחית היא 3. החלופות העיקריות, ומתי לבחור בהן:</p>
+    <ul>
+      <li><b>Chart.js</b>: מצייר על Canvas ולא צריך React. מהיר ופשוט, פחות גמיש בעיצוב. MIT.</li>
+      <li><b>Apache ECharts</b>: מאות סוגי גרפים, כולל מפות. כבד יותר. Apache 2.0.</li>
+      <li><b>D3</b>: השכבה הנמוכה עצמה. שליטה מלאה בכל פיקסל, והרבה יותר קוד. ISC.</li>
+    </ul>
+    <p>הכלל לבחירה: אם הפרויקט ב-React והגרף סטנדרטי, Recharts. אם צריך צורה שאין לה שם, D3. ובכל מקרה, האנימציה המובנית כבויה והכל מחושב מ-t.</p>
+  </div>
+
+  <article class="el" id="e-chart-area">
+    <div class="el-h"><span class="el-n">01.1</span><h3 class="el-t">גרף שטח שמצטייר</h3><div class="el-tags"><span>Recharts</span><span>React</span><span>SVG</span><span class="lic">MIT</span></div></div>
+    <div class="el-demo" data-demo="chart-area"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>מה רואים</h4><p>30 ימים של דקות אימון באפליקציית "קצב". הקו מצטייר משמאל לימין, נקודה כתומה רוכבת על הקצה שלו, ובסוף נוחת קו מקווקו של היעד: 60 דקות. הצופה רואה את המגמה נבנית, במקום לקבל אותה מוכנה.</p>
+        <h4>נסו</h4><p>סמנו "תנו ל-Recharts להנפיש לבד". עכשיו הספרייה מנפישה לפי שעון הקיר, והסרגל כבר לא שולט בה. זו בדיוק האנימציה שהייתה נשברת בצילום.</p></div>
+        <div><h4>איך זה עובד</h4><ul>
+          <li>בכל פריים מחשבים מ-t כמה מהקו כבר נחשף, ומעבירים ל-Recharts רק את הנקודות האלה, ועוד נקודת ביניים אחת כדי שהקצה יזוז בצורה רציפה ולא בקפיצות של יום שלם.</li>
+          <li><code>isAnimationActive={false}</code> מכבה את האנימציה של הספרייה. החשיפה היא שלנו.</li>
+          <li><code>type="monotone"</code> מעגל את הקו בלי לעבור מעל הנתונים, כך שלא מומצאים שיאים שלא היו.</li>
+          <li>המילוי הוא מעבר צבע מכתום לשקוף, והיעד הוא <code>ReferenceLine</code> שעוביו גדל על קפיץ.</li></ul></div>
+      </div>
+      <div class="fit"><div class="y"><b>מתי כן</b>רגע ההוכחה: "תראו כמה התקדמתם". מגמה אחת, ברורה, עם סוף שנוחת על הביט.</div><div class="n"><b>מתי לא</b>יותר משלושה קווים, או ערכים מדויקים שהצופה צריך לקרוא בשתי שניות. במקרה כזה, מספר גדול אחד (01.3) עובד טוב יותר.</div></div>
+      <div class="prompt"><h5>פרומפט מלא</h5><div class="code"><span class="lbl">area chart · Recharts · paste into Claude Code</span><button class="cp" type="button">העתק פרומפט</button><pre>&lt;inputs&gt;
+Ask me for the data series (one value per day) and its label. If I skip it, invent a plausible 30-day series of workout minutes that trends upward with natural noise, and say so.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 7-second clip, 1920x1080, 60fps. A Recharts AreaChart draws itself from left to right as the data is revealed. A dot in the accent colour rides the tip of the line. At the end, a dashed goal line at 60 lands on a beat with the label "יעד: 60 דקות".
+Look: light background #EEF3FB, navy text and grid #12163F, the line is a gradient #FFC74E → #FF8F3A → #F56B49, the area fill is the same orange fading to transparent. Axis labels in Hebrew in Assistant; the title in Karantina 700. Swap the colours and fonts for your brand.
+Banned: 3D charts, drop shadows on the line, legends that nobody needs, gridlines on both axes.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM, a beat every 0.5s. Beats 0-1: the empty axes. Beats 1-9: the line draws with an ease-in-out. Beat 10: the goal line springs in. Beats 10-13: hold, with the dot pulsing once per beat.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file with React and Recharts that exposes window.seek(t). Every frame is computed from t alone: no CSS transitions, no timers, no state between frames.
+Set isAnimationActive={false} on every series. For each frame, compute how far along the line we are, pass only the points revealed so far plus one interpolated point at the tip, and render with flushSync so the DOM is ready before the screenshot.
+Use type="monotone" for the curve. The goal line's stroke width and label size come from a closed-form spring of t.
+Render with Playwright at 60fps and assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Recharts animates on its own clock by default. If isAnimationActive is left on anywhere, captured frames jump.
+- Fix the Y axis domain (for example 0 to 80), or the axis rescales every frame as points are added.
+- Wait for document.fonts.ready before the first frame.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me 3 stills (beat 1, beat 6, beat 12) before rendering the full clip.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-chart-bars">
+    <div class="el-h"><span class="el-n">01.2</span><h3 class="el-t">עמודות שנוחתות על הביט</h3><div class="el-tags"><span>Recharts</span><span>BarChart</span><span class="lic">MIT</span></div></div>
+    <div class="el-demo" data-demo="chart-bars"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>מה רואים</h4><p>שבוע של אימונים. כל עמודה קופצת למעלה בביט משלה, חצי שנייה אחרי הקודמת, עוברת קצת את הגובה שלה וחוזרת. העמודה של היום צבועה במעבר הצבע "אש" של המותג (צהוב, כתום, אדום). הימים מסודרים מימין לשמאל, כמו שקוראים בעברית.</p></div>
+        <div><h4>איך זה עובד</h4><ul>
+          <li>הגובה של כל עמודה = הערך שלה × <code>spring(t − הזמן של הביט שלה)</code>. מחסירים את זמן הביט כדי לאפס את השעון של כל עמודה בנפרד: לפני הביט שלה התוצאה שלילית, והקפיץ מחזיר 0, כלומר העמודה עוד לא התחילה. הקפיץ עובר קצת את 1 וחוזר, ולכן העמודה "נוחתת" במקום לעצור יבש.</li>
+          <li>המספר מעל העמודה מופיע רק כשהיא עברה 60% מהדרך, כדי שלא יקפוץ לפניה.</li>
+          <li>הצבע של היום מגיע מ-<code>Cell</code>, רכיב של Recharts שמאפשר צבע שונה לכל עמודה.</li></ul></div>
+      </div>
+      <div class="fit"><div class="y"><b>מתי כן</b>השוואה בין 4 עד 12 פריטים, והדגשה של אחד מהם. מושלם לקצב מוזיקלי, כי כל עמודה היא ביט.</div><div class="n"><b>מתי לא</b>יותר מ-12 עמודות: הן נעשות דקות מדי לקריאה במסך טלפון, והאנימציה נמשכת יותר מדי.</div></div>
+      <div class="prompt"><h5>פרומפט מלא</h5><div class="code"><span class="lbl">bar chart on the beat · Recharts</span><button class="cp" type="button">העתק פרומפט</button><pre>&lt;inputs&gt;
+Ask me for the 7 values and which bar to highlight. If I skip them, use workout minutes for a week (Sunday to Saturday) and highlight Friday.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 5.5-second clip, 1080x1920 for Reels, 60fps. A Recharts BarChart of 7 days where each bar springs up on its own beat, overshoots slightly and settles. The highlighted bar is filled with the gradient #FFC74E → #FF8F3A → #F56B49; the others are navy #12163F on a light #EEF3FB background. Day labels in Hebrew (א׳ to ש׳), ordered right to left. The value appears above each bar once it is most of the way up.
+Banned: bars growing all at once, bouncing more than once, 3D bars.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM. Bar i lands on beat i+1 (0.5s apart). The highlighted bar gets a small extra scale pop on its beat.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file with React and Recharts that exposes window.seek(t); every frame is computed from t alone, no CSS transitions or timers.
+BarChart with isAnimationActive={false}. Each bar's value = target × spring(t − beatTime), where spring is this closed-form damped spring with ω = 13 and ζ = 0.5: spring(t) = 1 − e^(−ζωt)·(cos(ω_d·t) + (ζω/ω_d)·sin(ω_d·t)), ω_d = ω·√(1 − ζ²). Use Cell for per-bar colours. Render each frame with flushSync. Capture with Playwright at 60fps and assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Clamp the spring at 0 so a bar never dips below the axis.
+- Fix the Y domain so the axis does not rescale while bars grow.
+- Reverse the data order (or use reversed on the X axis) so the week reads right to left.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me stills at beats 2, 5 and 10 before the full render.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-kpi">
+    <div class="el-h"><span class="el-n">01.3</span><h3 class="el-t">מונים שעולים</h3><div class="el-tags"><span>CSS</span><span>tabular-nums</span><span>Intl.NumberFormat</span></div></div>
+    <div class="el-demo" data-demo="kpi"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>מה רואים</h4><p>שלושה מספרים שרצים מאפס לערך הסופי, כל אחד בתורו, ונוחתים עם קפיצה קטנה מעבר לערך וחזרה. בלי ספרייה בכלל: זה רק מספר שמחושב מ-t ונכתב לתוך אלמנט.</p>
+        <h4>נסו</h4><p>בטלו את "ספרות ברוחב קבוע" ותראו את המספרים רועדים בזמן הספירה.</p></div>
+        <div><h4>למה הם רועדים</h4><p>בהרבה פונטים, למשל Inter שבו כתובים המספרים כאן, הספרה 1 צרה יותר מהספרה 8. הן נקראות <b>ספרות פרופורציונליות</b>. כשהמספר משתנה בכל פריים, הרוחב שלו משתנה, וכל מה שמסביבו זז. הפתרון הוא תכונה של הפונט שנקראת <code>tabular-nums</code>: כל הספרות מקבלות רוחב זהה, כמו בטבלה. (זה עובד רק אם הפונט כולל ספרות כאלה; ל-Inter יש.) שורה אחת של CSS: <code>font-variant-numeric: tabular-nums</code>.</p>
+        <p>ובשביל הפסיקים של האלפים (1,248) משתמשים ב-<code>Intl.NumberFormat</code>, הכלי המובנה בדפדפן לעיצוב מספרים לפי שפה.</p></div>
+      </div>
+      <div class="fit"><div class="y"><b>מתי כן</b>מספר אחד שהוא הסיפור: "1,248 דקות". הוא נקרא מיד, גם בטלפון.</div><div class="n"><b>מתי לא</b>יותר משלושה מונים באותו רגע: העין לא יודעת על מה להסתכל.</div></div>
+      <div class="prompt"><h5>פרומפט מלא</h5><div class="code"><span class="lbl">count-up KPI tiles</span><button class="cp" type="button">העתק פרומפט</button><pre>&lt;inputs&gt;
+Ask me for up to three KPIs (value, label, optional suffix like % or +). If I skip them, use: 1,248 "דקות אימון", 30 "ימים ברצף", +38% "שיפור החודש".
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 4.5-second clip, 1920x1080, 60fps. Three KPI tiles side by side, ordered right to left. Each number counts up from 0 to its value and lands with a small overshoot, one tile per beat. Numbers in Inter 800, labels in Hebrew in Karantina 700. Light tiles #EEF3FB on white, navy numbers #12163F, the middle number in orange #B4501A.
+Banned: slot-machine rolling digits, confetti, numbers that keep moving after they land.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM. Tile 1 starts on beat 1, tile 2 on beat 2, tile 3 on beat 3. Each count lasts 1.2s with an ease-out and a tiny spring at the end.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file exposing window.seek(t); every value is computed from t alone, no timers or CSS transitions.
+displayed = round(target × easeOut(progress(t))); format with Intl.NumberFormat('he-IL'); keep the suffix outside the number in its own span. Use font-variant-numeric: tabular-nums on every number. Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Without tabular-nums the numbers change width every frame and the tiles shake.
+- Isolate the "+" and "%" with unicode-bidi: isolate, or they jump to the wrong side in RTL.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me one still mid-count and one at the end before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-ring">
+    <div class="el-h"><span class="el-n">01.4</span><h3 class="el-t">טבעת התקדמות</h3><div class="el-tags"><span>SVG</span><span>stroke-dasharray</span></div></div>
+    <div class="el-demo" data-demo="ring"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>מה רואים</h4><p>טבעת שמתמלאת ל-78% מהיעד השבועי, עם המספר שעולה במרכז. הטבעת של אפליקציות הכושר, מצוירת בקוד, בלי שום ספרייה.</p>
+        <h4>נסו</h4><p>סמנו "הראו את קו המתאר המלא" ותראו שהטבעת היא בעצם קו מקווקו ארוך אחד.</p></div>
+        <div><h4>איך זה עובד</h4><p>ב-SVG אפשר להפוך את קו המתאר של עיגול לקו מקווקו. <code>stroke-dasharray</code> קובע את אורך המקטע וגם את אורך הרווח שאחריו, ו-<code>stroke-dashoffset</code> מזיז את נקודת ההתחלה של התבנית. הטריק: קובעים מקטע ורווח שניהם באורך ההיקף כולו (2πr: פעמיים פאי, כ-6.28, כפול הרדיוס r). כשמזיזים את המקטע, הרווח נכנס במקומו, כלומר כלום, ורק חלק מהמקטע נשאר גלוי:</p>
+        <p><code>offset = היקף × (1 − התקדמות)</code>. כשההתקדמות 0, המקטע כולו מחוץ לעיגול. כש-1, הוא מכסה הכל. המספרים מתעדכנים חי בתיבה הכהה. ומסובבים את העיגול ב-‎−90°, כי ב-SVG עיגול מתחיל בשעה 3, ואנחנו רוצים שיתחיל בשעה 12.</p></div>
+      </div>
+      <div class="fit"><div class="y"><b>מתי כן</b>אחוז מיעד, ספירה לאחור, טעינה. צורה שכולם מזהים מהשעון והטלפון.</div><div class="n"><b>מתי לא</b>השוואה בין כמה ערכים: טבעות מקוננות קשות לקריאה. עמודות (01.2) ברורות יותר.</div></div>
+      <div class="prompt"><h5>פרומפט מלא</h5><div class="code"><span class="lbl">progress ring · SVG</span><button class="cp" type="button">העתק פרומפט</button><pre>&lt;inputs&gt;
+Ask me for the goal and the reached value. If I skip them, fill to 78% with the label "מהיעד השבועי".
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 4-second clip, 1080x1080, 60fps. A circular progress ring fills from 12 o'clock to its value with a spring that settles, while the percentage counts up in the centre. Track in navy at 10% opacity, the arc in the gradient #FFC74E → #FF8F3A → #F56B49 with round caps, 22px thick at a 92px radius (scale up for 1080). Number in Inter 800, label in Hebrew in Karantina 700.
+Banned: glow, multiple nested rings, a ring that spins after it lands.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+Beat 1: the track appears. Beats 1-5: the arc fills with a closed-form spring, ω = 6 and ζ = 0.85: spring(t) = 1 − e^(−ζωt)·(cos(ω_d·t) + (ζω/ω_d)·sin(ω_d·t)), ω_d = ω·√(1 − ζ²). Beat 6: a small scale pop on the number.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file exposing window.seek(t); every attribute is computed from t, no CSS transitions.
+SVG circle with stroke-dasharray = 2πr and stroke-dashoffset = 2πr × (1 − progress(t)), rotated −90° around its centre so it starts at 12 o'clock. The number uses tabular-nums. Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- With round caps, a 0% ring still shows a dot. Hide the arc until progress passes 1%.
+- Set the dash values as attributes every frame; a CSS transition on stroke-dashoffset would run on the wall clock.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me a still at 50% and at the end before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+</section>
+
+<!-- ============ 02 UI ============ -->
+<section class="sec s-sky" id="c2" data-folio="02" data-toc="ממשק: shadcn/ui">
+  <div class="sh"><span class="num">02</span><div><h2>ממשק אמיתי עם shadcn/ui</h2><p class="sub">סרטון מוצר צריך אפליקציה שנראית אמיתית. הנה איך מקבלים אחת, בלי לעצב אותה מאפס.</p></div></div>
+  <div class="body">
+    <p>הסצנה הכי חשובה בסרטון של קצב היא סיור באפליקציה: מישהו מקליד, לוחץ, מחליף לשונית, ורואים שהמוצר עובד. כדי שזה ייראה כמו אפליקציה אמיתית, בונים אותו מרכיבי ממשק אמיתיים. שלושה מושגים, אחד על השני:</p>
+    <ul>
+      <li><b>Tailwind CSS</b> היא דרך לכתוב עיצוב בעזרת <b>מחלקות</b>: מחלקה (class) היא תווית שמדביקים על אלמנט, וה-CSS קובע מה כל תווית עושה. ב-Tailwind כל תווית עושה דבר אחד קטן, ולכן במקום לכתוב קובץ CSS נפרד, כותבים <code>rounded-full bg-primary px-4</code>: מעוגל לגמרי, בצבע הראשי, ריווח אופקי.</li>
+      <li><b>Radix</b> היא ספרייה של רכיבים בלי עיצוב בכלל, שמטפלת בכל ההתנהגות: מקלדת, פוקוס, ותוכנות שמקריאות את המסך בקול לאנשים עם לקות ראייה. לשונית שעובדת נכון עם מקש Tab, למשל.</li>
+      <li><b>shadcn/ui</b> מחברת את שתיהן. היא מגדירה את עצמה "לא ספריית רכיבים": במקום להתקין חבילה, מעתיקים את הקוד של כל רכיב לפרויקט (<code>npx shadcn add button</code>), והוא שלכם לשנות. זה בדיוק מה שמאפשר להתאים אותה לווידאו.</li>
+    </ul>
+    <p>shadcn/ui פופולרית מאוד, ולכן היא נראית "כמו אפליקציה אמיתית". מאותה סיבה היא גם עלולה להיראות גנרית. בהדגמה למטה כל הרכיבים קיבלו את צבעי Phoenix, פלטת המותג של YUV.AI (נייבי, כתום, זהב), ואת הפונט קרנטינה, וזה מה שהופך אותם לשלכם.</p>
+  </div>
+
+  <article class="el" id="e-ui">
+    <div class="el-h"><span class="el-n">02.1</span><h3 class="el-t">סיור באפליקציה, מרכיבים אמיתיים</h3><div class="el-tags"><span>shadcn/ui</span><span>Radix</span><span>Tailwind</span><span>React</span><span class="lic">MIT</span></div></div>
+    <div class="el-demo split" data-demo="ui-scene"><div class="stage"></div>
+      <ol class="ui-steps">
+        <li data-from="0" data-to="0.9"><b>Card נכנס</b><span>כרטיס עם כותרת, שעולה על קפיץ.</span></li>
+        <li data-from="0.9" data-to="2.4"><b>Input מקבל הקלדה</b><span>"אימון בוקר", אות כל 0.14 שנייה, עם סמן שנמדד לפי רוחב הטקסט.</span></li>
+        <li data-from="2.4" data-to="3.4"><b>Button נלחץ</b><span>הסמן מגיע, לוחץ, והכפתור מתכווץ ומשנה צבע.</span></li>
+        <li data-from="3.4" data-to="4.4"><b>Progress מתמלא</b><span>מ-0 ל-72% על קפיץ איטי.</span></li>
+        <li data-from="4.4" data-to="6.6"><b>Tabs מתחלפות</b><span>היום ← שבוע ← חודש, והמספר הגדול מתעדכן.</span></li>
+        <li data-from="6.6" data-to="7.2"><b>Switch נדלק</b><span>הכפתור הקטן קופץ לצד השני.</span></li>
+        <li data-from="7.2" data-to="8.8"><b>Slider זז</b><span>עצימות מ-30 ל-80.</span></li>
+        <li data-from="8.8" data-to="9.6"><b>Alert צונח</b><span>הודעה: היעד השבועי הושג.</span></li>
+        <li data-from="9.6" data-to="11.1"><b>Badge קופץ</b><span>תווית קטנה שקופצת מעבר לגודלה וחוזרת.</span></li>
+      </ol>
+      <div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>מה רואים</h4><p>מסך של קצב שבנוי מתשעה רכיבים אמיתיים של shadcn/ui. הרשימה בצד מסמנת איזה רכיב פועל עכשיו. גררו את הסרגל אחורה ותראו שכל רכיב חוזר בדיוק למצב של אותו רגע, גם הלשונית, גם המתג.</p>
+        <h4>רכיב מבוקר: המושג החשוב כאן</h4><p>מתג רגיל זוכר בעצמו אם הוא דלוק. זה נקרא <b>מצב פנימי</b>. בסרטון זו בעיה: אם המתג "זוכר" שהוא נדלק, ואתם קופצים אחורה בזמן, הוא יישאר דלוק. לכן כל רכיב כאן הוא <b>מבוקר</b> (controlled): הוא לא מחליט כלום לבד. בכל פריים אומרים לו מבחוץ מה המצב, למשל <code>checked={t &gt; 6.6}</code>.</p></div>
+        <div><h4>איך זה עובד</h4><ul>
+          <li>הרכיבים הועתקו מ-shadcn/ui, וכל מחלקות ה-<code>transition</code> נמחקו מהם. מחלקה כזו גורמת לדפדפן להנפיש שינויים לבד, לפי שעון הקיר.</li>
+          <li>כל ערך הוא פונקציה של t: הטקסט שהוקלד, הלשונית הפעילה, מיקום המתג, ערך המחוון.</li>
+          <li>הסמן של העכבר מחשב את המיקום של הכפתור האמיתי על המסך, ומגיע אליו בתנועה עם האטה.</li>
+          <li>הצבעים מוגדרים פעם אחת כ<b>משתנים</b> (<code>--primary</code>, <code>--accent</code>). משתנה הוא שם לערך ששומרים פעם אחת, וכל אלמנט "יורש" את המשתנים של האלמנט שעוטף אותו. לכן מגדירים אותם פעם אחת למעלה, וכל הרכיבים מקבלים אותם. כך מחליפים מותג בשורה אחת.</li></ul></div>
+      </div>
+      <div class="fit"><div class="y"><b>מתי כן</b>סרטון מוצר, הדגמת פיצ'ר, "ככה זה עובד". כשהצופה צריך להאמין שיש אפליקציה אמיתית.</div><div class="n"><b>מתי לא</b>כשיש לכם צילומי מסך אמיתיים ומוצר קיים: עדיף להשתמש במסכים האמיתיים שלכם, ולבנות מחדש רק את מה שזז.</div></div>
+      <div class="prompt"><h5>פרומפט מלא</h5><div class="code"><span class="lbl">app tour · shadcn/ui · paste into Claude Code</span><button class="cp" type="button">העתק פרומפט</button><pre>&lt;inputs&gt;
+Ask me for my app's name, its main screen (screenshot or description) and the one action the tour should show. If I skip them, invent a believable Hebrew fitness app called "קצב" with a workout card.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+An 11-second product tour, 1080x1920, 60fps, built from real shadcn/ui components: Card, Input, Button, Progress, Tabs, Switch, Slider, Alert and Badge. A cursor types "אימון בוקר" into the search input with a real keystroke rhythm, clicks the start button, the weekly progress fills to 72%, the tabs switch day → week → month, a reminders switch flips on, an intensity slider moves from 30 to 80, an alert drops in ("יעד שבועי הושג") and a badge pops.
+The UI is right to left (dir="rtl"). Restyle the shadcn tokens to my brand: navy #12163F as --primary, orange #FF8F3A as --accent, #EEF3FB as --background, radius 28px. Headlines in Karantina 700, UI text in Assistant.
+Banned: default shadcn grey look, default Tailwind colours, generic lorem ipsum, a cursor that teleports.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+Card enters 0-0.9s, typing 0.9-2.4s, click at 3.1s, progress 3.4-4.4s, tabs at 4.4s and 5.4s, switch at 6.6s, slider 7.2-8.8s, alert at 8.8s, badge at 9.6s. Every event lands on a beat at 120 BPM.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file with React, exposing window.seek(t). Add the components with npx shadcn add (or copy their source), then:
+- Delete every transition-* and animate-* class from them.
+- Make every component controlled: value, checked, the active tab and the slider value are props computed from t. Render each frame with flushSync.
+- The cursor's target is measured from the real button's bounding box; its path is an ease-in-out from off-screen.
+- Measure the typed text width with canvas measureText so the caret sits exactly after the last letter.
+Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Radix components keep internal state. If they are not controlled from t, scrubbing backwards leaves them in the wrong state.
+- In RTL, the Progress indicator and the Switch thumb must move from right to left; flip their translate direction.
+- Tailwind's preflight reset can break the rest of the page; scope it or disable it.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me 4 stills (typing, click, tabs on month, alert) before the full render.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+</section>
+
+<!-- ============ 03 ICONS & LOGOS ============ -->
+<section class="sec s-cloud" id="c3" data-folio="03" data-toc="אייקונים ולוגואים">
+  <div class="sh"><span class="num">03</span><div><h2>אייקונים ולוגואים רשמיים</h2><p class="sub">אלפי סמלים חינמיים, ומה מותר לעשות איתם.</p></div></div>
+  <div class="body">
+    <p>שני סוגים של סמלים נכנסים כמעט לכל סרטון. <b>אייקונים</b> הם סמלים כלליים: משקולת, להבה, שעון. <b>לוגואים</b> הם סמלים של חברות: GitHub, React, Claude. לשניהם יש ספריות חינמיות ענקיות, וכולם וקטור (SVG), אז הם חדים בכל זום.</p>
+  </div>
+
+  <article class="el" id="e-icons">
+    <div class="el-h"><span class="el-n">03.1</span><h3 class="el-t">אייקונים שמצטיירים</h3><div class="el-tags"><span>Lucide</span><span>lucide-react</span><span>SVG</span><span class="lic">ISC</span></div></div>
+    <div class="el-demo" data-demo="icons-draw"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>מה רואים</h4><p>שמונה אייקונים של כושר, כל אחד מצייר את עצמו קו אחרי קו, ברבע שנייה אחרי הקודם, ובסוף נדלקים בכתום. נסו את מחוון עובי הקו: אותם אייקונים, אופי אחר לגמרי.</p>
+        <h4>מה זה Lucide</h4><p>ספריית אייקונים בקוד פתוח עם קרוב לאלפיים אייקונים, ברישיון ISC (מותר הכל, גם מסחרי). כל האייקונים מצוירים בקווים בעובי אחיד על רשת של 24×24, ולכן הם נראים כמו משפחה אחת. <code>lucide-react</code> נותנת כל אייקון כרכיב React: <code>&lt;Dumbbell /&gt;</code>.</p></div>
+        <div><h4>איך זה עובד</h4><p>זה אותו טריק של הטבעת (01.4): מודדים את האורך של כל קו (<code>getTotalLength</code>), הופכים אותו לקו מקווקו עם מקטע אחד באורך הזה, ומזיזים את המקטע מ"מוסתר" ל"גלוי" לפי t. אייקון שבנוי מכמה קווים מצייר אותם אחד אחרי השני.</p>
+        <p>קיצור דרך: אם נותנים לכל קו <code>pathLength="1"</code>, הדפדפן מתייחס לכל קו כאילו אורכו 1, ואז לא צריך למדוד.</p></div>
+      </div>
+      <div class="fit"><div class="y"><b>מתי כן</b>רשימת פיצ'רים, שלבים, "מה תקבלו". ציור עצמי מושך את העין לפריט הבא.</div><div class="n"><b>מתי לא</b>ערבוב של שתי ספריות אייקונים באותו סרטון: עוביים וסגנונות שונים נראים מרושלים.</div></div>
+      <div class="prompt"><h5>פרומפט מלא</h5><div class="code"><span class="lbl">self-drawing icons · Lucide</span><button class="cp" type="button">העתק פרומפט</button><pre>&lt;inputs&gt;
+Ask me for the features to show (a short Hebrew label each). If I skip them, use 4 fitness features: אימון כוח, שריפת קלוריות, דופק, טיימר.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 5-second clip, 1920x1080, 60fps. Four Lucide icons (Dumbbell, Flame, HeartPulse, Timer) in a row, right to left. Each icon draws itself stroke by stroke on its own beat, then its Hebrew label rises out of a mask line under it. When all are drawn, they light up in orange #FF8F3A together. Icons navy #12163F, stroke width 2, on #EEF3FB. Labels in Karantina 700.
+Banned: icons fading in, mixing icon libraries, filled icons.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM. Icon i starts drawing on beat i+1 and takes 1 beat. All light up on beat 7.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file with React and lucide-react, exposing window.seek(t); everything is computed from t, no CSS transitions.
+Give every path pathLength="1", set stroke-dasharray to 1, and animate stroke-dashoffset from 1 to 0 with an eased progress of t. Multi-path icons draw their paths in sequence. Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Without pathLength="1", paths of different lengths draw at different speeds.
+- lucide-react sets stroke on the svg element; set the dash styles on each child path, circle and line.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me a still at beat 2 and at beat 7 before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-logos">
+    <div class="el-h"><span class="el-n">03.2</span><h3 class="el-t">לוגואים רשמיים</h3><div class="el-tags"><span>Simple Icons</span><span>SVG</span><span class="lic">CC0 · trademarks apply</span></div></div>
+    <div class="el-demo" data-demo="logos"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>מה רואים</h4><p>קיר של 16 לוגואים של הכלים שבנו את העמוד הזה, קופצים פנימה אחד אחרי השני בצבעי המותג הרשמיים שלהם. נסו לכבות את "צבעי המותג" ולהדליק "רקע כהה". הגרסה החד-צבעית בשחור או בלבן היא בדרך כלל הגרסה היחידה שמותגים מתירים מלבד הצבע הרשמי, ולכן ההדגמה עוברת אליה ולא לצבע אחר.</p>
+        <h4>מה זה Simple Icons</h4><p>מאגר של יותר מ-3,400 לוגואים של מותגים, כל אחד כ-SVG נקי, יחד עם קוד הצבע הרשמי של המותג. החבילה <code>simple-icons</code> ב-npm נותנת לכל לוגו את הצורה ואת הצבע, כך ש-Claude לא צריך לצייר לוגו מהזיכרון, ולא ימציא צורה "בערך".</p></div>
+        <div><h4>מה מותר ומה אסור</h4><p>הקבצים עצמם ב-CC0, נחלת הכלל. אבל הלוגו הוא <b>סימן מסחרי</b>, וזה כבר חוק אחר. Simple Icons עצמם מבקשים לכבד את הנחיות המותג של כל חברה. בפועל:</p>
+        <ul><li>מותר להראות לוגו כדי לומר "עובד עם" או "נבנה עם".</li><li>אסור לשנות צבע לצבע לא רשמי, למתוח, לחתוך או להוסיף אפקטים.</li><li>אסור לרמוז שהחברה ממליצה עליכם או שותפה שלכם.</li><li>לוגו בגרסה רשמית עדכנית מוצאים בדף ה-Brand או Press של החברה.</li></ul></div>
+      </div>
+      <div class="fit"><div class="y"><b>מתי כן</b>"משתלב עם הכלים שלכם", "נבנה עם", לקוחות שאישרו להופיע.</div><div class="n"><b>מתי לא</b>לקוחות שלא אישרו, או כל מצב שבו הלוגו נראה כמו המלצה שלא קיבלתם.</div></div>
+      <div class="prompt"><h5>פרומפט מלא</h5><div class="code"><span class="lbl">official logo wall · simple-icons</span><button class="cp" type="button">העתק פרומפט</button><pre>&lt;inputs&gt;
+Ask me which brands to show and confirm that I have the right to show each of them. If I skip it, use the tools this project was built with: Claude, React, Three.js, Tailwind CSS, shadcn/ui, FFmpeg, Node.js, GitHub.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 4.5-second "built with" clip, 1920x1080, 60fps. A grid of official logos pops in on the beat, one after another from the right, each in its official brand colour on white tiles over #EEF3FB. A title above in Karantina 700: "נבנה עם". Logos keep their exact proportions and colours.
+Banned: recoloured logos, logos with glow or shadows, logos drawn from memory, distortion.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM, 16th-note stagger: a new logo every 0.125s, each with a short spring scale from 0.6 to 1.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file exposing window.seek(t); everything is computed from t, no CSS transitions.
+Import each logo from the simple-icons npm package (import { siReact } from 'simple-icons'), use its .path in a 24×24 viewBox and "#" + its .hex as the fill (.hex comes without the #). Do not redraw or modify any logo. Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Some brands (for example GitHub) have black logos; on a dark background, switch to the brand's official white version, never an invented colour.
+- simple-icons occasionally removes logos at a brand's request; if one is missing, ask me for the official file instead of approximating it.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+List the logos you will use and their hex colours, then show me the final frame before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+</section>
+
+<!-- ============ 04 TYPE ============ -->
+<section class="sec s-denim" id="c4" data-folio="04" data-toc="טיפוגרפיה קינטית">
+  <div class="sh"><span class="num">04</span><div><h2>טיפוגרפיה קינטית</h2><p class="sub">טקסט שזז עם המוזיקה. ארבע טכניקות שמחליפות כמעט כל "פייד".</p></div></div>
+  <div class="body">
+    <p><b>טיפוגרפיה קינטית</b> היא טקסט שהתנועה שלו היא חלק מהמסר: מילה שנוחתת חזק מרגישה חשובה, מילה שמוקלדת מרגישה כמו שיחה. בסרטוני השקה רוב המסך הוא טקסט, ולכן זה אולי האלמנט החשוב ביותר בקטלוג. ההדגמה למטה מראה ארבע טכניקות ברצף, כל אחת בשתי שניות וחצי.</p>
+  </div>
+  <article class="el" id="e-type">
+    <div class="el-h"><span class="el-n">04.1</span><h3 class="el-t">ארבע טכניקות לטקסט שזז</h3><div class="el-tags"><span>Canvas 2D</span><span>Karantina</span><span>RTL</span></div></div>
+    <div class="el-demo" data-demo="type"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>SLAM: מילים שנוחתות</h4><p>כל מילה מופיעה בביט שלה, מתחילה גדולה מדי וקטנה לגודלה עם קפיץ, כמו חותמת. מתאים לכותרות של שלוש-ארבע מילים בשיא של המוזיקה.</p>
+        <h4>MASK RISE: עולות מקו</h4><p>המילים עולות מתוך קו בלתי נראה, כאילו היו מתחתיו. ה"קו" הוא <b>מסכה</b>: מלבן שמראה רק את מה שבתוכו, כמו שבלונה. הטקסט זז, המסכה לא, ולכן נראה שהוא נולד מהקו.</p></div>
+        <div><h4>POP TYPE: הקלדה</h4><p>אות אחרי אות, כל אחת קופצת קצת כשהיא נכתבת, עם סמן מהבהב. הקצב לא אחיד כמו אצל אדם אמיתי, וכל הקשה נוחתת על <b>חצי ביט או רבע ביט</b> (מה שבמוזיקה נקרא "שמינית" ו"שש-עשרית"; ב-120 BPM אלה 0.25 ו-0.125 שנייה), כך שההקלדה "מתנגנת" עם המוזיקה.</p>
+        <h4>MARKER: מרקר</h4><p>פס צבע שנמתח מאחורי המילה החשובה, מימין לשמאל כמו כיוון הקריאה. הדרך הכי פשוטה להגיד לצופה "זו המילה".</p></div>
+      </div>
+      <div class="def"><b>עברית: שלושה דברים שחשוב לבקש</b>חושפים מילים מימין לשמאל, לפי סדר הקריאה. עוטפים מספרים ומילים באנגלית בתוך <code>unicode-bidi: isolate</code>. למה? הדפדפן מסדר עברית מימין לשמאל, ואנגלית ומספרים משמאל לימין. סימנים ניטרליים כמו +, % ורווח לוקחים את הכיוון מהשכנים שלהם, ולכן לפעמים נודדים לצד השני. ההגדרה הזו אומרת לדפדפן לסדר את הקטע העטוף כיחידה סגורה, בלי שיתערבב עם כיוון המשפט. וקרנטינה צרה, אז כותרת בקרנטינה צריכה להיות בערך פי 1.25 מכותרת בפונט רחב יותר כדי להרגיש באותו משקל.</div>
+      <div class="fit"><div class="y"><b>מתי כן</b>בכל סרטון השקה. SLAM לשיא, MASK RISE למשפטים, POP TYPE לפרומפטים ולשיחות, MARKER למילת מפתח.</div><div class="n"><b>מתי לא</b>יותר משתי טכניקות באותה סצנה: הטקסט מתחיל להתחרות על תשומת הלב במקום לספר סיפור.</div></div>
+      <div class="prompt"><h5>פרומפט מלא</h5><div class="code"><span class="lbl">kinetic typography · Hebrew</span><button class="cp" type="button">העתק פרומפט</button><pre>&lt;inputs&gt;
+Ask me for the exact on-screen lines and which word is the key word. If I skip them, use: "כל אימון הוא ביט" (slam), "קצב סופר את החזרות בשבילך" (mask rise), "תתחיל אימון בוקר" (typed), and mark "ביט".
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 10-second kinetic typography clip, 1920x1080, 60fps, Hebrew, right to left. Four moments, each on its own colour spread with a hard wipe between them: SLAM (words land one per beat from 1.6× scale with a spring), MASK RISE (words rise out of an invisible line and leave through it), POP TYPE (letters type on with a slight pop and a blinking caret), MARKER (an orange marker swipe from right to left behind the key word).
+Type: Karantina 700 for Hebrew headlines (about 1.25× the size you would give a wider font), Anton uppercase for any English label, Assistant for small text. Colours: navy #12163F, orange #FF8F3A, gold #FFC74E, light #EEF3FB, denim #AFCBEF.
+Banned: fades, blur-ins, letter-by-letter scramble effects, text that moves after it lands.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM. Slam: one word per beat. Mask rise: words 0.12s apart. Typing: one keystroke per 16th note (0.125s), with 2 short pauses between words. Marker: swipes in over half a beat on the downbeat.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file exposing window.seek(t), drawing on a 2D canvas (or DOM) from t alone.
+Lay out each line once (measure words with measureText, right-aligned for RTL), then move and clip each word as a function of t. The mask is a clip rectangle; the word's y offset goes from below the line to 0 with a spring. Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Set ctx.direction = 'rtl' and textAlign = 'right' for Hebrew, and measure with the real font loaded (await document.fonts.ready).
+- Wrap numbers and English words with unicode-bidi: isolate (DOM) or draw them as separate runs (canvas), or they jump to the wrong side.
+- Never split Hebrew words letter by letter across lines.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me one still of each of the four moments before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+</section>
+
+<!-- ============ 05 3D ============ -->
+<section class="sec s-navy" id="c5" data-folio="05" data-toc="תלת-ממד: three.js">
+  <div class="sh"><span class="num">05</span><div><h2>תלת-ממד עם three.js</h2><p class="sub">טלפונים, זכוכית, חלקיקים, ים. ומה כל מילה בפרומפט אומרת.</p></div></div>
+  <div class="body">
+    <p><b>three.js</b> היא הספרייה הפופולרית ביותר לתלת-ממד ברשת, חינמית ב-MIT. היא יושבת מעל WebGL, הדרך לצייר עם כרטיס המסך, וחוסכת את אלפי שורות הקוד שהוא דורש. כדי להבין פרומפט של תלת-ממד, עוזר לחשוב על סט צילומים:</p>
+    <ul>
+      <li><b>Scene</b> (סצנה): הבמה, שעליה מניחים הכל.</li>
+      <li><b>Camera</b> (מצלמה): מאיפה מסתכלים, ובאיזו זווית ראייה (רחבה כמו עדשה רחבה, או צרה כמו עדשת טלה, עדשת זום).</li>
+      <li><b>Mesh</b> (גוף): כל אובייקט. הוא בנוי משני חלקים: <b>Geometry</b>, הצורה עצמה, ו-<b>Material</b>, החומר של המעטפת: צבע, כמה הוא מבריק, כמה הוא מחוספס, האם הוא שקוף. כרטיס המסך יודע לצייר מהר מאוד דבר אחד, משולשים, ולכן כל צורה, גם כדור, מפורקת להרבה משולשים קטנים.</li>
+      <li><b>Light</b> (אור), ו-<b>Environment map</b>: תמונת 360° של הסביבה שמשתקפת במשטחים מבריקים. בלעדיה מתכת וזכוכית נראות אפורות ומתות, כי למתכת כמעט אין צבע משלה: רואים בה את מה שהיא משקפת, ובלי סביבה היא משקפת כלום.</li>
+      <li><b>Renderer</b> (הצלם): הופך את כל זה לתמונה דו-ממדית אחת, הפריים.</li>
+    </ul>
+    <p>עוד שני מושגים שחוזרים בפרומפטים. <b>PBR</b> (Physically Based Rendering) הם חומרים שמגיבים לאור לפי חוקי הפיזיקה, ולכן נראים אמיתיים בכל תאורה. שולטים בהם בעיקר בשני מספרים בין 0 ל-1: <code>metalness</code> (כמה הוא מתכת) ו-<code>roughness</code> (כמה הוא מחוספס: 0 הוא מראה, 1 הוא גיר). <b>GLTF</b> הוא פורמט הקובץ הסטנדרטי למודלים תלת-ממדיים, "ה-JPEG של התלת-ממד": מודל שבניתם בתוכנת תלת-ממד (למשל Blender, החינמית, שמופיעה בסוף הפרק) או הורדתם מאתר נכנס ל-three.js כקובץ GLTF. בכל ההדגמות כאן אפשר לגרור כדי לסובב. זה רק בתצוגה המקדימה: בסרטון, הזווית נקבעת מ-t.</p>
+  </div>
+
+  <article class="el" id="e-devices">
+    <div class="el-h"><span class="el-n">05.1</span><h3 class="el-t">טלפון ולפטופ עם מסכים חיים</h3><div class="el-tags"><span>three.js</span><span>CanvasTexture</span><span>PBR</span><span class="lic">MIT</span></div></div>
+    <div class="el-demo" data-demo="d3-devices"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>מה רואים</h4><p>מכסה של לפטופ נפתח, טלפון עולה לידו, והמצלמה מסתובבת לאט. על המסכים יש תוכן חי: בטלפון מונה של שכיבות סמיכה שמתמלא, בלפטופ קוד שמוקלד. הכל בונה את עצמו מצורות פשוטות בקוד, בלי שום קובץ מודל.</p>
+        <h4>תשובה כנה על "אייפון" ו"מקבוק"</h4><p>אלה מכשירים <b>גנריים</b> בהשראת טלפון ולפטופ מודרניים, לא מודלים של אפל. העיצוב של המכשירים והלוגו של אפל מוגנים. אם צריך מכשיר מוכר, משתמשים במודל GLTF שהרישיון שלו מתיר את השימוש, או בתבניות המכשירים הרשמיות שאפל מפרסמת למשווקים, לפי ההנחיות שלה.</p></div>
+        <div><h4>איך זה עובד</h4><ul>
+          <li>הגוף של כל מכשיר הוא קופסה עם פינות מעוגלות, בחומר PBR מתכתי, ומשתקף בו "חדר סטודיו" וירטואלי (<code>RoomEnvironment</code>).</li>
+          <li><b>המסך החי</b>: מציירים את ממשק המשתמש על Canvas דו-ממדי רגיל בכל פריים, והופכים אותו לטקסטורה (<code>CanvasTexture</code>), "מדבקה" שנמתחת על המסך התלת-ממדי. <code>needsUpdate = true</code> אומר ל-three.js להעתיק את הציור החדש לכרטיס המסך. ברירת המחדל היא לא להעתיק, כי העתקת תמונה לכרטיס המסך בכל פריים היא פעולה יקרה, וברוב הטקסטורות התמונה לא משתנה.</li>
+          <li>המכסה הוא ציר: הסיבוב שלו מחושב מ-t עם קפיץ. המצלמה נעה על מסלול עגול סביב המכשירים.</li></ul></div>
+      </div>
+      <div class="fit"><div class="y"><b>מתי כן</b>"זה עובד בכל מכשיר", הצגת אפליקציה בתוך העולם, מעבר מממשק שטוח למוצר אמיתי.</div><div class="n"><b>מתי לא</b>כשהצופה צריך לקרוא את מה שעל המסך: בזווית תלת-ממדית טקסט קטן נבלע. הראו את המסך שטוח, ורק אז הכניסו אותו למכשיר.</div></div>
+      <div class="prompt"><h5>פרומפט מלא</h5><div class="code"><span class="lbl">3D phone + laptop with live screens · three.js</span><button class="cp" type="button">העתק פרומפט</button><pre>&lt;inputs&gt;
+Ask me what each screen should show. If I skip it: the phone shows a push-up counter ring filling to 12 reps with a Hebrew title, the laptop shows code typing line by line.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 9-second 3D clip, 1920x1080, 60fps, three.js. A generic modern laptop opens its lid while a generic phone rises beside it; the camera orbits slowly around both. Both screens are live and animate in sync with the film.
+Devices: rounded aluminium-like bodies (PBR, metalness 0.8, roughness 0.3), black glass screens with a thin bezel, no brand logos. Background: the clear sky gradient #5EA9F2 → #93CBFF → #DDF0FF, a soft contact shadow under the devices. Accent colours on screen: #FFC74E, #FF8F3A, #F56B49.
+Banned: Apple logos or exact Apple product shapes, floating particles, lens flares, a camera that reverses direction.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM. Beats 0-3: lid opens on a spring. Beats 2-5: the phone rises. Beats 4-17: slow orbit, the counter ring fills on screen, the code types on the laptop at one line per beat.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file with three.js that exposes window.seek(t); every transform and every screen pixel is computed from t, no clocks.
+Build the devices from rounded boxes. For each screen, draw its UI on an offscreen 2D canvas every frame, wrap it in a CanvasTexture with colorSpace = SRGBColorSpace, and set needsUpdate = true after drawing. Use RoomEnvironment through PMREMGenerator for reflections and ACES tone mapping. The lid's rotation and the phone's height come from closed-form springs of t; the camera orbit angle is a smooth function of t.
+Capture with Playwright at 60fps (preserveDrawingBuffer on the renderer), assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Forgetting needsUpdate = true leaves the screen frozen on its first frame.
+- Screen text drawn on the canvas must be large; on a tilted 3D screen anything under about 28px becomes unreadable.
+- Never call renderer.setAnimationLoop; render once inside seek(t).
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me 3 stills (lid half open, phone up, mid orbit) before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-glass">
+    <div class="el-h"><span class="el-n">05.2</span><h3 class="el-t">כדור זכוכית נושם</h3><div class="el-tags"><span>three.js</span><span>MeshPhysicalMaterial</span><span>shader</span></div></div>
+    <div class="el-demo" data-demo="d3-glass"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>מה רואים</h4><p>כדור זכוכית שמשנה את צורתו לאט, כמו טיפה, וטבעת וכדורים קטנים סובבים סביבו. מאחוריו כתוב YUV.AI, והזכוכית מעקמת את הטקסט, בדיוק כמו כוס מים שמעוותת את מה שמאחוריה.</p>
+        <h4>החומר: זכוכית אמיתית</h4><p><code>MeshPhysicalMaterial</code> הוא החומר המתקדם של three.js. שלוש הגדרות הופכות אותו לזכוכית: <b>transmission</b> (כמה אור עובר דרכו), <b>thickness</b> (כמה הוא עבה, כי זכוכית עבה מעקמת יותר), ו-<b>ior</b>, מקדם השבירה: כמה האור מתכופף כשהוא נכנס לחומר. לזכוכית זה בערך 1.5, למים 1.33.</p></div>
+        <div><h4>איך הוא "נושם"</h4><p>כל נקודה על פני הכדור נדחפת החוצה או פנימה לפי <b>רעש</b> (noise): פונקציה שנותנת ערכים אקראיים אבל חלקים, כך ששכנות מקבלות ערכים קרובים, וזה נראה אורגני ולא מרצד. את החישוב עושה <b>שיידר</b> (shader): תוכנה קטנה שרצה על כרטיס המסך, על כל הנקודות במקביל. מכניסים לשיידר המובנה של three.js כמה שורות בעזרת <code>onBeforeCompile</code>, ומעבירים לו את t כמשתנה (<code>uTime</code>).</p></div>
+      </div>
+      <div class="fit"><div class="y"><b>מתי כן</b>רגע "פרימיום", לוגו או שם מוצר מאחורי זכוכית, מעבר בין פרקים.</div><div class="n"><b>מתי לא</b>רקע בהיר ושטוח: לזכוכית אין מה לשבור, והיא נראית כמו פלסטיק אפור.</div></div>
+      <div class="prompt"><h5>פרומפט מלא</h5><div class="code"><span class="lbl">liquid glass orb · three.js</span><button class="cp" type="button">העתק פרומפט</button><pre>&lt;inputs&gt;
+Ask me for the word that sits behind the glass. If I skip it, use "YUV.AI".
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 12-second loopable 3D clip, 1920x1080, 60fps. A liquid glass orb slowly breathes (its surface swells and settles organically) in front of a large word set in Anton in the fire gradient #FFC74E → #FF8F3A → #F56B49, which it refracts. An orange torus ring tilts slowly behind it and five small glossy spheres in brand colours (#FFC74E, #12163F, #F56B49, #5EA9F2, #D74270) orbit it. Background: the sky gradient #2C78D2 → #93CBFF → #F4FBFF, one white key light from the upper right.
+Banned: rainbow chromatic aberration, bloom everywhere, particles, a glass that looks grey.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+One breath cycle every 4 beats at 120 BPM (2s). The orbiting spheres complete one orbit over the full 12s so the clip loops seamlessly.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file with three.js that exposes window.seek(t); every uniform and transform is computed from t.
+Material: MeshPhysicalMaterial with transmission 1, thickness 1.2, ior 1.45, roughness 0.05, an environment map from RoomEnvironment via PMREMGenerator. Displace vertices along their normals with 3D simplex noise injected through onBeforeCompile; the shader's uTime uniform is set from t every frame. Use a high-segment sphere (at least 128×128) so the displacement is smooth.
+Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Transmission needs an environment map and something behind the object, or the glass reads as grey.
+- After displacing vertices, recompute normals in the shader (or use a normal-from-noise approximation), or the lighting looks flat.
+- For a seamless loop, make every periodic motion an integer number of cycles over the clip's length.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me 2 stills (inhale and exhale) before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-particles">
+    <div class="el-h"><span class="el-n">05.3</span><h3 class="el-t">20,000 חלקיקים שמשנים צורה</h3><div class="el-tags"><span>three.js</span><span>Points</span><span>GPU</span></div></div>
+    <div class="el-demo" data-demo="d3-particles"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>מה רואים</h4><p>עשרים אלף נקודות שעוברות בין ארבע צורות: כדור, קשר, המילה AI, וגלקסיה. אותה טכניקה מופעלת בראש העמוד. רגע: "חלקיקים" ברשימת האסור של zero, לא? כן, כי חלקיקים <b>סתמיים</b> ברקע הם קלישאה. חלקיקים שהופכים למילה ומספרים משהו הם כבר טכניקה.</p></div>
+        <div><h4>איך זה עובד</h4><ul>
+          <li><code>Points</code> הוא אובייקט של three.js שמצייר כל נקודה ברשימה כנקודה על המסך, כולן בבת אחת על כרטיס המסך. 20,000 כאלה ב-DOM היו חונקים את הדפדפן (ראו מעבדה 0.6).</li>
+          <li>לכל צורה מחשבים מראש 20,000 מיקומי יעד. את המילה דוגמים מציור שלה: כותבים אותה על Canvas דו-ממדי, וקוראים אילו פיקסלים נצבעו.</li>
+          <li>המיקום של כל נקודה = ערבוב בין הצורה הקודמת לבאה, לפי התקדמות עם האטה: <code>mix(A, B, ease(p))</code>. לכל נקודה עיכוב קטן משלה, כדי שהמעבר ייראה כמו נחיל ולא כמו בלוק.</li></ul></div>
+      </div>
+      <div class="fit"><div class="y"><b>מתי כן</b>פתיחה או סגירה, "מכאוס לסדר", לוגו שנבנה מאלפי נקודות.</div><div class="n"><b>מתי לא</b>כרקע שזז מאחורי טקסט: זו בדיוק הקלישאה, והיא מתחרה בקריאה.</div></div>
+      <div class="prompt"><h5>פרומפט מלא</h5><div class="code"><span class="lbl">particle morph · three.js Points</span><button class="cp" type="button">העתק פרומפט</button><pre>&lt;inputs&gt;
+Ask me for the word or logo the particles should form. If I skip it, use "AI".
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+An 11-second 3D clip, 1920x1080, 60fps. 20,000 particles morph from a sphere into a torus knot, into a word, into a spiral galaxy, holding each shape for about 1.6s. Particles are small soft dots in #FFC74E, #FF8F3A, #F56B49 and a little #5DE4E9, additive blending on #0B0E2A. The camera drifts slowly.
+Banned: particles drifting randomly in the background, bloom halos around everything, a linear morph.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM. Each morph takes 3 beats (1.5s) and starts on a downbeat; each hold is just over 3 beats.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file with three.js that exposes window.seek(t); positions are computed from t every frame, no simulation state.
+THREE.Points with a fixed count of 20,000. Precompute a Float32Array of target positions per shape: sphere (Fibonacci sphere), torus knot (TorusKnotGeometry vertices, resampled), word (draw it on a 2D canvas, sample lit pixels, add a little depth jitter), galaxy (logarithmic spiral arms with noise). position = mix(A, B, easeInOut(progress)), with a small per-particle delay. Custom point shader for round soft dots.
+Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Every shape must have exactly the same particle count; resample, never truncate.
+- Seed the random jitter (a fixed seed), so frame 300 is identical on every render.
+- Additive blending with depthWrite on causes black squares; set depthWrite: false.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me one still of each shape before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-ocean">
+    <div class="el-h"><span class="el-n">05.4</span><h3 class="el-t">ים ושמיים: מיום לשקיעה</h3><div class="el-tags"><span>three.js</span><span>Sky</span><span>Water</span></div></div>
+    <div class="el-demo" data-demo="d3-ocean"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>מה רואים</h4><p>ים רגוע ושמיים שעוברים מצהריים לשקיעה וחזרה, בשתים-עשרה שניות. זה ה-time-lapse מסרט ההשקה YUV.AI MOTION, שבו המכשירים צפים מעל המים.</p></div>
+        <div><h4>איך זה עובד</h4><ul>
+          <li><code>Sky</code> הוא תוסף של three.js שמחשב את צבע השמיים מהמיקום של השמש, לפי מודל פיזיקלי של פיזור אור באטמוספרה. למה כתום? האוויר מפזר אור כחול הרבה יותר מאור אדום. כשהשמש נמוכה, האור שלה עובר דרך הרבה יותר אוויר בדרך אלינו, רוב הכחול מתפזר לצדדים, ומה שמגיע הוא בעיקר כתום ואדום. לא מציירים שקיעה: מורידים את השמש.</li>
+          <li><code>Water</code> הוא תוסף שמצייר את הסצנה פעם נוספת, כמו במראה מתחת לפני המים, ומעוות את ההשתקפות בדפוס גלים שזז לפי t.</li>
+          <li>שעת היום היא מספר אחד שמחושב מ-t, וממנו נגזרים גובה השמש, צבע האור והחשיפה.</li></ul></div>
+      </div>
+      <div class="fit"><div class="y"><b>מתי כן</b>"מעבר זמן", אווירה, רקע לסצנת מוצר תלת-ממדית, סיום רגשי.</div><div class="n"><b>מתי לא</b>סרטון ממשק טהור: עולם שלם מסיח את הדעת מהאפליקציה.</div></div>
+      <div class="prompt"><h5>פרומפט מלא</h5><div class="code"><span class="lbl">ocean time-lapse · three.js Sky + Water</span><button class="cp" type="button">העתק פרומפט</button><pre>&lt;inputs&gt;
+Ask me whether something should float above the water (a product, a logo). If I skip it, keep the scene empty.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 12-second 3D clip, 1920x1080, 60fps. A calm open ocean under a physically based sky. Time of day goes from midday to golden hour to sunset and back to day, so the clip loops. The camera is low over the water and drifts forward slowly. Warm sunset tones should land near #FF8F3A and #F56B49, the day sky near #5EA9F2.
+Banned: lens flares, birds, a sun that jumps, choppy stormy waves.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM. The sun reaches its lowest point on beat 12 (6s), exactly mid-clip.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file with three.js and its Sky and Water addons, exposing window.seek(t).
+One number tod(t) from 0 (midday) to 1 (sunset) drives the sun's elevation, the Sky's turbidity and rayleigh, the directional light's colour and the renderer's exposure. The Water shader's time uniform is set from t every frame.
+Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- The Water addon advances its own time if you let it. Set material.uniforms.time.value from t every frame.
+- Update the sun direction on both the Sky and the Water, or the reflection points at a different sun.
+- Lower exposure at sunset, or the sky blows out to white.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me stills at midday, golden hour and sunset before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-carousel">
+    <div class="el-h"><span class="el-n">05.5</span><h3 class="el-t">קרוסלת כרטיסים שנעצרת על הביט</h3><div class="el-tags"><span>three.js</span><span>sum of springs</span></div></div>
+    <div class="el-demo" data-demo="d3-carousel"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>מה רואים</h4><p>שישה כרטיסים על טבעת בתלת-ממד, שמסתובבת צעד אחד בכל ביט, עוברת קצת את המקום ונעצרת. זה הרגע מסרט ההשקה שבו הלחיצה מתפוצצת לקרוסלה.</p></div>
+        <div><h4>איך זה עובד: סכום של קפיצים</h4><p>הזווית של הטבעת היא <b>סכום</b>: לכל ביט יש קפיץ משלו, שמתחיל בזמן של אותו ביט ומוסיף צעד אחד (60°, כי 360° חלקי 6 כרטיסים). <code>angle = Σ step × spring(t − beat_i)</code>. הסימן Σ (סיגמה) פירושו "חבר את כולם": לכל ביט i, שמתחיל בזמן beat_i, מוסיפים את הקפיץ שלו. כל קפיץ עובר קצת את היעד וחוזר, ולכן כל צעד "נוחת". ומאחר שזה סכום של נוסחאות סגורות, אפשר לחשב את הזווית בכל רגע, גם אם קופצים לאמצע.</p><p>כל כרטיס מסתובב גם סביב עצמו כדי לפנות תמיד למצלמה, אחרת הטקסט בכרטיסים שמאחור נראה הפוך, כמו בראי.</p></div>
+      </div>
+      <div class="fit"><div class="y"><b>מתי כן</b>הצגת קטגוריות, פיצ'רים או תבניות, כשכל אחד מקבל ביט.</div><div class="n"><b>מתי לא</b>כשצריך לקרוא את תוכן הכרטיסים לעומק: הם עוברים מהר מדי.</div></div>
+      <div class="prompt"><h5>פרומפט מלא</h5><div class="code"><span class="lbl">3D card carousel on the beat · three.js</span><button class="cp" type="button">העתק פרומפט</button><pre>&lt;inputs&gt;
+Ask me for the card titles (6 to 8). If I skip them, use the six categories of this catalog in Hebrew: גרפים, ממשק, אייקונים, טיפוגרפיה, תלת-ממד, אפקטים.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 6.6-second 3D clip, 1920x1080, 60fps. Six cards stand on a ring in 3D, facing outward. The ring snaps one card forward on every beat with a small overshoot. The front card is slightly larger and fully lit; the others dim with distance. Cards: white with a 28px radius, a navy title in Karantina 700 and a fire-gradient icon chip; background the sky gradient #5EA9F2 → #93CBFF → #DDF0FF.
+Banned: continuous spinning, motion blur streaks, cards that show mirrored text.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM: a snap every 0.5s for 12 beats.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file with three.js exposing window.seek(t).
+Each card is a plane with a CanvasTexture drawn once. Ring rotation = sum over beats of step × spring(t − beatTime_i), with step = 2π / cardCount and this closed-form spring, ω = 14 and ζ = 0.6: spring(t) = 1 − e^(−ζωt)·(cos(ω_d·t) + (ζω/ω_d)·sin(ω_d·t)), ω_d = ω·√(1 − ζ²). Each card's own rotation counter-rotates so it always faces the camera.
+Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- If the cards face the ring's centre instead of the camera, the far ones read mirrored.
+- Use sRGB colour space on the textures, or the brand colours look washed out.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me stills at beats 1, 4 and 8 before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-eq">
+    <div class="el-h"><span class="el-n">05.6</span><h3 class="el-t">אקולייזר תלת-ממדי</h3><div class="el-tags"><span>three.js</span><span>InstancedMesh</span></div></div>
+    <div class="el-demo" data-demo="d3-eq"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>מה רואים</h4><p>רשת של 20×20 עמודים שגל עובר בה, וכל ביט נותן לה "בעיטה" מהמרכז החוצה. הצבע תלוי בגובה: נמוך בכחול, בינוני בכתום, גבוה בזהב. כאן הגל מחושב מנוסחה; בסרט אמיתי הגבהים מגיעים מהמוזיקה עצמה.</p>
+        <h4>מהמוזיקה, בלי לשבור את השעון</h4><p>מנתח שמע חי בדפדפן רץ לפי שעון הקיר, ולכן לא מתאים לצילום. במקום זה מנתחים את השיר <b>מראש</b>: לכל פריים מחשבים את <b>הספקטרום</b>, כמה אנרגיה יש בכל תדר (בס, אמצע, גבוהים), ושומרים בטבלה. בזמן הצילום רק קוראים את השורה של t.</p></div>
+        <div><h4>איך זה עובד: צורה אחת, 400 מופעים</h4><p>כל אובייקט נפרד ב-three.js הוא הוראת ציור נפרדת שהמעבד שולח לכרטיס המסך (<b>draw call</b>). אלפי הוראות כאלה בכל פריים מאטות את המעבד, גם כשכרטיס המסך פנוי. זה חשוב בעיקר לתצוגה המקדימה (0.6); הסרטון ייצא חלק בכל מקרה. <code>InstancedMesh</code> שולח <b>הוראה אחת</b>: "צייר את הקופסה הזו 400 פעמים, הנה המיקום והצבע של כל אחת". אותה תמונה, חלק קטן מהעבודה.</p></div>
+      </div>
+      <div class="fit"><div class="y"><b>מתי כן</b>סרטון מוזיקלי, "המוזיקה היא השעון", מעבר אנרגטי לפני הדרופ.</div><div class="n"><b>מתי לא</b>סרטון בלי מוזיקה בולטת: אקולייזר שזז על שקט נראה מנותק.</div></div>
+      <div class="prompt"><h5>פרומפט מלא</h5><div class="code"><span class="lbl">3D audio equalizer · InstancedMesh</span><button class="cp" type="button">העתק פרומפט</button><pre>&lt;inputs&gt;
+Ask me for the music track. If I skip it, use a royalty-free 120 BPM track with a clear kick (Mixkit, licensed for commercial use) and tell me which one.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 12-second 3D clip, 1920x1080, 60fps. A 20×20 grid of bars seen from a three-quarter angle above. Bar heights follow the music: bass in the centre, highs at the edges, and every kick sends a ring-shaped pulse from the centre outward. Colour by height from blue #2C78D2 through orange #FF8F3A to gold #FFC74E. Background #0B0E2A, a soft rim light.
+Banned: random heights not tied to the audio, bloom on everything, a camera that shakes.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+The track's own beat grid drives everything: measure the BPM and the kick times first.
+&lt;/structure&gt;
+
+&lt;build&gt;
+Analyse the track offline first (Python with librosa, or ffmpeg plus an FFT): for every frame at 60fps, store the energy of 20 frequency bands and the kick onsets in a JSON file.
+Then one HTML file with three.js exposing window.seek(t): one InstancedMesh of 400 boxes; for each frame, read row round(t × 60) of the JSON, set each instance's scale.y and colour with setMatrixAt and setColorAt, then set instanceMatrix.needsUpdate and instanceColor.needsUpdate. The pulse is a ring whose radius grows from each kick time.
+Capture with Playwright at 60fps and mux the same audio with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- A live Web Audio analyser runs on the wall clock. Precompute the spectrum, or picture and sound drift apart.
+- Scale boxes from their base, not their centre (translate the geometry up by half its height once).
+- Smooth the band energies over 2-3 frames, or the bars flicker.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me the detected BPM, the kick times and 2 stills before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+  <div class="body">
+    <h3>כשצריך יותר מזה</h3>
+    <ul>
+      <li><b>React Three Fiber</b>: three.js בצורת רכיבי React. שימושי כשהסצנה גדולה והפרויקט כבר ב-React. MIT. גרסה 9 שלו מיועדת ל-React 19.</li>
+      <li><b>Spline</b>: עורך תלת-ממד ויזואלי בדפדפן, בלי קוד. מעצבים ביד ומייצאים ל-GLTF, ל-three.js או ל-React. יש תוכנית חינמית.</li>
+      <li><b>Blender</b>: תוכנת תלת-ממד מלאה וחינמית, ברישיון GPL: מותר להשתמש בה לכל מטרה, גם מסחרית, ומה שיוצרים בה שלכם; התנאים של GPL חלים רק על מי שמשנה את התוכנה עצמה ומפיץ אותה. בונים בה מודלים מותאמים אישית ומייצאים GLTF. עקומת לימוד תלולה, תוצאה בלי גבולות.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 06 FX ============ -->
+<section class="sec s-cloud" id="c6" data-folio="06" data-toc="אפקטים ומעברים">
+  <div class="sh"><span class="num">06</span><div><h2>אפקטים ומעברים</h2><p class="sub">הניאון של "AI חושב", זכוכית, זוהר, ומעברים בלי פייד.</p></div></div>
+
+  <article class="el" id="e-neon">
+    <div class="el-h"><span class="el-n">06.1</span><h3 class="el-t">קצה ניאון: "ה-AI חושב"</h3><div class="el-tags"><span>CSS</span><span>conic-gradient</span><span>mask</span></div></div>
+    <div class="el-demo" data-demo="fx-neon"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>מה רואים</h4><p>שדה הקלדה עם קצה צבעוני שמסתובב סביבו והילה רכה, שפועמת בכל ביט, בזמן שבקשה מוקלדת בפנים. זה האות החזותי שהשתרש לרגע שבו AI מעבד בקשה.</p></div>
+        <div><h4>איך זה עובד</h4><ul>
+          <li><b>conic-gradient</b> הוא מעבר צבעים שמסתובב סביב נקודה, כמו מחוגים של שעון: כל זווית מקבלת צבע אחר. משנים את זווית ההתחלה, והצבעים מסתובבים.</li>
+          <li><b>mask</b> חותכת מהמעבר הזה רק טבעת דקה בקצה, כך שנשאר רק קו מתאר צבעוני.</li>
+          <li>עותק שני של אותו מעבר, מטושטש מאחור, יוצר את ההילה. בכל ביט היא מתחזקת לרגע.</li>
+          <li>הזווית = t × 1.5 רדיאנים. <b>רדיאן</b> הוא יחידת זווית כמו מעלה: סיבוב שלם הוא 2π, בערך 6.28 רדיאנים. 1.5 רדיאנים בשנייה הם סיבוב שלם בכל 4.2 שניות בערך, איטי מספיק כדי להרגיש "חושב" ולא מסחרר. בעמוד עצמו (הכפתור למעלה) הניאון מסתובב באנימציית CSS רגילה, כי שם אין צילום. בסרטון, הזווית מגיעה מ-t.</li></ul></div>
+      </div>
+      <div class="fit"><div class="y"><b>מתי כן</b>שדה פרומפט, כפתור הפעולה הראשי, כרטיס אחד מרכזי. אלמנט אחד בכל מסך.</div><div class="n"><b>מתי לא</b>על כל דבר: ניאון בכל מקום מבטל את עצמו והופך לרעש.</div></div>
+      <div class="prompt"><h5>פרומפט מלא</h5><div class="code"><span class="lbl">neon "AI is thinking" edge · CSS</span><button class="cp" type="button">העתק פרומפט</button><pre>&lt;inputs&gt;
+Ask me for the request that types into the field. If I skip it, use "השקה לאפליקציית כושר".
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 6-second clip, 1920x1080, 60fps. A large white pill-shaped input field on the sky gradient #5EA9F2 → #93CBFF → #DDF0FF. Around it, an iridescent neon edge (a conic gradient of #5DE4E9, #4FA3FF, #8B6CFF, #FF66C4, #FF8F3A, #FFC74E) rotates slowly, with a soft blurred halo behind it that swells on every beat. The placeholder "על מה הסרטון?" is replaced by the request typing in, with a blinking caret, and a round send button in the fire gradient. Hebrew in Assistant, right to left.
+Banned: a glow that covers the text, neon on more than this one element, flicker.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM. The halo pulses on every beat. Typing starts on beat 2 at one letter per 16th note.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file exposing window.seek(t); every style is computed from t.
+The ring is a pseudo-element with background: conic-gradient(from var(--ang), …), masked to a 4px ring (-webkit-mask-composite: xor plus the standard mask-composite: exclude); a second copy behind it has filter: blur(22px). Set --ang = t × 1.5rad and the halo opacity from a beat-synced spring on every frame. Do not use a CSS keyframe animation.
+Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- A CSS @keyframes rotation runs on the wall clock and breaks the capture. Set the angle from t.
+- If you register --ang with @property and inherits: false, a value set on the element never reaches its ::before. Leave it unregistered (plain custom properties inherit) or register it with inherits: true.
+- Keep the mask on both -webkit-mask (with -webkit-mask-composite: xor) and mask (with mask-composite: exclude).
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me a still before typing and one mid-typing before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-glasscard">
+    <div class="el-h"><span class="el-n">06.2</span><h3 class="el-t">כרטיס זכוכית</h3><div class="el-tags"><span>CSS</span><span>backdrop-filter</span></div></div>
+    <div class="el-demo" data-demo="fx-glass"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>מה רואים</h4><p>כרטיס נתונים חלבי שצף מעל עיגולי צבע שזזים. הכרטיס עצמו כמעט שקוף; מה שנותן לו את המראה הוא הטשטוש של מה שמאחוריו. הזיזו את מחוון הטשטוש, וכבו את הזכוכית כדי לראות את ההבדל.</p></div>
+        <div><h4>איך זה עובד</h4><p><code>backdrop-filter: blur()</code> מטשטש את <b>מה שמאחורי</b> האלמנט, ולא את האלמנט עצמו. <code>saturate()</code> מגביר את הצבעים של הרקע המטושטש, וזה מה שנותן את התחושה ה"נוזלית". מוסיפים מסגרת לבנה דקה ושקופה למחצה, ונראה שיש לזכוכית עובי. העיגולים זזים לפי sin ו-cos של t.</p></div>
+      </div>
+      <div class="fit"><div class="y"><b>מתי כן</b>כרטיס מידע מעל רקע צבעוני שזז, התראה מעל תמונה, ממשק בסגנון "זכוכית" של מערכות הפעלה.</div><div class="n"><b>מתי לא</b>מעל רקע אחיד ושטוח: אין מה לטשטש, והכרטיס נראה אפור.</div></div>
+      <div class="prompt"><h5>פרומפט מלא</h5><div class="code"><span class="lbl">frosted glass card · CSS backdrop-filter</span><button class="cp" type="button">העתק פרומפט</button><pre>&lt;inputs&gt;
+Ask me for the number and label on the card. If I skip them, use 268 "דקות השבוע" with a "+12%" chip.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 10-second loopable clip, 1080x1920, 60fps. Four large soft colour blobs (#FF8F3A, #5EA9F2, #FFC74E, #D74270) drift slowly on navy #12163F. A frosted glass card floats in the centre: background white at 16% opacity, a 1.5px white border at 40%, strong backdrop blur and saturation. On it, a big number in Inter 800, a Hebrew label in Karantina 700, and a small fire-gradient chip. The card springs in at the start.
+Banned: a glass card over a flat background, heavy drop shadows, noise textures on the card.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+The card springs in on beat 1 at 120 BPM; the blobs complete whole cycles over 10s so the clip loops.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file exposing window.seek(t); blob positions and the card's scale are computed from t, no CSS animations.
+The card uses backdrop-filter: blur(22px) saturate(1.6) (plus -webkit-backdrop-filter). Blob positions = sin/cos of t with different speeds, each completing an integer number of cycles in 10s.
+Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- backdrop-filter only shows when something moves behind the card; keep the blobs passing under it.
+- An ancestor with opacity below 1, filter, mask, clip-path, mix-blend-mode or will-change creates a new backdrop root and the card stops seeing the blobs; keep those off the card's ancestors.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me one still before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-aurora">
+    <div class="el-h"><span class="el-n">06.3</span><h3 class="el-t">רקע זוהר צפוני</h3><div class="el-tags"><span>Canvas 2D</span><span>blur</span><span>grain</span></div></div>
+    <div class="el-demo" data-demo="fx-aurora"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>מה רואים</h4><p>רקע של כתמי צבע ענקיים ורכים שנודדים לאט, עם גרעין עדין כמו של פילם. סמנו "בלי טשטוש" ותגלו את הסוד: אלה חמישה עיגולים פשוטים.</p>
+        <h4>איך זה עובד</h4><p>מציירים חמישה עיגולים גדולים בצבעי המותג, כל אחד זז על מסלול של sin ו-cos של t במהירות אחרת, ומטשטשים את כולם בטשטוש כבד מאוד (70 פיקסלים). מעל, שכבה של רעש אקראי חלש.</p></div>
+        <div><h4>למה הגרעין חשוב</h4><p>סרטון שומר כל ערוץ צבע (אדום, ירוק, כחול) ב-8 ביטים, כלומר 256 רמות. מעבר עדין, למשל מנייבי לנייבי קצת יותר בהיר, משתמש אולי ב-20 מהן. על פני 1,000 פיקסלים אלה 20 מדרגות ברוחב 50 פיקסלים כל אחת, והעין רואה <b>פסים</b> (banding). הדחיסה של קובץ הווידאו מחמירה את זה עוד יותר. רעש עדין שובר את הפסים, כי העין ממצעת אותו לגוון חלק. לטכניקה הזו קוראים <b>dithering</b>.</p></div>
+      </div>
+      <div class="fit"><div class="y"><b>מתי כן</b>רקע לכותרת או לסצנת סיום, מעבר אווירה בין פרקים.</div><div class="n"><b>מתי לא</b>מאחורי טקסט קטן או ממשק עמוס: הוא מוריד את הניגודיות.</div></div>
+      <div class="prompt"><h5>פרומפט מלא</h5><div class="code"><span class="lbl">aurora background with grain · Canvas</span><button class="cp" type="button">העתק פרומפט</button><pre>&lt;inputs&gt;
+Ask me for the headline that sits on top. If I skip it, use "FLY HIGH" in Anton.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 14-second loopable background clip, 1920x1080, 60fps. Five huge soft colour blobs (#5EA9F2, #FF8F3A, #FFC74E, #D74270, #93CBFF) drift slowly on navy #12163F and blend into an aurora, with fine film grain on top. The headline sits centred in white.
+Banned: hard edges, fast movement, a rainbow, grain so strong it looks dirty.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+No beat sync: the motion is slow and continuous. Every blob completes a whole number of cycles in 14s so the clip loops.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file exposing window.seek(t), drawing on a 2D canvas.
+Draw five large circles with ctx.filter = 'blur(70px)' at positions from sin/cos of t with different speeds. Overlay a tiled noise texture generated once from a seeded random function, at about 9% opacity.
+Capture with Playwright at 60fps. Encode with ffmpeg at a high bitrate (or -tune grain) so the compression keeps the grain.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Smooth gradients band after video compression. The grain hides it, but only if the encoder keeps it.
+- Generate the noise from a fixed seed so every frame uses the same pattern (a changing pattern looks like TV static).
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me one still with and one without grain before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-trans">
+    <div class="el-h"><span class="el-n">06.4</span><h3 class="el-t">ארבעה מעברים בלי פייד</h3><div class="el-tags"><span>Canvas 2D</span><span>flood</span><span>morph</span><span>wipe</span><span>iris</span></div></div>
+    <div class="el-demo" data-demo="transitions"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>למה בלי פייד</h4><p><b>פייד</b> (crossfade) הוא כשתמונה אחת נעלמת לאט ומתחתיה מופיעה הבאה. זה המעבר הראשון בכל תוכנת עריכה, ולכן הוא נראה "תבנית". הכלל של zero: <b>כל סצנה נולדת מאובייקט שכבר על המסך.</b> כך העין עוקבת אחרי משהו, ולא נקטעת.</p>
+        <h4>FLOOD: הצפה</h4><p>כפתור נלחץ, והצבע שלו מתפשט כעיגול עד שהוא ממלא את כל המסך. הרדיוס הסופי = המרחק מהכפתור לפינה הרחוקה ביותר, כדי שלא יישאר שום פס.</p>
+        <h4>MORPH: שינוי צורה</h4><p>גלולה קטנה מתרחבת, ואז גדלה לגובה ומעגלת פינות אחרת, עד שהיא כרטיס. רוחב, גובה ורדיוס הפינות, כל אחד על קפיץ משלו.</p></div>
+        <div><h4>WIPE: מגב</h4><p>עמוד חדש נכנס מימין, ולפניו פס של אש שמוביל אותו. הפס הוא מה שהופך מגב פשוט למשהו עם אנרגיה.</p>
+        <h4>IRIS: איריס</h4><p>המסך נסגר לעיגול שהולך וקטן, עד שנשארת נקודה, והנקודה הופכת לנקודה שבלוגו YUV.AI. הרדיוס קטן <b>בקנה מידה לוגריתמי</b>: בכל פרק זמן שווה הוא קטן פי אותו מספר. בסרט של 1920×1080 הוא מתחיל ב-1,100 פיקסלים, המרחק ממרכז המסך לפינה, כך שבהתחלה העיגול מכסה הכל, ומסתיים ב-14, גודל הנקודה בלוגו. ארבעה צעדים שווים: 1,100, ‏370, ‏125, ‏42, ‏14, כל אחד קטן פי 3 מהקודם. למה לא ליניארי? כיווץ ליניארי מוריד בכל פריים אותו מספר פיקסלים: 18 פיקסלים מתוך 1,100 כמעט לא מורגשים, אבל 18 מתוך 30 הם יותר מחצי. לכן העיגול כמעט לא זז בהתחלה ואז נטרק בבת אחת, כי העין קולטת שינויי גודל ביחס, לא בפיקסלים.</p></div>
+      </div>
+      <div class="fit"><div class="y"><b>מתי כן</b>בכל מעבר בין סצנות. בחרו לפי האובייקט שעל המסך: כפתור מציף, גלולה הופכת לכרטיס, נקודה הופכת ללוגו.</div><div class="n"><b>מתי לא</b>מעבר שלא יוצא מאובייקט על המסך נראה כמו חיתוך, גם אם הוא מהודר.</div></div>
+      <div class="prompt"><h5>פרומפט מלא</h5><div class="code"><span class="lbl">four transitions without a crossfade · Canvas</span><button class="cp" type="button">העתק פרומפט</button><pre>&lt;inputs&gt;
+Ask me for the scenes on each side of each transition. If I skip them, use simple Hebrew title cards in my brand.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+An 11-second clip, 1920x1080, 60fps, showing four transitions in a row. FLOOD: a "התחל" button is pressed and its fire gradient floods the frame as a growing circle. MORPH: a navy pill widens, then grows into a card with a progress bar. WIPE: a new page slides in from the right led by a fire-gradient band. IRIS: the frame closes into a shrinking circle that becomes the dot of the YUV.AI logo.
+Colours: navy #12163F, denim #AFCBEF, light #EEF3FB and #DDF0FF, fire #FFC74E → #FF8F3A → #F56B49. Hebrew titles in Karantina 700.
+Banned: crossfades, blur transitions, any transition that does not start from an object already on screen.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM. Each transition gets 2.8s; the main motion of each starts on a downbeat and takes about one beat.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file exposing window.seek(t), drawing on a 2D canvas.
+Flood: radius = distance from the button to the farthest corner × 1.03 × easeOut(progress). Morph: width, height and corner radius each follow a sum of springs. Wipe: clip the new page to a rectangle whose edge follows an eased progress, and draw a fire band at the edge. Iris: radius interpolated in log space, exp(lerp(log(rStart), log(rEnd), easeInOut(p))).
+Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- A flood radius smaller than the farthest corner leaves a sliver of the old scene.
+- Linear iris shrinking crawls at the start and snaps shut at the end; use log space.
+- Give each layer an explicit z-order so the flood covers the old scene but not the label it came from.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me one still in the middle of each transition before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+</section>
+
+<!-- ============ 07 TOOLS ============ -->
+<section class="sec s-denim" id="c7" data-folio="07" data-toc="מפת הכלים">
+  <div class="sh"><span class="num">07</span><div><h2>מפת הכלים: מה עוד קיים</h2><p class="sub">הקטלוג בנוי על HTML ו-seek(t). הנה הכלים שעושים את אותה עבודה אחרת, ומתי כל אחד מנצח.</p></div></div>
+  <div class="body"><p>כל המידע על רישיונות ומחירים נבדק ב-17.10.2026, ומחירים משתנים, אז לפני עבודה מסחרית כדאי לבדוק שוב בקישור שבמקורות.</p></div>
+  <div class="tbl"><table class="tools">
+    <tr><th>כלי</th><th>מה זה</th><th>מתי לבחור בו</th><th>רישיון ומחיר</th></tr>
+    <tr><td>HTML + seek(t)<small>השיטה של העמוד</small></td><td>קובץ HTML אחד ש-Claude כותב מאפס, עם פונקציה שמציירת כל רגע. Playwright מצלם, ffmpeg מרכיב.</td><td>סרטון אחד בשליטה מלאה, בלי להתקין <b>מסגרת</b> (framework: מבנה מוכן לפרויקט שלם, עם כללים ופקודות משלו). כל ספרייה בקטלוג נכנסת לתוכו.</td><td class="lic">חינם</td></tr>
+    <tr><td>Remotion<small>remotion.dev</small></td><td>מסגרת שבה כל סרטון הוא רכיב React שמקבל את מספר הפריים. מרנדרת ל-MP4, גם בענן.</td><td>הרבה סרטונים דומים מתבנית אחת (למשל סרטון אישי לכל לקוח), צוות שכבר עובד ב-React.</td><td class="lic">חינם ליחידים ולחברות של עד 3 עובדים; מעבר לזה רישיון חברה בתשלום</td></tr>
+    <tr><td>HyperFrames<small>HeyGen · v0.8</small></td><td>קובץ HTML שבו לכל אלמנט יש <code>data-start</code> ו-<code>data-duration</code>, וצילום <b>דטרמיניסטי</b> ל-MP4: כל פריים יוצא תמיד אותו דבר, בדיוק כמו seek(t). נבנה ל<b>סוכני AI</b> (AI שמבצע פעולות בעצמו, כמו Claude Code), כולל <b>סקילים</b>: קובצי הוראות שמלמדים סוכן לעבוד עם הכלי.</td><td>כשרוצים את שיטת ה-seek(t) עם כלי מוכן שמפעילים בפקודות בטרמינל (init, preview, render). עדיין לפני גרסה 1.0, אז דברים עוד עשויים להשתנות.</td><td class="lic">קוד פתוח, Apache 2.0</td></tr>
+    <tr><td>GSAP<small>gsap.com</small></td><td>ספריית אנימציה עם צירי זמן (timelines). אפשר לעצור ציר זמן ולקפוץ לכל רגע בו, ולכן הוא מתאים לצילום פריים אחרי פריים.</td><td>כוריאוגרפיה מורכבת של הרבה אלמנטים. HyperFrames משתמש בו כברירת מחדל.</td><td class="lic">חינמי לגמרי, גם מסחרית, כולל כל התוספים. הרישיון של Webflow (לא קוד פתוח) אוסר רק לבנות איתו כלי ליצירת אנימציות בלי קוד שמתחרה ב-Webflow</td></tr>
+    <tr><td>Motion Canvas<small>motioncanvas.io</small></td><td>ספרייה ב-TypeScript (גרסה של JavaScript שבה מציינים לכל ערך את הסוג שלו, כדי לתפוס טעויות מוקדם), ועורך עם תצוגה חיה, לאנימציות וקטוריות שמתוזמנות לקריינות.</td><td>סרטוני הסבר עם קריינות, דיאגרמות, קוד שמשתנה על המסך.</td><td class="lic">קוד פתוח, MIT</td></tr>
+    <tr><td>Lottie<small>lottie-web</small></td><td>פורמט אנימציה מבוסס JSON (פורמט טקסט פשוט לשמירת נתונים). אנימטור בונה ב-After Effects ומייצא עם התוסף Bodymovin, והאנימציה רצה בדפדפן ובאפליקציות. אפשר לקפוץ לכל פריים (<code>goToAndStop</code>).</td><td>כשיש אנימציה מוכנה ממעצב, או מספריית LottieFiles, ורוצים לשלב אותה בסרטון.</td><td class="lic">הנגן בקוד פתוח (MIT); לכל אנימציה רישיון משלה</td></tr>
+    <tr><td>Rive<small>rive.app</small></td><td>עורך לאנימציות אינטראקטיביות שמגיבות למשתמש, בעזרת "מכונת מצבים": רשימת מצבים, כמו "רגיל", "העכבר מעל" ו"נלחץ", וכללים מתי עוברים ביניהם.</td><td>אנימציה בתוך אפליקציה או אתר, שמגיבה ללחיצות. פחות לסרטון ליניארי.</td><td class="lic">הנגנים בקוד פתוח (MIT); ייצוא דורש תוכנית בתשלום, מ-9$ לחודש בחיוב שנתי</td></tr>
+    <tr><td>Spline<small>spline.design</small></td><td>עורך תלת-ממד ויזואלי בדפדפן.</td><td>לעצב סצנה תלת-ממדית ביד, ולייצא ל-GLTF או לקוד.</td><td class="lic">תוכנית חינמית, ותוכניות בתשלום</td></tr>
+    <tr><td>React Three Fiber<small>pmndrs</small></td><td>three.js בצורת רכיבי React.</td><td>סצנת תלת-ממד גדולה בפרויקט React.</td><td class="lic">קוד פתוח, MIT</td></tr>
+  </table></div>
+  <div class="body">
+    <h3>איך בוחרים, בארבע שאלות</h3>
+    <ol>
+      <li><b>סרטון אחד או מאה?</b> אחד: HTML ו-seek(t). מאה מאותה תבנית: Remotion או HyperFrames.</li>
+      <li><b>יש אנימציה מוכנה ממעצב?</b> Lottie נכנס לכל אחת מהשיטות.</li>
+      <li><b>זה בתוך אפליקציה ומגיב למשתמש?</b> Rive. זו כבר לא שאלה של וידאו.</li>
+      <li><b>צריך מודל תלת-ממדי מותאם?</b> Blender או Spline, מייצאים GLTF, ומכניסים ל-three.js.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ 08 BUILDER ============ -->
+<section class="sec s-fire" id="c8" data-folio="08" data-toc="בונה הפרומפטים">
+  <div class="sh"><span class="num">08</span><div><h2>בונה הפרומפטים</h2><p class="sub">בחרו פורמט, אורך, מיתוג ואלמנטים מהקטלוג, וקבלו פרומפט אחד שלם לסרט כולו.</p></div></div>
+  <div class="body">
+    <p>אין כאן AI. הבונה מרכיב את הפרומפט מחלקים קבועים, כך שאפשר לראות בדיוק איזה משפט כל בחירה מוסיפה: כל אלמנט מוסיף שורה לכל אחד מששת הבלוקים, למשל איך לבנות אותו ב-<code>&lt;build&gt;</code> ואיזה באג להזהיר מפניו ב-<code>&lt;gotchas&gt;</code>. קצב המוזיקה והאורך מחושבים למספר ביטים, והאלמנטים מתפזרים לאורך הסרט בין פתיחה של ארבעה ביטים לסיום של ארבעה, בסדר של סיפור: קודם המוצר, אחר כך ההוכחה (גרפים ומספרים), ובסוף האמון (לוגואים). מעברים ורקע לא מקבלים טווח ביטים משלהם, כי הם לא סצנה: הם נשזרים לאורך כל הסרט. את המשפט בשדה 1 כתבו באנגלית; הוא נכנס לפרומפט כמו שהוא.</p>
+  </div>
+  <article class="el" id="e-builder">
+    <div class="el-h"><span class="el-n">08.1</span><h3 class="el-t">הפרומפט שלכם</h3><div class="el-tags"><span>6 blocks</span><span>live</span></div></div>
+    <div class="el-demo" data-demo="prompt-builder"><div class="stage"></div></div>
+    <div class="el-body"><p>הצעד הבא: הדביקו ב-Claude Code (או בכל סוכן קוד), ענו על השאלות שהוא שואל ב-<code>&lt;inputs&gt;</code>, ואשרו את מפת הביטים והסטילס לפני הרינדור המלא. את התהליך המלא, מצילום ועד מוזיקה, תמצאו ב<a href="index.html#s14">פרק הצנרת בעמוד השיטה</a>. (סוכן קוד הוא AI שכותב ומריץ קוד בעצמו על המחשב שלכם.)</p></div>
+  </article>
+</section>
+
+<!-- ============ 09 SOURCES ============ -->
+<section class="sec s-cloud" id="c9" data-folio="09" data-toc="מקורות">
+  <div class="sh"><span class="num">09</span><div><h2>מקורות</h2><p class="sub">כל הקישורים נבדקו כחיים ב-17.10.2026.</p></div></div>
+  <ol class="src">
+    <li><a href="https://github.com/recharts/recharts" target="_blank" rel="noopener">Recharts</a>: ספריית הגרפים, MIT.</li>
+    <li><a href="https://ui.shadcn.com/docs" target="_blank" rel="noopener">shadcn/ui · Introduction</a>: "This is not a component library", ואיך מוסיפים רכיבים.</li>
+    <li><a href="https://www.radix-ui.com/primitives" target="_blank" rel="noopener">Radix Primitives</a>: רכיבי התנהגות ונגישות בלי עיצוב.</li>
+    <li><a href="https://tailwindcss.com" target="_blank" rel="noopener">Tailwind CSS</a></li>
+    <li><a href="https://lucide.dev" target="_blank" rel="noopener">Lucide</a>: ספריית האייקונים, ISC.</li>
+    <li><a href="https://simpleicons.org" target="_blank" rel="noopener">Simple Icons</a> ו-<a href="https://github.com/simple-icons/simple-icons/blob/develop/DISCLAIMER.md" target="_blank" rel="noopener">ההבהרה המשפטית שלהם</a> על סימנים מסחריים.</li>
+    <li><a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> ו-<a href="https://threejs.org/docs/pages/MeshPhysicalMaterial.html" target="_blank" rel="noopener">MeshPhysicalMaterial</a>.</li>
+    <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/font-variant-numeric" target="_blank" rel="noopener">MDN · font-variant-numeric</a> (tabular-nums).</li>
+    <li><a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/stroke-dashoffset" target="_blank" rel="noopener">MDN · stroke-dashoffset</a></li>
+    <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/backdrop-filter" target="_blank" rel="noopener">MDN · backdrop-filter</a></li>
+    <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/gradient/conic-gradient" target="_blank" rel="noopener">MDN · conic-gradient()</a></li>
+    <li><a href="https://playwright.dev" target="_blank" rel="noopener">Playwright</a> ו-<a href="https://ffmpeg.org" target="_blank" rel="noopener">FFmpeg</a></li>
+    <li><a href="https://github.com/remotion-dev/remotion/blob/main/LICENSE.md" target="_blank" rel="noopener">Remotion · LICENSE</a>: חינם ליחידים ולחברות עד 3 עובדים.</li>
+    <li><a href="https://github.com/heygen-com/hyperframes" target="_blank" rel="noopener">HyperFrames (HeyGen)</a>, Apache 2.0, ו<a href="https://yuv.ai/blog/hyperframes-heygen" target="_blank" rel="noopener">הסקירה שלי ב-yuv.ai</a>.</li>
+    <li><a href="https://gsap.com/pricing/" target="_blank" rel="noopener">GSAP · Pricing</a>: חינמי לגמרי, כולל התוספים, ו<a href="https://gsap.com/community/standard-license/" target="_blank" rel="noopener">הרישיון הסטנדרטי</a>: מסחרי מותר, כלי אנימציה ללא קוד שמתחרה ב-Webflow אסור.</li>
+    <li><a href="https://github.com/motion-canvas/motion-canvas" target="_blank" rel="noopener">Motion Canvas</a>, MIT.</li>
+    <li><a href="https://github.com/airbnb/lottie-web" target="_blank" rel="noopener">lottie-web</a>, MIT, ו-<a href="https://en.wikipedia.org/wiki/Lottie_(file_format)" target="_blank" rel="noopener">Lottie בוויקיפדיה</a> (התוסף Bodymovin מ-2015, והספריות של Airbnb מ-2017).</li>
+    <li><a href="https://rive.app/blog/rive-s-new-9-mo-plan" target="_blank" rel="noopener">Rive · the new $9/mo plan</a> (20.10.2025): הרנטיימים ב-MIT, ייצוא מתוכנית בתשלום.</li>
+    <li><a href="https://spline.design" target="_blank" rel="noopener">Spline</a></li>
+    <li><a href="https://github.com/pmndrs/react-three-fiber" target="_blank" rel="noopener">React Three Fiber</a>, MIT.</li>
+    <li><a href="https://github.com/chartjs/Chart.js" target="_blank" rel="noopener">Chart.js</a>, <a href="https://github.com/apache/echarts" target="_blank" rel="noopener">Apache ECharts</a>, <a href="https://github.com/d3/d3" target="_blank" rel="noopener">D3</a></li>
+    <li><a href="index.html#s19" >מקורות עמוד השיטה</a>: המאמר והפרומפטים המקוריים של zero (<span class="ltr">@twoclipping</span>).</li>
+  </ol>
+</section>
+
+<footer>
+  <div class="sig">יובל אבידני</div>
+  <p class="bio">מגיש פינת AI בחדשות 12, GitHub Star כפול, AWS Gen AI Superstar, מייסד YUV.AI. בונה, מלמד, ומשגר AI שעובד.</p>
+  <div class="blogs">
+    <a href="https://yuv.ai/blog" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><div><b>הבלוג</b><span>מדריכים, סקירות כלים ופירוקים לעומק, בעברית ובאנגלית.</span><small>yuv.ai/blog</small></div></a>
+    <a href="https://news.yuv.ai" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8M15 18h-5M10 6h8v4h-8Z"/></svg><div><b>חדר החדשות</b><span>חדר החדשות של YUV.AI: מה חדש בעולם ה-AI, בעברית.</span><small>news.yuv.ai</small></div></a>
+    <a href="index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><div><b>עמוד השיטה</b><span>איך Claude מייצר סרטוני השקה בקוד, מפורק לפירורים.</span><small>motion-in-code</small></div></a>
+  </div>
+  <nav class="links" aria-label="קישורים">
+    <a href="https://yuv.ai" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm6.9 6h-2.9a15.7 15.7 0 0 0-1.4-3.6A8 8 0 0 1 18.9 8ZM12 4.1c.8 1.1 1.5 2.4 1.9 3.9h-3.8c.4-1.5 1.1-2.8 1.9-3.9ZM4.3 14a8 8 0 0 1 0-4h3.3a16.5 16.5 0 0 0 0 4H4.3Zm.8 2h2.9c.3 1.3.8 2.5 1.4 3.6A8 8 0 0 1 5.1 16Zm2.9-8H5.1a8 8 0 0 1 4.3-3.6C8.8 5.5 8.3 6.7 8 8Zm4 11.9c-.8-1.1-1.5-2.4-1.9-3.9h3.8c-.4 1.5-1.1 2.8-1.9 3.9Zm2.3-5.9H9.7a14.7 14.7 0 0 1 0-4h4.6a14.7 14.7 0 0 1 0 4Zm.3 5.6c.6-1.1 1.1-2.3 1.4-3.6h2.9a8 8 0 0 1-4.3 3.6Zm1.8-5.6a16.5 16.5 0 0 0 0-4h3.3a8 8 0 0 1 0 4h-3.3Z"/></svg><span>yuv.ai</span></a>
+    <a href="https://linktr.ee/yuvai" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m13.73635 5.85251 4.00467-4.11665 2.3248 2.3808-4.20064 4.00466h5.9085v3.30473h-5.9365l4.22865 4.10766-2.3248 2.3338L12.0005 12.099l-5.74052 5.76852-2.3248-2.3248 4.22864-4.10766h-5.9375V8.12132h5.9085L3.93417 4.11666l2.3248-2.3808 4.00468 4.11665V0h3.4727zm-3.4727 10.30614h3.4727V24h-3.4727z"/></svg><span>Linktree</span></a>
+    <a href="https://x.com/yuvalav" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.234 10.162 22.977 0h-2.072l-7.591 8.824L7.251 0H.258l9.168 13.343L.258 24H2.33l8.016-9.318L16.749 24h6.993zm-2.837 3.299-.929-1.329L3.076 1.56h3.182l5.965 8.532.929 1.329 7.754 11.09h-3.182z"/></svg><span>@yuvalav</span></a>
+    <a href="https://instagram.com/yuval_770" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"/></svg><span>Instagram</span></a>
+    <a href="https://www.tiktok.com/@yuval.ai" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg><span>TikTok</span></a>
+    <a href="https://youtube.com/@yuv-ai" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg><span>YouTube</span></a>
+    <a href="https://github.com/hoodini" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg><span>GitHub</span></a>
+    <a href="https://www.linkedin.com/in/yuval-avidani-87081474/" target="_blank" rel="noopener"><span class="tx" aria-hidden="true">in</span><span>LinkedIn</span></a>
+    <a href="https://facebook.com/yuval.avidani" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"/></svg><span>Facebook</span></a>
+  </nav>
+  <p class="credit">כל ההדגמות בעמוד הזה רצות בדפדפן שלכם מקוד פתוח: React, Recharts, shadcn/ui, Radix, Lucide, Simple Icons ו-three.js, כל אחת לפי הרישיון שלה. הלוגואים שייכים לבעליהם ומוצגים כדי לציין את הכלים שבהם נבנה העמוד. השיטה והפרומפטים המקוריים שייכים ל-zero (<a href="https://x.com/twoclipping" target="_blank" rel="noopener" class="ltr">@twoclipping</a>).</p>
+</footer>
+</main>
+<button id="toTop" type="button" aria-label="חזרה לראש העמוד"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+<script>
+/* the element index in "how to read" is built from the cards themselves, so it never drifts */
+(function () {
+  var idx = document.getElementById('idx'); if (!idx) return;
+  document.querySelectorAll('article.el[id^="e-"]').forEach(function (a) {
+    var n = a.querySelector('.el-n'), t = a.querySelector('.el-h h3'), tags = a.querySelectorAll('.el-tags span');
+    if (!n || !t || /LAB|08\./.test(n.textContent)) return;
+    var l = document.createElement('a'); l.href = '#' + a.id;
+    l.innerHTML = '<span>' + n.textContent + '</span><b>' + t.textContent + '</b><small>' + [].slice.call(tags, 0, 2).map(function (s) { return s.textContent; }).join(' · ') + '</small>';
+    idx.appendChild(l);
+  });
+})();
+</script>
+</body>
+</html>

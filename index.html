@@ -283,12 +283,32 @@ footer{--link:var(--yuv-gold);--link-h:#fff}
   .hkick b{letter-spacing:2px;padding:8px 14px 7px}
   .hcta{padding:12px 22px 11px}
 }
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.neon::before,.neon::after{animation:none}}
+.hcta2{display:inline-flex;align-items:center;gap:10px;margin-inline-start:14px;color:var(--yuv-navy);font:700 clamp(21px,1.8vw,25px)/1 var(--heD);text-decoration:none;border-bottom:3px solid var(--yuv-orange);padding-bottom:4px}
+.hcta2:hover{color:var(--orange-t)}
+footer .blogs{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin:28px 0 6px;max-width:900px}
+footer .blogs a{display:flex;gap:16px;align-items:flex-start;padding:18px 22px;border-radius:var(--r);background:rgba(255,255,255,.07);color:#fff;text-decoration:none;box-shadow:inset 0 0 0 1.5px rgba(255,143,58,.28)}
+footer .blogs a:hover{background:rgba(255,143,58,.14);color:#fff}
+footer .blogs svg{flex:none;width:30px;height:30px;fill:none;stroke:var(--yuv-orange);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;margin-top:2px}
+footer .blogs b{display:block;font:700 28px/1.1 var(--heD);color:#fff}
+footer .blogs span{display:block;font:500 16px/1.45 var(--body);color:rgba(255,255,255,.75)}
+footer .blogs small{display:block;font:500 13px/1.4 var(--mono);color:var(--yuv-gold);direction:ltr;text-align:right;margin-top:4px}
+/* ---------- header link + back to top (shared with catalog.html) ---------- */
+.bar .home{margin-inline-start:auto;color:#fff;text-decoration:none;font:700 21px/1 var(--he);border-radius:999px;padding:8px 16px;background:rgba(255,255,255,.08)}
+.bar .home:hover{color:var(--yuv-gold);background:rgba(255,255,255,.14)}
+.bar .home+.navbtn{margin-inline-start:0}
+#toTop{position:fixed;bottom:22px;inset-inline-end:22px;z-index:60;width:58px;height:58px;border:0;border-radius:999px;background:var(--yuv-navy);color:var(--yuv-gold);display:grid;place-items:center;cursor:pointer;box-shadow:var(--sh),inset 0 0 0 2px rgba(255,199,78,.6);opacity:0;transform:translateY(16px) scale(.9);pointer-events:none;transition:opacity .2s,transform .2s}
+#toTop.show{opacity:1;transform:none;pointer-events:auto}
+#toTop svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+#toTop:hover{color:#fff}
+#toTop:focus-visible{outline:3px solid var(--yuv-sky-5);outline-offset:3px}
+@media (max-width:560px){#toTop{width:48px;height:48px;bottom:14px;inset-inline-end:14px}#toTop svg{width:22px;height:22px}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.neon::before,.neon::after{animation:none}#toTop{transition:none}}
 </style>
 </head>
 <body>
 <header class="bar"><div class="wrap">
   <div class="brand"><span>YUV<b>.</b>AI</span><small>MOTION IN CODE</small></div>
+  <a class="home" href="catalog.html">קטלוג האלמנטים</a>
   <button class="navbtn" id="tocBtn" aria-expanded="false" aria-controls="toc">תוכן עניינים</button>
 </div><div class="prog" id="prog"></div></header>
 <nav class="toc" id="toc" aria-label="תוכן עניינים"></nav>
@@ -303,7 +323,7 @@ footer{--link:var(--yuv-gold);--link-h:#fff}
       <h1>וידאו<br>שהוא <span class="hl">קוד</span>.</h1>
       <p class="deck">איך Claude מייצר סרטוני השקה ברמת סטודיו, בלי After Effects</p>
       <p class="hmono"><span class="nb">seek(t) → Playwright → ffmpeg</span> · <span class="nb">60 fps · on the beat</span></p>
-      <a class="hcta neon" href="#s0"><span>▶</span>צפו בשלושת הסרטים</a>
+      <a class="hcta neon" href="#s0"><span>▶</span>צפו בשלושת הסרטים</a><a class="hcta2" href="catalog.html">קטלוג: מה אפשר לבקש</a>
     </div>
     <div class="hero-stage">
       <figure class="hshot hs-wide"><video class="hloop" autoplay muted loop playsinline preload="auto" poster="media/hero-launch-loop.jpg" aria-label="קטע מסרט ההשקה YUV.AI MOTION: קרוסלת כרטיסים תלת־ממדית שנעצרת על כל ביט"><source src="media/hero-launch-loop.webm" type="video/webm"><source src="media/hero-launch-loop.mp4" type="video/mp4"></video></figure>
@@ -839,6 +859,7 @@ await browser.close();</pre></div>
   <h3>הפרומפט שלנו — בשלד של zero, מותאם לעברית, RTL והמותג</h3>
   <div class="code"><span class="lbl">YUV.AI motion prompt · paste into Claude Code (Opus 5.5, effort xhigh)</span><button class="cp">העתק</button><pre id="yuvPrompt"></pre></div>
   <div class="ex"><b>הצעד הבא שהייתי עושה</b>להפוך את זה לסקיל קבוע (<code>yuv-motion</code>) כך שלא צריך להדביק כלום — ולפני שבונים מאפס, לבחון את <a href="https://github.com/howseen-ai/claude-motion-design" target="_blank" rel="noopener">howseen-ai/claude-motion-design</a>: סקיל קוד-פתוח (MIT) שבנוי על אותם עקרונות, כולל render.py, סריקת pops וזיהוי דרופ, שנבנה בהשראה ישירה מהפרומפטים של zero. אפשר לקחת ממנו את המנוע ולשים מעליו את השכבה שלנו (עברית, RTL, מותג, מצלמה על ה-4090).</div>
+  <div class="why"><b>רוצים לראות מה עוד אפשר לבקש?</b>בנינו <a href="catalog.html">קטלוג חי של 18 אלמנטים</a>: גרפים של Recharts, ממשק shadcn/ui, אייקונים ולוגואים רשמיים, טיפוגרפיה קינטית, תלת-ממד ב-three.js ואפקטים. כל אחד עם הדגמה שאפשר לגרור בה את הזמן, הסבר מאפס ופרומפט מלא להעתקה, ובסוף בונה פרומפטים שמרכיב סרט שלם.</div>
 </section>
 
 <!-- ============ 19 SOURCES ============ -->
@@ -850,6 +871,11 @@ await browser.close();</pre></div>
 <footer>
   <div class="sig">יובל אבידני</div>
   <p class="bio">מגיש פינת AI בחדשות 12, GitHub Star כפול, AWS Gen AI Superstar, מייסד YUV.AI. בונה, מלמד, ומשגר AI שעובד.</p>
+  <div class="blogs">
+    <a href="https://yuv.ai/blog" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><div><b>הבלוג</b><span>מדריכים, סקירות כלים ופירוקים לעומק, בעברית ובאנגלית.</span><small>yuv.ai/blog</small></div></a>
+    <a href="https://news.yuv.ai" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8M15 18h-5M10 6h8v4h-8Z"/></svg><div><b>חדר החדשות</b><span>חדר החדשות של YUV.AI: מה חדש בעולם ה-AI, בעברית.</span><small>news.yuv.ai</small></div></a>
+    <a href="catalog.html"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><div><b>קטלוג המושן</b><span>18 אלמנטים חיים עם הסבר מאפס ופרומפט מלא לכל אחד.</span><small>catalog.html</small></div></a>
+  </div>
   <nav class="links" aria-label="קישורים">
     <a href="https://yuv.ai" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm6.9 6h-2.9a15.7 15.7 0 0 0-1.4-3.6A8 8 0 0 1 18.9 8ZM12 4.1c.8 1.1 1.5 2.4 1.9 3.9h-3.8c.4-1.5 1.1-2.8 1.9-3.9ZM4.3 14a8 8 0 0 1 0-4h3.3a16.5 16.5 0 0 0 0 4H4.3Zm.8 2h2.9c.3 1.3.8 2.5 1.4 3.6A8 8 0 0 1 5.1 16Zm2.9-8H5.1a8 8 0 0 1 4.3-3.6C8.8 5.5 8.3 6.7 8 8Zm4 11.9c-.8-1.1-1.5-2.4-1.9-3.9h3.8c-.4 1.5-1.1 2.8-1.9 3.9Zm2.3-5.9H9.7a14.7 14.7 0 0 1 0-4h4.6a14.7 14.7 0 0 1 0 4Zm.3 5.6c.6-1.1 1.1-2.3 1.4-3.6h2.9a8 8 0 0 1-4.3 3.6Zm1.8-5.6a16.5 16.5 0 0 0 0-4h3.3a8 8 0 0 1 0 4h-3.3Z"/></svg><span>yuv.ai</span></a>
     <a href="https://linktr.ee/yuvai" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m13.73635 5.85251 4.00467-4.11665 2.3248 2.3808-4.20064 4.00466h5.9085v3.30473h-5.9365l4.22865 4.10766-2.3248 2.3338L12.0005 12.099l-5.74052 5.76852-2.3248-2.3248 4.22864-4.10766h-5.9375V8.12132h5.9085L3.93417 4.11666l2.3248-2.3808 4.00468 4.11665V0h3.4727zm-3.4727 10.30614h3.4727V24h-3.4727z"/></svg><span>Linktree</span></a>
@@ -1896,6 +1922,16 @@ if (document.readyState === 'loading') document.addEventListener('DOMContentLoad
     if (e.isIntersecting) { const p = e.target.play(); if (p && p.catch) p.catch(() => {}); } else e.target.pause();
   }), { threshold: 0.05 });
   vids.forEach(v => io.observe(v));
+})();
+</script>
+<button id="toTop" type="button" aria-label="חזרה לראש העמוד"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+<script>
+(function () { /* back to top: shows after 900px of scroll */
+  var b = document.getElementById('toTop'); if (!b) return;
+  var rm = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var on = function () { b.classList.toggle('show', (document.documentElement.scrollTop || document.body.scrollTop) > 900); };
+  window.addEventListener('scroll', on, { passive: true }); on();
+  b.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: rm ? 'auto' : 'smooth' }); });
 })();
 </script>
 </body>

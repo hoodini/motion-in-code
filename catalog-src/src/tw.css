@@ -1,0 +1,22 @@
+@tailwind components;
+@tailwind utilities;
+
+/* shadcn/ui tokens → Phoenix palette, scoped to .tw so the rest of the page is untouched */
+.tw {
+  --background: 217 62% 96%; --foreground: 235 56% 16%;
+  --card: 0 0% 100%; --card-foreground: 235 56% 16%;
+  --primary: 235 56% 16%; --primary-foreground: 0 0% 100%;
+  --secondary: 206 100% 93%; --secondary-foreground: 235 56% 16%;
+  --muted: 217 62% 96%; --muted-foreground: 231 27% 40%;
+  --accent: 26 100% 61%; --accent-foreground: 235 56% 16%;
+  --destructive: 12 90% 62%; --destructive-foreground: 0 0% 100%;
+  --border: 217 45% 89%; --input: 217 45% 89%; --ring: 213 65% 50%;
+  --radius: 1.75rem;
+  font-family: Assistant, Inter, system-ui, sans-serif; color: hsl(var(--foreground));
+}
+/* the bits of Tailwind's preflight that shadcn components rely on */
+.tw *, .tw *::before, .tw *::after { box-sizing: border-box; border-width: 0; border-style: solid; border-color: hsl(var(--border)); }
+.tw button, .tw input { font: inherit; color: inherit; margin: 0; }
+.tw button { background: transparent; cursor: pointer; }
+.tw h3, .tw p { margin: 0; }
+.tw svg { display: inline-block; vertical-align: middle; }
