@@ -7,6 +7,9 @@
 <meta name="description" content="פירוק מלא של שיטת @twoclipping: איך Claude Opus 5.5 מייצר סרטוני השקה ברמת סטודיו בקוד בלבד — seek(t), קפיצים, מצלמה לוגריתמית, ביטים, מושן בלר ובקרת איכות. עם מעבדות אינטראקטיביות אמיתיות.">
 <meta property="og:title" content="Motion in Code — איך Claude מייצר סרטוני השקה בקוד">
 <meta property="og:description" content="השיטה של @twoclipping, מפורקת לפירורים עם מעבדות אינטראקטיביות. YUV.AI">
+<meta property="og:image" content="https://hoodini.github.io/motion-in-code/media/readme/social-preview.jpg">
+<meta property="og:image:width" content="1280"><meta property="og:image:height" content="640">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Gveret+Levin&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&family=Karantina:wght@300;400;700&family=Assistant:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <meta name="theme-color" content="#12163F">
@@ -115,6 +118,31 @@ h1{font:700 clamp(88px,16vw,240px)/.88 var(--heD);letter-spacing:0;margin:28px 0
 .deck{font:700 clamp(36px,4.4vw,62px)/1 var(--heD);margin:0 0 20px;max-width:900px}
 .hero>.sub{font:500 17px/1.6 var(--body);margin-top:6px}
 .lead{font:500 clamp(21px,1.9vw,24px)/1.6 var(--body);color:var(--muted)}
+
+/* ---------- hero top: the repo banner, mirrored for RTL ---------- */
+.hero-top{display:grid;grid-template-columns:minmax(0,1.04fr) minmax(0,1fr);gap:clamp(24px,4vw,64px);align-items:center;min-height:clamp(520px,42vw,620px);margin:0 0 clamp(36px,5vw,72px)}
+.hkick{display:flex;align-items:center;gap:16px;max-width:600px}
+.hkick b{font:400 clamp(16px,1.5vw,22px)/1 var(--en);letter-spacing:3px;background:var(--yuv-navy);color:var(--yuv-gold);padding:9px 18px 8px;border-radius:999px;white-space:nowrap;direction:ltr}
+.hkick i{flex:1;height:6px;border-radius:999px;background:var(--yuv-navy)}
+.hero-top h1{font:700 clamp(92px,12.4vw,200px)/.9 var(--heD);margin:26px 0 24px}
+.hero-top h1 .hl{display:inline-block;padding:.06em .12em 0;line-height:.88;border-radius:.1em}
+.hero-top .deck{font-size:clamp(30px,3.2vw,48px);line-height:1.02;max-width:620px;margin:0 0 16px}
+.hmono{font:500 clamp(14px,1.2vw,18px)/1.4 var(--mono);color:#23306a;margin:0 0 30px;direction:ltr;text-align:right}
+.hcta{display:inline-flex;align-items:center;gap:12px;background:#fff;color:var(--yuv-navy);border-radius:999px;padding:14px 30px 13px;font:700 clamp(23px,2vw,28px)/1 var(--heD);text-decoration:none;box-shadow:var(--sh);transition:transform .2s}
+.hcta span{color:var(--yuv-orange);font-size:.78em}
+.hmono .nb{white-space:nowrap}
+.hcta:hover{color:var(--yuv-navy);transform:translateY(-2px)}
+.hero-stage{position:relative;width:100%;aspect-ratio:1.19}
+.hshot{position:absolute;margin:0;background:var(--yuv-navy);border:clamp(6px,.7vw,10px) solid var(--yuv-navy);border-radius:clamp(14px,1.6vw,22px);overflow:hidden;box-shadow:var(--sh)}
+.hshot video{display:block;width:100%;height:100%;object-fit:cover;background:var(--yuv-navy)}
+.hs-wide{width:91%;aspect-ratio:16/9;left:-3%;top:7%;transform:rotate(3deg)}
+.hs-phone{width:34%;aspect-ratio:9/16;right:0;top:25%;border-radius:clamp(22px,2.6vw,34px);transform:rotate(-4deg)}
+.hero-top+.kicker{margin-bottom:6px}
+@media (max-width:900px){
+  .hero-top{grid-template-columns:1fr;min-height:0;gap:28px}
+  .hero-stage{max-width:560px;justify-self:center;aspect-ratio:1.22}
+  .hmono{text-align:right}
+}
 .chips{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0}
 .chip{border-radius:999px;background:var(--card);color:var(--fg);padding:6px 18px;font:700 24px/1.2 var(--he);box-shadow:var(--sh-con)}
 .chip b{color:var(--acc-t)}
@@ -252,6 +280,8 @@ footer{--link:var(--yuv-gold);--link-h:#fff}
   .tldr li{padding:16px 18px;gap:14px}
   th,td{padding:11px 12px}
   .brand small{display:none}
+  .hkick b{letter-spacing:2px;padding:8px 14px 7px}
+  .hcta{padding:12px 22px 11px}
 }
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.neon::before,.neon::after{animation:none}}
 </style>
@@ -266,10 +296,21 @@ footer{--link:var(--yuv-gold);--link-h:#fff}
 <main>
 
 <!-- ============ HERO ============ -->
-<section class="hero" id="top" data-folio="00">
+<section class="hero" id="top">
+  <div class="hero-top">
+    <div class="hero-txt">
+      <div class="hkick"><b>YUV.AI · MOTION IN CODE</b><i></i></div>
+      <h1>וידאו<br>שהוא <span class="hl">קוד</span>.</h1>
+      <p class="deck">איך Claude מייצר סרטוני השקה ברמת סטודיו, בלי After Effects</p>
+      <p class="hmono"><span class="nb">seek(t) → Playwright → ffmpeg</span> · <span class="nb">60 fps · on the beat</span></p>
+      <a class="hcta neon" href="#s0"><span>▶</span>צפו בשלושת הסרטים</a>
+    </div>
+    <div class="hero-stage">
+      <figure class="hshot hs-wide"><video class="hloop" autoplay muted loop playsinline preload="auto" poster="media/hero-launch-loop.jpg" aria-label="קטע מסרט ההשקה YUV.AI MOTION: קרוסלת כרטיסים תלת־ממדית שנעצרת על כל ביט"><source src="media/hero-launch-loop.webm" type="video/webm"><source src="media/hero-launch-loop.mp4" type="video/mp4"></video></figure>
+      <figure class="hshot hs-phone"><video class="hloop" autoplay muted loop playsinline preload="auto" poster="media/hero-ketzev-loop.jpg" aria-label="קטע מהסרט קצב: דמות מצוירת בקוד מתאמנת בסנכרון עם מונה החזרות באפליקציה"><source src="media/hero-ketzev-loop.webm" type="video/webm"><source src="media/hero-ketzev-loop.mp4" type="video/mp4"></video></figure>
+    </div>
+  </div>
   <span class="kicker"><i></i>מחקר עומק · 15.10.2026 · השיטה של <span class="ltr">@twoclipping</span></span>
-  <h1>וידאו <span class="hl">שהוא קוד</span>.</h1>
-  <p class="deck">איך Claude מייצר סרטוני השקה ברמת סטודיו, בלי After Effects</p>
   <p class="lead">הסרטון למטה הוא לא קובץ וידאו. הוא תוכנה קטנה שמציירת אותו בזמן אמת, פריים אחרי פריים, מתוך מספר אחד בלבד: <b>הזמן</b>. בדיוק כמו הסרטונים של <span class="ltr">@twoclipping</span>, רק קטן יותר. לחצו Play, תגררו את הסרגל לכל נקודה — ואז נפרק אותו ביחד, מהיסוד, פירור אחרי פירור.</p>
   <div class="film neon" id="film">
     <canvas id="filmCanvas" width="1280" height="720" aria-label="סרטון הדגמה שמצויר בקוד"></canvas>
@@ -1842,6 +1883,19 @@ function boot() {
   if (document.fonts) document.fonts.ready.then(() => { window.__fontsReady = true; });
 }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
+})();
+</script>
+<script>
+(() => {
+  const vids = [...document.querySelectorAll('video.hloop')];
+  if (!vids.length) return;
+  const still = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (still) { vids.forEach(v => { v.removeAttribute('autoplay'); v.pause(); }); return; }
+  if (!('IntersectionObserver' in window)) return;
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) { const p = e.target.play(); if (p && p.catch) p.catch(() => {}); } else e.target.pause();
+  }), { threshold: 0.05 });
+  vids.forEach(v => io.observe(v));
 })();
 </script>
 </body>
