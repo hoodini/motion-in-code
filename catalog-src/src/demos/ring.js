@@ -1,4 +1,5 @@
 // A progress ring = a circle's outline drawn as ONE dash whose length grows. stroke-dasharray / stroke-dashoffset.
+import { EN, T, DIR } from '../ui/i18n.js';
 import { spring, clamp } from '../../../kit/src/core.js';
 const R = 92, CIRC = 2 * Math.PI * R;
 export function mount(stage) {
@@ -8,9 +9,9 @@ export function mount(stage) {
       <circle cx="120" cy="120" r="${R}" fill="none" stroke="rgba(18,22,63,.1)" stroke-width="22"/>
       <circle class="ring-guide" cx="120" cy="120" r="${R}" fill="none" stroke="#2C78D2" stroke-width="2" stroke-dasharray="6 8"/>
       <circle class="ring-arc" cx="120" cy="120" r="${R}" fill="none" stroke="url(#rgF)" stroke-width="22" stroke-linecap="round" transform="rotate(-90 120 120)" stroke-dasharray="${CIRC.toFixed(1)}" stroke-dashoffset="${CIRC.toFixed(1)}"/>
-    </svg><div class="ring-mid"><b>0%</b><span>מהיעד השבועי</span></div></div>
+    </svg><div class="ring-mid"><b>0%</b><span>${T('מהיעד השבועי', 'of weekly goal')}</span></div></div>
     <pre class="ring-read" dir="ltr"></pre>
-    <div class="ctrl-row"><label class="chk"><input type="checkbox" class="ring-show"> הראו את קו המתאר המלא</label></div>`;
+    <div class="ctrl-row"><label class="chk"><input type="checkbox" class="ring-show"> ${T('הראו את קו המתאר המלא', 'Show the full outline')}</label></div>`;
   const arc = stage.querySelector('.ring-arc'), mid = stage.querySelector('.ring-mid b'), read = stage.querySelector('.ring-read');
   stage.querySelector('.ring-show').addEventListener('change', e => stage.classList.toggle('guide', e.target.checked));
   return {

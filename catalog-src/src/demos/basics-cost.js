@@ -1,4 +1,5 @@
 // The same N dots drawn three ways. We really draw them and time it with performance.now().
+import { EN, T, DIR } from '../ui/i18n.js';
 import * as THREE from 'three';
 import { el } from '../ui/canvas.js';
 const STEPS = [100, 300, 1000, 3000, 10000, 30000];
@@ -11,9 +12,9 @@ export function mount(stage) {
       <figure><div class="cost-view"><canvas class="cost-cv" width="240" height="240"></canvas></div><figcaption><b>Canvas 2D</b><span class="cost-ms" data-k="cv">—</span></figcaption></figure>
       <figure><div class="cost-view cost-gl"></div><figcaption><b>WebGL</b><span class="cost-ms" data-k="gl">—</span></figcaption></figure>
     </div>
-    <div class="ctrl-row"><label>כמה נקודות <input type="range" min="0" max="${STEPS.length - 1}" step="1" value="2" class="cost-n"><output>1,000</output></label>
-    <button type="button" class="btn m cost-run">מדוד עכשיו</button></div>
-    <p class="cost-note">המספרים נמדדים עכשיו, במכשיר שלך. ב-60fps יש לכל פריים 16.7 מילישניות.</p>`;
+    <div class="ctrl-row"><label>${T('כמה נקודות', 'How many dots')} <input type="range" min="0" max="${STEPS.length - 1}" step="1" value="2" class="cost-n"><output>1,000</output></label>
+    <button type="button" class="btn m cost-run">${T('מדוד עכשיו', 'Measure now')}</button></div>
+    <p class="cost-note">${T('המספרים נמדדים עכשיו, במכשיר שלך. ב-60fps יש לכל פריים 16.7 מילישניות.', 'These numbers are measured right now, on this device. At 60fps each frame gets 16.7 milliseconds.')}</p>`;
   const domBox = stage.querySelector('.cost-dom'), cv = stage.querySelector('.cost-cv'), cx = cv.getContext('2d'), glBox = stage.querySelector('.cost-gl');
   const out = k => stage.querySelector(`.cost-ms[data-k="${k}"]`), nIn = stage.querySelector('.cost-n'), nOut = stage.querySelector('output');
   const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true, preserveDrawingBuffer: false });

@@ -1,10 +1,11 @@
 // Count-up numbers. The trap: in most fonts the digit "1" is narrower than "8", so a counting number wiggles sideways.
+import { EN, T, DIR } from '../ui/i18n.js';
 import { spring, clamp } from '../../../kit/src/core.js';
-const TILES = [['דקות אימון', 1248, ''], ['ימים ברצף', 30, ''], ['שיפור החודש', 38, '%+']];
+const TILES = [[T('דקות אימון', 'Workout minutes'), 1248, ''], [T('ימים ברצף', 'Day streak'), 30, ''], [T('שיפור החודש', 'This month'), 38, '%+']];
 export function mount(stage) {
   stage.classList.add('kpi');
   stage.innerHTML = `<div class="kpi-row">${TILES.map(([l], i) => `<div class="kpi-tile" style="--i:${i}"><b class="kpi-n">0</b><span>${l}</span></div>`).join('')}</div>
-    <div class="ctrl-row"><label class="chk"><input type="checkbox" class="kpi-tab" checked> ספרות ברוחב קבוע (tabular-nums)</label></div>`;
+    <div class="ctrl-row"><label class="chk"><input type="checkbox" class="kpi-tab" checked> ${T('ספרות ברוחב קבוע (tabular-nums)', 'Fixed-width digits (tabular-nums)')}</label></div>`;
   const ns = [...stage.querySelectorAll('.kpi-n')], tiles = [...stage.querySelectorAll('.kpi-tile')], tab = stage.querySelector('.kpi-tab');
   tab.addEventListener('change', () => stage.classList.toggle('prop', !tab.checked));
   return {

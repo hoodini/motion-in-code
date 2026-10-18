@@ -1,6 +1,7 @@
 // shadcn/ui components (new-york style), adapted from https://ui.shadcn.com (MIT). Two changes for video:
 // 1) every `transition-*` class is removed, because CSS transitions run on the wall clock, not on t;
 // 2) moving parts (switch thumb, progress bar) take their position from a prop, so t drives them.
+import { EN, T, DIR } from './i18n.js';
 import * as React from 'react';
 import { cva } from 'class-variance-authority';
 import { clsx } from 'clsx';
@@ -34,7 +35,7 @@ export const Badge = ({ className, variant, ...p }) => <div className={cn(badgeV
 
 export const Input = React.forwardRef(({ className, ...p }, ref) => <input ref={ref} className={cn('flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring', className)} {...p} />);
 
-export const Progress = ({ className, value = 0, dir = 'rtl', ...p }) => (
+export const Progress = ({ className, value = 0, dir = DIR, ...p }) => (
   <ProgressP.Root className={cn('relative h-2 w-full overflow-hidden rounded-full bg-primary/20', className)} value={value} {...p}>
     <ProgressP.Indicator className="h-full w-full flex-1 bg-primary" style={{ transform: `translateX(${dir === 'rtl' ? '' : '-'}${100 - value}%)` }} />
   </ProgressP.Root>
@@ -46,7 +47,7 @@ export const TabsTrigger = ({ className, ...p }) => <TabsP.Trigger className={cn
 export const TabsContent = ({ className, ...p }) => <TabsP.Content className={cn('mt-2 focus-visible:outline-none', className)} {...p} />;
 
 /** pos: 0 = off, 1 = on (can overshoot a little, because it comes from a spring) */
-export const Switch = ({ className, pos = 0, dir = 'rtl', ...p }) => (
+export const Switch = ({ className, pos = 0, dir = DIR, ...p }) => (
   <SwitchP.Root dir={dir} checked={pos > 0.5} className={cn('peer inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent shadow-sm focus-visible:outline-none', className)}
     style={{ background: pos > 0.5 ? 'hsl(var(--primary))' : 'hsl(var(--input))' }} {...p}>
     <SwitchP.Thumb className="pointer-events-none block h-4 w-4 rounded-full bg-background shadow-lg ring-0" style={{ transform: `translateX(${(dir === 'rtl' ? -1 : 1) * 16 * pos}px)` }} />

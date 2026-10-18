@@ -1,4 +1,5 @@
 // A phone and a laptop built from code (no model files). Their screens are live 2D canvases redrawn from t.
+import { EN, T, DIR } from '../ui/i18n.js';
 import { view3d, orbit, gradientTexture, contactShadow, THREE } from '../ui/three.js';
 import { makePhone, makeLaptop } from '../../../kit/src/world.js';
 import { spring, clamp, inv, io3 } from '../../../kit/src/core.js';
@@ -21,13 +22,13 @@ export async function mount(stage) {
   const drawPhone = t => {
     const W = 512, H = 1064; px.fillStyle = C.navy; px.fillRect(0, 0, W, H);
     const reps = Math.min(12, Math.max(0, Math.floor((t - 2.2) / 0.45) + 1)), p = clamp((t - 2.2) / (12 * 0.45), 0, 1);
-    px.fillStyle = '#fff'; px.font = '700 64px Karantina'; px.direction = 'rtl'; px.textAlign = 'center'; px.fillText('שכיבות סמיכה', W / 2, 190);
+    px.fillStyle = '#fff'; px.font = EN ? '400 72px Anton' : '700 64px Karantina'; px.direction = DIR; px.textAlign = 'center'; px.fillText(T('שכיבות סמיכה', 'PUSH-UPS'), W / 2, 190);
     px.lineWidth = 34; px.strokeStyle = 'rgba(255,255,255,.12)'; px.beginPath(); px.arc(W / 2, 520, 170, 0, Math.PI * 2); px.stroke();
     px.strokeStyle = fire(px, 100, 300, 420, 700); px.lineCap = 'round'; px.beginPath(); px.arc(W / 2, 520, 170, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * Math.max(0.001, p)); px.stroke();
     px.fillStyle = '#fff'; px.font = '400 170px Anton'; px.direction = 'ltr'; px.fillText(String(reps), W / 2, 580);
     px.font = '400 44px Anton'; px.fillStyle = 'rgba(255,255,255,.6)'; px.fillText('/ 12', W / 2, 650);
     px.fillStyle = C.orange; px.beginPath(); px.roundRect(80, 860, W - 160, 96, 48); px.fill();
-    px.fillStyle = C.navy; px.font = '700 50px Karantina'; px.direction = 'rtl'; px.fillText(reps >= 12 ? 'סיימת!' : 'עוד ' + (12 - reps), W / 2, 925);
+    px.fillStyle = C.navy; px.font = EN ? '400 50px Anton' : '700 50px Karantina'; px.direction = DIR; px.fillText(reps >= 12 ? T('סיימת!', 'DONE!') : T('עוד ' + (12 - reps), (12 - reps) + ' TO GO'), W / 2, 925);
     ptex.needsUpdate = true;
   };
   const drawLaptop = t => {

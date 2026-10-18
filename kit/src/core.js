@@ -112,7 +112,8 @@ export function riseWords(x, t, words, cxp, y, size, fontFn, color, tIns, tOut, 
       const xr = opt.ltr ? pos : pos - ws[i];
       if (opt.marker && opt.marker.i === i) {
         const m = opt.marker, mw = (ws[i] + size * 0.24) * out3(inv(m.t, m.t + 0.32, t));
-        if (mw > 0) { x.fillStyle = m.color; x.fillRect(xr + ws[i] + size * 0.12 - mw, y + dy - size * 0.78, mw, size * 0.92); }
+        // the marker grows in reading direction: from the right edge in RTL, from the left edge in LTR
+        if (mw > 0) { x.fillStyle = m.color; x.fillRect(opt.ltr ? xr - size * 0.12 : xr + ws[i] + size * 0.12 - mw, y + dy - size * 0.78, mw, size * 0.92); }
       }
       x.fillStyle = opt.colors ? opt.colors[i] : color; x.textAlign = 'left'; x.fillText(w, xr, y + dy);
     }

@@ -1,11 +1,12 @@
 // An "aurora" background: a few huge soft colour blobs that drift with t, blurred together on a 2D canvas.
+import { EN, T, DIR } from '../ui/i18n.js';
 import { canvas2d } from '../ui/canvas.js';
 const BLOBS = [['#5EA9F2', 0.0], ['#FF8F3A', 1.3], ['#FFC74E', 2.4], ['#D74270', 3.6], ['#93CBFF', 4.8]];
 export function mount(stage) {
   stage.classList.add('fxa');
   const cv = canvas2d(stage, 960, 540);
   const ctrl = document.createElement('div'); ctrl.className = 'ctrl-row';
-  ctrl.innerHTML = `<label class="chk"><input type="checkbox" class="fxa-grain" checked> גרעין (grain)</label><label class="chk"><input type="checkbox" class="fxa-raw"> בלי טשטוש (לראות את העיגולים)</label>`;
+  ctrl.innerHTML = `<label class="chk"><input type="checkbox" class="fxa-grain" checked> ${T('גרעין (grain)', 'Film grain')}</label><label class="chk"><input type="checkbox" class="fxa-raw"> ${T('בלי טשטוש (לראות את העיגולים)', 'No blur (see the circles)')}</label>`;
   stage.appendChild(ctrl);
   const grain = ctrl.querySelector('.fxa-grain'), raw = ctrl.querySelector('.fxa-raw');
   const noise = document.createElement('canvas'); noise.width = noise.height = 160; { const x = noise.getContext('2d'), d = x.createImageData(160, 160); let s = 7; for (let i = 0; i < d.data.length; i += 4) { s = (s * 16807) % 2147483647; const v = s % 255; d.data[i] = d.data[i + 1] = d.data[i + 2] = v; d.data[i + 3] = 22; } x.putImageData(d, 0, 0); }

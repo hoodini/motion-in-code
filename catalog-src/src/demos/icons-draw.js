@@ -1,4 +1,5 @@
 // Lucide icons are drawn with lines, so each line can "draw itself": dasharray = its length, dashoffset shrinks to 0.
+import { EN, T, DIR } from '../ui/i18n.js';
 import { createRoot } from 'react-dom/client';
 import { flushSync } from 'react-dom';
 import { Dumbbell, Flame, HeartPulse, Timer, Trophy, Footprints, Zap, Target } from 'lucide-react';
@@ -8,7 +9,7 @@ export function mount(stage) {
   stage.classList.add('ico');
   const grid = document.createElement('div'); grid.className = 'ico-grid'; stage.appendChild(grid);
   const ctrl = document.createElement('div'); ctrl.className = 'ctrl-row';
-  ctrl.innerHTML = `<label>עובי קו <input type="range" min="1" max="3" step="0.25" value="2" class="ico-w"><output>2</output></label>`;
+  ctrl.innerHTML = `<label>${T('עובי קו', 'Stroke width')} <input type="range" min="1" max="3" step="0.25" value="2" class="ico-w"><output>2</output></label>`;
   stage.appendChild(ctrl);
   const root = createRoot(grid);
   flushSync(() => root.render(<>{ICONS.map(([n, I]) => <figure key={n}><I size={64} strokeWidth={2} absoluteStrokeWidth={false} /><figcaption dir="ltr">{n}</figcaption></figure>)}</>));

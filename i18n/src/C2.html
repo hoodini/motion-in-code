@@ -1,0 +1,259 @@
+<!-- ============ 01 DATA ============ -->
+<section class="sec s-cloud" id="c1" data-folio="01" data-toc="נתונים וגרפים">
+  <div class="sh"><span class="num">01</span><div><h2>נתונים וגרפים</h2><p class="sub">הרגע שבו הסרטון מוכיח משהו: צמיחה, תוצאות, התקדמות.</p></div></div>
+  <div class="body">
+    <p>סרטון השקה טוב עונה על "למה להאמין לכם?", ולרוב התשובה היא מספר. בסרטון של קצב, זה הרגע שבו המתאמן רואה כמה התקדם בחודש. ארבעת האלמנטים כאן הם ארבע דרכים להראות מספר: קו שמתפתח בזמן, השוואה בין ימים, מספר אחד גדול, ואחוז מיעד.</p>
+    <p>הספרייה שבה משתמשים כאן היא <b>Recharts</b>: אוסף רכיבי React לגרפים, שמצייר אותם כ-SVG (כלומר וקטור, חד בכל זום). מתחת למכסה היא נעזרת בחלקים של ספרייה בשם D3 בשביל החישובים: איפה כל שנתה, איך מעגלים עקומה. היא חינמית ברישיון MIT, והגרסה הנוכחית היא 3. החלופות העיקריות, ומתי לבחור בהן:</p>
+    <ul>
+      <li><b>Chart.js</b>: מצייר על Canvas ולא צריך React. מהיר ופשוט, פחות גמיש בעיצוב. MIT.</li>
+      <li><b>Apache ECharts</b>: מאות סוגי גרפים, כולל מפות. כבד יותר. Apache 2.0.</li>
+      <li><b>D3</b>: השכבה הנמוכה עצמה. שליטה מלאה בכל פיקסל, והרבה יותר קוד. ISC.</li>
+    </ul>
+    <p>הכלל לבחירה: אם הפרויקט ב-React והגרף סטנדרטי, Recharts. אם צריך צורה שאין לה שם, D3. ובכל מקרה, האנימציה המובנית כבויה והכל מחושב מ-t.</p>
+  </div>
+
+  <article class="el" id="e-chart-area">
+    <div class="el-h"><span class="el-n">01.1</span><h3 class="el-t">גרף שטח שמצטייר</h3><div class="el-tags"><span>Recharts</span><span>React</span><span>SVG</span><span class="lic">MIT</span></div></div>
+    <div class="el-demo" data-demo="chart-area"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>מה רואים</h4><p>30 ימים של דקות אימון באפליקציית "קצב". הקו מצטייר משמאל לימין, נקודה כתומה רוכבת על הקצה שלו, ובסוף נוחת קו מקווקו של היעד: 60 דקות. הצופה רואה את המגמה נבנית, במקום לקבל אותה מוכנה.</p>
+        <h4>נסו</h4><p>סמנו "תנו ל-Recharts להנפיש לבד". עכשיו הספרייה מנפישה לפי שעון הקיר, והסרגל כבר לא שולט בה. זו בדיוק האנימציה שהייתה נשברת בצילום.</p></div>
+        <div><h4>איך זה עובד</h4><ul>
+          <li>בכל פריים מחשבים מ-t כמה מהקו כבר נחשף, ומעבירים ל-Recharts רק את הנקודות האלה, ועוד נקודת ביניים אחת כדי שהקצה יזוז בצורה רציפה ולא בקפיצות של יום שלם.</li>
+          <li><code>isAnimationActive={false}</code> מכבה את האנימציה של הספרייה. החשיפה היא שלנו.</li>
+          <li><code>type="monotone"</code> מעגל את הקו בלי לעבור מעל הנתונים, כך שלא מומצאים שיאים שלא היו.</li>
+          <li>המילוי הוא מעבר צבע מכתום לשקוף, והיעד הוא <code>ReferenceLine</code> שעוביו גדל על קפיץ.</li></ul></div>
+      </div>
+      <div class="fit"><div class="y"><b>מתי כן</b>רגע ההוכחה: "תראו כמה התקדמתם". מגמה אחת, ברורה, עם סוף שנוחת על הביט.</div><div class="n"><b>מתי לא</b>יותר משלושה קווים, או ערכים מדויקים שהצופה צריך לקרוא בשתי שניות. במקרה כזה, מספר גדול אחד (01.3) עובד טוב יותר.</div></div>
+      <div class="prompt"><h5>פרומפט מלא</h5><div class="code"><span class="lbl">area chart · Recharts · paste into Claude Code</span><button class="cp" type="button">העתק פרומפט</button><pre>&lt;inputs&gt;
+Ask me for the data series (one value per day) and its label. If I skip it, invent a plausible 30-day series of workout minutes that trends upward with natural noise, and say so.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 7-second clip, 1920x1080, 60fps. A Recharts AreaChart draws itself from left to right as the data is revealed. A dot in the accent colour rides the tip of the line. At the end, a dashed goal line at 60 lands on a beat with the label "יעד: 60 דקות".
+Look: light background #EEF3FB, navy text and grid #12163F, the line is a gradient #FFC74E → #FF8F3A → #F56B49, the area fill is the same orange fading to transparent. Axis labels in Hebrew in Assistant; the title in Karantina 700. Swap the colours and fonts for your brand.
+Banned: 3D charts, drop shadows on the line, legends that nobody needs, gridlines on both axes.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM, a beat every 0.5s. Beats 0-1: the empty axes. Beats 1-9: the line draws with an ease-in-out. Beat 10: the goal line springs in. Beats 10-13: hold, with the dot pulsing once per beat.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file with React and Recharts that exposes window.seek(t). Every frame is computed from t alone: no CSS transitions, no timers, no state between frames.
+Set isAnimationActive={false} on every series. For each frame, compute how far along the line we are, pass only the points revealed so far plus one interpolated point at the tip, and render with flushSync so the DOM is ready before the screenshot.
+Use type="monotone" for the curve. The goal line's stroke width and label size come from a closed-form spring of t.
+Render with Playwright at 60fps and assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Recharts animates on its own clock by default. If isAnimationActive is left on anywhere, captured frames jump.
+- Fix the Y axis domain (for example 0 to 80), or the axis rescales every frame as points are added.
+- Wait for document.fonts.ready before the first frame.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me 3 stills (beat 1, beat 6, beat 12) before rendering the full clip.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-chart-bars">
+    <div class="el-h"><span class="el-n">01.2</span><h3 class="el-t">עמודות שנוחתות על הביט</h3><div class="el-tags"><span>Recharts</span><span>BarChart</span><span class="lic">MIT</span></div></div>
+    <div class="el-demo" data-demo="chart-bars"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>מה רואים</h4><p>שבוע של אימונים. כל עמודה קופצת למעלה בביט משלה, חצי שנייה אחרי הקודמת, עוברת קצת את הגובה שלה וחוזרת. העמודה של היום צבועה במעבר הצבע "אש" של המותג (צהוב, כתום, אדום). הימים מסודרים מימין לשמאל, כמו שקוראים בעברית.</p></div>
+        <div><h4>איך זה עובד</h4><ul>
+          <li>הגובה של כל עמודה = הערך שלה × <code>spring(t − הזמן של הביט שלה)</code>. מחסירים את זמן הביט כדי לאפס את השעון של כל עמודה בנפרד: לפני הביט שלה התוצאה שלילית, והקפיץ מחזיר 0, כלומר העמודה עוד לא התחילה. הקפיץ עובר קצת את 1 וחוזר, ולכן העמודה "נוחתת" במקום לעצור יבש.</li>
+          <li>המספר מעל העמודה מופיע רק כשהיא עברה 60% מהדרך, כדי שלא יקפוץ לפניה.</li>
+          <li>הצבע של היום מגיע מ-<code>Cell</code>, רכיב של Recharts שמאפשר צבע שונה לכל עמודה.</li></ul></div>
+      </div>
+      <div class="fit"><div class="y"><b>מתי כן</b>השוואה בין 4 עד 12 פריטים, והדגשה של אחד מהם. מושלם לקצב מוזיקלי, כי כל עמודה היא ביט.</div><div class="n"><b>מתי לא</b>יותר מ-12 עמודות: הן נעשות דקות מדי לקריאה במסך טלפון, והאנימציה נמשכת יותר מדי.</div></div>
+      <div class="prompt"><h5>פרומפט מלא</h5><div class="code"><span class="lbl">bar chart on the beat · Recharts</span><button class="cp" type="button">העתק פרומפט</button><pre>&lt;inputs&gt;
+Ask me for the 7 values and which bar to highlight. If I skip them, use workout minutes for a week (Sunday to Saturday) and highlight Friday.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 5.5-second clip, 1080x1920 for Reels, 60fps. A Recharts BarChart of 7 days where each bar springs up on its own beat, overshoots slightly and settles. The highlighted bar is filled with the gradient #FFC74E → #FF8F3A → #F56B49; the others are navy #12163F on a light #EEF3FB background. Day labels in Hebrew (א׳ to ש׳), ordered right to left. The value appears above each bar once it is most of the way up.
+Banned: bars growing all at once, bouncing more than once, 3D bars.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM. Bar i lands on beat i+1 (0.5s apart). The highlighted bar gets a small extra scale pop on its beat.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file with React and Recharts that exposes window.seek(t); every frame is computed from t alone, no CSS transitions or timers.
+BarChart with isAnimationActive={false}. Each bar's value = target × spring(t − beatTime), where spring is this closed-form damped spring with ω = 13 and ζ = 0.5: spring(t) = 1 − e^(−ζωt)·(cos(ω_d·t) + (ζω/ω_d)·sin(ω_d·t)), ω_d = ω·√(1 − ζ²). Use Cell for per-bar colours. Render each frame with flushSync. Capture with Playwright at 60fps and assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Clamp the spring at 0 so a bar never dips below the axis.
+- Fix the Y domain so the axis does not rescale while bars grow.
+- Reverse the data order (or use reversed on the X axis) so the week reads right to left.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me stills at beats 2, 5 and 10 before the full render.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-kpi">
+    <div class="el-h"><span class="el-n">01.3</span><h3 class="el-t">מונים שעולים</h3><div class="el-tags"><span>CSS</span><span>tabular-nums</span><span>Intl.NumberFormat</span></div></div>
+    <div class="el-demo" data-demo="kpi"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>מה רואים</h4><p>שלושה מספרים שרצים מאפס לערך הסופי, כל אחד בתורו, ונוחתים עם קפיצה קטנה מעבר לערך וחזרה. בלי ספרייה בכלל: זה רק מספר שמחושב מ-t ונכתב לתוך אלמנט.</p>
+        <h4>נסו</h4><p>בטלו את "ספרות ברוחב קבוע" ותראו את המספרים רועדים בזמן הספירה.</p></div>
+        <div><h4>למה הם רועדים</h4><p>בהרבה פונטים, למשל Inter שבו כתובים המספרים כאן, הספרה 1 צרה יותר מהספרה 8. הן נקראות <b>ספרות פרופורציונליות</b>. כשהמספר משתנה בכל פריים, הרוחב שלו משתנה, וכל מה שמסביבו זז. הפתרון הוא תכונה של הפונט שנקראת <code>tabular-nums</code>: כל הספרות מקבלות רוחב זהה, כמו בטבלה. (זה עובד רק אם הפונט כולל ספרות כאלה; ל-Inter יש.) שורה אחת של CSS: <code>font-variant-numeric: tabular-nums</code>.</p>
+        <p>ובשביל הפסיקים של האלפים (1,248) משתמשים ב-<code>Intl.NumberFormat</code>, הכלי המובנה בדפדפן לעיצוב מספרים לפי שפה.</p></div>
+      </div>
+      <div class="fit"><div class="y"><b>מתי כן</b>מספר אחד שהוא הסיפור: "1,248 דקות". הוא נקרא מיד, גם בטלפון.</div><div class="n"><b>מתי לא</b>יותר משלושה מונים באותו רגע: העין לא יודעת על מה להסתכל.</div></div>
+      <div class="prompt"><h5>פרומפט מלא</h5><div class="code"><span class="lbl">count-up KPI tiles</span><button class="cp" type="button">העתק פרומפט</button><pre>&lt;inputs&gt;
+Ask me for up to three KPIs (value, label, optional suffix like % or +). If I skip them, use: 1,248 "דקות אימון", 30 "ימים ברצף", +38% "שיפור החודש".
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 4.5-second clip, 1920x1080, 60fps. Three KPI tiles side by side, ordered right to left. Each number counts up from 0 to its value and lands with a small overshoot, one tile per beat. Numbers in Inter 800, labels in Hebrew in Karantina 700. Light tiles #EEF3FB on white, navy numbers #12163F, the middle number in orange #B4501A.
+Banned: slot-machine rolling digits, confetti, numbers that keep moving after they land.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM. Tile 1 starts on beat 1, tile 2 on beat 2, tile 3 on beat 3. Each count lasts 1.2s with an ease-out and a tiny spring at the end.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file exposing window.seek(t); every value is computed from t alone, no timers or CSS transitions.
+displayed = round(target × easeOut(progress(t))); format with Intl.NumberFormat('he-IL'); keep the suffix outside the number in its own span. Use font-variant-numeric: tabular-nums on every number. Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Without tabular-nums the numbers change width every frame and the tiles shake.
+- Isolate the "+" and "%" with unicode-bidi: isolate, or they jump to the wrong side in RTL.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me one still mid-count and one at the end before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-ring">
+    <div class="el-h"><span class="el-n">01.4</span><h3 class="el-t">טבעת התקדמות</h3><div class="el-tags"><span>SVG</span><span>stroke-dasharray</span></div></div>
+    <div class="el-demo" data-demo="ring"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>מה רואים</h4><p>טבעת שמתמלאת ל-78% מהיעד השבועי, עם המספר שעולה במרכז. הטבעת של אפליקציות הכושר, מצוירת בקוד, בלי שום ספרייה.</p>
+        <h4>נסו</h4><p>סמנו "הראו את קו המתאר המלא" ותראו שהטבעת היא בעצם קו מקווקו ארוך אחד.</p></div>
+        <div><h4>איך זה עובד</h4><p>ב-SVG אפשר להפוך את קו המתאר של עיגול לקו מקווקו. <code>stroke-dasharray</code> קובע את אורך המקטע וגם את אורך הרווח שאחריו, ו-<code>stroke-dashoffset</code> מזיז את נקודת ההתחלה של התבנית. הטריק: קובעים מקטע ורווח שניהם באורך ההיקף כולו (2πr: פעמיים פאי, כ-6.28, כפול הרדיוס r). כשמזיזים את המקטע, הרווח נכנס במקומו, כלומר כלום, ורק חלק מהמקטע נשאר גלוי:</p>
+        <p><code>offset = היקף × (1 − התקדמות)</code>. כשההתקדמות 0, המקטע כולו מחוץ לעיגול. כש-1, הוא מכסה הכל. המספרים מתעדכנים חי בתיבה הכהה. ומסובבים את העיגול ב-‎−90°, כי ב-SVG עיגול מתחיל בשעה 3, ואנחנו רוצים שיתחיל בשעה 12.</p></div>
+      </div>
+      <div class="fit"><div class="y"><b>מתי כן</b>אחוז מיעד, ספירה לאחור, טעינה. צורה שכולם מזהים מהשעון והטלפון.</div><div class="n"><b>מתי לא</b>השוואה בין כמה ערכים: טבעות מקוננות קשות לקריאה. עמודות (01.2) ברורות יותר.</div></div>
+      <div class="prompt"><h5>פרומפט מלא</h5><div class="code"><span class="lbl">progress ring · SVG</span><button class="cp" type="button">העתק פרומפט</button><pre>&lt;inputs&gt;
+Ask me for the goal and the reached value. If I skip them, fill to 78% with the label "מהיעד השבועי".
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 4-second clip, 1080x1080, 60fps. A circular progress ring fills from 12 o'clock to its value with a spring that settles, while the percentage counts up in the centre. Track in navy at 10% opacity, the arc in the gradient #FFC74E → #FF8F3A → #F56B49 with round caps, 22px thick at a 92px radius (scale up for 1080). Number in Inter 800, label in Hebrew in Karantina 700.
+Banned: glow, multiple nested rings, a ring that spins after it lands.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+Beat 1: the track appears. Beats 1-5: the arc fills with a closed-form spring, ω = 6 and ζ = 0.85: spring(t) = 1 − e^(−ζωt)·(cos(ω_d·t) + (ζω/ω_d)·sin(ω_d·t)), ω_d = ω·√(1 − ζ²). Beat 6: a small scale pop on the number.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file exposing window.seek(t); every attribute is computed from t, no CSS transitions.
+SVG circle with stroke-dasharray = 2πr and stroke-dashoffset = 2πr × (1 − progress(t)), rotated −90° around its centre so it starts at 12 o'clock. The number uses tabular-nums. Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- With round caps, a 0% ring still shows a dot. Hide the arc until progress passes 1%.
+- Set the dash values as attributes every frame; a CSS transition on stroke-dashoffset would run on the wall clock.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me a still at 50% and at the end before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+</section>
+
+<!-- ============ 02 UI ============ -->
+<section class="sec s-sky" id="c2" data-folio="02" data-toc="ממשק: shadcn/ui">
+  <div class="sh"><span class="num">02</span><div><h2>ממשק אמיתי עם shadcn/ui</h2><p class="sub">סרטון מוצר צריך אפליקציה שנראית אמיתית. הנה איך מקבלים אחת, בלי לעצב אותה מאפס.</p></div></div>
+  <div class="body">
+    <p>הסצנה הכי חשובה בסרטון של קצב היא סיור באפליקציה: מישהו מקליד, לוחץ, מחליף לשונית, ורואים שהמוצר עובד. כדי שזה ייראה כמו אפליקציה אמיתית, בונים אותו מרכיבי ממשק אמיתיים. שלושה מושגים, אחד על השני:</p>
+    <ul>
+      <li><b>Tailwind CSS</b> היא דרך לכתוב עיצוב בעזרת <b>מחלקות</b>: מחלקה (class) היא תווית שמדביקים על אלמנט, וה-CSS קובע מה כל תווית עושה. ב-Tailwind כל תווית עושה דבר אחד קטן, ולכן במקום לכתוב קובץ CSS נפרד, כותבים <code>rounded-full bg-primary px-4</code>: מעוגל לגמרי, בצבע הראשי, ריווח אופקי.</li>
+      <li><b>Radix</b> היא ספרייה של רכיבים בלי עיצוב בכלל, שמטפלת בכל ההתנהגות: מקלדת, פוקוס, ותוכנות שמקריאות את המסך בקול לאנשים עם לקות ראייה. לשונית שעובדת נכון עם מקש Tab, למשל.</li>
+      <li><b>shadcn/ui</b> מחברת את שתיהן. היא מגדירה את עצמה "לא ספריית רכיבים": במקום להתקין חבילה, מעתיקים את הקוד של כל רכיב לפרויקט (<code>npx shadcn add button</code>), והוא שלכם לשנות. זה בדיוק מה שמאפשר להתאים אותה לווידאו.</li>
+    </ul>
+    <p>shadcn/ui פופולרית מאוד, ולכן היא נראית "כמו אפליקציה אמיתית". מאותה סיבה היא גם עלולה להיראות גנרית. בהדגמה למטה כל הרכיבים קיבלו את צבעי Phoenix, פלטת המותג של YUV.AI (נייבי, כתום, זהב), ואת הפונט קרנטינה, וזה מה שהופך אותם לשלכם.</p>
+  </div>
+
+  <article class="el" id="e-ui">
+    <div class="el-h"><span class="el-n">02.1</span><h3 class="el-t">סיור באפליקציה, מרכיבים אמיתיים</h3><div class="el-tags"><span>shadcn/ui</span><span>Radix</span><span>Tailwind</span><span>React</span><span class="lic">MIT</span></div></div>
+    <div class="el-demo split" data-demo="ui-scene"><div class="stage"></div>
+      <ol class="ui-steps">
+        <li data-from="0" data-to="0.9"><b>Card נכנס</b><span>כרטיס עם כותרת, שעולה על קפיץ.</span></li>
+        <li data-from="0.9" data-to="2.4"><b>Input מקבל הקלדה</b><span>"אימון בוקר", אות כל 0.14 שנייה, עם סמן שנמדד לפי רוחב הטקסט.</span></li>
+        <li data-from="2.4" data-to="3.4"><b>Button נלחץ</b><span>הסמן מגיע, לוחץ, והכפתור מתכווץ ומשנה צבע.</span></li>
+        <li data-from="3.4" data-to="4.4"><b>Progress מתמלא</b><span>מ-0 ל-72% על קפיץ איטי.</span></li>
+        <li data-from="4.4" data-to="6.6"><b>Tabs מתחלפות</b><span>היום ← שבוע ← חודש, והמספר הגדול מתעדכן.</span></li>
+        <li data-from="6.6" data-to="7.2"><b>Switch נדלק</b><span>הכפתור הקטן קופץ לצד השני.</span></li>
+        <li data-from="7.2" data-to="8.8"><b>Slider זז</b><span>עצימות מ-30 ל-80.</span></li>
+        <li data-from="8.8" data-to="9.6"><b>Alert צונח</b><span>הודעה: היעד השבועי הושג.</span></li>
+        <li data-from="9.6" data-to="11.1"><b>Badge קופץ</b><span>תווית קטנה שקופצת מעבר לגודלה וחוזרת.</span></li>
+      </ol>
+      <div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>מה רואים</h4><p>מסך של קצב שבנוי מתשעה רכיבים אמיתיים של shadcn/ui. הרשימה בצד מסמנת איזה רכיב פועל עכשיו. גררו את הסרגל אחורה ותראו שכל רכיב חוזר בדיוק למצב של אותו רגע, גם הלשונית, גם המתג.</p>
+        <h4>רכיב מבוקר: המושג החשוב כאן</h4><p>מתג רגיל זוכר בעצמו אם הוא דלוק. זה נקרא <b>מצב פנימי</b>. בסרטון זו בעיה: אם המתג "זוכר" שהוא נדלק, ואתם קופצים אחורה בזמן, הוא יישאר דלוק. לכן כל רכיב כאן הוא <b>מבוקר</b> (controlled): הוא לא מחליט כלום לבד. בכל פריים אומרים לו מבחוץ מה המצב, למשל <code>checked={t &gt; 6.6}</code>.</p></div>
+        <div><h4>איך זה עובד</h4><ul>
+          <li>הרכיבים הועתקו מ-shadcn/ui, וכל מחלקות ה-<code>transition</code> נמחקו מהם. מחלקה כזו גורמת לדפדפן להנפיש שינויים לבד, לפי שעון הקיר.</li>
+          <li>כל ערך הוא פונקציה של t: הטקסט שהוקלד, הלשונית הפעילה, מיקום המתג, ערך המחוון.</li>
+          <li>הסמן של העכבר מחשב את המיקום של הכפתור האמיתי על המסך, ומגיע אליו בתנועה עם האטה.</li>
+          <li>הצבעים מוגדרים פעם אחת כ<b>משתנים</b> (<code>--primary</code>, <code>--accent</code>). משתנה הוא שם לערך ששומרים פעם אחת, וכל אלמנט "יורש" את המשתנים של האלמנט שעוטף אותו. לכן מגדירים אותם פעם אחת למעלה, וכל הרכיבים מקבלים אותם. כך מחליפים מותג בשורה אחת.</li></ul></div>
+      </div>
+      <div class="fit"><div class="y"><b>מתי כן</b>סרטון מוצר, הדגמת פיצ'ר, "ככה זה עובד". כשהצופה צריך להאמין שיש אפליקציה אמיתית.</div><div class="n"><b>מתי לא</b>כשיש לכם צילומי מסך אמיתיים ומוצר קיים: עדיף להשתמש במסכים האמיתיים שלכם, ולבנות מחדש רק את מה שזז.</div></div>
+      <div class="prompt"><h5>פרומפט מלא</h5><div class="code"><span class="lbl">app tour · shadcn/ui · paste into Claude Code</span><button class="cp" type="button">העתק פרומפט</button><pre>&lt;inputs&gt;
+Ask me for my app's name, its main screen (screenshot or description) and the one action the tour should show. If I skip them, invent a believable Hebrew fitness app called "קצב" with a workout card.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+An 11-second product tour, 1080x1920, 60fps, built from real shadcn/ui components: Card, Input, Button, Progress, Tabs, Switch, Slider, Alert and Badge. A cursor types "אימון בוקר" into the search input with a real keystroke rhythm, clicks the start button, the weekly progress fills to 72%, the tabs switch day → week → month, a reminders switch flips on, an intensity slider moves from 30 to 80, an alert drops in ("יעד שבועי הושג") and a badge pops.
+The UI is right to left (dir="rtl"). Restyle the shadcn tokens to my brand: navy #12163F as --primary, orange #FF8F3A as --accent, #EEF3FB as --background, radius 28px. Headlines in Karantina 700, UI text in Assistant.
+Banned: default shadcn grey look, default Tailwind colours, generic lorem ipsum, a cursor that teleports.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+Card enters 0-0.9s, typing 0.9-2.4s, click at 3.1s, progress 3.4-4.4s, tabs at 4.4s and 5.4s, switch at 6.6s, slider 7.2-8.8s, alert at 8.8s, badge at 9.6s. Every event lands on a beat at 120 BPM.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file with React, exposing window.seek(t). Add the components with npx shadcn add (or copy their source), then:
+- Delete every transition-* and animate-* class from them.
+- Make every component controlled: value, checked, the active tab and the slider value are props computed from t. Render each frame with flushSync.
+- The cursor's target is measured from the real button's bounding box; its path is an ease-in-out from off-screen.
+- Measure the typed text width with canvas measureText so the caret sits exactly after the last letter.
+Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Radix components keep internal state. If they are not controlled from t, scrubbing backwards leaves them in the wrong state.
+- In RTL, the Progress indicator and the Switch thumb must move from right to left; flip their translate direction.
+- Tailwind's preflight reset can break the rest of the page; scope it or disable it.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me 4 stills (typing, click, tabs on month, alert) before the full render.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+</section>
+

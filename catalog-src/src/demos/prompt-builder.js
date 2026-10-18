@@ -1,6 +1,7 @@
 // The prompt builder: pick elements from the catalog, a format, a length and a brand,
 // and get one complete prompt in zero's six-block skeleton. No AI here: it is plain string assembly,
 // so you can read exactly which sentence each choice adds.
+import { EN, T } from '../ui/i18n.js';
 export const ELEMENTS = [
   { id: 'chart-area', ord: 50, en: 'the area chart', cat: 'גרפים', he: 'גרף שטח שנבנה',
     dir: 'A Recharts AreaChart that draws itself left to right as the data points are revealed, with a soft gradient fill and a dashed goal line the curve crosses on a beat.',
@@ -100,6 +101,14 @@ const PHOENIX = {
   fontsEn: 'Headlines in Anton uppercase with letter-spacing 0, body in Inter, numbers in JetBrains Mono'
 };
 
+// English edition: display names for the chips and categories (the prompt text itself is English in both editions)
+const NAME_EN = { 'chart-area': 'Area chart that draws itself', 'chart-bars': 'Bars that land on the beat', kpi: 'Counting KPIs', ring: 'Progress ring',
+  'ui-scene': 'App tour (shadcn/ui)', 'icons-draw': 'Icons that draw themselves', logos: 'Official logos', type: 'Kinetic typography',
+  'd3-devices': '3D phone and laptop', 'd3-glass': 'Glass orb', 'd3-particles': 'Particle morph', 'd3-ocean': 'Ocean, day to sunset',
+  'd3-carousel': 'Card carousel', 'd3-eq': '3D equalizer', 'fx-neon': 'Neon "AI is thinking" edge', 'fx-glass': 'Glass card',
+  'fx-aurora': 'Aurora background', transitions: 'Transitions without fades' };
+const CAT_EN = { 'גרפים': 'Charts', 'ממשק': 'Interface', 'אייקונים': 'Icons & logos', 'טיפוגרפיה': 'Typography', 'תלת-ממד': '3D', 'אפקטים': 'Effects' };
+
 const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
 
 export function buildPrompt(o) {
@@ -161,42 +170,42 @@ export function mount(stage) {
   const def = ['ui-scene', 'kpi', 'd3-devices', 'transitions'];
   stage.innerHTML = `
   <div class="pb-form">
-    <label class="pb-f"><span>1 · על מה הסרטון? משפט אחד</span><textarea class="pb-story" rows="2">A launch film for "Ketzev", a Hebrew fitness app that turns every workout into a beat.</textarea></label>
-    <div class="pb-f"><span>2 · פורמט</span><div class="seg pb-fmt"><button type="button" data-v="h" class="on">16:9</button><button type="button" data-v="v">9:16</button><button type="button" data-v="b">שניהם</button></div></div>
+    <label class="pb-f"><span>${T('1 · על מה הסרטון? משפט אחד', '1 · What is the film about? One sentence')}</span><textarea class="pb-story" rows="2">${T('A launch film for "Ketzev", a Hebrew fitness app that turns every workout into a beat.', 'A launch film for "Ketzev", a fitness app that turns every workout into a beat.')}</textarea></label>
+    <div class="pb-f"><span>${T('2 · פורמט', '2 · Format')}</span><div class="seg pb-fmt"><button type="button" data-v="h" class="on">16:9</button><button type="button" data-v="v">9:16</button><button type="button" data-v="b">${T('שניהם', 'Both')}</button></div></div>
     <div class="pb-row">
-      <label class="pb-f"><span>3 · אורך: <output class="pb-lenO">30</output> שניות</span><input type="range" class="pb-len" min="10" max="60" step="1" value="30"></label>
-      <label class="pb-f"><span>4 · קצב המוזיקה: <output class="pb-bpmO">120</output> BPM</span><input type="range" class="pb-bpm" min="80" max="150" step="1" value="120"></label>
+      <label class="pb-f"><span>${T('3 · אורך: ', '3 · Length: ')}<output class="pb-lenO">30</output>${T(' שניות', ' seconds')}</span><input type="range" class="pb-len" min="10" max="60" step="1" value="30"></label>
+      <label class="pb-f"><span>${T('4 · קצב המוזיקה: ', '4 · Music tempo: ')}<output class="pb-bpmO">120</output> BPM</span><input type="range" class="pb-bpm" min="80" max="150" step="1" value="120"></label>
     </div>
-    <div class="pb-f"><span>5 · שפה על המסך</span><div class="seg pb-lang"><button type="button" data-v="he" class="on">עברית</button><button type="button" data-v="en">English</button></div></div>
-    <div class="pb-f"><span>6 · מיתוג</span><div class="seg pb-brand"><button type="button" data-v="phoenix" class="on">Phoenix (YUV.AI)</button><button type="button" data-v="own">המותג שלי</button></div>
-      <div class="pb-own" hidden><label>רקע <input type="color" class="pb-c1" value="#F7F4EE"></label><label>טקסט <input type="color" class="pb-c2" value="#111111"></label><label>צבע הדגשה <input type="color" class="pb-c3" value="#2F6BFF"></label><label>פונט כותרות <input type="text" class="pb-fh" placeholder="למשל Karantina"></label><label>פונט טקסט <input type="text" class="pb-fb" placeholder="למשל Assistant"></label></div></div>
-    <div class="pb-f"><span>7 · אלמנטים מהקטלוג <output class="pb-n"></output></span>
-      ${cats.map(c => `<div class="pb-cat"><b>${c}</b>${ELEMENTS.filter(e => e.cat === c).map(e => `<label class="pb-chip"><input type="checkbox" value="${e.id}" ${def.includes(e.id) ? 'checked' : ''}><span>${e.he}</span></label>`).join('')}</div>`).join('')}
+    <div class="pb-f"><span>${T('5 · שפה על המסך', '5 · On-screen language')}</span><div class="seg pb-lang"><button type="button" data-v="he"${EN ? '' : ' class="on"'}>${T('עברית', 'Hebrew (RTL)')}</button><button type="button" data-v="en"${EN ? ' class="on"' : ''}>English</button></div></div>
+    <div class="pb-f"><span>${T('6 · מיתוג', '6 · Branding')}</span><div class="seg pb-brand"><button type="button" data-v="phoenix" class="on">Phoenix (YUV.AI)</button><button type="button" data-v="own">${T('המותג שלי', 'My brand')}</button></div>
+      <div class="pb-own" hidden><label>${T('רקע', 'Background')} <input type="color" class="pb-c1" value="#F7F4EE"></label><label>${T('טקסט', 'Text')} <input type="color" class="pb-c2" value="#111111"></label><label>${T('צבע הדגשה', 'Accent')} <input type="color" class="pb-c3" value="#2F6BFF"></label><label>${T('פונט כותרות', 'Headline font')} <input type="text" class="pb-fh" placeholder="${T('למשל Karantina', 'e.g. Anton')}"></label><label>${T('פונט טקסט', 'Body font')} <input type="text" class="pb-fb" placeholder="${T('למשל Assistant', 'e.g. Inter')}"></label></div></div>
+    <div class="pb-f"><span>${T('7 · אלמנטים מהקטלוג', '7 · Elements from the catalog')} <output class="pb-n"></output></span>
+      ${cats.map(c => `<div class="pb-cat"><b>${EN ? CAT_EN[c] : c}</b>${ELEMENTS.filter(e => e.cat === c).map(e => `<label class="pb-chip"><input type="checkbox" value="${e.id}" ${def.includes(e.id) ? 'checked' : ''}><span>${EN ? NAME_EN[e.id] : e.he}</span></label>`).join('')}</div>`).join('')}
     </div>
   </div>
   <div class="pb-out">
     <div class="pb-stat"></div>
-    <div class="code pb-code"><span class="lbl">your prompt · paste into Claude Code</span><button class="cp pb-cp" type="button">העתק פרומפט</button><pre class="pb-pre"></pre></div>
+    <div class="code pb-code"><span class="lbl">your prompt · paste into Claude Code</span><button class="cp pb-cp" type="button">${T('העתק פרומפט', 'Copy prompt')}</button><pre class="pb-pre"></pre></div>
   </div>`;
   const $ = s => stage.querySelector(s), $$ = s => [...stage.querySelectorAll(s)];
-  const st = { fmt: 'h', lang: 'he', brand: 'phoenix' };
+  const st = { fmt: 'h', lang: EN ? 'en' : 'he', brand: 'phoenix' };
   const seg = (sel, key) => $$(sel + ' button').forEach(b => b.addEventListener('click', () => { $$(sel + ' button').forEach(x => x.classList.toggle('on', x === b)); st[key] = b.dataset.v; if (key === 'brand') $('.pb-own').hidden = st.brand !== 'own'; upd(); }));
   seg('.pb-fmt', 'fmt'); seg('.pb-lang', 'lang'); seg('.pb-brand', 'brand');
   const upd = () => {
     const o = { ...st, story: $('.pb-story').value, len: +$('.pb-len').value, bpm: +$('.pb-bpm').value, els: $$('.pb-chip input:checked').map(i => i.value),
       c1: $('.pb-c1').value, c2: $('.pb-c2').value, c3: $('.pb-c3').value, fh: $('.pb-fh').value, fb: $('.pb-fb').value };
     $('.pb-lenO').textContent = o.len; $('.pb-bpmO').textContent = o.bpm;
-    $('.pb-n').textContent = `(${o.els.length} נבחרו)`;
+    $('.pb-n').textContent = T(`(${o.els.length} נבחרו)`, `(${o.els.length} selected)`);
     const p = buildPrompt(o);
     $('.pb-pre').innerHTML = esc(p).replace(/^(&lt;\/?[a-z]+>)$/gm, '<span class="pb-tag">$1</span>');
     const beats = Math.round(o.len / (60 / o.bpm));
-    $('.pb-stat').innerHTML = `<span><b>${beats}</b> ביטים</span><span><b>${(60 / o.bpm).toFixed(2)}</b> שניות לביט</span><span><b>${o.len * 60}</b> פריימים</span><span><b>${p.split(/\s+/).length}</b> מילים בפרומפט</span>`;
+    $('.pb-stat').innerHTML = `<span><b>${beats}</b>${T(' ביטים', ' beats')}</span><span><b>${(60 / o.bpm).toFixed(2)}</b>${T(' שניות לביט', ' s per beat')}</span><span><b>${o.len * 60}</b>${T(' פריימים', ' frames')}</span><span><b>${p.split(/\s+/).length}</b>${T(' מילים בפרומפט', ' words in the prompt')}</span>`;
   };
   stage.addEventListener('input', upd); stage.addEventListener('change', upd);
   $('.pb-cp').addEventListener('click', async () => {
     const b = $('.pb-cp');
-    try { await navigator.clipboard.writeText($('.pb-pre').innerText); b.textContent = 'הועתק ✓'; } catch { b.textContent = 'סמנו והעתיקו'; }
-    setTimeout(() => (b.textContent = 'העתק פרומפט'), 1600);
+    try { await navigator.clipboard.writeText($('.pb-pre').innerText); b.textContent = T('הועתק ✓', 'Copied ✓'); } catch { b.textContent = T('סמנו והעתיקו', 'Select and copy'); }
+    setTimeout(() => (b.textContent = T('העתק פרומפט', 'Copy prompt')), 1600);
   });
   upd();
   return { noTime: true };

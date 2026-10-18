@@ -1,10 +1,11 @@
 // The preview player for a demo: it only supplies t. Every demo's render(t) is a pure function of t,
 // exactly like a film's seek(t), so the same code could be captured frame by frame into a video.
+import { EN, T, DIR } from './i18n.js';
 export function makeTimebar(host, ctl) {
   const bar = document.createElement('div');
   bar.className = 'tb';
-  bar.innerHTML = `<button class="tb-play" type="button" aria-label="נגן או עצור">▶</button>
-    <input class="tb-range" type="range" min="0" max="${ctl.dur}" step="0.01" value="0" aria-label="זמן בהדגמה">
+  bar.innerHTML = `<button class="tb-play" type="button" aria-label="${T('נגן או עצור', 'Play or pause')}">▶</button>
+    <input class="tb-range" type="range" min="0" max="${ctl.dur}" step="0.01" value="0" aria-label="${T('זמן בהדגמה', 'Time in the demo')}">
     <output class="tb-t">t = 0.00s</output>`;
   host.appendChild(bar);
   const btn = bar.querySelector('.tb-play'), range = bar.querySelector('.tb-range'), out = bar.querySelector('.tb-t');

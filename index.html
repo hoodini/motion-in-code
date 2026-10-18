@@ -3,6 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- motion:head -->
+<link rel="canonical" href="https://news.yuv.ai/motion">
+<link rel="alternate" hreflang="he" href="https://news.yuv.ai/motion">
+<link rel="alternate" hreflang="en" href="https://yuv.ai/motion">
+<link rel="alternate" hreflang="x-default" href="https://yuv.ai/motion">
+<meta property="og:url" content="https://news.yuv.ai/motion">
+<meta property="og:type" content="article"><meta property="og:site_name" content="YUV.AI">
+<meta property="og:locale" content="he_IL"><meta property="og:locale:alternate" content="en_US">
+<script>if (/github\.io$/.test(location.hostname)) location.replace('https://news.yuv.ai/motion' + location.search + location.hash);</script>
+<!-- /motion:head -->
 <title>Motion in Code · YUV.AI</title>
 <meta name="description" content="פירוק מלא של שיטת @twoclipping: איך Claude Opus 5.5 מייצר סרטוני השקה ברמת סטודיו בקוד בלבד — seek(t), קפיצים, מצלמה לוגריתמית, ביטים, מושן בלר ובקרת איכות. עם מעבדות אינטראקטיביות אמיתיות.">
 <meta property="og:title" content="Motion in Code — איך Claude מייצר סרטוני השקה בקוד">
@@ -295,13 +305,24 @@ footer .blogs small{display:block;font:500 13px/1.4 var(--mono);color:var(--yuv-
 /* ---------- header link + back to top (shared with catalog.html) ---------- */
 .bar .home{margin-inline-start:auto;color:#fff;text-decoration:none;font:700 21px/1 var(--he);border-radius:999px;padding:8px 16px;background:rgba(255,255,255,.08)}
 .bar .home:hover{color:var(--yuv-gold);background:rgba(255,255,255,.14)}
-.bar .home+.navbtn{margin-inline-start:0}
+.bar .home+.navbtn,.bar .lang+.navbtn{margin-inline-start:0}
 #toTop{position:fixed;bottom:22px;inset-inline-end:22px;z-index:60;width:58px;height:58px;border:0;border-radius:999px;background:var(--yuv-navy);color:var(--yuv-gold);display:grid;place-items:center;cursor:pointer;box-shadow:var(--sh),inset 0 0 0 2px rgba(255,199,78,.6);opacity:0;transform:translateY(16px) scale(.9);pointer-events:none;transition:opacity .2s,transform .2s}
 #toTop.show{opacity:1;transform:none;pointer-events:auto}
 #toTop svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
 #toTop:hover{color:#fff}
 #toTop:focus-visible{outline:3px solid var(--yuv-sky-5);outline-offset:3px}
 @media (max-width:560px){#toTop{width:48px;height:48px;bottom:14px;inset-inline-end:14px}#toTop svg{width:22px;height:22px}}
+/* language switch in the top bar */
+.bar .lang{color:#fff;text-decoration:none;font:700 15px/1 var(--mono);letter-spacing:.04em;border:2px solid rgba(255,255,255,.3);border-radius:999px;padding:8px 13px;white-space:nowrap}
+.bar .lang:hover{border-color:var(--yuv-gold);color:var(--yuv-gold)}
+.bar .lang:lang(he){font:700 19px/1 'Karantina',system-ui,sans-serif;letter-spacing:0;padding:6px 13px}
+@media (max-width:560px){
+  .bar .wrap{gap:8px}
+  .bar .home{white-space:nowrap;padding:7px 11px;font-size:18px}
+  .navbtn{white-space:nowrap;padding:6px 12px;font-size:18px}
+  .bar .lang{padding:7px 9px;font-size:12px}
+}
+@media (max-width:359px){.bar .home{display:none}}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.neon::before,.neon::after{animation:none}#toTop{transition:none}}
 </style>
 </head>
@@ -309,6 +330,7 @@ footer .blogs small{display:block;font:500 13px/1.4 var(--mono);color:var(--yuv-
 <header class="bar"><div class="wrap">
   <div class="brand"><span>YUV<b>.</b>AI</span><small>MOTION IN CODE</small></div>
   <a class="home" href="catalog.html">קטלוג האלמנטים</a>
+  <a class="lang" href="index.en.html" hreflang="en" lang="en">English</a>
   <button class="navbtn" id="tocBtn" aria-expanded="false" aria-controls="toc">תוכן עניינים</button>
 </div><div class="prog" id="prog"></div></header>
 <nav class="toc" id="toc" aria-label="תוכן עניינים"></nav>
@@ -427,16 +449,16 @@ footer .blogs small{display:block;font:500 13px/1.4 var(--mono);color:var(--yuv-
   <div class="sh"><span class="num">02</span><div><h2>מי זה <span class="ltr">@twoclipping</span>, ומה בדיוק הוא פרסם</h2><p class="sub">עובדות עם מקורות. מה שלא הצלחתי לאמת — כתוב במפורש.</p></div></div>
   <div class="card">
     <p><b>zero</b> (<span class="ltr">@twoclipping</span> ב-X) הוא יוצר שהתפוצץ בשבוע ההשקה של Claude Opus 5.5 (שיצא ב-22 בספטמבר 2026). הפוסט הראשון שלו — "צורה אחת שמשתנה דרך תריסר מצבי ממשק על הביט" — עלה ב-24.9 ונמדד בכ-978 אלף צפיות ו-11.9 אלף לייקים (מדידה אחרת, מאוחרת: 933 אלף). הוא פרסם יחד עם הסרטונים את הפרומפטים המלאים והזמין במפורש להעתיק אותם ("steal it").</p>
-    <p>ב-28.9.2026 פרסם מאמר ארוך ב-X: <b>"How I Make $10K Launch Videos for $0 with Opus 5.5 (Full Course)"</b> — זה המאמר ששלחת. הוא מכיל 6 שלבים, 3 פרומפטים מלאים, ו-7 "חוקי יוקרה". לפי סיכום עצמאי של המאמר, הוא נחתם בהמלצה על רשת יוצרים/אפיליאייט להפצה — חלק שלא הופיע בטקסט ששלחת.</p>
+    <p>ב-28.9.2026 פרסם מאמר ארוך ב-X: <b>"How I Make $10K Launch Videos for $0 with Opus 5.5 (Full Course)"</b> — זה המאמר שעליו מבוסס העמוד. הוא מכיל 6 שלבים, 3 פרומפטים מלאים, ו-7 "חוקי יוקרה". לפי סיכום עצמאי של המאמר, הוא נחתם בהמלצה על רשת יוצרים/אפיליאייט להפצה — חלק שלא הופיע בגרסת הטקסט שעליה עבדנו.</p>
     <div class="tbl"><table>
       <tr><th>הפרומפט</th><th>פורמט</th><th>מה מיוחד בו</th></tr>
       <tr><td>UI Morph (הוויראלי)</td><td>1440×1440 · 0:14 · 120BPM</td><td>צורה אחת שעוברת 14 מצבי ממשק, לופ מושלם</td></tr>
       <tr><td>הזמנת אוכל</td><td>1920×1080 · 0:15 · 130BPM</td><td>סיפור משתמש: בקשה → תוצאה → פעולה</td></tr>
       <tr><td>"Develop" — הדפסת תמונות</td><td>1440×1440 · 0:27 · 120BPM</td><td>"זכוכית נוזלית", צמצם מצלמה, פוטג' אמיתי; ~106K צפיות</td></tr>
       <tr><td>Beat-synced footage</td><td>1920×1080 · 10 תיבות</td><td>קליפים אמיתיים מסונכרנים לביט, קרוסלה תלת-ממדית</td></tr>
-      <tr><td>Landing-page fly-over (ששלחת)</td><td>1440×1152 · 14.5s</td><td>WebGL תלת-ממדי, עומק שדה, מצלמה ממהירות</td></tr>
+      <tr><td>Landing-page fly-over (בונוס)</td><td>1440×1152 · 14.5s</td><td>WebGL תלת-ממדי, עומק שדה, מצלמה ממהירות</td></tr>
     </table></div>
-    <div class="warn"><b>מה לא אימתתי</b>X חוסם גישה אוטומטית, לכן לא קראתי את המאמר ישירות משם — הסתמכתי על הטקסט ששלחת ועל 4 מקורות משניים שמצטטים אותו. את פרומפט ה-fly-over ששלחת לא מצאתי באף רשימה ציבורית, כך שאת המקור המדויק שלו (איזה פוסט, איזה תאריך) לא אימתתי.</div>
+    <div class="warn"><b>מה לא אימתתי</b>X חוסם גישה אוטומטית, לכן לא קראתי את המאמר ישירות משם — הסתמכתי על הטקסט המלא של המאמר ועל 4 מקורות משניים שמצטטים אותו. את פרומפט ה-fly-over לא מצאתי באף רשימה ציבורית, כך שאת המקור המדויק שלו (איזה פוסט, איזה תאריך) לא אימתתי.</div>
   </div>
 </section>
 
@@ -453,7 +475,7 @@ footer .blogs small{display:block;font:500 13px/1.4 var(--mono);color:var(--yuv-
     <h3>שלב 1: לגנוב את הרעיון</h3>
     <p>לא צריך להיות יצירתיים בחלק הזה. כל סרטון שעשיתי התחיל ממשהו שכבר קיים: אנימציות ממשק מ-Dribbble <span class="term">(אתר שבו מעצבים מציגים עבודות)</span>, קינוט של אפל, אפילו פרומו של אפליקציה של מישהו אחר. אז מצאו סרטון השקה שאתם אוהבים, שמרו אותו ותנו אותו ל-Claude Code <span class="term">(קלוד שרץ בטרמינל/אפליקציה ויכול להריץ פקודות, לכתוב קבצים ולראות תמונות)</span> עם זה:</p>
     <div class="code"><button class="cp">העתק</button><pre>Extract 2 frames per second from reference.mp4 with ffmpeg and put them on contact sheets. Go through them and break the video into beats: what happens on each beat, how each scene turns into the next, the camera moves, the colors and the fonts. Then write the same structure for my product: [your product + link].</pre></div>
-    <div class="tr">חלץ 2 פריימים לשנייה מ-reference.mp4 עם ffmpeg <span class="term">(תוכנת קוד פתוח מהטרמינל שחותכת, ממירה ומרכיבה וידאו ואודיו)</span> ושים אותם על גיליונות מגע <span class="term">(contact sheets — תמונה אחת שמכילה רשת של הרבה פריימים קטנים)</span>. עבור עליהם ופרק את הסרטון לביטים <span class="term">(beats — הפעימות של המוזיקה)</span>: מה קורה בכל ביט, איך כל סצנה הופכת לבאה, תנועות המצלמה, הצבעים והפונטים. ואז כתוב את אותו מבנה למוצר שלי: [המוצר שלך + קישור].</div>
+    <div class="tr">חלץ 2 פריימים לשנייה מ-reference.mp4 עם ffmpeg <span class="term">(תוכנת קוד פתוח מהטרמינל שחותכת, ממירה ומרכיבה וידאו ואודיו)</span> ושים אותם על גיליונות מגע <span class="term">(contact sheets — תמונה אחת שמכילה רשת של הרבה פריימים קטנים)</span>. עבור עליהם ופרק את הסרטון לביטים <span class="term">(beats — הפעימות של המוזיקה)</span>: מה קורה בכל ביט, איך כל סצנה הופכת לבאה, תנועות המצלמה, הצבעים והפונטים. ואז כתוב את אותו מבנה למוצר שלי: [המוצר שלכם + קישור].</div>
     <p>אין רפרנס? בקשו ממנו 3 רעיונות למוצר ובחרו אחד. טיפ אחד: קלוד נוטה כברירת מחדל לסרטונים כהים שנראים תלת-ממדיים, והם עדיין לא נראים יוקרתיים — אז אני דוחף את שלי למראה דו-ממדי, לבן ומינימליסטי. זה מה שבאמת מרגיש פרימיום. אם אתם כותבים פרומפט משלכם, הוסיפו את זה כדי שלא יברח לתלת-ממד כהה:</p>
     <div class="code"><button class="cp">העתק</button><pre>Style: 2D only. Warm white background, black UI, one accent color, one clean font (Geist or Inter). No 3D, no dark mode, no glows, no particles. Think Apple keynote, not a video game trailer.</pre></div>
     <div class="tr">סגנון: דו-ממד בלבד. רקע לבן-חם, ממשק שחור, צבע אקסנט אחד, פונט נקי אחד (Geist או Inter). בלי תלת-ממד, בלי מצב כהה, בלי זוהר, בלי חלקיקים. תחשוב קינוט של אפל, לא טריילר של משחק וידאו.</div>
@@ -784,10 +806,10 @@ await browser.close();</pre></div>
       <label>צילומים לשנייה לכל worker <input type="range" id="rcW" min="1" max="30" value="6"><output id="rcWO">6</output></label>
       <label>workers <input type="range" id="rcK" min="1" max="12" value="7"><output id="rcKO">7</output></label>
     </div>
-    <div class="ctrls"><span class="seg" id="rcPre"><button data-w="7" data-k="1">ענן CPU (EP01)</button><button data-w="6" data-k="7" class="on">ה-4090 שלך (EP04)</button></span></div>
+    <div class="ctrls"><span class="seg" id="rcPre"><button data-w="7" data-k="1">ענן CPU (EP01)</button><button data-w="6" data-k="7" class="on">RTX 4090 ביתי (EP04)</button></span></div>
     <div class="readout" id="rcR"></div>
   </div></div>
-  <p>המספרים בכפתורים לקוחים מהרינדורים האמיתיים שלנו בפרויקט: בסביבת הענן (CPU בלבד) הגענו לכ-7 פריימים בשנייה; על ה-RTX 4090 שלך, 7 workers במקביל, כ-6 לשנייה כל אחד. תת-פריימים מכפילים את העבודה — לכן בטיוטות מרנדרים בלי מושן בלר וברזולוציה נמוכה, ומושן בלר רק במאסטר.</p>
+  <p>המספרים בכפתורים לקוחים מהרינדורים האמיתיים שלנו בפרויקט: בסביבת הענן (CPU בלבד) הגענו לכ-7 פריימים בשנייה; על RTX 4090 ביתי, 7 workers במקביל, כ-6 לשנייה כל אחד. תת-פריימים מכפילים את העבודה — לכן בטיוטות מרנדרים בלי מושן בלר וברזולוציה נמוכה, ומושן בלר רק במאסטר.</p>
 </section>
 
 <!-- ============ 15 ANATOMY ============ -->
@@ -800,7 +822,7 @@ await browser.close();</pre></div>
 
 <!-- ============ 16 FLYOVER ============ -->
 <section class="sec s-denim" id="s16" data-folio="16" data-toc="בונוס: פרומפט ה-Fly-over">
-  <div class="sh"><span class="num">16</span><div><h2>בונוס: פרומפט ה-Fly-over התלת-ממדי ששלחת</h2><p class="sub">אותו שלד בדיוק — אבל כאן הוא שובר את חוק ה"2D only" שלו, ובכוונה.</p></div></div>
+  <div class="sh"><span class="num">16</span><div><h2>בונוס: פרומפט ה-Fly-over התלת-ממדי</h2><p class="sub">אותו שלד בדיוק — אבל כאן הוא שובר את חוק ה"2D only" שלו, ובכוונה.</p></div></div>
   <details><summary>הפרומפט המלא + תרגום</summary><div class="in">
     <div class="code"><span class="lbl">original · paste into Claude Code</span><button class="cp">העתק</button><pre data-prompt="fly"></pre></div>
     <div class="tr" id="tr-fly"></div>
@@ -824,7 +846,7 @@ await browser.close();</pre></div>
     <li><b>"drawn lowest first with no depth buffer":</b> מציירים מהשכבה הנמוכה לגבוהה, כמו צייר שמצייר קודם רקע ("אלגוריתם הצייר"). בלי depth buffer כי השכבות שקופות בחלקן, ו-depth buffer לא יודע להתמודד עם שקיפות.</li>
     <li><b>"fade them into the haze colour first":</b> כרטיס שנעשה שקוף חושף את מה שמאחוריו — ובתלת-ממד זה נראה כמו "רוח". קודם צובעים אותו לצבע האובך של הרקע (הוא "נבלע" באוויר), ורק בסוף חותכים לשקיפות.</li>
   </ul>
-  <div class="warn"><b>שני דברים שהפרומפט הזה מבקש ושצריך לדעת מראש</b>(1) הוא דורש GPU אמיתי (<code>--use-angle=d3d11</code>) ו-16 תת-פריימים לפריים — כלומר רינדור על ה-PC שלך, לא בענן. 14.5 × 60 × 16 = ‏13,920 צילומים. (2) הוא מתחיל ב"open my link" — הוא מצלם את דף הנחיתה <b>האמיתי</b> שלך, ולכן כל שינוי בגובה של סקשן בדף מזיז את כל התזמון ("lock the page before timing anything").</div>
+  <div class="warn"><b>שני דברים שהפרומפט הזה מבקש ושצריך לדעת מראש</b>(1) הוא דורש GPU אמיתי (<code>--use-angle=d3d11</code>) ו-16 תת-פריימים לפריים — כלומר רינדור על מחשב מקומי, לא בענן. 14.5 × 60 × 16 = ‏13,920 צילומים. (2) הוא מתחיל ב"open my link" — הוא מצלם את דף הנחיתה <b>האמיתי</b> שלכם, ולכן כל שינוי בגובה של סקשן בדף מזיז את כל התזמון ("lock the page before timing anything").</div>
 </section>
 
 <!-- ============ 17 CRITIQUE ============ -->
@@ -832,7 +854,7 @@ await browser.close();</pre></div>
   <div class="sh"><span class="num">17</span><div><h2>מה אפשר להבין מזה — כולל מה מוגזם</h2><p class="sub">השיטה מצוינת. הכותרת שלה — פחות.</p></div></div>
   <div class="tbl"><table>
     <tr><th>הטענה</th><th>מה נכון</th><th>מה מוגזם / חסר</th></tr>
-    <tr><td>"$0"</td><td>אין צורך ב-After Effects או בסטוק בתשלום.</td><td>Claude עצמו עולה (מנוי או טוקנים). מקור אחד מדווח ~90K טוקני קלט + 15K פלט לסרט ≈ ‏0.66$ במחיר מחירון — לסרט אחד, לפני סבבי תיקון, רינדור וזמן שלך.</td></tr>
+    <tr><td>"$0"</td><td>אין צורך ב-After Effects או בסטוק בתשלום.</td><td>Claude עצמו עולה (מנוי או טוקנים). מקור אחד מדווח ~90K טוקני קלט + 15K פלט לסרט ≈ ‏0.66$ במחיר מחירון — לסרט אחד, לפני סבבי תיקון, רינדור וזמן שלכם.</td></tr>
     <tr><td>"0 effort" / "לא יודע שלב 1 במושן"</td><td>לא צריך ידיים של אנימטור.</td><td>הפרומפטים מלאים בידע מקצועי עמוק (תריס 180°, זום לוגריתמי, קפיצים אנליטיים, LUFS). הידע לא נעלם — הוא עבר לפרומפט. מי שמשנה את הפרומפטים בלי להבין אותם — שובר אותם.</td></tr>
     <tr><td>"פרומפט אחד"</td><td>פרומפט אחד מניע את התהליך.</td><td>בפועל: רפרנס → נכסים → מפת ביטים → סטילס → רינדור → 2–3 סבבי הערות. גם יוצר אחר (<span class="ltr">@rexan_wong</span>) שבדק סרטונים כאלה הגיע למסקנה ש"פרומפט אחד" הוא בעצם תהליך עבודה.</td></tr>
     <tr><td>"לא תוכלו להבדיל מ-$15K"</td><td>הדמואים באמת ברמה גבוהה.</td><td>אלה דמואים בסגנון אחד שהוא אהב (2D, לבן, אפל). סטודיו מוכר גם אסטרטגיה, קופי ותהליך מול לקוח. הטענה היא שלו, לא נמדדה.</td></tr>
@@ -887,7 +909,7 @@ await browser.close();</pre></div>
     <a href="https://www.linkedin.com/in/yuval-avidani-87081474/" target="_blank" rel="noopener"><span class="tx" aria-hidden="true">in</span><span>LinkedIn</span></a>
     <a href="https://facebook.com/yuval.avidani" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"/></svg><span>Facebook</span></a>
   </nav>
-  <p class="credit">כל התוכן והפרומפטים המקוריים שייכים ל-zero (<a href="https://x.com/twoclipping" target="_blank" rel="noopener" class="ltr">@twoclipping</a>). העמוד הזה הוא ניתוח ותרגום לצורכי לימוד. כל המעבדות מחושבות בזמן אמת בדפדפן שלך — אין כאן אף מספר מזויף.</p>
+  <p class="credit">כל התוכן והפרומפטים המקוריים שייכים ל-zero (<a href="https://x.com/twoclipping" target="_blank" rel="noopener" class="ltr">@twoclipping</a>). העמוד הזה הוא ניתוח ותרגום לצורכי לימוד. כל המעבדות מחושבות בזמן אמת בדפדפן — אין כאן אף מספר מזויף.</p>
 </footer>
 </main>
 
@@ -1766,8 +1788,8 @@ function initCost() {
 
 /* ---------- §15 anatomy ---------- */
 const ANAT = [
-  ['<inputs>', 'מה לבקש ממך לפני שמתחילים', 'רשימת חומרים שקלוד חייב לבקש — ומה לעשות אם דילגת ("If I skip any, use the defaults").',
-    'בלי חומרים אמיתיים, מודל ממציא: תמונות פלייסהולדר, לוגו גנרי, מוזיקה "בערך". זה המקור מס׳ 1 למראה "תבנית". הבקשה מראש הופכת ניחוש לחומר אמיתי, וברירות המחדל (בפרומפט האוכל: מנות ספציפיות מ-Pexels ושיר ספציפי מ-Mixkit) מונעות תקיעה אם לא ענית.',
+  ['<inputs>', 'מה לבקש ממך לפני שמתחילים', 'רשימת חומרים שקלוד חייב לבקש — ומה לעשות אם מדלגים ("If I skip any, use the defaults").',
+    'בלי חומרים אמיתיים, מודל ממציא: תמונות פלייסהולדר, לוגו גנרי, מוזיקה "בערך". זה המקור מס׳ 1 למראה "תבנית". הבקשה מראש הופכת ניחוש לחומר אמיתי, וברירות המחדל (בפרומפט האוכל: מנות ספציפיות מ-Pexels ושיר ספציפי מ-Mixkit) מונעות תקיעה אם אף אחד לא עונה.',
     '"Real footage only, never placeholder cards." · "If I skip any, use the defaults: ... Mixkit \\"Cat Walk\\"."',
     'קלוד ממציא נכסים או נעצר לשאול באמצע.'],
   ['<direction>', 'הטעם: מה מותר ומה אסור', 'משפט פורמט (אורך, רזולוציה, fps, "2D only", "one continuous take"), דקדוק תנועה ("objects change shape instead"), צבעים בקוד hex, פונטים בשם — ורשימת Banned.',

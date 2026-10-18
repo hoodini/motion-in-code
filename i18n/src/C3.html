@@ -1,0 +1,138 @@
+<!-- ============ 03 ICONS & LOGOS ============ -->
+<section class="sec s-cloud" id="c3" data-folio="03" data-toc="אייקונים ולוגואים">
+  <div class="sh"><span class="num">03</span><div><h2>אייקונים ולוגואים רשמיים</h2><p class="sub">אלפי סמלים חינמיים, ומה מותר לעשות איתם.</p></div></div>
+  <div class="body">
+    <p>שני סוגים של סמלים נכנסים כמעט לכל סרטון. <b>אייקונים</b> הם סמלים כלליים: משקולת, להבה, שעון. <b>לוגואים</b> הם סמלים של חברות: GitHub, React, Claude. לשניהם יש ספריות חינמיות ענקיות, וכולם וקטור (SVG), אז הם חדים בכל זום.</p>
+  </div>
+
+  <article class="el" id="e-icons">
+    <div class="el-h"><span class="el-n">03.1</span><h3 class="el-t">אייקונים שמצטיירים</h3><div class="el-tags"><span>Lucide</span><span>lucide-react</span><span>SVG</span><span class="lic">ISC</span></div></div>
+    <div class="el-demo" data-demo="icons-draw"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>מה רואים</h4><p>שמונה אייקונים של כושר, כל אחד מצייר את עצמו קו אחרי קו, ברבע שנייה אחרי הקודם, ובסוף נדלקים בכתום. נסו את מחוון עובי הקו: אותם אייקונים, אופי אחר לגמרי.</p>
+        <h4>מה זה Lucide</h4><p>ספריית אייקונים בקוד פתוח עם קרוב לאלפיים אייקונים, ברישיון ISC (מותר הכל, גם מסחרי). כל האייקונים מצוירים בקווים בעובי אחיד על רשת של 24×24, ולכן הם נראים כמו משפחה אחת. <code>lucide-react</code> נותנת כל אייקון כרכיב React: <code>&lt;Dumbbell /&gt;</code>.</p></div>
+        <div><h4>איך זה עובד</h4><p>זה אותו טריק של הטבעת (01.4): מודדים את האורך של כל קו (<code>getTotalLength</code>), הופכים אותו לקו מקווקו עם מקטע אחד באורך הזה, ומזיזים את המקטע מ"מוסתר" ל"גלוי" לפי t. אייקון שבנוי מכמה קווים מצייר אותם אחד אחרי השני.</p>
+        <p>קיצור דרך: אם נותנים לכל קו <code>pathLength="1"</code>, הדפדפן מתייחס לכל קו כאילו אורכו 1, ואז לא צריך למדוד.</p></div>
+      </div>
+      <div class="fit"><div class="y"><b>מתי כן</b>רשימת פיצ'רים, שלבים, "מה תקבלו". ציור עצמי מושך את העין לפריט הבא.</div><div class="n"><b>מתי לא</b>ערבוב של שתי ספריות אייקונים באותו סרטון: עוביים וסגנונות שונים נראים מרושלים.</div></div>
+      <div class="prompt"><h5>פרומפט מלא</h5><div class="code"><span class="lbl">self-drawing icons · Lucide</span><button class="cp" type="button">העתק פרומפט</button><pre>&lt;inputs&gt;
+Ask me for the features to show (a short Hebrew label each). If I skip them, use 4 fitness features: אימון כוח, שריפת קלוריות, דופק, טיימר.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 5-second clip, 1920x1080, 60fps. Four Lucide icons (Dumbbell, Flame, HeartPulse, Timer) in a row, right to left. Each icon draws itself stroke by stroke on its own beat, then its Hebrew label rises out of a mask line under it. When all are drawn, they light up in orange #FF8F3A together. Icons navy #12163F, stroke width 2, on #EEF3FB. Labels in Karantina 700.
+Banned: icons fading in, mixing icon libraries, filled icons.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM. Icon i starts drawing on beat i+1 and takes 1 beat. All light up on beat 7.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file with React and lucide-react, exposing window.seek(t); everything is computed from t, no CSS transitions.
+Give every path pathLength="1", set stroke-dasharray to 1, and animate stroke-dashoffset from 1 to 0 with an eased progress of t. Multi-path icons draw their paths in sequence. Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Without pathLength="1", paths of different lengths draw at different speeds.
+- lucide-react sets stroke on the svg element; set the dash styles on each child path, circle and line.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me a still at beat 2 and at beat 7 before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-logos">
+    <div class="el-h"><span class="el-n">03.2</span><h3 class="el-t">לוגואים רשמיים</h3><div class="el-tags"><span>Simple Icons</span><span>SVG</span><span class="lic">CC0 · trademarks apply</span></div></div>
+    <div class="el-demo" data-demo="logos"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>מה רואים</h4><p>קיר של 16 לוגואים של הכלים שבנו את העמוד הזה, קופצים פנימה אחד אחרי השני בצבעי המותג הרשמיים שלהם. נסו לכבות את "צבעי המותג" ולהדליק "רקע כהה". הגרסה החד-צבעית בשחור או בלבן היא בדרך כלל הגרסה היחידה שמותגים מתירים מלבד הצבע הרשמי, ולכן ההדגמה עוברת אליה ולא לצבע אחר.</p>
+        <h4>מה זה Simple Icons</h4><p>מאגר של יותר מ-3,400 לוגואים של מותגים, כל אחד כ-SVG נקי, יחד עם קוד הצבע הרשמי של המותג. החבילה <code>simple-icons</code> ב-npm נותנת לכל לוגו את הצורה ואת הצבע, כך ש-Claude לא צריך לצייר לוגו מהזיכרון, ולא ימציא צורה "בערך".</p></div>
+        <div><h4>מה מותר ומה אסור</h4><p>הקבצים עצמם ב-CC0, נחלת הכלל. אבל הלוגו הוא <b>סימן מסחרי</b>, וזה כבר חוק אחר. Simple Icons עצמם מבקשים לכבד את הנחיות המותג של כל חברה. בפועל:</p>
+        <ul><li>מותר להראות לוגו כדי לומר "עובד עם" או "נבנה עם".</li><li>אסור לשנות צבע לצבע לא רשמי, למתוח, לחתוך או להוסיף אפקטים.</li><li>אסור לרמוז שהחברה ממליצה עליכם או שותפה שלכם.</li><li>לוגו בגרסה רשמית עדכנית מוצאים בדף ה-Brand או Press של החברה.</li></ul></div>
+      </div>
+      <div class="fit"><div class="y"><b>מתי כן</b>"משתלב עם הכלים שלכם", "נבנה עם", לקוחות שאישרו להופיע.</div><div class="n"><b>מתי לא</b>לקוחות שלא אישרו, או כל מצב שבו הלוגו נראה כמו המלצה שלא קיבלתם.</div></div>
+      <div class="prompt"><h5>פרומפט מלא</h5><div class="code"><span class="lbl">official logo wall · simple-icons</span><button class="cp" type="button">העתק פרומפט</button><pre>&lt;inputs&gt;
+Ask me which brands to show and confirm that I have the right to show each of them. If I skip it, use the tools this project was built with: Claude, React, Three.js, Tailwind CSS, shadcn/ui, FFmpeg, Node.js, GitHub.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 4.5-second "built with" clip, 1920x1080, 60fps. A grid of official logos pops in on the beat, one after another from the right, each in its official brand colour on white tiles over #EEF3FB. A title above in Karantina 700: "נבנה עם". Logos keep their exact proportions and colours.
+Banned: recoloured logos, logos with glow or shadows, logos drawn from memory, distortion.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM, 16th-note stagger: a new logo every 0.125s, each with a short spring scale from 0.6 to 1.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file exposing window.seek(t); everything is computed from t, no CSS transitions.
+Import each logo from the simple-icons npm package (import { siReact } from 'simple-icons'), use its .path in a 24×24 viewBox and "#" + its .hex as the fill (.hex comes without the #). Do not redraw or modify any logo. Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Some brands (for example GitHub) have black logos; on a dark background, switch to the brand's official white version, never an invented colour.
+- simple-icons occasionally removes logos at a brand's request; if one is missing, ask me for the official file instead of approximating it.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+List the logos you will use and their hex colours, then show me the final frame before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+</section>
+
+<!-- ============ 04 TYPE ============ -->
+<section class="sec s-denim" id="c4" data-folio="04" data-toc="טיפוגרפיה קינטית">
+  <div class="sh"><span class="num">04</span><div><h2>טיפוגרפיה קינטית</h2><p class="sub">טקסט שזז עם המוזיקה. ארבע טכניקות שמחליפות כמעט כל "פייד".</p></div></div>
+  <div class="body">
+    <p><b>טיפוגרפיה קינטית</b> היא טקסט שהתנועה שלו היא חלק מהמסר: מילה שנוחתת חזק מרגישה חשובה, מילה שמוקלדת מרגישה כמו שיחה. בסרטוני השקה רוב המסך הוא טקסט, ולכן זה אולי האלמנט החשוב ביותר בקטלוג. ההדגמה למטה מראה ארבע טכניקות ברצף, כל אחת בשתי שניות וחצי.</p>
+  </div>
+  <article class="el" id="e-type">
+    <div class="el-h"><span class="el-n">04.1</span><h3 class="el-t">ארבע טכניקות לטקסט שזז</h3><div class="el-tags"><span>Canvas 2D</span><span>Karantina</span><span>RTL</span></div></div>
+    <div class="el-demo" data-demo="type"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>SLAM: מילים שנוחתות</h4><p>כל מילה מופיעה בביט שלה, מתחילה גדולה מדי וקטנה לגודלה עם קפיץ, כמו חותמת. מתאים לכותרות של שלוש-ארבע מילים בשיא של המוזיקה.</p>
+        <h4>MASK RISE: עולות מקו</h4><p>המילים עולות מתוך קו בלתי נראה, כאילו היו מתחתיו. ה"קו" הוא <b>מסכה</b>: מלבן שמראה רק את מה שבתוכו, כמו שבלונה. הטקסט זז, המסכה לא, ולכן נראה שהוא נולד מהקו.</p></div>
+        <div><h4>POP TYPE: הקלדה</h4><p>אות אחרי אות, כל אחת קופצת קצת כשהיא נכתבת, עם סמן מהבהב. הקצב לא אחיד כמו אצל אדם אמיתי, וכל הקשה נוחתת על <b>חצי ביט או רבע ביט</b> (מה שבמוזיקה נקרא "שמינית" ו"שש-עשרית"; ב-120 BPM אלה 0.25 ו-0.125 שנייה), כך שההקלדה "מתנגנת" עם המוזיקה.</p>
+        <h4>MARKER: מרקר</h4><p>פס צבע שנמתח מאחורי המילה החשובה, מימין לשמאל כמו כיוון הקריאה. הדרך הכי פשוטה להגיד לצופה "זו המילה".</p></div>
+      </div>
+      <div class="def"><b>עברית: שלושה דברים שחשוב לבקש</b>חושפים מילים מימין לשמאל, לפי סדר הקריאה. עוטפים מספרים ומילים באנגלית בתוך <code>unicode-bidi: isolate</code>. למה? הדפדפן מסדר עברית מימין לשמאל, ואנגלית ומספרים משמאל לימין. סימנים ניטרליים כמו +, % ורווח לוקחים את הכיוון מהשכנים שלהם, ולכן לפעמים נודדים לצד השני. ההגדרה הזו אומרת לדפדפן לסדר את הקטע העטוף כיחידה סגורה, בלי שיתערבב עם כיוון המשפט. וקרנטינה צרה, אז כותרת בקרנטינה צריכה להיות בערך פי 1.25 מכותרת בפונט רחב יותר כדי להרגיש באותו משקל.</div>
+      <div class="fit"><div class="y"><b>מתי כן</b>בכל סרטון השקה. SLAM לשיא, MASK RISE למשפטים, POP TYPE לפרומפטים ולשיחות, MARKER למילת מפתח.</div><div class="n"><b>מתי לא</b>יותר משתי טכניקות באותה סצנה: הטקסט מתחיל להתחרות על תשומת הלב במקום לספר סיפור.</div></div>
+      <div class="prompt"><h5>פרומפט מלא</h5><div class="code"><span class="lbl">kinetic typography · Hebrew</span><button class="cp" type="button">העתק פרומפט</button><pre>&lt;inputs&gt;
+Ask me for the exact on-screen lines and which word is the key word. If I skip them, use: "כל אימון הוא ביט" (slam), "קצב סופר את החזרות בשבילך" (mask rise), "תתחיל אימון בוקר" (typed), and mark "ביט".
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 10-second kinetic typography clip, 1920x1080, 60fps, Hebrew, right to left. Four moments, each on its own colour spread with a hard wipe between them: SLAM (words land one per beat from 1.6× scale with a spring), MASK RISE (words rise out of an invisible line and leave through it), POP TYPE (letters type on with a slight pop and a blinking caret), MARKER (an orange marker swipe from right to left behind the key word).
+Type: Karantina 700 for Hebrew headlines (about 1.25× the size you would give a wider font), Anton uppercase for any English label, Assistant for small text. Colours: navy #12163F, orange #FF8F3A, gold #FFC74E, light #EEF3FB, denim #AFCBEF.
+Banned: fades, blur-ins, letter-by-letter scramble effects, text that moves after it lands.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM. Slam: one word per beat. Mask rise: words 0.12s apart. Typing: one keystroke per 16th note (0.125s), with 2 short pauses between words. Marker: swipes in over half a beat on the downbeat.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file exposing window.seek(t), drawing on a 2D canvas (or DOM) from t alone.
+Lay out each line once (measure words with measureText, right-aligned for RTL), then move and clip each word as a function of t. The mask is a clip rectangle; the word's y offset goes from below the line to 0 with a spring. Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Set ctx.direction = 'rtl' and textAlign = 'right' for Hebrew, and measure with the real font loaded (await document.fonts.ready).
+- Wrap numbers and English words with unicode-bidi: isolate (DOM) or draw them as separate runs (canvas), or they jump to the wrong side.
+- Never split Hebrew words letter by letter across lines.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me one still of each of the four moments before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+</section>
+

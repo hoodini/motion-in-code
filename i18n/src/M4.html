@@ -1,0 +1,127 @@
+<section class="sec s-denim" id="s11" data-folio="11" data-toc="המוזיקה היא השעון">
+  <div class="sh"><span class="num">11</span><div><h2>המוזיקה היא השעון: BPM, ביטים, דרופ וסאונד לפי שיא</h2><p class="sub">"Something happens on every beat" — ואיך מחשב "שומע" את הביט.</p></div></div>
+  <p><b>BPM</b> (Beats Per Minute) = כמה פעימות בדקה. 120 BPM = ‏2 פעימות בשנייה = ביט כל 0.5 שנייה. <b>תיבה</b> (bar) = 4 ביטים. <b>דאונביט</b> = הביט הראשון בתיבה, החזק. <b>דרופ</b> = הרגע שבו אחרי בנייה כל הכלים נכנסים בבת אחת — שיא האנרגיה.</p>
+  <p>ברגע שיודעים את ה-BPM, כל תכנון הסרטון הופך לטבלה: ביט 0 — זה קורה, ביט 1 — זה. בגלל זה הפרומפטים מדברים בביטים ולא בשניות. בדקתי את המספרים שלו — הם מדויקים:</p>
+  <div class="lab"><div class="lh">מחשבון ביטים</div><div class="lb">
+    <div class="ctrls">
+      <label>BPM <input type="range" id="bcB" min="60" max="180" value="130"><output id="bcBO">130</output></label>
+      <label>ביטים <input type="range" id="bcN" min="4" max="64" value="32"><output id="bcNO">32</output></label>
+      <span class="seg" id="bcPre"><button data-b="130" data-n="32" class="on">אוכל</button><button data-b="120" data-n="54">הדפסה</button><button data-b="120" data-n="28">UI morph</button></span>
+    </div>
+    <div class="readout" id="bcR"></div>
+  </div></div>
+  <h3>איך numpy "שומע" את הקצב — שלב אחרי שלב</h3>
+  <p>הפרומפט אומר "Analyze it with numpy and give me the beat grid". מה קורה מתחת לפני השטח (אני מריץ כאן בדפדפן בדיוק את האלגוריתם הזה, על שיר שמסונתז עכשיו):</p>
+  <ol>
+    <li><b>מה זה קובץ שמע:</b> רשימה ארוכה של מספרים בין ‎−1 ל-1 — מיקום הממברנה של הרמקול. 22,050 מספרים לכל שנייה.</li>
+    <li><b>מעטפת אנרגיה:</b> חותכים לחלונות של 256 דגימות (~12 מילישניות) ומחשבים בכל חלון RMS (שורש ממוצע הריבועים) = "כמה חזק" בחלון.</li>
+    <li><b>Onset ("התחלת צליל"):</b> לכל חלון — בכמה הוא חזק יותר מהקודם (רק עליות). תוף שמכה = קפיצה חדה. זה הופך את השיר לרשימת "דפיקות".</li>
+    <li><b>אוטוקורלציה:</b> מזיזים את רשימת הדפיקות על עצמה בהיסטים שונים ובודקים מתי היא הכי "מתלכדת" עם עצמה. אם יש דפיקה כל 0.5 שנייה, ההיסט של 0.5 שנייה נותן את ההתאמה הכי גבוהה → 120 BPM. (מעדיפים קצב קרוב ל-120 כי אחרת האלגוריתם עלול לבחור חצי או כפול.)</li>
+    <li><b>פאזה:</b> יודעים כל כמה, צריך לדעת <b>מתי</b> — מחפשים את ההיסט ההתחלתי שבו הרשת נוחתת על הכי הרבה דפיקות.</li>
+    <li><b>הדרופ:</b> מחשבים אנרגיה ממוצעת לכל ביט ומחפשים את הביט עם הקפיצה הגדולה ביותר ביחס לשני הביטים שלפניו.</li>
+  </ol>
+  <div class="lab"><div class="lh">זיהוי ביטים ודרופ — אמיתי, על שיר מסונתז</div><div class="lb">
+    <canvas id="btCanvas" width="860" height="300"></canvas>
+    <div class="ctrls">
+      <label>BPM אמיתי <input type="range" id="btB" min="90" max="150" value="120"><output id="btBO">120</output></label>
+      <label>דרופ בביט <input type="range" id="btD" min="4" max="16" value="8"><output id="btDO">8</output></label>
+      <button class="btn" id="btRun">נתח</button><button class="btn m" id="btPlay">▶ השמע</button>
+    </div>
+    <div class="readout" id="btR"></div>
+  </div></div>
+  <div class="warn"><b>מגבלה אמיתית</b>על שיר אמיתי זיהוי אוטומטי טועה לפעמים (חצי-קצב, דרופ מזויף). לכן בפרומפט ה-footage שלו כתוב "Calibrate the grid to the real kick hits" — לכייל את הרשת למכות התוף האמיתיות, ובסקיל הפתוח של Howseen כתוב במפורש "never trust an auto beat grid". הלקח: הרשת היא היפותזה שבודקים, לא אמת.</div>
+
+  <h3>אפקט סאונד "לפי השיא הנמדד" — הפרט הקטן שעושה את ההבדל</h3>
+  <p>בפרומפט: <i>"Place each so its measured peak, not its file start, lands on the event."</i> לקובץ של "ווש" יש התחלה שקטה שעולה עד <b>שיא</b> — הרגע שהאוזן שומעת כ"הנה!". בקובץ שלנו השיא נמצא 0.42 שנייה מתחילת הקובץ. אם מנגנים את הקובץ ברגע הדרופ, השיא מגיע 0.42 שנייה <b>אחרי</b> הדרופ — כמעט ביט שלם באיחור, והאוזן מרגישה שמשהו "לא נוחת". הפתרון: למדוד איפה השיא, ולהתחיל את הקובץ ב-<code>זמן האירוע − זמן השיא</code>.</p>
+  <div class="lab"><div class="lh">ווש על ביט: לפי תחילת קובץ מול לפי שיא</div><div class="lb">
+    <canvas id="pkCanvas" width="860" height="220"></canvas>
+    <div class="ctrls"><span class="seg" id="pkType"><button data-t="whoosh" class="on">whoosh</button><button data-t="pop">pop</button><button data-t="click">click</button></span>
+      <button class="btn o" id="pkNaive">▶ לפי תחילת הקובץ</button><button class="btn m" id="pkPeak">▶ לפי השיא</button></div>
+    <div class="readout" id="pkR"></div>
+  </div></div>
+  <div class="def"><b>הגדרה: loudnorm ל-‎-14 LUFS</b><b>LUFS</b> היא יחידה למדידת עוצמה <b>כפי שאוזן אנושית שומעת אותה</b> (לא סתם שיא הגל). <code>loudnorm</code> הוא פילטר של ffmpeg שמביא את כל הסרטון לעוצמה נמדדת קבועה. ‎−14 LUFS הוא יעד נפוץ לפלטפורמות סטרימינג — כך הסרטון לא יישמע חלש מכל השאר בפיד, וגם לא "יוחלש" אוטומטית.</div>
+</section>
+
+<!-- ============ 12 MOTION BLUR ============ -->
+<section class="sec s-cloud" id="s12" data-folio="12" data-toc="מושן בלר מתת-פריימים">
+  <div class="sh"><span class="num">12</span><div><h2>מושן בלר מתת-פריימים: למה 4 משאיר "רוחות רפאים" ו-8 לא</h2><p class="sub">"8 subframes per frame blended with ffmpeg tmix" — כל מילה, כל מספר.</p></div></div>
+  <p><b>הבעיה:</b> מצלמה אמיתית פותחת את התריס לפרק זמן (למשל חצי מזמן הפריים — "תריס 180°"). מה שזז בזמן הזה נמרח בתמונה. זה ה"מושן בלר", והמוח רגיל אליו כל כך שבלעדיו תנועה מהירה נראית "מגמגמת" ומלאכותית. אבל צילום מסך של דפדפן הוא <b>רגע אחד אינסופית קצר</b> — אפס מריחה.</p>
+  <p><b>הפתרון:</b> לכל פריים סופי, מצלמים N "תת-פריימים" בזמנים צפופים בתוך חלון התריס, ומחשבים <b>ממוצע</b> פיקסל-פיקסל. ממוצע של 8 מיקומים קרובים של עיגול = עיגול מרוח. <b>ffmpeg tmix</b> הוא בדיוק פילטר שממצע N פריימים רצופים.</p>
+  <p><b>למה 4 לא מספיק בתנועה מהירה:</b> המרחק בין שני תת-פריימים הוא <code>מהירות × זמן תריס ÷ N</code>. אם המרחק הזה גדול מהאובייקט עצמו — העותקים לא נוגעים זה בזה, ורואים 4 עותקים שקופים נפרדים: "ghost copies". הפרומפט אומר "use 8 and slow the move down" — שתי הדרכים להקטין את אותו מספר.</p>
+  <div class="lab"><div class="lh">מעבדת מושן בלר — ממוצע אמיתי של תת-פריימים</div><div class="lb">
+    <canvas id="mbCanvas" width="860" height="220"></canvas>
+    <div class="ctrls">
+      <label>מהירות <input type="range" id="mbV" min="200" max="9000" step="100" value="4800"><output id="mbVO">4800</output></label>
+      <label>תת-פריימים N <input type="range" id="mbN" min="1" max="16" value="4"><output id="mbNO">4</output></label>
+      <label>תריס <input type="range" id="mbS" min="0.1" max="1" step="0.05" value="0.5"><output id="mbSO">0.50</output></label>
+    </div>
+    <div class="readout" id="mbR"></div>
+  </div></div>
+  <p>ופקודת ה-ffmpeg — <b>בדקתי אותה בפועל</b> לפני שכתבתי אותה כאן: יצרתי 24 תת-פריימים מלאכותיים ווידאתי שכל פריים יוצא הוא הממוצע של 8 התת-פריימים שלו ולא מערבב שכנים:</p>
+  <div class="code"><span class="lbl">verified: each output frame = mean of its own 8 subframes</span><button class="cp">העתק</button><pre># 60 fps × 8 subframes = 480 images per second of film
+ffmpeg -framerate 480 -i sub_%06d.png \
+  -vf "tmix=frames=8,select='eq(mod(n\,8)\,7)',setpts=N/(60*TB)" \
+  -r 60 -c:v libx264 -pix_fmt yuv420p -crf 16 video.mp4</pre></div>
+  <p><code>tmix=frames=8</code> ממצע כל פריים עם 7 שלפניו. <code>select='eq(mod(n,8),7)'</code> שומר רק כל פריים שמיני — את זה שהממוצע שלו מכסה בדיוק קבוצה שלמה. <code>setpts</code> מסדר מחדש את חותמות הזמן ל-60fps. <b>גוטצ'ה מהסקיל של Howseen:</b> לעולם לא ממצעים על פני חיתוך קשה — אחרת שתי סצנות נמרחות זו לתוך זו.</p>
+</section>
+
+<!-- ============ 13 QA ============ -->
+<section class="sec s-denim" id="s13" data-folio="13" data-toc="קלוד בודק את עצמו">
+  <div class="sh"><span class="num">13</span><div><h2>"It checks its own work": בקרת איכות שקלוד עושה לבד</h2><p class="sub">החוק השביעי — והסיבה שהתוצאה לא נראית כמו "פרומפט אחד ותקווה".</p></div></div>
+  <p>כל פרומפט שלו נגמר ב-<code>&lt;start&gt;</code> שמחייב: <b>לפני כתיבת הסרט המלא</b> — מפת ביטים ו-4 סטילס לאישור. ואחרי הרינדור — שתי בדיקות: פריים אחד לכל ביט, וסריקת "pops".</p>
+  <h3>בדיקה 1: גיליון מגע — פריים אחד לכל ביט</h3>
+  <p>זה בדיוק מה שקלוד "מסתכל" עליו. הנה הגיליון של הסרטון מלמעלה, מחושב עכשיו מאותה <code>seek(t)</code> — פריים בכל חצי שנייה:</p>
+  <div class="lab"><div class="lh">Contact sheet: 18 ביטים בתמונה אחת</div><div class="lb"><canvas id="csCanvas" width="1280" height="400"></canvas></div></div>
+  <h3>בדיקה 2: סריקת "pops" — תקלה של פריים אחד</h3>
+  <p><b>Pop</b> = פריים בודד שבו משהו קופץ למקום לא נכון ומיד חוזר (שכבה שהופיעה מוקדם, משתנה שלא הוגדר). ב-60fps העין קולטת את זה כ"הבהוב" מעצבן, אבל קשה מאוד למצוא אותו בצפייה. <b>האלגוריתם:</b> לכל זוג פריימים רצופים מחשבים הפרש ממוצע בין הפיקסלים. בתנועה חלקה ההפרש משתנה לאט. Pop יוצר <b>זינוק</b> — פי 3 ויותר מהשכנים — בדיוק כמו שכתוב בפרומפט: "frame-difference spikes 3x their neighbours".</p>
+  <div class="lab"><div class="lh">סורק pops — מזריקים תקלה ומחפשים אותה</div><div class="lb">
+    <canvas id="ppCanvas" width="860" height="260"></canvas>
+    <div class="ctrls"><button class="btn m" id="ppNew">הזרק תקלה חדשה</button><button class="btn o" id="ppClean">בלי תקלה</button></div>
+    <div class="readout" id="ppR"></div>
+  </div></div>
+  <div class="why"><b>למה זה קריטי דווקא ל-AI</b>מודל שכותב קוד ארוך עושה טעויות קטנות (z-index שנשכח, משתנה שלא אותחל לפני ה-seek הראשון — שתיהן מופיעות ב-gotchas שלו). בדיקות מספריות הופכות "אני חושב שזה טוב" ל"מדדתי, אין זינוקים". זה בדיוק ההבדל בין דמו ויראלי לבין משהו שאפשר למסור ללקוח.</div>
+</section>
+
+<!-- ============ 14 PIPELINE ============ -->
+<section class="sec s-navy" id="s14" data-folio="14" data-toc="הצנרת המלאה">
+  <div class="sh"><span class="num">14</span><div><h2>הצנרת המלאה: מקובץ HTML ל-MP4</h2><p class="sub">עכשיו, כשכל חלק מוגדר, אפשר לראות את כל השרשרת.</p></div></div>
+  <div class="pipe">
+    <div class="st"><b>REFERENCE</b>סרטון השראה → 2fps → גיליונות מגע → מבנה ביטים</div><span class="ar">→</span>
+    <div class="st"><b>ASSETS</b>שיר (BPM + דרופ), SFX עם שיאים מדודים, תמונות, לוגו</div><span class="ar">→</span>
+    <div class="st"><b>BEAT MAP</b>טבלה: ביט → מה קורה, מאיזה אובייקט, איזה סאונד</div><span class="ar">→</span>
+    <div class="st"><b>4 STILLS</b>אישור אנושי לפני כתיבת הסרט</div><span class="ar">→</span>
+    <div class="st"><b>seek(t)</b>HTML אחד, הכל פונקציה של t</div><span class="ar">→</span>
+    <div class="st"><b>RENDER</b>Playwright × N תת-פריימים → PNG</div><span class="ar">→</span>
+    <div class="st"><b>FFMPEG</b>tmix → 60fps · SFX לפי שיא · loudnorm</div><span class="ar">→</span>
+    <div class="st"><b>QA</b>פריים לביט · סריקת pops · הערות במאי</div>
+  </div>
+  <div class="code"><span class="lbl">render.mjs — the whole renderer (Node + Playwright)</span><button class="cp">העתק</button><pre>import { chromium } from 'playwright';
+const FPS = 60, SUB = 8, SHUTTER = 0.5, DUR = 9;      // seconds
+const browser = await chromium.launch({ args: ['--use-angle=d3d11', '--enable-gpu', '--ignore-gpu-blocklist'] });
+const page = await browser.newPage({ viewport: { width: 1920, height: 1080 } });
+await page.goto('http://localhost:8000/film.html');
+await page.evaluate(() =&gt; document.fonts.ready);       // never shoot before fonts load
+let i = 0;
+for (let f = 0; f &lt; DUR * FPS; f++) {
+  for (let k = 0; k &lt; SUB; k++) {                       // subframes spread across the shutter
+    const t = f / FPS + (SHUTTER / FPS) * ((k + 0.5) / SUB - 0.5);
+    await page.evaluate(t =&gt; window.seek(t), t);         // may be async (images, video)
+    await page.screenshot({ path: `out/sub_${String(i++).padStart(6, '0')}.png` });
+  }
+}
+await browser.close();</pre></div>
+  <div class="lab"><div class="lh">מחשבון עלות רינדור</div><div class="lb">
+    <div class="ctrls">
+      <label>אורך (ש׳) <input type="range" id="rcD" min="5" max="120" value="15"><output id="rcDO">15</output></label>
+      <label>FPS <input type="range" id="rcF" min="24" max="60" step="6" value="60"><output id="rcFO">60</output></label>
+      <label>תת-פריימים <input type="range" id="rcS" min="1" max="16" value="8"><output id="rcSO">8</output></label>
+      <label>צילומים לשנייה לכל worker <input type="range" id="rcW" min="1" max="30" value="6"><output id="rcWO">6</output></label>
+      <label>workers <input type="range" id="rcK" min="1" max="12" value="7"><output id="rcKO">7</output></label>
+    </div>
+    <div class="ctrls"><span class="seg" id="rcPre"><button data-w="7" data-k="1">ענן CPU (EP01)</button><button data-w="6" data-k="7" class="on">ה-4090 שלך (EP04)</button></span></div>
+    <div class="readout" id="rcR"></div>
+  </div></div>
+  <p>המספרים בכפתורים לקוחים מהרינדורים האמיתיים שלנו בפרויקט: בסביבת הענן (CPU בלבד) הגענו לכ-7 פריימים בשנייה; על ה-RTX 4090 שלך, 7 workers במקביל, כ-6 לשנייה כל אחד. תת-פריימים מכפילים את העבודה — לכן בטיוטות מרנדרים בלי מושן בלר וברזולוציה נמוכה, ומושן בלר רק במאסטר.</p>
+</section>
+
+<!-- ============ 15 ANATOMY ============ -->

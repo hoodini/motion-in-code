@@ -279,11 +279,22 @@ footer .blogs small{display:block;font:500 13px/1.4 var(--mono);color:var(--yuv-
 /* ---------- header link + back to top (shared with catalog.html) ---------- */
 .bar .home{margin-inline-start:auto;color:#fff;text-decoration:none;font:700 21px/1 var(--he);border-radius:999px;padding:8px 16px;background:rgba(255,255,255,.08)}
 .bar .home:hover{color:var(--yuv-gold);background:rgba(255,255,255,.14)}
-.bar .home+.navbtn{margin-inline-start:0}
+.bar .home+.navbtn,.bar .lang+.navbtn{margin-inline-start:0}
 #toTop{position:fixed;bottom:22px;inset-inline-end:22px;z-index:60;width:58px;height:58px;border:0;border-radius:999px;background:var(--yuv-navy);color:var(--yuv-gold);display:grid;place-items:center;cursor:pointer;box-shadow:var(--sh),inset 0 0 0 2px rgba(255,199,78,.6);opacity:0;transform:translateY(16px) scale(.9);pointer-events:none;transition:opacity .2s,transform .2s}
 #toTop.show{opacity:1;transform:none;pointer-events:auto}
 #toTop svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
 #toTop:hover{color:#fff}
 #toTop:focus-visible{outline:3px solid var(--yuv-sky-5);outline-offset:3px}
 @media (max-width:560px){#toTop{width:48px;height:48px;bottom:14px;inset-inline-end:14px}#toTop svg{width:22px;height:22px}}
+/* language switch in the top bar */
+.bar .lang{color:#fff;text-decoration:none;font:700 15px/1 var(--mono);letter-spacing:.04em;border:2px solid rgba(255,255,255,.3);border-radius:999px;padding:8px 13px;white-space:nowrap}
+.bar .lang:hover{border-color:var(--yuv-gold);color:var(--yuv-gold)}
+.bar .lang:lang(he){font:700 19px/1 'Karantina',system-ui,sans-serif;letter-spacing:0;padding:6px 13px}
+@media (max-width:560px){
+  .bar .wrap{gap:8px}
+  .bar .home{white-space:nowrap;padding:7px 11px;font-size:18px}
+  .navbtn{white-space:nowrap;padding:6px 12px;font-size:18px}
+  .bar .lang{padding:7px 9px;font-size:12px}
+}
+@media (max-width:359px){.bar .home{display:none}}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.neon::before,.neon::after{animation:none}#toTop{transition:none}}

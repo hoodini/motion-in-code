@@ -1,0 +1,127 @@
+<section class="sec s-denim" id="s11" data-folio="11" data-toc="The music is the clock">
+  <div class="sh"><span class="num">11</span><div><h2>The music is the clock: BPM, beats, the drop and peak-aligned sound</h2><p class="sub">"Something happens on every beat", and how a computer "hears" the beat.</p></div></div>
+  <p><b>BPM</b> (Beats Per Minute) = how many beats in one minute. 120 BPM = 2 beats per second = a beat every 0.5 seconds. <b>Bar</b> = 4 beats. <b>Downbeat</b> = the first beat of the bar, the strong one. <b>The drop</b> = the moment when, after a build-up, all the instruments come in at once: the peak of the energy.</p>
+  <p>Once we know the BPM, planning the whole film becomes a table: on beat 0 this happens, on beat 1 that happens. That's why the prompts talk in beats, not seconds. We checked zero's numbers, and they're accurate:</p>
+  <div class="lab"><div class="lh">Beat calculator</div><div class="lb">
+    <div class="ctrls">
+      <label>BPM <input type="range" id="bcB" min="60" max="180" value="130"><output id="bcBO">130</output></label>
+      <label>Beats <input type="range" id="bcN" min="4" max="64" value="32"><output id="bcNO">32</output></label>
+      <span class="seg" id="bcPre"><button data-b="130" data-n="32" class="on">Food order</button><button data-b="120" data-n="54">Photo print</button><button data-b="120" data-n="28">UI morph</button></span>
+    </div>
+    <div class="readout" id="bcR"></div>
+  </div></div>
+  <h3>How numpy "hears" the rhythm, step by step</h3>
+  <p>The prompt says "Analyze it with numpy and give me the beat grid". Here's what happens under the hood (we run exactly this algorithm right here in the browser, on a song synthesized on the spot):</p>
+  <ol>
+    <li><b>What an audio file is:</b> a long list of numbers between −1 and 1, the position of the speaker's membrane. 22,050 numbers for every second.</li>
+    <li><b>Energy envelope:</b> we cut the audio into windows of 256 samples (~12 milliseconds) and compute the RMS (root mean square) of each window = "how loud" that window is.</li>
+    <li><b>Onset ("the start of a sound"):</b> for each window, how much louder it is than the one before (rises only). A drum strike = a sharp jump. This turns the song into a list of "hits".</li>
+    <li><b>Autocorrelation:</b> we slide the list of hits over itself at different offsets and check where it "lines up" with itself best. If there's a hit every 0.5 seconds, the 0.5-second offset gives the highest match → 120 BPM. (We favor tempos close to 120, because otherwise the algorithm might pick half or double the real tempo.)</li>
+    <li><b>Phase:</b> now we know how often, but we also need to know <b>when</b>. We search for the starting offset where the grid lands on the most hits.</li>
+    <li><b>The drop:</b> we compute the average energy of each beat and look for the beat with the biggest jump compared with the two beats before it.</li>
+  </ol>
+  <div class="lab"><div class="lh">Beat and drop detection: real, on a synthesized song</div><div class="lb">
+    <canvas id="btCanvas" width="860" height="300"></canvas>
+    <div class="ctrls">
+      <label>True BPM <input type="range" id="btB" min="90" max="150" value="120"><output id="btBO">120</output></label>
+      <label>Drop at beat <input type="range" id="btD" min="4" max="16" value="8"><output id="btDO">8</output></label>
+      <button class="btn" id="btRun">Analyze</button><button class="btn m" id="btPlay">▶ Play</button>
+    </div>
+    <div class="readout" id="btR"></div>
+  </div></div>
+  <div class="warn"><b>A real limitation</b>On a real song, automatic detection is sometimes wrong (half-tempo, a fake drop). That's why zero's beat-synced footage prompt says "Calibrate the grid to the real kick hits", meaning: line the grid up with the actual kick drum hits. And Howseen's open skill says it explicitly: "never trust an auto beat grid". The lesson: the grid is a hypothesis we test, not the truth.</div>
+
+  <h3>Sound effects placed "by measured peak": the small detail that makes the difference</h3>
+  <p>In the prompt: <i>"Place each so its measured peak, not its file start, lands on the event."</i> A "whoosh" file starts quiet and rises to a <b>peak</b>, the moment the ear hears as "there it is!". In our file the peak sits 0.42 seconds after the start of the file. If we play the file right at the drop, the peak arrives 0.42 seconds <b>after</b> the drop. That's almost a full beat late, and the ear feels that something isn't "landing". The fix: measure where the peak is, and start the file at <code>event time − peak time</code>.</p>
+  <div class="lab"><div class="lh">Whoosh on the beat: by file start vs. by peak</div><div class="lb">
+    <canvas id="pkCanvas" width="860" height="220"></canvas>
+    <div class="ctrls"><span class="seg" id="pkType"><button data-t="whoosh" class="on">whoosh</button><button data-t="pop">pop</button><button data-t="click">click</button></span>
+      <button class="btn o" id="pkNaive">▶ By file start</button><button class="btn m" id="pkPeak">▶ By peak</button></div>
+    <div class="readout" id="pkR"></div>
+  </div></div>
+  <div class="def"><b>Definition: loudnorm to -14 LUFS</b><b>LUFS</b> is a unit for measuring loudness <b>the way a human ear hears it</b> (not just the peak of the waveform). <code>loudnorm</code> is an ffmpeg filter that brings the whole film to a fixed, measured loudness. −14 LUFS is a common target for streaming platforms: that way our film won't sound quieter than everything else in the feed, and it won't get "turned down" automatically either.</div>
+</section>
+
+<!-- ============ 12 MOTION BLUR ============ -->
+<section class="sec s-cloud" id="s12" data-folio="12" data-toc="Motion blur from subframes">
+  <div class="sh"><span class="num">12</span><div><h2>Motion blur from subframes: why 4 leaves "ghosts" and 8 doesn't</h2><p class="sub">"8 subframes per frame blended with ffmpeg tmix": every word, every number.</p></div></div>
+  <p><b>The problem:</b> a real camera opens its shutter for a stretch of time (for example, half of the frame's duration, known as a "180° shutter"). Anything that moves during that time gets smeared across the image. That smear is "motion blur", and our brains are so used to it that without it, fast motion looks "stuttery" and artificial. But a browser screenshot is <b>a single, infinitely short instant</b>: zero smear.</p>
+  <p><b>The fix:</b> for every final frame, we capture N "subframes" at closely spaced times inside the shutter window and compute their pixel-by-pixel <b>average</b>. The average of 8 nearby positions of a circle = a smeared circle. <b>ffmpeg tmix</b> is exactly that: a filter that averages N consecutive frames.</p>
+  <p><b>Why 4 isn't enough for fast motion:</b> the distance between two subframes is <code>speed × shutter time ÷ N</code>. If that distance is bigger than the object itself, the copies don't touch each other, and we see 4 separate see-through copies: "ghost copies". The prompt says "use 8 and slow the move down". Those are the two ways to shrink that same number.</p>
+  <div class="lab"><div class="lh">Motion blur lab: a real average of subframes</div><div class="lb">
+    <canvas id="mbCanvas" width="860" height="220"></canvas>
+    <div class="ctrls">
+      <label>Speed <input type="range" id="mbV" min="200" max="9000" step="100" value="4800"><output id="mbVO">4800</output></label>
+      <label>Subframes N <input type="range" id="mbN" min="1" max="16" value="4"><output id="mbNO">4</output></label>
+      <label>Shutter <input type="range" id="mbS" min="0.1" max="1" step="0.05" value="0.5"><output id="mbSO">0.50</output></label>
+    </div>
+    <div class="readout" id="mbR"></div>
+  </div></div>
+  <p>And the ffmpeg command. <b>We actually tested it</b> before writing it here: we generated 24 synthetic subframes and verified that every output frame is the average of its own 8 subframes and doesn't mix in its neighbors:</p>
+  <div class="code"><span class="lbl">verified: each output frame = mean of its own 8 subframes</span><button class="cp">Copy</button><pre># 60 fps × 8 subframes = 480 images per second of film
+ffmpeg -framerate 480 -i sub_%06d.png \
+  -vf "tmix=frames=8,select='eq(mod(n\,8)\,7)',setpts=N/(60*TB)" \
+  -r 60 -c:v libx264 -pix_fmt yuv420p -crf 16 video.mp4</pre></div>
+  <p><code>tmix=frames=8</code> averages each frame with the 7 before it. <code>select='eq(mod(n,8),7)'</code> keeps only every eighth frame: the one whose average covers exactly one complete group. <code>setpts</code> rewrites the timestamps for 60fps. <b>A gotcha from Howseen's skill:</b> never average across a hard cut (an instant switch from one scene to the next), or the two scenes smear into each other.</p>
+</section>
+
+<!-- ============ 13 QA ============ -->
+<section class="sec s-denim" id="s13" data-folio="13" data-toc="Claude checks itself">
+  <div class="sh"><span class="num">13</span><div><h2>"It checks its own work": quality control Claude does on its own</h2><p class="sub">The seventh rule, and the reason the result doesn't look like "one prompt and a prayer".</p></div></div>
+  <p>Every one of zero's prompts ends with a <code>&lt;start&gt;</code> block that requires, <b>before writing the full film</b>, a beat map and 4 stills for approval. And after the render, two checks: one frame per beat, and a scan for "pops".</p>
+  <h3>Check 1: a contact sheet, one frame per beat</h3>
+  <p>This is exactly what Claude "looks" at. Here's the sheet for the film above, computed right now from that same <code>seek(t)</code>, with one frame every half second:</p>
+  <div class="lab"><div class="lh">Contact sheet: 18 beats in one image</div><div class="lb"><canvas id="csCanvas" width="1280" height="400"></canvas></div></div>
+  <h3>Check 2: the pop scan, catching a one-frame glitch</h3>
+  <p>A <b>pop</b> = a single frame where something jumps to the wrong place and immediately snaps back (a layer that showed up too early, a variable that wasn't set). At 60fps the eye catches it as an annoying "flicker", but it's very hard to find by watching. <b>The algorithm:</b> for every pair of consecutive frames, we compute the average difference between their pixels. In smooth motion, that difference changes slowly. A pop creates a <b>spike</b>, 3x or more above its neighbors, exactly as the prompt puts it: "frame-difference spikes 3x their neighbours".</p>
+  <div class="lab"><div class="lh">Pop scanner: we inject a glitch and hunt for it</div><div class="lb">
+    <canvas id="ppCanvas" width="860" height="260"></canvas>
+    <div class="ctrls"><button class="btn m" id="ppNew">Inject a new glitch</button><button class="btn o" id="ppClean">No glitch</button></div>
+    <div class="readout" id="ppR"></div>
+  </div></div>
+  <div class="why"><b>Why this matters especially for AI</b>A model that writes long code makes small mistakes: a forgotten z-index (the setting that decides which layer sits on top), or a variable not initialized before the first seek. Both are listed in zero's gotchas. Numeric checks turn "I think it looks good" into "I measured it: no spikes". That's exactly the difference between a viral demo and something we can hand over to a client.</div>
+</section>
+
+<!-- ============ 14 PIPELINE ============ -->
+<section class="sec s-navy" id="s14" data-folio="14" data-toc="The full pipeline">
+  <div class="sh"><span class="num">14</span><div><h2>The full pipeline: from an HTML file to an MP4</h2><p class="sub">Now that every part is defined, we can see the whole chain.</p></div></div>
+  <div class="pipe">
+    <div class="st"><b>REFERENCE</b>Reference video → 2fps → contact sheets → beat structure</div><span class="ar">→</span>
+    <div class="st"><b>ASSETS</b>Song (BPM + drop), SFX with measured peaks, images, logo</div><span class="ar">→</span>
+    <div class="st"><b>BEAT MAP</b>A table: beat → what happens, which object, which sound</div><span class="ar">→</span>
+    <div class="st"><b>4 STILLS</b>Human approval before the film is written</div><span class="ar">→</span>
+    <div class="st"><b>seek(t)</b>One HTML file, everything a function of t</div><span class="ar">→</span>
+    <div class="st"><b>RENDER</b>Playwright × N subframes → PNG</div><span class="ar">→</span>
+    <div class="st"><b>FFMPEG</b>tmix → 60fps · SFX by peak · loudnorm</div><span class="ar">→</span>
+    <div class="st"><b>QA</b>One frame per beat · pop scan · director's notes</div>
+  </div>
+  <div class="code"><span class="lbl">render.mjs: the whole renderer (Node + Playwright)</span><button class="cp">Copy</button><pre>import { chromium } from 'playwright';
+const FPS = 60, SUB = 8, SHUTTER = 0.5, DUR = 9;      // seconds
+const browser = await chromium.launch({ args: ['--use-angle=d3d11', '--enable-gpu', '--ignore-gpu-blocklist'] });
+const page = await browser.newPage({ viewport: { width: 1920, height: 1080 } });
+await page.goto('http://localhost:8000/film.html');
+await page.evaluate(() =&gt; document.fonts.ready);       // never shoot before fonts load
+let i = 0;
+for (let f = 0; f &lt; DUR * FPS; f++) {
+  for (let k = 0; k &lt; SUB; k++) {                       // subframes spread across the shutter
+    const t = f / FPS + (SHUTTER / FPS) * ((k + 0.5) / SUB - 0.5);
+    await page.evaluate(t =&gt; window.seek(t), t);         // may be async (images, video)
+    await page.screenshot({ path: `out/sub_${String(i++).padStart(6, '0')}.png` });
+  }
+}
+await browser.close();</pre></div>
+  <div class="lab"><div class="lh">Render cost calculator</div><div class="lb">
+    <div class="ctrls">
+      <label>Length (s) <input type="range" id="rcD" min="5" max="120" value="15"><output id="rcDO">15</output></label>
+      <label>FPS <input type="range" id="rcF" min="24" max="60" step="6" value="60"><output id="rcFO">60</output></label>
+      <label>Subframes <input type="range" id="rcS" min="1" max="16" value="8"><output id="rcSO">8</output></label>
+      <label>Captures per second per worker <input type="range" id="rcW" min="1" max="30" value="6"><output id="rcWO">6</output></label>
+      <label>Workers <input type="range" id="rcK" min="1" max="12" value="7"><output id="rcKO">7</output></label>
+    </div>
+    <div class="ctrls"><span class="seg" id="rcPre"><button data-w="7" data-k="1">CPU cloud (EP01)</button><button data-w="6" data-k="7" class="on">My 4090 (EP04)</button></span></div>
+    <div class="readout" id="rcR"></div>
+  </div></div>
+  <p>The numbers on the buttons come from our real renders in this project: in the cloud environment (CPU only) we got about 7 frames per second; on my RTX 4090, with 7 workers (browser copies rendering side by side) running in parallel, about 6 per second each. Subframes multiply the work, so for drafts we render without motion blur and at low resolution, and save motion blur for the master.</p>
+</section>
+
+<!-- ============ 15 ANATOMY ============ -->

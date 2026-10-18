@@ -1,0 +1,147 @@
+<section class="sec s-cloud" id="s4" data-folio="04" data-toc="Foundations: what video is">
+  <div class="sh"><span class="num">04</span><div><h2>Foundations: what is "video", anyway?</h2><p class="sub">Before any trick: what the thing itself physically is.</p></div></div>
+  <p><b>Video is a sequence of still images</b> (stills) shown very quickly, one after another. Each of these images is called a <b>frame</b>. The eye and the brain can't keep up with the "jumps" between images, so they stitch them together into continuous motion, like a flipbook.</p>
+  <p><b>FPS</b> (frames per second) = how many images are shown each second. At 60fps each image stays on screen for 1/60 of a second ≈ 16.7 milliseconds. <b>Why 60 and not 30?</b> Because most screens refresh 60 times per second, and in fast motion (a button growing, a camera pushing in) at 30fps every step is twice as big, so the eye starts to notice "stairs". The price: twice as many images to produce.</p>
+  <div class="ex"><b>The math for the film above</b>9 seconds × 60 frames = <b>540 images</b>. zero's food film: 14.8 seconds × 60 = 888 images. Every single one of them is an image that someone (or something) has to draw.</div>
+  <div class="lab"><div class="lh">The flipbook: jump to any frame</div><div class="lb">
+    <canvas id="flipCanvas" width="640" height="360"></canvas>
+    <div class="ctrls"><label>Frame <input type="range" id="flipF" min="0" max="539" value="240"><output id="flipO">240</output></label></div>
+    <div class="readout" id="flipR"></div>
+  </div></div>
+  <p>Notice what just happened: you jumped to frame 240, and the image appeared <b>instantly</b>, without "playing" the 239 frames before it. That's not obvious at all, and it's the heart of the whole method. To understand why, we first need to understand what a language model is good at.</p>
+</section>
+
+<!-- ============ 5 WHY CODE ============ -->
+<section class="sec s-navy" id="s5" data-folio="05" data-toc="The core trick: video as code">
+  <div class="sh"><span class="num">05</span><div><h2>The core trick: turn a pixel problem into a code problem</h2><p class="sub">Why this works with a language model specifically, and why now.</p></div></div>
+  <p>There are two completely different ways AI can "make video":</p>
+  <div class="grid2">
+    <div class="card flat"><h4>Path A: a video model (Veo, Sora, Flux Video)</h4><p>The model generates <b>pixels</b> directly: it "guesses" what the next image should look like, based on statistics from millions of videos. Excellent for realistic footage. Bad at anything that demands precision: correct text, an exact brand color, a button that stays the same button, timing to the millisecond. And there's no way to "fix just the fourth second": we generate again and everything changes.</p></div>
+    <div class="card flat"><h4>Path B: a language model that writes code (this method)</h4><p>Claude doesn't generate a single pixel. It writes <b>software</b> (a web page) that draws every frame. The text is exact because it's real text. The color is exact because it's <code>#FF8F3A</code>. And if the fourth second isn't good, we change three lines of code, and the rest of the film stays identical, down to the byte.</p></div>
+  </div>
+  <p><b>Why is this such a good fit for an LLM (large language model)?</b> At its core, a language model is a machine that writes text, and code is text with sharp rules. When we turn "make a beautiful animation" into "write a function that returns the button's width at time t", we move the task out of the area where the model is weak (visual guessing) and into the area where it's strongest (precise, long, consistent code). Why did this break out with Opus 5.5 specifically? There's no direct benchmark for "motion ability", but what the community points to is an unusually good sense of timing and rhythm, together with two things the method requires: writing and maintaining a long code file without breaking it, and <b>seeing</b> images.</p>
+  <div class="why"><b>The part everyone misses: Claude has eyes</b>Claude Code can open a PNG file and "see" it. So the loop is: write code → capture a few frames → look at them → fix. That's the difference between "one prompt and hope" and a process that improves itself. It's also the reason for the "contact sheets" in step 1: a model can't watch a video, but it can read one image that holds 30 small frames. And why 2 frames per second, exactly? Because at 120 BPM there's exactly one beat every half second, which means one image per beat.</div>
+  <div class="tbl"><table>
+    <tr><th></th><th>Video model</th><th>Rendered code (zero)</th></tr>
+    <tr><td>Exact text and logo</td><td class="no">Unreliable</td><td class="yes">Pixel-perfect</td></tr>
+    <tr><td>Spot fix ("just second 4")</td><td class="no">Regenerate everything</td><td class="yes">Change one line</td></tr>
+    <tr><td>Sync to music</td><td class="no">Approximate</td><td class="yes">To the millisecond</td></tr>
+    <tr><td>Same result on every run</td><td class="no">No</td><td class="yes">Yes (deterministic)</td></tr>
+    <tr><td>Realistic footage, people, nature</td><td class="yes">Excellent</td><td class="no">Only with real footage we bring in</td></tr>
+  </table></div>
+  <p>And this is where <code>seek(t)</code> comes in: the way "software that draws a frame" has to be built for any of this to work.</p>
+</section>
+
+<!-- ============ 6 SEEK ============ -->
+<section class="sec s-cloud" id="s6" data-folio="06" data-toc="seek(t): a pure function of time">
+  <div class="sh"><span class="num">06</span><div><h2><code>seek(t)</code>: every frame is a pure function of time</h2><p class="sub">The most important technical rule in all the prompts: "no CSS transitions, no timers, no state between frames".</p></div></div>
+  <p>A <b>function</b> is a machine: a value goes in, a value comes out. A <b>pure function</b> is one where the same input always gives the same output, and that doesn't depend on anything else: not on the computer's clock, not on what happened before. <code>seek(t)</code> takes a time <code>t</code> in seconds (say, 4.2) and draws the screen <b>exactly</b> as it should look at that moment. From nothing. Without remembering anything.</p>
+  <div class="code"><span class="lbl">film.html: the minimal shape of every film</span><button class="cp">Copy</button><pre>&lt;div id="dot"&gt;&lt;/div&gt;
+&lt;script&gt;
+const spring = (t, w = 12, z = 0.8) =&gt; { if (t &lt;= 0) return 0;
+  const wd = w * Math.sqrt(1 - z*z);
+  return 1 - Math.exp(-z*w*t) * (Math.cos(wd*t) + (z*w/wd) * Math.sin(wd*t)); };
+
+window.seek = (t) =&gt; {                 // t in seconds. Nothing else.
+  const grow = spring(t - 0.5);         // starts growing at 0.5s
+  const w = 44 + (380 - 44) * grow;     // circle (44px) -&gt; pill (380px)
+  dot.style.width = w + 'px';
+  dot.style.borderRadius = '999px';
+};
+seek(0);
+&lt;/script&gt;</pre></div>
+  <p><b>Why not just run a regular animation and record it?</b> Because a regular animation (a CSS transition, <code>setTimeout</code>, <code>requestAnimationFrame</code>) reads the <b>real clock</b>: "300 milliseconds have passed since I started, so I'm at 30%". But when we render, a single Playwright screenshot takes a variable amount of time: sometimes 40 milliseconds, sometimes 200. The clock keeps running during the screenshot, so every frame gets "caught" at a random moment. When we play the images back at a steady 60fps, the motion stutters, speeds up and slows down. With <code>seek(t)</code> we tell the page "be at <code>t=4.2</code>", wait as long as it takes, take the screenshot, and the next <code>t</code> is exactly 4.2 + 1/60. The film's time is completely decoupled from the computer's time.</p>
+  <div class="lab"><div class="lh">Simulation: real-clock animation vs. seek(t)</div><div class="lb">
+    <div class="grid2"><div><b>Real clock (timer)</b><canvas id="tmA" width="420" height="120"></canvas></div><div><b>seek(t)</b><canvas id="tmB" width="420" height="120"></canvas></div></div>
+    <canvas id="tmPlot" width="860" height="230" style="margin-top:12px"></canvas>
+    <div class="ctrls"><button class="btn" id="tmNew">New simulation</button><label>Max screenshot time <input type="range" id="tmMax" min="20" max="300" value="200"><output id="tmMaxO">200ms</output></label></div>
+    <div class="readout" id="tmR"></div>
+  </div></div>
+  <p>What you saw in the graph: the <code>seek(t)</code> line is perfectly straight (every frame advances exactly 1/60 of a second), while the timer line is jagged and jumpy, because each frame gets "caught" after a different screenshot time. And here are three more gifts <code>seek(t)</code> gives us:</p>
+  <ul>
+    <li><b>Jump to any moment:</b> Claude can capture just frame 240 to check the drop, without rendering everything.</li>
+    <li><b>Parallel rendering:</b> 7 browsers can render 7 different parts of the film at the same time (as we did in EP04 on the RTX 4090), because no frame depends on the one before it.</li>
+    <li><b>Surgical fixes:</b> changing the scene at second 6 doesn't touch a single frame before it.</li>
+  </ul>
+  <div class="def"><b>Definition: async seek(t)</b>The prompt that captures the frames as images says <code>async seek(t)</code>. <b>async</b> = a function that's allowed to "wait" before it finishes, for example until an image or a video frame has loaded. Playwright waits for it to finish and only then takes the screenshot. Without it, we'd capture a frame where the image hasn't appeared yet.</div>
+</section>
+
+<!-- ============ 7 EASING ============ -->
+<section class="sec s-denim" id="s7" data-folio="07" data-toc="Easing: how things accelerate">
+  <div class="sh"><span class="num">07</span><div><h2>Easing: why "linear" motion looks robotic</h2><p class="sub">The first layer of "taste", and what it looks like as numbers.</p></div></div>
+  <p>Say a button needs to move from point A to point B in one second. The simple way: at every moment, it has covered the same share of the distance as the share of time that has passed (50% of the time = 50% of the distance). That's called <b>linear</b>, and it looks mechanical, because nothing in the real world moves like that. A car speeds up, cruises, and slows down. A hand lifting a cup speeds up, then slows down before it reaches the table.</p>
+  <p><b>Easing</b> is a function that converts "how much of the time has passed" (u, between 0 and 1) into "how much of the distance we've covered" (also between 0 and 1). No formulas yet. First, just look at the balls:</p>
+  <div class="lab"><div class="lh">Four easing curves side by side</div><div class="lb">
+    <canvas id="ezCanvas" width="860" height="330"></canvas>
+    <div class="ctrls"><label>u (fraction of time passed) <input type="range" id="ezU" min="0" max="1" step="0.001" value="0.3"><output id="ezO">0.30</output></label><button class="btn" id="ezPlay">▶ Play</button></div>
+  </div></div>
+  <p>Now the formula, once we have a picture in our heads. <b>easeInOutCubic</b> (ease-in-out): for u below one half, <code>4u³</code> (it starts slowly, because u³ is tiny when u is small); for the second half, <code>1 − (−2u+2)³/2</code> (the mirror image: it slows down at the end). <b>easeOutCubic</b> (ease-out) = <code>1 − (1−u)³</code>: it shoots off and then slows down, great for things that "land". <b>easeOutExpo</b> slows down to an extreme. It looks "fast and expensive", but overused it feels templated.</p>
+  <div class="warn"><b>The limit of easing</b>A curve like this always ends at exactly 1 and stops dead. A real object that lands doesn't stop like that: it "bounces" a little past the target and settles. Worse: easing only knows how to go from A to B. What happens if the target changes halfway? It "jumps". For both of these we need a spring, which is the next section.</div>
+</section>
+
+<!-- ============ 8 SPRINGS ============ -->
+<section class="sec s-cloud" id="s8" data-folio="08" data-toc="Closed-form springs">
+  <div class="sh"><span class="num">08</span><div><h2>Closed-form springs: the secret behind the physical feel</h2><p class="sub">"Springs are closed-form step responses": what each word means, and why it's done exactly this way.</p></div></div>
+  <p><b>Intuition first:</b> picture a weight hanging from a spring, and we suddenly move the point it hangs from 10 cm down. The weight doesn't jump straight to the new spot: it accelerates toward it, overshoots a little, comes back, and settles. Two things determine how this looks:</p>
+  <ul>
+    <li><b>Stiffness</b> (ω, "omega"): a stiff spring = fast motion. In units: the natural frequency, in radians per second. ω=12 → a natural oscillation period of 2π/12 ≈ 0.52 seconds.</li>
+    <li><b>Damping</b> (ζ, "zeta"): how much "friction" there is. ζ less than 1 → it overshoots the target and comes back (springy). ζ=1 → it arrives as fast as possible without overshooting (critical damping). ζ greater than 1 → it crawls, "muddy".</li>
+  </ul>
+  <p><b>"Step response"</b> = how the spring reacts when the target jumps all at once (a "step") from 0 to 1. <b>"Closed-form"</b> = there's a formula that gives the position at any time <code>t</code> <b>directly</b>, without simulating step after step. And that's the whole point: a step-by-step simulation has to remember the position and velocity from the previous frame (in other words, "state"), and that breaks <code>seek(t)</code> (there's no way to jump to frame 240 without computing the 239 before it). The closed-form formula gives us a spring that is a pure function of time.</p>
+  <div class="def"><b>The formula (for damping less than 1), symbol by symbol</b>
+    <code>x(t) = 1 − e<sup>−ζωt</sup> · ( cos(ω<sub>d</sub>t) + (ζω/ω<sub>d</sub>)·sin(ω<sub>d</sub>t) )</code>, where <code>ω<sub>d</sub> = ω·√(1−ζ²)</code>.<br>
+    • <code>e<sup>−ζωt</sup></code>: "the envelope". It fades over time, and how fast depends on damping times stiffness. This is what makes the oscillation die out.<br>
+    • <code>cos</code> and <code>sin</code>: the oscillation itself (back and forth around the target), at frequency <code>ω<sub>d</sub></code>, which is the natural frequency "slowed down" a little by the damping.<br>
+    • The term <code>(ζω/ω<sub>d</sub>)·sin</code> is chosen so that at time 0 the velocity is exactly 0: the spring starts from rest, with no "kick".<br>
+    • The maximum overshoot falls straight out of the formula: <code>e<sup>−πζ/√(1−ζ²)</sup></code>. ζ=0.8 → 1.5%. ζ=0.6 → 9.5%. And that's what the prompt means by "a tiny overshoot at most": damping of roughly 0.75–0.9.</div>
+  <div class="lab"><div class="lh">Spring lab: circle → pill (the example from the article)</div><div class="lb">
+    <canvas id="spCanvas" width="860" height="300"></canvas>
+    <div class="ctrls">
+      <label>Stiffness ω <input type="range" id="spW" min="4" max="30" step="0.5" value="12"><output id="spWO">12</output></label>
+      <label>Damping ζ <input type="range" id="spZ" min="0.2" max="1.6" step="0.01" value="0.8"><output id="spZO">0.80</output></label>
+      <label><input type="checkbox" id="spMulti"> Three targets in a row</label>
+      <button class="btn" id="spPlay">▶ Play</button>
+    </div>
+    <div class="readout" id="spR"></div>
+  </div></div>
+  <h3>"The sum of one spring per change": how the target changes midway</h3>
+  <p>In the prompt: <i>"A value with many targets is the sum of one spring per change, so it stays a pure function of time."</i> Check the "Three targets in a row" box in the lab. The width starts at 44, at 0.0 seconds it gets a target of 380, at 0.35 it changes its mind to 200, and at 0.7 to 300. Instead of remembering "where I was", we compute: <code>value = 44 + (380−44)·spring(t) + (200−380)·spring(t−0.35) + (300−200)·spring(t−0.7)</code>. Each change adds its own spring, which starts at the moment of that change. Since every spring starts at velocity 0 and position 0, the sum is continuous (no jump), and the result is still a pure function of <code>t</code>.</p>
+  <h3>The "liquid indicator" trick: two edges, two springs</h3>
+  <p>In the UI morph prompt: <i>"The tab indicator's two edges ride different springs, so the leading edge stretches ahead of the trailing one."</i> The bar that marks the selected tab isn't one object that moves: it's two numbers, the right edge and the left edge. If the edge facing the direction of travel gets a stiffer spring than the trailing edge, the bar <b>stretches</b> along the way and contracts when it arrives, just like a drop of water. Click the tabs:</p>
+  <div class="lab"><div class="lh">Liquid tabs</div><div class="lb">
+    <canvas id="tabCanvas" width="860" height="140"></canvas>
+    <div class="ctrls"><label><input type="checkbox" id="tabSame"> Same spring for both edges (for comparison)</label></div>
+  </div></div>
+</section>
+
+<!-- ============ 9 MORPH ============ -->
+<section class="sec s-denim" id="s9" data-folio="09" data-toc="Morph instead of fade">
+  <div class="sh"><span class="num">09</span><div><h2>Change shape instead of disappearing: morph vs. fade</h2><p class="sub">Rules #1 and #2 in "what makes it look expensive", and why they work on the brain.</p></div></div>
+  <p><b>Fade (crossfade)</b> = the old image turns transparent while the new one appears. In the middle, both are half-transparent, one on top of the other. <b>Morph</b> = the very same object changes its width, height, corners and color until it becomes the next thing.</p>
+  <div class="lab"><div class="lh">The same transition, twice</div><div class="lb">
+    <div class="grid2"><div><b>Fade</b><canvas id="mfA" width="420" height="260"></canvas></div><div><b>Morph (shared element)</b><canvas id="mfB" width="420" height="260"></canvas></div></div>
+    <div class="ctrls"><label>Progress <input type="range" id="mfU" min="0" max="1" step="0.001" value="0.5"><output id="mfO">0.50</output></label><button class="btn" id="mfPlay">▶ Play</button></div>
+  </div></div>
+  <p><b>Why the brain prefers a morph:</b> our visual system is built to track <b>objects</b> over time (object permanence). When the button itself grows into a page, the eye never loses it for a moment, so the brain reads cause and effect: "I clicked, and this thing opened". In a fade, there's a moment where the eye sees two half-transparent things and doesn't know which one to focus on. The causal link breaks, and the result feels like "the next slide" in a presentation. Hence "it looks like a powerpoint".</p>
+  <div class="def"><b>Definition: shared element</b>In the prompt: <i>"Every handoff between layers is a shared element: the lime flood carries a copy of the bubble's words, the button carries its own label into the page."</i> When an object passes from one layer to another (for example, from the phone to full screen), it takes <b>its content with it</b>. In the film above: the pill with <code>seek(t)</code> grows into a card, and the orange button on that card is the one that floods the screen on the drop. It's not a color appearing out of nowhere.</div>
+  <div class="warn"><b>"Flood": the two numbers from the prompts</b>"A flood must clear the farthest corner and take about 0.35s, or it reads as a flash." An expanding circle has to reach a radius equal to the distance from its center <b>to the farthest corner</b> of the screen; otherwise an unpainted triangle is left in that corner. And 0.35 seconds: any faster and, at 60fps, half the screen changes in one or two frames, so the eye sees a "flash", not motion. Any slower and it no longer feels like an explosion on the drop.</div>
+</section>
+
+<!-- ============ 10 CAMERA ============ -->
+<section class="sec s-cloud" id="s10" data-folio="10" data-toc="Camera: log-space zoom">
+  <div class="sh"><span class="num">10</span><div><h2>The camera: one transform, and zoom "in log space"</h2><p class="sub">"The camera is one transform on a container... zoom interpolated in log space."</p></div></div>
+  <p>There's no real camera in a web page. The "camera" = <b>one box that wraps the whole world</b>, and we apply movement and scaling to it (a transform). Scaling the box 2× around a point = "zooming in 2× on that point". All of the camera's motion is a short list of keyframes (moments where we pin down exactly where the camera is), <code>[time, zoom, x, y]</code>, with easing in between.</p>
+  <p><b>Why "logarithmic"?</b> Zoom is <b>multiplicative</b>: going from 1 to 2 is "2×", and going from 2 to 4 is also "2×", and the eye experiences both as the same distance. If we compute the zoom linearly from 1 to 16, then halfway through the time the zoom is 8.5, meaning we've already covered 8.5× out of 16×. The eye feels a crazy surge at the start and a crawl at the end. In log space (<code>z = a·(b/a)<sup>u</sup></code>, where a is the starting zoom, b the final zoom and u the fraction of time that has passed), halfway through the time the zoom is 4 = √16: half of the <b>perceived</b> distance. The speed the eye experiences is the rate of change of <code>ln(z)</code> (the logarithm of the zoom), and that's exactly what the graph below measures.</p>
+  <div class="lab"><div class="lh">×16 zoom: linear vs. logarithmic</div><div class="lb">
+    <div class="grid2"><div><b>Linear</b><canvas id="zmA" width="420" height="240"></canvas></div><div><b>Logarithmic</b><canvas id="zmB" width="420" height="240"></canvas></div></div>
+    <canvas id="zmPlot" width="860" height="200" style="margin-top:10px"></canvas>
+    <div class="ctrls"><label>Time <input type="range" id="zmU" min="0" max="1" step="0.001" value="0.5"><output id="zmO">0.50</output></label><button class="btn" id="zmPlay">▶ Play</button></div>
+  </div></div>
+  <ul>
+    <li><b>"one move per scene"</b>: one camera move per scene. Two moves at once (say, a zoom plus a pan, which slides the view sideways, in another direction) = the eye doesn't know where to look.</li>
+    <li><b>"never zooms in and out back to back"</b>: zooming in and immediately zooming out looks like a camera that couldn't make up its mind. In the film above, the camera pushes in before the drop, and it makes the return to 1 <b>while the orange flood covers the entire screen</b>. A camera change over a solid-color surface is invisible. It's a classic editing trick.</li>
+    <li><b>"Never put will-change on anything the camera scales"</b>: <code>will-change</code> tells the browser "snapshot this element as an image and move the image around". When we scale up an image like that, the text goes blurry. Without it, the browser redraws the text at every size, so it stays sharp.</li>
+  </ul>
+</section>
+
+<!-- ============ 11 MUSIC ============ -->

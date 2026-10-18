@@ -1,10 +1,11 @@
 // "Liquid glass" in CSS: a card that blurs and brightens whatever moves behind it (backdrop-filter).
+import { EN, T, DIR } from '../ui/i18n.js';
 import { spring } from '../../../kit/src/core.js';
 export function mount(stage) {
   stage.classList.add('fxg');
   stage.innerHTML = `<div class="fxg-stage"><i class="fxg-b b1"></i><i class="fxg-b b2"></i><i class="fxg-b b3"></i><i class="fxg-b b4"></i>
-    <div class="fxg-card"><b>268</b><span>דקות השבוע</span><em>+12%</em></div></div>
-    <div class="ctrl-row"><label>טשטוש <input type="range" min="0" max="40" value="22" class="fxg-blur"><output>22px</output></label><label class="chk"><input type="checkbox" class="fxg-on" checked> זכוכית פעילה</label></div>`;
+    <div class="fxg-card"><b>268</b><span>${T('דקות השבוע', 'minutes this week')}</span><em>+12%</em></div></div>
+    <div class="ctrl-row"><label>${T('טשטוש', 'Blur')} <input type="range" min="0" max="40" value="22" class="fxg-blur"><output>22px</output></label><label class="chk"><input type="checkbox" class="fxg-on" checked> ${T('זכוכית פעילה', 'Glass on')}</label></div>`;
   const st = stage.querySelector('.fxg-stage'), bs = [...stage.querySelectorAll('.fxg-b')], card = stage.querySelector('.fxg-card');
   const bl = stage.querySelector('.fxg-blur'), bo = stage.querySelector('output'), on = stage.querySelector('.fxg-on');
   const setBlur = () => { bo.textContent = bl.value + 'px'; st.style.setProperty('--blur', on.checked ? bl.value + 'px' : '0px'); st.classList.toggle('off', !on.checked); };

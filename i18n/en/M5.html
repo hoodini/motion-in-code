@@ -1,0 +1,76 @@
+<section class="sec s-cloud" id="s15" data-folio="15" data-toc="Anatomy of the prompt">
+  <div class="sh"><span class="num">15</span><div><h2>Anatomy of the prompt: the six blocks, and why each one works on an LLM</h2><p class="sub">All of zero's prompts are built on exactly the same skeleton. Click a block.</p></div></div>
+  <div class="blocks" id="anBlocks"></div>
+  <div class="card anat" id="anBody"></div>
+  <div class="why"><b>The principle that ties all six blocks together</b>When we don't tell a language model exactly what we want, it gives us the <b>average</b> of what it saw in training. In motion design, the average is exactly "the template": dark background, glow, particles, fade. The prompt from zero doesn't add "creativity". It <b>deletes the average options</b> (the banned list), <b>sets the numbers</b> (colors, BPM, seconds, sizes), <b>passes on engineering knowledge</b> (build), <b>saves us the bugs he has already hit</b> (gotchas), and <b>brings a human into the loop cheaply</b> (start). It's a prompt written like a director's technical spec, not like a request.</div>
+</section>
+
+<!-- ============ 16 FLYOVER ============ -->
+<section class="sec s-denim" id="s16" data-folio="16" data-toc="Bonus: the fly-over prompt">
+  <div class="sh"><span class="num">16</span><div><h2>Bonus: the 3D fly-over prompt</h2><p class="sub">Exactly the same skeleton, but here zero breaks his own "2D only" rule, on purpose.</p></div></div>
+  <details><summary>Full prompt + explanation</summary><div class="in">
+    <div class="code"><span class="lbl">original · paste into Claude Code</span><button class="cp">Copy</button><pre data-prompt="fly"></pre></div>
+    <div class="tr" id="tr-fly"></div>
+  </div></details>
+  <p><b>What's new here compared with the previous three prompts:</b></p>
+  <h3>1. A camera driven by speed, not by positions</h3>
+  <p>"Drive the camera from one speed curve, never from a position key every half second... Integrate it into the page position." Instead of telling the camera "at 0.5 seconds be at y=300, at 1.0 be at y=700", we define <b>how fast</b> it travels at every moment, and <b>add up</b> (integrate) that speed over time to get the position. Why? Because when we connect fixed positions with a smooth curve, the speed between the keys turns "wavy": it speeds up and slows down around each key. The eye reads this as a glide that stalls and lurches ("stops or surges in the glide" is on the banned list). When we start from the speed, it stays exactly as flat as we defined it.</p>
+  <div class="lab"><div class="lh">Speed curve → position, vs. a key every half second</div><div class="lb">
+    <canvas id="fsCanvas" width="860" height="300"></canvas>
+    <div class="readout" id="fsR"></div>
+  </div></div>
+  <h3>2. Asymmetric depth of field</h3>
+  <p>"blur radius = 75 × (focus − depth) / depth in front of the focus and 6 × (depth − focus) / depth behind it, capped at 120px". <b>Depth of field</b> = how much of the image is sharp. In a real lens, things very close to the lens blur much faster than things far away, and that's what gives the "macro" feel of an expensive miniature. The multiplier of 75 in front versus 6 behind (12.5 times more) creates exactly this: the page near the lens "melts", while whatever sits behind the focus stays almost sharp.</p>
+  <div class="lab"><div class="lh">How much blur at each depth</div><div class="lb">
+    <canvas id="dfCanvas" width="860" height="240"></canvas>
+    <div class="ctrls"><label>Focus distance <input type="range" id="dfF" min="900" max="2400" value="1360"><output id="dfFO">1360</output></label></div>
+  </div></div>
+  <h3>3. Three engineering details that explain "why does mine look cheap?"</h3>
+  <ul>
+    <li><b>Mipmaps + 16x anisotropic filtering:</b> A texture (here, the image of the page) seen at a steep angle and from far away gets squeezed into far fewer pixels than it actually contains. Without preparation, each frame "samples" different pixels, so distant text flickers (shimmer). Mipmaps = pre-shrunk versions of the image, made in advance. Anisotropic filtering = sampling that understands the image is stretched more in one direction than the other (because of the angle).</li>
+    <li><b>"drawn lowest first with no depth buffer":</b> We draw from the lowest layer up to the highest, like a painter who paints the background first (the "painter's algorithm"). No depth buffer (the GPU's per-pixel record of what is closest to the camera), because the layers are partly transparent, and a depth buffer can't handle transparency.</li>
+    <li><b>"fade them into the haze colour first":</b> A card that turns transparent reveals whatever is behind it, and in 3D that looks like a "ghost". So first we tint it to the background's haze color (it "dissolves" into the air), and only at the very end cut it to transparent.</li>
+  </ul>
+  <div class="warn"><b>Two things this prompt requires, worth knowing up front</b>(1) It needs a real GPU (<code>--use-angle=d3d11</code>) and 16 subframes per frame, which means rendering on a local PC, not in the cloud. 14.5 × 60 × 16 = 13,920 captures (seconds × fps × subframes). (2) It starts with "open my link": it captures the <b>real</b> landing page, so any change to a section's height on that page shifts all the timing ("lock the page before timing anything").</div>
+</section>
+
+<!-- ============ 17 CRITIQUE ============ -->
+<section class="sec s-cloud" id="s17" data-folio="17" data-toc="Critical analysis: what's overstated">
+  <div class="sh"><span class="num">17</span><div><h2>What we can learn from this, including what's overstated</h2><p class="sub">The method is excellent. Its headline, less so.</p></div></div>
+  <div class="tbl"><table>
+    <tr><th>The claim</th><th>What's true</th><th>What's overstated / missing</th></tr>
+    <tr><td>"$0"</td><td>No need for After Effects or paid stock footage.</td><td>Claude itself costs money (a subscription or tokens). One source reports ~90K input tokens + 15K output tokens per film ≈ $0.66 at list price. That's for one film, before revision rounds, rendering and the time we put in.</td></tr>
+    <tr><td>"0 effort" / "I don't know step 1 of motion design"</td><td>No animator's hands needed.</td><td>The prompts are packed with deep professional knowledge (180° shutter, logarithmic zoom, closed-form springs, LUFS). The knowledge didn't disappear: it moved into the prompt. Change the prompts without understanding them, and they break.</td></tr>
+    <tr><td>"One prompt"</td><td>One prompt drives the process.</td><td>In practice: reference → assets → beat map → stills → render → 2–3 rounds of notes. Another creator (<span class="ltr">@rexan_wong</span>) who examined videos like these also concluded that "one prompt" is really a workflow.</td></tr>
+    <tr><td>"You can't tell it from a $15K video"</td><td>The demos really are high quality.</td><td>These are demos in one style he likes (2D, white, Apple-like). A studio also sells strategy, copy and a client process. The claim is his; nobody measured it.</td></tr>
+    <tr><td>"It's all free on Mixkit/Pexels"</td><td>Both have large free libraries.</td><td>Mixkit has a <b>separate license for each type of item</b> (music, SFX, "free" vs. "restricted" video). Pexels has restrictions on identifiable people and brands. Check every file before any commercial use.</td></tr>
+  </table></div>
+  <div class="why"><b>The big picture</b>The real shift here isn't "AI makes video". It's that motion design has turned into <b>director-led software engineering</b>: a spec, tests, targeted fixes, versions. Whoever can write the spec (taste + numbers + a banned list) and give precise notes wins. That's exactly the difference between zero's videos and "my one prompt video looked mid".</div>
+  <div class="warn"><b>A note on Opus 5.5's effort level</b>Community documentation for video prompts recommends running at a high effort level (high/xhigh), not the default. Effort is the setting for how much the model thinks before it answers. On a different technical benchmark (Terminal-Bench-Science), scores improved up to xhigh and dipped slightly at max. This wasn't measured on video specifically, but it's a reasonable starting point: xhigh for planning and writing the film.</div>
+</section>
+
+<!-- ============ 18 ADOPT ============ -->
+<section class="sec s-sky" id="s18" data-folio="18" data-toc="How we're adopting it">
+  <div class="sh"><span class="num">18</span><div><h2>How we're adopting it from now on: the YUV.AI Motion Method</h2><p class="sub">What we already have from EP01–EP06 (our first six episodes), what changes, and our prompt.</p></div></div>
+  <div class="tbl"><table>
+    <tr><th>Part</th><th>What we've done so far</th><th>From now on</th></tr>
+    <tr><td>Engine</td><td>Paused GSAP timeline / <code>render(t)</code> (EP01, EP04)</td><td>Same idea, but with <b>closed-form springs</b> and a strict "zero state" rule. A paused GSAP timeline is fine, as long as there are no timers</td></tr>
+    <tr><td>Clock</td><td>The voiceover's word timings (Scribe/Whisper)</td><td><b>Two clocks:</b> the voiceover for captions, the <b>beats</b> for transitions. The main event lands on the drop</td></tr>
+    <tr><td>Transitions</td><td>Whip/slice/flash cuts (EP03)</td><td><b>Morph + shared element</b> between scenes. Short captions with hard cuts stay: that's a separate layer</td></tr>
+    <tr><td>Camera</td><td>A punch-zoom on every cut (EP03 vertical)</td><td>One move per scene, logarithmic zoom, reset hidden under a flood</td></tr>
+    <tr><td>Sound</td><td>SFX placed at the start of an event; sometimes synthesized (EP02)</td><td>Real SFX, <b>aligned by measured peak</b>; ducking (the music dips) under the voiceover; −14 LUFS (already in place)</td></tr>
+    <tr><td>Motion blur</td><td>None</td><td>6–8 subframes + tmix, in the master render only</td></tr>
+    <tr><td>QA</td><td>Contact sheets, audit.py for legibility</td><td>+ a frame per beat, pop scan, right-to-left (RTL) check</td></tr>
+    <tr><td>Process</td><td>"Work to the end without asking"</td><td>One cheap gate: <b>a beat map + 4 stills</b> before the full film (can be auto-approved if nobody is available)</td></tr>
+  </table></div>
+  <h3>Our prompt: zero's skeleton, adapted to Hebrew, right-to-left and our brand</h3>
+  <div class="code"><span class="lbl">YUV.AI motion prompt · paste into Claude Code (Opus 5.5, effort xhigh)</span><button class="cp">Copy</button><pre id="yuvPrompt"></pre></div>
+  <div class="ex"><b>The next step we'd take</b>Turn this into a permanent Claude Code skill (<code>yuv-motion</code>) so there's nothing to paste. And before building from scratch, look at <a href="https://github.com/howseen-ai/claude-motion-design" target="_blank" rel="noopener">howseen-ai/claude-motion-design</a>: an open-source skill (MIT license) built on the same principles, including render.py, a pop scan and drop detection, and inspired directly by zero's prompts. We can take its engine and put our own layer on top (Hebrew, RTL, brand, frame capture on our RTX 4090).</div>
+  <div class="why"><b>Want to see what else you can ask for?</b>We built <a href="catalog.html">a live catalog of 18 elements</a>: Recharts charts, shadcn/ui interfaces, official icons and logos, kinetic typography, 3D in three.js, and effects. Each one comes with a demo whose timeline you can drag, an explanation from scratch, and a full prompt to copy. At the end, a prompt builder assembles a whole film.</div>
+</section>
+
+<!-- ============ 19 SOURCES ============ -->
+<section class="sec s-denim" id="s19" data-folio="19" data-toc="Sources">
+  <div class="sh"><span class="num">19</span><div><h2>Sources</h2><p class="sub">All links were checked and live on October 15, 2026.</p></div></div>
+  <ol class="src" id="srcList"></ol>
+</section>

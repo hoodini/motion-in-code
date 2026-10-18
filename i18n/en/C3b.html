@@ -1,0 +1,276 @@
+<!-- ============ 05 3D ============ -->
+<section class="sec s-navy" id="c5" data-folio="05" data-toc="3D: three.js">
+  <div class="sh"><span class="num">05</span><div><h2>3D with three.js</h2><p class="sub">Phones, glass, particles, ocean. And what every word in the prompt means.</p></div></div>
+  <div class="body">
+    <p><b>three.js</b> is the most popular library for 3D on the web, free under the MIT license. It sits on top of WebGL (the browser's way of drawing with the graphics card) and spares us the thousands of lines of code WebGL demands. To understand a 3D prompt, it helps to think of a film set:</p>
+    <ul>
+      <li><b>Scene</b>: the stage, where we place everything.</li>
+      <li><b>Camera</b>: where we look from, and how wide the view is (wide like a wide-angle lens, or narrow like a telephoto, zoom-style lens).</li>
+      <li><b>Mesh</b> (an object): every object in the scene. It is built from two parts: <b>Geometry</b>, the shape itself, and <b>Material</b>, the surface: its color, how shiny it is, how rough it is, whether it is transparent. The graphics card can draw one thing very fast, triangles, so every shape, even a sphere, is broken down into lots of small triangles.</li>
+      <li><b>Light</b>, and the <b>Environment map</b>: a 360° image of the surroundings that shows up as reflections in shiny surfaces. Without it, metal and glass look gray and dead, because metal has almost no color of its own: what we see in it is whatever it reflects, and with no surroundings it reflects nothing.</li>
+      <li><b>Renderer</b> (the photographer): turns all of this into one 2D image, the frame.</li>
+    </ul>
+    <p>Two more terms keep coming up in the prompts. <b>PBR</b> (Physically Based Rendering) means materials that respond to light according to the laws of physics, so they look real under any lighting. We control them mostly with two numbers between 0 and 1: <code>metalness</code> (how metallic it is) and <code>roughness</code> (how rough it is: 0 is a mirror, 1 is chalk). <b>GLTF</b> is the standard file format for 3D models, "the JPEG of 3D": a model we built in a 3D program (for example Blender, which is free and appears at the end of this chapter) or downloaded from a site comes into three.js as a GLTF file. Drag any demo here to rotate it. That works only in the preview: in the film, the angle is computed from t.</p>
+  </div>
+
+  <article class="el" id="e-devices">
+    <div class="el-h"><span class="el-n">05.1</span><h3 class="el-t">Phone and laptop with live screens</h3><div class="el-tags"><span>three.js</span><span>CanvasTexture</span><span>PBR</span><span class="lic">MIT</span></div></div>
+    <div class="el-demo" data-demo="d3-devices"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>What you see</h4><p>A laptop lid opens, a phone rises beside it, and the camera slowly circles around them. The screens show live content: on the phone, a push-up counter fills up; on the laptop, code is being typed. Everything builds itself from simple shapes in code, with no model file at all.</p>
+        <h4>An honest answer about "iPhone" and "MacBook"</h4><p>These are <b>generic</b> devices inspired by a modern phone and laptop, not Apple models. Apple's device designs and its logo are legally protected. If we need a recognizable device, we use a GLTF model whose license allows that use, or the official device templates Apple publishes for marketers, following Apple's guidelines.</p></div>
+        <div><h4>How it works</h4><ul>
+          <li>Each device's body is a box with rounded corners in a metallic PBR material, and it reflects a virtual "studio room" (<code>RoomEnvironment</code>).</li>
+          <li><b>The live screen</b>: every frame, we draw the user interface on a regular 2D Canvas and turn it into a texture (<code>CanvasTexture</code>), a "sticker" stretched over the 3D screen. <code>needsUpdate = true</code> tells three.js to copy the new drawing to the graphics card. By default it does not copy, because copying an image to the graphics card every frame is expensive, and in most textures the image never changes.</li>
+          <li>The lid is a hinge: its rotation is computed from t with a spring. The camera moves on a circular path around the devices.</li></ul></div>
+      </div>
+      <div class="fit"><div class="y"><b>When to use</b>"It works on every device", showing an app inside a 3D world, a transition from a flat interface to a real product.</div><div class="n"><b>When not to</b>When the viewer needs to read what's on the screen: at a 3D angle, small text gets lost. Show the screen flat first, and only then put it into the device.</div></div>
+      <div class="prompt"><h5>Full prompt</h5><div class="code"><span class="lbl">3D phone + laptop with live screens · three.js</span><button class="cp" type="button">Copy prompt</button><pre>&lt;inputs&gt;
+Ask me what each screen should show. If I skip it: the phone shows a push-up counter ring filling to 12 reps with the title "Push-ups", the laptop shows code typing line by line.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 9-second 3D clip, 1920x1080, 60fps, three.js. A generic modern laptop opens its lid while a generic phone rises beside it; the camera orbits slowly around both. Both screens are live and animate in sync with the film.
+Devices: rounded aluminium-like bodies (PBR, metalness 0.8, roughness 0.3), black glass screens with a thin bezel, no brand logos. Background: the clear sky gradient #5EA9F2 → #93CBFF → #DDF0FF, a soft contact shadow under the devices. Accent colours on screen: #FFC74E, #FF8F3A, #F56B49.
+Banned: Apple logos or exact Apple product shapes, floating particles, lens flares, a camera that reverses direction.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM. Beats 0-3: lid opens on a spring. Beats 2-5: the phone rises. Beats 4-17: slow orbit, the counter ring fills on screen, the code types on the laptop at one line per beat.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file with three.js that exposes window.seek(t); every transform and every screen pixel is computed from t, no clocks.
+Build the devices from rounded boxes. For each screen, draw its UI on an offscreen 2D canvas every frame, wrap it in a CanvasTexture with colorSpace = SRGBColorSpace, and set needsUpdate = true after drawing. Use RoomEnvironment through PMREMGenerator for reflections and ACES tone mapping. The lid's rotation and the phone's height come from closed-form springs of t; the camera orbit angle is a smooth function of t.
+Capture with Playwright at 60fps (preserveDrawingBuffer on the renderer), assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Forgetting needsUpdate = true leaves the screen frozen on its first frame.
+- Screen text drawn on the canvas must be large; on a tilted 3D screen anything under about 28px becomes unreadable.
+- Never call renderer.setAnimationLoop; render once inside seek(t).
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me 3 stills (lid half open, phone up, mid orbit) before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-glass">
+    <div class="el-h"><span class="el-n">05.2</span><h3 class="el-t">Breathing glass orb</h3><div class="el-tags"><span>three.js</span><span>MeshPhysicalMaterial</span><span>shader</span></div></div>
+    <div class="el-demo" data-demo="d3-glass"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>What you see</h4><p>A glass orb that slowly changes shape, like a droplet, with a ring and small spheres circling it. Behind it sits the word YUV.AI, and the glass bends the text, exactly the way a glass of water distorts whatever is behind it.</p>
+        <h4>The material: real glass</h4><p><code>MeshPhysicalMaterial</code> is the advanced material in three.js. Three settings turn it into glass: <b>transmission</b> (how much light passes through it), <b>thickness</b> (how thick it is, because thick glass bends light more), and <b>ior</b>, the index of refraction: how much light bends when it enters the material. For glass it's about 1.5, for water 1.33.</p></div>
+        <div><h4>How it "breathes"</h4><p>Every point on the orb's surface is pushed outward or inward according to <b>noise</b>: a function that gives random but smooth values, so neighboring points get similar values, and the result looks organic rather than jittery. The calculation is done by a <b>shader</b>: a small program that runs on the graphics card, on all the points in parallel. We inject a few lines into the built-in three.js shader with <code>onBeforeCompile</code>, and pass t to it as a variable (<code>uTime</code>).</p></div>
+      </div>
+      <div class="fit"><div class="y"><b>When to use</b>A "premium" moment, a logo or product name behind glass, a transition between chapters.</div><div class="n"><b>When not to</b>On a bright, flat background: the glass has nothing to refract, and it looks like gray plastic.</div></div>
+      <div class="prompt"><h5>Full prompt</h5><div class="code"><span class="lbl">liquid glass orb · three.js</span><button class="cp" type="button">Copy prompt</button><pre>&lt;inputs&gt;
+Ask me for the word that sits behind the glass. If I skip it, use "YUV.AI".
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 12-second loopable 3D clip, 1920x1080, 60fps. A liquid glass orb slowly breathes (its surface swells and settles organically) in front of a large word set in Anton in the fire gradient #FFC74E → #FF8F3A → #F56B49, which it refracts. An orange torus ring tilts slowly behind it and five small glossy spheres in brand colours (#FFC74E, #12163F, #F56B49, #5EA9F2, #D74270) orbit it. Background: the sky gradient #2C78D2 → #93CBFF → #F4FBFF, one white key light from the upper right.
+Banned: rainbow chromatic aberration, bloom everywhere, particles, a glass that looks grey.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+One breath cycle every 4 beats at 120 BPM (2s). The orbiting spheres complete one orbit over the full 12s so the clip loops seamlessly.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file with three.js that exposes window.seek(t); every uniform and transform is computed from t.
+Material: MeshPhysicalMaterial with transmission 1, thickness 1.2, ior 1.45, roughness 0.05, an environment map from RoomEnvironment via PMREMGenerator. Displace vertices along their normals with 3D simplex noise injected through onBeforeCompile; the shader's uTime uniform is set from t every frame. Use a high-segment sphere (at least 128×128) so the displacement is smooth.
+Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Transmission needs an environment map and something behind the object, or the glass reads as grey.
+- After displacing vertices, recompute normals in the shader (or use a normal-from-noise approximation), or the lighting looks flat.
+- For a seamless loop, make every periodic motion an integer number of cycles over the clip's length.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me 2 stills (inhale and exhale) before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-particles">
+    <div class="el-h"><span class="el-n">05.3</span><h3 class="el-t">20,000 particles that morph</h3><div class="el-tags"><span>three.js</span><span>Points</span><span>GPU</span></div></div>
+    <div class="el-demo" data-demo="d3-particles"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>What you see</h4><p>Twenty thousand points moving between four shapes: a sphere, a knot, the word AI, and a galaxy. The same technique runs at the top of this page. Wait: aren't "particles" on zero's banned list? They are, because <b>aimless</b> particles drifting in the background are a cliché. Particles that turn into a word and tell us something are a technique.</p></div>
+        <div><h4>How it works</h4><ul>
+          <li><code>Points</code> is a three.js object that draws every point in a list as a dot on screen, all of them at once on the graphics card. 20,000 dots as regular page elements (the DOM) would choke the browser (see lab 0.6).</li>
+          <li>For each shape we precompute 20,000 target positions. The word is sampled from a drawing of it: we write it on a 2D Canvas and read which pixels got painted.</li>
+          <li>Each point's position = a blend between the previous shape and the next one, following the progress p with easing: <code>mix(A, B, ease(p))</code>. Every point gets a small delay of its own, so the transition looks like a swarm and not like a solid block.</li></ul></div>
+      </div>
+      <div class="fit"><div class="y"><b>When to use</b>An opening or a closing, "from chaos to order", a logo built from thousands of points.</div><div class="n"><b>When not to</b>As a moving background behind text: that's exactly the cliché, and it competes with reading.</div></div>
+      <div class="prompt"><h5>Full prompt</h5><div class="code"><span class="lbl">particle morph · three.js Points</span><button class="cp" type="button">Copy prompt</button><pre>&lt;inputs&gt;
+Ask me for the word or logo the particles should form. If I skip it, use "AI".
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+An 11-second 3D clip, 1920x1080, 60fps. 20,000 particles morph from a sphere into a torus knot, into a word, into a spiral galaxy, holding each shape for about 1.6s. Particles are small soft dots in #FFC74E, #FF8F3A, #F56B49 and a little #5DE4E9, additive blending on #0B0E2A. The camera drifts slowly.
+Banned: particles drifting randomly in the background, bloom halos around everything, a linear morph.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM. Each morph takes 3 beats (1.5s) and starts on a downbeat; each hold is just over 3 beats.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file with three.js that exposes window.seek(t); positions are computed from t every frame, no simulation state.
+THREE.Points with a fixed count of 20,000. Precompute a Float32Array of target positions per shape: sphere (Fibonacci sphere), torus knot (TorusKnotGeometry vertices, resampled), word (draw it on a 2D canvas, sample lit pixels, add a little depth jitter), galaxy (logarithmic spiral arms with noise). position = mix(A, B, easeInOut(progress)), with a small per-particle delay. Custom point shader for round soft dots.
+Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Every shape must have exactly the same particle count; resample, never truncate.
+- Seed the random jitter (a fixed seed), so frame 300 is identical on every render.
+- Additive blending with depthWrite on causes black squares; set depthWrite: false.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me one still of each shape before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-ocean">
+    <div class="el-h"><span class="el-n">05.4</span><h3 class="el-t">Ocean and sky: from day to sunset</h3><div class="el-tags"><span>three.js</span><span>Sky</span><span>Water</span></div></div>
+    <div class="el-demo" data-demo="d3-ocean"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>What you see</h4><p>A calm sea and a sky that moves from midday to sunset and back, in twelve seconds. This is the time-lapse from the YUV.AI MOTION launch film, where the devices float above the water.</p></div>
+        <div><h4>How it works</h4><ul>
+          <li><code>Sky</code> is a three.js addon that computes the color of the sky from the sun's position, using a physical model of how light scatters in the atmosphere. Why orange? Air scatters blue light far more than red light. When the sun is low, its light passes through much more air on the way to us, most of the blue scatters off to the sides, and what reaches us is mostly orange and red. We don't paint a sunset: we lower the sun.</li>
+          <li><code>Water</code> is an addon that draws the scene one more time, as if in a mirror under the surface of the water, and distorts that reflection with a wave pattern that moves according to t.</li>
+          <li>The time of day is a single number computed from t, and from it we derive the sun's height, the color of the light and the exposure (the overall brightness of the image).</li></ul></div>
+      </div>
+      <div class="fit"><div class="y"><b>When to use</b>"Time passing", atmosphere, a backdrop for a 3D product scene, an emotional ending.</div><div class="n"><b>When not to</b>A pure interface film: a whole world distracts from the app.</div></div>
+      <div class="prompt"><h5>Full prompt</h5><div class="code"><span class="lbl">ocean time-lapse · three.js Sky + Water</span><button class="cp" type="button">Copy prompt</button><pre>&lt;inputs&gt;
+Ask me whether something should float above the water (a product, a logo). If I skip it, keep the scene empty.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 12-second 3D clip, 1920x1080, 60fps. A calm open ocean under a physically based sky. Time of day goes from midday to golden hour to sunset and back to day, so the clip loops. The camera is low over the water and drifts forward slowly. Warm sunset tones should land near #FF8F3A and #F56B49, the day sky near #5EA9F2.
+Banned: lens flares, birds, a sun that jumps, choppy stormy waves.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM. The sun reaches its lowest point on beat 12 (6s), exactly mid-clip.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file with three.js and its Sky and Water addons, exposing window.seek(t).
+One number tod(t) from 0 (midday) to 1 (sunset) drives the sun's elevation, the Sky's turbidity and rayleigh, the directional light's colour and the renderer's exposure. The Water shader's time uniform is set from t every frame.
+Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- The Water addon advances its own time if you let it. Set material.uniforms.time.value from t every frame.
+- Update the sun direction on both the Sky and the Water, or the reflection points at a different sun.
+- Lower exposure at sunset, or the sky blows out to white.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me stills at midday, golden hour and sunset before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-carousel">
+    <div class="el-h"><span class="el-n">05.5</span><h3 class="el-t">Card carousel that snaps to the beat</h3><div class="el-tags"><span>three.js</span><span>sum of springs</span></div></div>
+    <div class="el-demo" data-demo="d3-carousel"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>What you see</h4><p>Six cards on a ring in 3D. The ring turns one step on every beat, overshoots a little and settles. This is the moment in the launch film where the click bursts into a carousel.</p></div>
+        <div><h4>How it works: a sum of springs</h4><p>The ring's angle is a <b>sum</b>: every beat has its own spring, which starts at that beat's time and adds one step (60°, because 360° divided by 6 cards is 60°). <code>angle = Σ step × spring(t − beat_i)</code>. The symbol Σ (sigma) means "add them all up": for every beat i, which starts at time beat_i, we add its spring. Each spring overshoots the target a little and comes back, which is why every step "lands". And since this is a sum of closed-form formulas, we can compute the angle at any moment, even if we jump straight to the middle.</p><p>Each card also rotates around its own axis so it always faces the camera. Otherwise the text on the cards at the back would read reversed, as in a mirror.</p></div>
+      </div>
+      <div class="fit"><div class="y"><b>When to use</b>Presenting categories, features or templates, where each one gets its own beat.</div><div class="n"><b>When not to</b>When the content of the cards has to be read closely: they go by too fast.</div></div>
+      <div class="prompt"><h5>Full prompt</h5><div class="code"><span class="lbl">3D card carousel on the beat · three.js</span><button class="cp" type="button">Copy prompt</button><pre>&lt;inputs&gt;
+Ask me for the card titles (6 to 8). If I skip them, use the six categories of this catalog: Charts, UI, Icons, Type, 3D, Effects.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 6.6-second 3D clip, 1920x1080, 60fps. Six cards stand on a ring in 3D, facing outward. The ring snaps one card forward on every beat with a small overshoot. The front card is slightly larger and fully lit; the others dim with distance. Cards: white with a 28px radius, a navy uppercase title in Anton and a fire-gradient icon chip; background the sky gradient #5EA9F2 → #93CBFF → #DDF0FF.
+Banned: continuous spinning, motion blur streaks, cards that show mirrored text.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM: a snap every 0.5s for 12 beats.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file with three.js exposing window.seek(t).
+Each card is a plane with a CanvasTexture drawn once. Ring rotation = sum over beats of step × spring(t − beatTime_i), with step = 2π / cardCount and this closed-form spring, ω = 14 and ζ = 0.6: spring(t) = 1 − e^(−ζωt)·(cos(ω_d·t) + (ζω/ω_d)·sin(ω_d·t)), ω_d = ω·√(1 − ζ²). Each card's own rotation counter-rotates so it always faces the camera.
+Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- If the cards face the ring's centre instead of the camera, the far ones read mirrored.
+- Use sRGB colour space on the textures, or the brand colours look washed out.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me stills at beats 1, 4 and 8 before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-eq">
+    <div class="el-h"><span class="el-n">05.6</span><h3 class="el-t">3D equalizer</h3><div class="el-tags"><span>three.js</span><span>InstancedMesh</span></div></div>
+    <div class="el-demo" data-demo="d3-eq"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>What you see</h4><p>A 20×20 grid of bars with a wave running through it, and every beat gives it a "kick" from the center outward. The color depends on height: low bars are blue, medium ones orange, tall ones gold. Here the wave comes from a formula; in a real film the heights come from the music itself.</p>
+        <h4>From the music, without breaking the clock</h4><p>A live audio analyzer in the browser runs on the wall clock (real time, not the film's t), so it doesn't work for frame-by-frame capture. Instead, we analyze the song <b>in advance</b>: for every frame we compute the <b>spectrum</b>, how much energy there is in each frequency range (bass, mids, highs), and store it in a table. During capture we just read the row for t.</p></div>
+        <div><h4>How it works: one shape, 400 instances</h4><p>Every separate object in three.js is a separate drawing instruction that the processor (CPU) sends to the graphics card (a <b>draw call</b>). Thousands of these every frame slow the processor down, even when the graphics card has capacity to spare. This matters mostly for the live preview (lab 0.6); the film comes out smooth either way. <code>InstancedMesh</code> sends <b>one instruction</b>: "draw this box 400 times, here are the position and color of each one". Same image, a fraction of the work.</p></div>
+      </div>
+      <div class="fit"><div class="y"><b>When to use</b>A music video, "the music is the clock", an energetic build-up before the drop.</div><div class="n"><b>When not to</b>A film without prominent music: an equalizer moving over silence looks disconnected.</div></div>
+      <div class="prompt"><h5>Full prompt</h5><div class="code"><span class="lbl">3D audio equalizer · InstancedMesh</span><button class="cp" type="button">Copy prompt</button><pre>&lt;inputs&gt;
+Ask me for the music track. If I skip it, use a royalty-free 120 BPM track with a clear kick (Mixkit, licensed for commercial use) and tell me which one.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 12-second 3D clip, 1920x1080, 60fps. A 20×20 grid of bars seen from a three-quarter angle above. Bar heights follow the music: bass in the centre, highs at the edges, and every kick sends a ring-shaped pulse from the centre outward. Colour by height from blue #2C78D2 through orange #FF8F3A to gold #FFC74E. Background #0B0E2A, a soft rim light.
+Banned: random heights not tied to the audio, bloom on everything, a camera that shakes.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+The track's own beat grid drives everything: measure the BPM and the kick times first.
+&lt;/structure&gt;
+
+&lt;build&gt;
+Analyse the track offline first (Python with librosa, or ffmpeg plus an FFT): for every frame at 60fps, store the energy of 20 frequency bands and the kick onsets in a JSON file.
+Then one HTML file with three.js exposing window.seek(t): one InstancedMesh of 400 boxes; for each frame, read row round(t × 60) of the JSON, set each instance's scale.y and colour with setMatrixAt and setColorAt, then set instanceMatrix.needsUpdate and instanceColor.needsUpdate. The pulse is a ring whose radius grows from each kick time.
+Capture with Playwright at 60fps and mux the same audio with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- A live Web Audio analyser runs on the wall clock. Precompute the spectrum, or picture and sound drift apart.
+- Scale boxes from their base, not their centre (translate the geometry up by half its height once).
+- Smooth the band energies over 2-3 frames, or the bars flicker.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me the detected BPM, the kick times and 2 stills before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+  <div class="body">
+    <h3>When you need more than this</h3>
+    <ul>
+      <li><b>React Three Fiber</b>: three.js in the form of React components (React is a popular library for building web interfaces). Useful when the scene is large and the project is already built in React. MIT. Version 9 is made for React 19.</li>
+      <li><b>Spline</b>: a visual 3D editor in the browser, no code. We design by hand and export to GLTF, three.js or React. There is a free plan.</li>
+      <li><b>Blender</b>: a full 3D program, free, under the GPL license: we may use it for any purpose, commercial included, and what we create with it is ours; the GPL terms apply only to someone who modifies the program itself and distributes it. We build custom models in it and export them as GLTF. A steep learning curve, results without limits.</li>
+    </ul>
+  </div>
+</section>
+

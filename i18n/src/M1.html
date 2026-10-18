@@ -1,0 +1,125 @@
+<section class="hero" id="top">
+  <div class="hero-top">
+    <div class="hero-txt">
+      <div class="hkick"><b>YUV.AI · MOTION IN CODE</b><i></i></div>
+      <h1>וידאו<br>שהוא <span class="hl">קוד</span>.</h1>
+      <p class="deck">איך Claude מייצר סרטוני השקה ברמת סטודיו, בלי After Effects</p>
+      <p class="hmono"><span class="nb">seek(t) → Playwright → ffmpeg</span> · <span class="nb">60 fps · on the beat</span></p>
+      <a class="hcta neon" href="#s0"><span>▶</span>צפו בשלושת הסרטים</a><a class="hcta2" href="catalog.html">קטלוג: מה אפשר לבקש</a>
+    </div>
+    <div class="hero-stage">
+      <figure class="hshot hs-wide"><video class="hloop" autoplay muted loop playsinline preload="auto" poster="media/hero-launch-loop.jpg" aria-label="קטע מסרט ההשקה YUV.AI MOTION: קרוסלת כרטיסים תלת־ממדית שנעצרת על כל ביט"><source src="media/hero-launch-loop.webm" type="video/webm"><source src="media/hero-launch-loop.mp4" type="video/mp4"></video></figure>
+      <figure class="hshot hs-phone"><video class="hloop" autoplay muted loop playsinline preload="auto" poster="media/hero-ketzev-loop.jpg" aria-label="קטע מהסרט קצב: דמות מצוירת בקוד מתאמנת בסנכרון עם מונה החזרות באפליקציה"><source src="media/hero-ketzev-loop.webm" type="video/webm"><source src="media/hero-ketzev-loop.mp4" type="video/mp4"></video></figure>
+    </div>
+  </div>
+  <span class="kicker"><i></i>מחקר עומק · 15.10.2026 · השיטה של <span class="ltr">@twoclipping</span></span>
+  <p class="lead">הסרטון למטה הוא לא קובץ וידאו. הוא תוכנה קטנה שמציירת אותו בזמן אמת, פריים אחרי פריים, מתוך מספר אחד בלבד: <b>הזמן</b>. בדיוק כמו הסרטונים של <span class="ltr">@twoclipping</span>, רק קטן יותר. לחצו Play, תגררו את הסרגל לכל נקודה — ואז נפרק אותו ביחד, מהיסוד, פירור אחרי פירור.</p>
+  <div class="film neon" id="film">
+    <canvas id="filmCanvas" width="1280" height="720" aria-label="סרטון הדגמה שמצויר בקוד"></canvas>
+    <div class="ruler" id="filmRuler" aria-hidden="true"></div>
+    <div class="fbar">
+      <button class="btn neon" id="filmPlay">▶ Play</button>
+      <input type="range" id="filmScrub" min="0" max="9" step="0.0166667" value="0" aria-label="זמן בסרטון">
+      <span class="tc" id="filmTC">t = 0.000s · frame 0 · beat 0</span>
+      <label><input type="checkbox" id="filmBlur"> מושן בלר</label>
+      <label><input type="checkbox" id="filmSound" checked> סאונד</label>
+    </div>
+  </div>
+  <p class="sub">סרגל הביטים מתחת לתמונה: כל קו הוא ביט (חצי שנייה, כי השיר ב-120 פעימות לדקה), הקו הכתום הוא ה"דרופ" — הרגע שבו המוזיקה מתפוצצת. המוזיקה והאפקטים כאן מסונתזים בדפדפן לצורך ההדגמה בלבד; השיטה המקורית דורשת סאונד אמיתי (ונראה למה).</p>
+  <div class="chips">
+    <span class="chip">היוצר: <b>zero</b> · <span class="ltr">@twoclipping</span></span>
+    <span class="chip">המאמר: <b>28.9.2026</b></span>
+    <span class="chip">פוסט ה-UI morph: <b>~0.93–0.98M</b> צפיות</span>
+    <span class="chip">Opus 5.5 יצא: <b>22.9.2026</b></span>
+  </div>
+</section>
+
+<!-- ============ THE FILM ============ -->
+<section class="sec s-navy" id="s0" data-folio="REEL" data-toc="הסרט: עשוי בשיטה">
+  <div class="sh"><span class="num">▶</span><div><h2>הסרט: 27 שניות, ‏60fps, עשוי כולו בשיטה הזו</h2><p class="sub">קובץ HTML אחד ופונקציה אחת של זמן. כל פריים צולם ב-Playwright, הסרט הורכב ב-ffmpeg, והמוזיקה והאפקטים אמיתיים, כל אחד ממוקם לפי השיא הנמדד שלו.</p></div></div>
+  <div class="reel">
+    <figure class="reel-v"><video controls playsinline preload="metadata" poster="media/poster-9x16.jpg" src="media/motion-in-code-9x16.mp4"></video><figcaption>‏9:16 · רילס / טיקטוק</figcaption></figure>
+    <figure class="reel-h"><video controls playsinline preload="metadata" poster="media/poster-16x9.jpg" src="media/motion-in-code-16x9.mp4"></video><figcaption>‏16:9 · יוטיוב / לינקדאין</figcaption></figure>
+  </div>
+  <div class="chips">
+    <span class="chip"><b>1602</b> פריימים לכל פורמט</span>
+    <span class="chip"><b>0</b> קפיצות פריים בודדות</span>
+    <span class="chip">אפקטים נוחתים <b>+7 עד +17ms</b> אחרי הביט</span>
+    <span class="chip">עוצמה <b>‎−13.6 LUFS</b></span>
+  </div>
+  <h3>שיעור שלא מופיע במאמר: אותה תנועה, שני כיווני אמנות</h3>
+  <p>הגרסה הראשונה (מימין) עבדה טכנית: אותו תזמון, אותם קפיצים, אותו סאונד. ובכל זאת היא נראתה "אנמית". הגרסה השנייה (משמאל) לא הזיזה אף שנייה בתזמון. היא שינתה רק את השפה הוויזואלית:</p>
+  <img class="cmp" src="media/v1-vs-v2.jpg" alt="השוואה: גרסה 1 בנייר חיוור מימין, גרסה 2 בסגנון מגזין משמאל, באותם שלושה רגעים בסרט" loading="lazy">
+  <ul>
+    <li><b>דף צבע מלא שמתחלף על הביט הראשון של כל תיבה</b> (שחור, ציאן, מג׳נטה) במקום נייר חיוור קבוע. ההחלפה היא מגב קשיח עם פס צבע מוביל, לא פייד.</li>
+    <li><b>טיפוגרפיה בקנה מידה של מגזין:</b> כותרת Rubik 900 בגודל 150px מעוגנת לימין, במקום 104px באמצע. כותרות המשנה ב-Anton במקום מונו דק.</li>
+    <li><b>מספרי פוליו ענקיים</b> (01–07) שיוצאים מגבולות הפריים. זו שכבת עומק בלי שום תוכן נוסף.</li>
+    <li><b>קווים עבים (4–9px) ובלי אפור:</b> כל צבע על המסך הוא צבע מותג.</li>
+  </ul>
+  <h3>שלב הבא: YUV.AI MOTION, אותה שיטה בקנה מידה מלא</h3>
+  <p>סרט השקה של 33 שניות למוצר דמיוני שהופך כל נושא לסרטון השקה. הוא בנוי עם הקיט שיצא מהעבודה הזו, ושום פריים בו לא מגיע מתוכנת עריכה:</p>
+  <ul>
+    <li>תיבת קלט עם הילה ניאונית שפועמת על הביט.</li>
+    <li>הקלדה בתווי שש־עשרה, והמצלמה עוקבת אחרי הסמן.</li>
+    <li>קליק שמתפוצץ לכרטיס שנוחת בקרוסלה תלת־ממדית ונעצרת על כל ביט.</li>
+    <li>אייפון ומקבוק שהמכסה שלו נפתח על הביט, עם קוד שנכתב על המסך בזמן אמת.</li>
+    <li>טיים־לאפס של השמיים מיום לשקיעה.</li>
+  </ul>
+  <p>גם הים, העננים והשמש הם קוד: three.js ושיידר, עם אותו שעון <code>seek(t)</code>. הקוד פתוח בתיקייה <a class="ltr" href="https://github.com/hoodini/motion-in-code/tree/main/kit">/kit</a>.</p>
+  <div class="reel">
+    <figure class="reel-v"><video controls playsinline preload="none" poster="media/poster-launch-9x16.jpg" src="media/yuv-motion-launch-9x16.mp4"></video><figcaption>‏9:16 · YUV.AI MOTION</figcaption></figure>
+    <figure class="reel-h"><video controls playsinline preload="none" poster="media/poster-launch-16x9.jpg" src="media/yuv-motion-launch-16x9.mp4"></video><figcaption>‏16:9 · YUV.AI MOTION</figcaption></figure>
+  </div>
+  <div class="chips">
+    <span class="chip"><b>1960</b> פריימים לכל פורמט</span>
+    <span class="chip"><b>0</b> קפיצות פריים</span>
+    <span class="chip"><b>66</b> אפקטים על הביט</span>
+    <span class="chip">עוצמה <b>‎−13.7 LUFS</b></span>
+  </div>
+  <h3>ועכשיו סיפור: "קצב", סרט מוצר לאפליקציית כושר</h3>
+  <p>סרט השקה הוא לא רשימת פיצ'רים. "קצב" (אפליקציה דמיונית) בנוי כמו פרסומת אמיתית: בעיה שמרגישים, רגע מפנה, המוצר מבפנים, אנשים שמשתמשים בו, הוכחה, ולמה עכשיו. 40 שניות, 84 ביטים, וגם כאן כל פריים הוא קוד:</p>
+  <ul>
+    <li><b>הבעיה:</b> לילה, ספה, טלפון. לוח שנה שמתמלא באיקסים, שלוש התראות מאפליקציות שלא עבדו, ואז הכל מתכווץ לנקודה שפועמת כמו לב והופכת לאייקון.</li>
+    <li><b>הדרופ:</b> איריס אל שמיים של יום, והשם נוחת על הביט.</li>
+    <li><b>המוצר מבפנים:</b> צלילה לתוך המסך, גלילה בפיד על הביטים, צ'יפים ניאוניים שמסבירים כל חלק, טאפ שהופך כרטיס למסך הבא, ומסך אימון חי.</li>
+    <li><b>מתאמנים:</b> נועה עושה סקוואט, וכל חזרה נוחתת על ביט ושולחת "+1" למונה בטלפון. דניאל רץ, מאיה עושה שכיבות סמיכה, והמסך מתחלף איתם. הדמויות מצוירות בקוד, עם רגליים שנטועות ברצפה וזרועות ב־IK.</li>
+    <li><b>הוכחה ולמה:</b> רצף של 30 יום, גרף לפני ואחרי, שלוש סיבות, וכפתור הורדה עם הילה.</li>
+  </ul>
+  <div class="reel">
+    <figure class="reel-v"><video controls playsinline preload="none" poster="media/poster-ketzev-9x16.jpg" src="media/ketzev-fitness-9x16.mp4"></video><figcaption>‏9:16 · קצב</figcaption></figure>
+    <figure class="reel-h"><video controls playsinline preload="none" poster="media/poster-ketzev-16x9.jpg" src="media/ketzev-fitness-16x9.mp4"></video><figcaption>‏16:9 · קצב</figcaption></figure>
+  </div>
+  <div class="why"><b>המסקנה</b>השיטה נותנת תנועה ותזמון ברמת סטודיו, אבל לא טעם. את הטעם צריך לכתוב כבריף ויזואלי מפורש: פלטה, קנה מידה של טיפוגרפיה, מה קורה לרקע על כל ביט. אם לא כותבים אותו, המודל בוחר ברירת מחדל "בטוחה", כלומר חיוורת.</div>
+</section>
+
+<!-- ============ 1 TL;DR ============ -->
+<section class="sec s-fire" id="s1" data-folio="01" data-toc="בשורה התחתונה">
+  <div class="sh"><span class="num">01</span><div><h2>בשורה התחתונה — בלי מילה אחת של ז'רגון</h2><p class="sub">חמישה משפטים. כל השאר בעמוד הוא ההוכחה והפירוק שלהם.</p></div></div>
+  <ol class="tldr">
+    <li><div><b>קלוד לא מצייר וידאו. הוא כותב תוכנה שמציירת כל תמונה בסרטון.</b> שאלה ויזואלית ("תעשה משהו יפה") הופכת לשאלה של קוד ("מה המיקום של הכפתור בשנייה 4.2?") — ובשאלות של קוד קלוד מצוין, מדויק ועקבי.</div></li>
+    <li><div><b>הטעם לא נשאר לניחוש.</b> הפרומפטים שלו לא אומרים "תעשה יפה"; הם מכתיבים צבעים מדויקים, פונט, ורשימת "אסור" ארוכה של כל הטריקים הזולים שמודל נוטה אליהם כברירת מחדל.</div></li>
+    <li><div><b>אין חיתוכים — יש שינויי צורה.</b> כפתור לא נעלם ומוחלף בעמוד; הכפתור עצמו גדל והופך לעמוד. העין עוקבת אחרי אותו אובייקט, והמוח קורא את זה כסיפור אחד רציף ויקר.</div></li>
+    <li><div><b>המוזיקה היא השעון.</b> קודם מודדים את השיר — כמה פעימות בדקה ומתי הפיצוץ — ורק אז מתכננים מה קורה בכל פעימה. התנועה "נוחתת" על הקצב כי היא תוכננה עליו.</div></li>
+    <li><div><b>קלוד בודק את עצמו לפני שאתם רואים.</b> הוא מצלם תמונות סטילס, מסתכל עליהן (הוא יודע לקרוא תמונות), מודד קפיצות ותקלות במספרים — ורק אז מרנדר. אתם נותנים הערות כמו במאי, לא כמו מתכנת.</div></li>
+  </ol>
+</section>
+
+<!-- ============ 2 WHO ============ -->
+<section class="sec s-cloud" id="s2" data-folio="02" data-toc="מי, מה ומתי">
+  <div class="sh"><span class="num">02</span><div><h2>מי זה <span class="ltr">@twoclipping</span>, ומה בדיוק הוא פרסם</h2><p class="sub">עובדות עם מקורות. מה שלא הצלחתי לאמת — כתוב במפורש.</p></div></div>
+  <div class="card">
+    <p><b>zero</b> (<span class="ltr">@twoclipping</span> ב-X) הוא יוצר שהתפוצץ בשבוע ההשקה של Claude Opus 5.5 (שיצא ב-22 בספטמבר 2026). הפוסט הראשון שלו — "צורה אחת שמשתנה דרך תריסר מצבי ממשק על הביט" — עלה ב-24.9 ונמדד בכ-978 אלף צפיות ו-11.9 אלף לייקים (מדידה אחרת, מאוחרת: 933 אלף). הוא פרסם יחד עם הסרטונים את הפרומפטים המלאים והזמין במפורש להעתיק אותם ("steal it").</p>
+    <p>ב-28.9.2026 פרסם מאמר ארוך ב-X: <b>"How I Make $10K Launch Videos for $0 with Opus 5.5 (Full Course)"</b> — זה המאמר ששלחת. הוא מכיל 6 שלבים, 3 פרומפטים מלאים, ו-7 "חוקי יוקרה". לפי סיכום עצמאי של המאמר, הוא נחתם בהמלצה על רשת יוצרים/אפיליאייט להפצה — חלק שלא הופיע בטקסט ששלחת.</p>
+    <div class="tbl"><table>
+      <tr><th>הפרומפט</th><th>פורמט</th><th>מה מיוחד בו</th></tr>
+      <tr><td>UI Morph (הוויראלי)</td><td>1440×1440 · 0:14 · 120BPM</td><td>צורה אחת שעוברת 14 מצבי ממשק, לופ מושלם</td></tr>
+      <tr><td>הזמנת אוכל</td><td>1920×1080 · 0:15 · 130BPM</td><td>סיפור משתמש: בקשה → תוצאה → פעולה</td></tr>
+      <tr><td>"Develop" — הדפסת תמונות</td><td>1440×1440 · 0:27 · 120BPM</td><td>"זכוכית נוזלית", צמצם מצלמה, פוטג' אמיתי; ~106K צפיות</td></tr>
+      <tr><td>Beat-synced footage</td><td>1920×1080 · 10 תיבות</td><td>קליפים אמיתיים מסונכרנים לביט, קרוסלה תלת-ממדית</td></tr>
+      <tr><td>Landing-page fly-over (ששלחת)</td><td>1440×1152 · 14.5s</td><td>WebGL תלת-ממדי, עומק שדה, מצלמה ממהירות</td></tr>
+    </table></div>
+    <div class="warn"><b>מה לא אימתתי</b>X חוסם גישה אוטומטית, לכן לא קראתי את המאמר ישירות משם — הסתמכתי על הטקסט ששלחת ועל 4 מקורות משניים שמצטטים אותו. את פרומפט ה-fly-over ששלחת לא מצאתי באף רשימה ציבורית, כך שאת המקור המדויק שלו (איזה פוסט, איזה תאריך) לא אימתתי.</div>
+  </div>
+</section>
+
+<!-- ============ 3 TRANSLATION ============ -->

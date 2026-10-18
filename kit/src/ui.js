@@ -93,12 +93,13 @@ export function slamWords(x, t, words, cx, y, size, fontFn, color, times, tOut, 
   x.restore();
 }
 /** RTL typing where every character pops in on its own spring. xr = right edge of the text. returns caret x. */
-export function popType(x, t, text, xr, y, fontFn, size, color, times) {
-  const ch = Array.from(text); x.save(); x.font = fontFn(size); x.direction = 'rtl'; x.textAlign = 'left'; x.fillStyle = color;
+export function popType(x, t, text, xr, y, fontFn, size, color, times, opt = {}) {
+  // RTL (default): xr is the right edge and letters are laid out leftwards. LTR (opt.ltr): xr is the LEFT edge.
+  const ch = Array.from(text); x.save(); x.font = fontFn(size); x.direction = opt.ltr ? 'ltr' : 'rtl'; x.textAlign = 'left'; x.fillStyle = color;
   let caret = xr, acc = '';
   ch.forEach((c, i) => {
-    const prevW = x.measureText(acc).width; acc += c; const wTot = x.measureText(acc).width, left = xr - wTot, cw = wTot - prevW;
-    if (t < times[i]) return; caret = left;
+    const prevW = x.measureText(acc).width; acc += c; const wTot = x.measureText(acc).width, left = opt.ltr ? xr + prevW : xr - wTot, cw = wTot - prevW;
+    if (t < times[i]) return; caret = opt.ltr ? xr + wTot : left;
     if (c === ' ') return;
     const s = spring(t - times[i], 28, 0.42), sc = 0.15 + 0.85 * s;
     x.save(); x.translate(left + cw / 2, y - size * 0.3); x.scale(sc, sc); x.translate(-(left + cw / 2), -(y - size * 0.3));

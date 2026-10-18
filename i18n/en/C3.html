@@ -1,0 +1,138 @@
+<!-- ============ 03 ICONS & LOGOS ============ -->
+<section class="sec s-cloud" id="c3" data-folio="03" data-toc="Icons and logos">
+  <div class="sh"><span class="num">03</span><div><h2>Icons and official logos</h2><p class="sub">Thousands of free symbols, and what we're allowed to do with them.</p></div></div>
+  <div class="body">
+    <p>Two kinds of symbols end up in almost every film. <b>Icons</b> are generic symbols: a dumbbell, a flame, a clock. <b>Logos</b> are company symbols: GitHub, React, Claude. Both have huge free libraries, and all of them are vector (SVG), so they stay sharp at any zoom.</p>
+  </div>
+
+  <article class="el" id="e-icons">
+    <div class="el-h"><span class="el-n">03.1</span><h3 class="el-t">Self-drawing icons</h3><div class="el-tags"><span>Lucide</span><span>lucide-react</span><span>SVG</span><span class="lic">ISC</span></div></div>
+    <div class="el-demo" data-demo="icons-draw"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>What you see</h4><p>Eight fitness icons, each drawing itself stroke by stroke, a quarter of a second after the one before, and at the end they all light up in orange. Try the stroke width slider: same icons, a completely different character.</p>
+        <h4>What Lucide is</h4><p>An open-source icon library with nearly 2,000 icons, under the ISC license (everything is allowed, commercial use included). Every icon is drawn with strokes of the same thickness on a 24×24 grid, so they all look like one family. <code>lucide-react</code> gives us each icon as a React component: <code>&lt;Dumbbell /&gt;</code>.</p></div>
+        <div><h4>How it works</h4><p>It's the same trick as the ring (01.4): we measure the length of each stroke (<code>getTotalLength</code>), turn it into a dashed stroke with a single dash of exactly that length, and slide that dash from "hidden" to "visible" based on t. An icon built from several strokes draws them one after another.</p>
+        <p>Shortcut: if we give each stroke <code>pathLength="1"</code>, the browser treats every stroke as if its length were 1, so there's nothing to measure.</p></div>
+      </div>
+      <div class="fit"><div class="y"><b>When to use</b>Feature lists, steps, "what you get". Self-drawing pulls the eye to the next item.</div><div class="n"><b>When not to</b>Mixing two icon libraries in the same film: different stroke weights and styles look sloppy.</div></div>
+      <div class="prompt"><h5>Full prompt</h5><div class="code"><span class="lbl">self-drawing icons · Lucide</span><button class="cp" type="button">Copy prompt</button><pre>&lt;inputs&gt;
+Ask me for the features to show (a short label each). If I skip them, use 4 fitness features: Strength, Calories, Heart rate, Timer.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 5-second clip, 1920x1080, 60fps. Four Lucide icons (Dumbbell, Flame, HeartPulse, Timer) in a row, left to right. Each icon draws itself stroke by stroke on its own beat, then its label rises out of a mask line under it. When all are drawn, they light up in orange #FF8F3A together. Icons navy #12163F, stroke width 2, on #EEF3FB. Labels in Inter 700.
+Banned: icons fading in, mixing icon libraries, filled icons.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM. Icon i starts drawing on beat i+1 and takes 1 beat. All light up on beat 7.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file with React and lucide-react, exposing window.seek(t); everything is computed from t, no CSS transitions.
+Give every path pathLength="1", set stroke-dasharray to 1, and animate stroke-dashoffset from 1 to 0 with an eased progress of t. Multi-path icons draw their paths in sequence. Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Without pathLength="1", paths of different lengths draw at different speeds.
+- lucide-react sets stroke on the svg element; set the dash styles on each child path, circle and line.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me a still at beat 2 and at beat 7 before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-logos">
+    <div class="el-h"><span class="el-n">03.2</span><h3 class="el-t">Official logos</h3><div class="el-tags"><span>Simple Icons</span><span>SVG</span><span class="lic">CC0 · trademarks apply</span></div></div>
+    <div class="el-demo" data-demo="logos"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>What you see</h4><p>A wall of 16 logos from the tools that built this page, popping in one after another in their official brand colors. Try unchecking "Official brand colors" and checking "Dark background". The one-color version, in black or white, is usually the only version brands allow besides their official color, which is why the demo switches to it and not to some other color.</p>
+        <h4>What Simple Icons is</h4><p>A collection of more than 3,400 brand logos, each one a clean SVG, together with the brand's official color code. The <code>simple-icons</code> package on npm gives us both the shape and the color of every logo, so Claude doesn't have to draw a logo from memory, and won't invent a shape that's "roughly" right.</p></div>
+        <div><h4>What's allowed and what isn't</h4><p>The files themselves are CC0, public domain. But a logo is a <b>trademark</b>, and that's a different law entirely. Simple Icons itself asks everyone to respect each company's brand guidelines. In practice:</p>
+        <ul><li>OK: showing a logo to say "works with" or "built with".</li><li>Not OK: changing it to an unofficial color, stretching it, cropping it or adding effects.</li><li>Not OK: implying that the company endorses us or is our partner.</li><li>The current official version of a logo lives on the company's Brand or Press page.</li></ul></div>
+      </div>
+      <div class="fit"><div class="y"><b>When to use</b>"Works with your tools", "built with", clients who agreed to appear.</div><div class="n"><b>When not to</b>Clients who haven't agreed, or any situation where the logo looks like an endorsement we never got.</div></div>
+      <div class="prompt"><h5>Full prompt</h5><div class="code"><span class="lbl">official logo wall · simple-icons</span><button class="cp" type="button">Copy prompt</button><pre>&lt;inputs&gt;
+Ask me which brands to show and confirm that I have the right to show each of them. If I skip it, use the tools this project was built with: Claude, React, Three.js, Tailwind CSS, shadcn/ui, FFmpeg, Node.js, GitHub.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 4.5-second "built with" clip, 1920x1080, 60fps. A grid of official logos pops in on the beat, one after another from the left, each in its official brand colour on white tiles over #EEF3FB. A title above in Anton, uppercase: "Built with". Logos keep their exact proportions and colours.
+Banned: recoloured logos, logos with glow or shadows, logos drawn from memory, distortion.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM, 16th-note stagger: a new logo every 0.125s, each with a short spring scale from 0.6 to 1.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file exposing window.seek(t); everything is computed from t, no CSS transitions.
+Import each logo from the simple-icons npm package (import { siReact } from 'simple-icons'), use its .path in a 24×24 viewBox and "#" + its .hex as the fill (.hex comes without the #). Do not redraw or modify any logo. Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Some brands (for example GitHub) have black logos; on a dark background, switch to the brand's official white version, never an invented colour.
+- simple-icons occasionally removes logos at a brand's request; if one is missing, ask me for the official file instead of approximating it.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+List the logos you will use and their hex colours, then show me the final frame before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+</section>
+
+<!-- ============ 04 TYPE ============ -->
+<section class="sec s-denim" id="c4" data-folio="04" data-toc="Kinetic typography">
+  <div class="sh"><span class="num">04</span><div><h2>Kinetic typography</h2><p class="sub">Text that moves with the music. Four techniques that replace almost every "fade".</p></div></div>
+  <div class="body">
+    <p><b>Kinetic typography</b> is text whose motion is part of the message: a word that lands hard feels important, a word that gets typed out feels like a conversation. In a launch video most of the screen is text, which makes this maybe the most important element in the catalog. The demo below runs four techniques back to back, two and a half seconds each.</p>
+  </div>
+  <article class="el" id="e-type">
+    <div class="el-h"><span class="el-n">04.1</span><h3 class="el-t">Four techniques for moving text</h3><div class="el-tags"><span>Canvas 2D</span><span>Anton</span><span>RTL</span></div></div>
+    <div class="el-demo" data-demo="type"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>SLAM: words that land</h4><p>Each word appears on its own beat, starts too big and shrinks to its size with a spring, like a rubber stamp. Made for headlines of three or four words at the peak of the music.</p>
+        <h4>MASK RISE: rising from a line</h4><p>The words rise out of an invisible line, as if they were waiting just below it. The "line" is a <b>mask</b>: a rectangle that shows only what's inside it, like a stencil. The text moves and the mask doesn't, so the words look like they're born from the line.</p></div>
+        <div><h4>POP TYPE: typing</h4><p>Letter after letter, each one pops a little as it's typed, with a blinking cursor. The pace is uneven, like a real person typing, and every keystroke lands on a <b>half beat or a quarter beat</b> (what musicians call an "eighth note" and a "sixteenth note"; at 120 BPM those are 0.25 and 0.125 seconds), so the typing "plays" along with the music.</p>
+        <h4>MARKER: highlighter</h4><p>A strip of color stretches behind the important word, in the reading direction (left to right in English, right to left in Hebrew). The simplest way to tell the viewer "this is the word".</p></div>
+      </div>
+      <div class="def"><b>Right-to-left languages (Hebrew, Arabic): three things to ask for</b>Reveal words from right to left, in reading order. Wrap numbers and English words in <code>unicode-bidi: isolate</code>. Why? The browser lays out Hebrew right to left, and English and numbers left to right. Neutral characters like +, % and the space take their direction from their neighbors, so sometimes they wander to the other side. This setting tells the browser to lay out the wrapped piece as one sealed unit, without mixing it into the direction of the sentence. And give condensed display fonts more size: Anton is condensed (so is Karantina, our Hebrew headline font), so a headline in it can be set about 1.25× larger than one in a wider font and still carry the same visual weight.</div>
+      <div class="fit"><div class="y"><b>When to use</b>In every launch video. SLAM for the peak, MASK RISE for sentences, POP TYPE for prompts and chats, MARKER for a key word.</div><div class="n"><b>When not to</b>More than two techniques in the same scene: the text starts competing for attention instead of telling a story.</div></div>
+      <div class="prompt"><h5>Full prompt</h5><div class="code"><span class="lbl">kinetic typography · English</span><button class="cp" type="button">Copy prompt</button><pre>&lt;inputs&gt;
+Ask me for the exact on-screen lines and which word is the key word. If I skip them, use: "BUILD. RENDER. SHIP." (slam), "Every word rises from a line" (mask rise), "Start morning workout" (typed), and mark "RENDER".
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 10-second kinetic typography clip, 1920x1080, 60fps, English, left to right. Four moments, each on its own colour spread with a hard wipe between them: SLAM (words land one per beat from 1.6× scale with a spring), MASK RISE (words rise out of an invisible line and leave through it), POP TYPE (letters type on with a slight pop and a blinking caret), MARKER (an orange marker swipe from left to right behind the key word).
+Type: Anton uppercase for headlines (it is condensed, so it can run about 1.25× the size you would give a wider font), Inter for small text. Colours: navy #12163F, orange #FF8F3A, gold #FFC74E, light #EEF3FB, denim #AFCBEF.
+Banned: fades, blur-ins, letter-by-letter scramble effects, text that moves after it lands.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM. Slam: one word per beat. Mask rise: words 0.12s apart. Typing: one keystroke per 16th note (0.125s), with 2 short pauses between words. Marker: swipes in over half a beat on the downbeat.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file exposing window.seek(t), drawing on a 2D canvas (or DOM) from t alone.
+Lay out each line once (measure words with measureText, left to right), then move and clip each word as a function of t. The mask is a clip rectangle; the word's y offset goes from below the line to 0 with a spring. Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Measure with the real font loaded (await document.fonts.ready), never with the fallback font.
+- If a line is in a right-to-left language (Hebrew, Arabic), set ctx.direction = 'rtl' and textAlign = 'right', and wrap numbers and English words with unicode-bidi: isolate (DOM) or draw them as separate runs (canvas), or they jump to the wrong side.
+- Never split a word letter by letter across lines.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me one still of each of the four moments before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+</section>
+

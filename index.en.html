@@ -1,0 +1,1787 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- motion:head -->
+<link rel="canonical" href="https://yuv.ai/motion">
+<link rel="alternate" hreflang="he" href="https://news.yuv.ai/motion">
+<link rel="alternate" hreflang="en" href="https://yuv.ai/motion">
+<link rel="alternate" hreflang="x-default" href="https://yuv.ai/motion">
+<meta property="og:url" content="https://yuv.ai/motion">
+<meta property="og:type" content="article"><meta property="og:site_name" content="YUV.AI">
+<meta property="og:locale" content="en_US"><meta property="og:locale:alternate" content="he_IL">
+<script>if (/github\.io$/.test(location.hostname)) location.replace('https://yuv.ai/motion' + location.search + location.hash);</script>
+<!-- /motion:head -->
+<title>Motion in Code · YUV.AI</title>
+<meta name="description" content="A full breakdown of the @twoclipping method: how Claude Opus 5.5 makes studio-grade launch films in code alone. seek(t), springs, a logarithmic camera, beats, motion blur and quality checks, with real interactive labs.">
+<meta property="og:title" content="Motion in Code: how Claude makes launch films in code">
+<meta property="og:description" content="The @twoclipping method, broken down crumb by crumb, with interactive labs. YUV.AI">
+<meta property="og:image" content="https://hoodini.github.io/motion-in-code/media/readme/social-preview.jpg">
+<meta property="og:image:width" content="1280"><meta property="og:image:height" content="640">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Gveret+Levin&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&family=Karantina:wght@300;400;700&family=Assistant:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#12163F">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='f' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23FFC74E'/%3E%3Cstop offset='.5' stop-color='%23FF8F3A'/%3E%3Cstop offset='1' stop-color='%23F56B49'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='18' fill='%2312163F'/%3E%3Ccircle cx='32' cy='32' r='13' fill='url(%23f)'/%3E%3C/svg%3E">
+<style>
+/* ============================================================
+   YUV.AI · Phoenix Day (yuv-design-system v2)
+   navy shirt · phoenix fire · light denim · clear sky
+   ============================================================ */
+@property --a{syntax:'<angle>';inherits:false;initial-value:0deg}
+:root{
+  --yuv-navy:#12163F; --yuv-navy-2:#1E2357; --yuv-navy-3:#0B0E2A;
+  --yuv-denim:#AFCBEF; --yuv-cloud:#EEF3FB;
+  --yuv-gold:#FFC74E; --yuv-orange:#FF8F3A; --yuv-coral:#F56B49;
+  --yuv-fire:linear-gradient(135deg,#FFC74E 0%,#FF8F3A 50%,#F56B49 100%);
+  --yuv-raspberry:#D74270; --yuv-azure:#5EA1C1;
+  --yuv-sky-1:#F4FBFF; --yuv-sky-2:#DDF0FF; --yuv-sky-3:#BDE1FF; --yuv-sky-4:#93CBFF; --yuv-sky-5:#5EA9F2; --yuv-sky-6:#2C78D2;
+  --yuv-sky:linear-gradient(180deg,#5EA9F2 0%,#93CBFF 40%,#DDF0FF 100%);
+  --yuv-neon:conic-gradient(from var(--a),#5DE4E9,#4FA3FF,#8B6CFF,#FF66C4,#FF8F3A,#FFC74E,#5DE4E9);
+  --orange-t:#B4501A;              /* brand orange, deepened for small text on light (AA) */
+  --sh-con:0 6px 18px -6px rgba(5,8,30,.38);
+  --sh-amb:0 36px 80px -30px rgba(5,8,30,.46);
+  --sh:var(--sh-con),var(--sh-amb);
+  --r:28px; --r-s:18px;
+  --he:'Karantina',system-ui,sans-serif; --heD:'Karantina',system-ui,sans-serif; --hand:'Gveret Levin',cursive; --body:'Assistant',system-ui,sans-serif;
+  /* Hebrew: Karantina for headlines and short display text; Assistant for paragraphs and running text; Gveret Levin only for handwriting/signatures; Bona Nova SC for Torah topics */
+  --en:'Anton',Impact,sans-serif; --lat:'Inter',system-ui,sans-serif; --mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+  --gut:max(16px,calc((100% - 1180px) / 2));
+  /* surface tokens (cloud by default; each surface class re-points them) */
+  --bg:var(--yuv-cloud); --fg:var(--yuv-navy); --muted:#3B4472; --card:#fff; --card-2:#F5F8FD;
+  --acc-t:var(--orange-t); --folio:rgba(18,22,63,.055); --code-bg:rgba(18,22,63,.08);
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--yuv-cloud);color:var(--fg);font:500 21px/1.65 var(--body);overflow-x:hidden}
+::selection{background:var(--yuv-gold);color:var(--yuv-navy)}
+a{color:var(--link,var(--yuv-navy));font-weight:700;text-underline-offset:4px;text-decoration-thickness:2px;text-decoration-color:var(--yuv-orange)}
+a:hover{color:var(--link-h,var(--orange-t))}
+code,kbd{font-family:var(--mono);font-weight:500;font-size:.84em;letter-spacing:0;word-spacing:0;direction:ltr;unicode-bidi:isolate;background:var(--code-bg);padding:.1em .5em;border-radius:999px}
+.ltr{direction:ltr;unicode-bidi:isolate}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+b,strong{font-weight:700}
+
+/* ---------- surfaces ---------- */
+.s-sky{background:var(--yuv-sky);--card:rgba(255,255,255,.84);--card-2:rgba(255,255,255,.62);--folio:rgba(18,22,63,.075)}
+.s-cloud{background:var(--yuv-cloud)}
+.s-denim{background:var(--yuv-denim);--bg:var(--yuv-denim);--muted:#232D5C;--card:var(--yuv-cloud);--card-2:#fff;--folio:rgba(18,22,63,.085);--code-bg:rgba(18,22,63,.1)}
+.s-navy{--link:var(--yuv-gold);--link-h:#fff;background:var(--yuv-navy);--bg:var(--yuv-navy);--fg:#fff;--muted:rgba(255,255,255,.76);--card:var(--yuv-navy-2);--card-2:#272D68;--acc-t:var(--yuv-gold);--folio:transparent;--code-bg:rgba(255,255,255,.12);color-scheme:dark}
+.s-fire{background:var(--yuv-fire);--bg:#FF8F3A;--muted:rgba(18,22,63,.84);--card:rgba(255,255,255,.5);--card-2:rgba(255,255,255,.36);--acc-t:var(--yuv-navy);--folio:rgba(120,36,0,.1)}
+
+/* ---------- top bar ---------- */
+.bar{position:sticky;top:0;z-index:50;background:rgba(18,22,63,.92);backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);color:#fff;box-shadow:0 12px 30px -20px rgba(5,8,30,.8)}
+.bar .wrap{display:flex;align-items:center;gap:16px;height:62px;max-width:none;padding:0 var(--gut)}
+.brand{font:400 24px/1 var(--en);letter-spacing:.02em;white-space:nowrap;direction:ltr;color:#fff;display:flex;align-items:baseline;gap:12px}
+.brand b{color:var(--yuv-orange);font-weight:400}
+.brand small{font:400 15px/1 var(--en);letter-spacing:3px;color:var(--yuv-gold)}
+.navbtn{margin-inline-start:auto;border:2px solid rgba(255,255,255,.3);background:transparent;border-radius:999px;padding:7px 18px;font:700 20px/1 var(--he);cursor:pointer;color:#fff}
+.navbtn:hover{border-color:var(--yuv-gold);color:var(--yuv-gold)}
+.prog{position:absolute;bottom:-2px;inset-inline-start:0;height:4px;background:var(--yuv-fire);width:0;border-radius:999px}
+.toc{display:none;position:fixed;top:62px;inset-inline-end:0;z-index:49;width:min(380px,100vw);max-height:calc(100vh - 62px);overflow:auto;background:var(--yuv-navy-2);color:#fff;padding:14px 0 18px;box-shadow:var(--sh);border-end-start-radius:var(--r)}
+.toc.open{display:block}
+.toc a{display:flex;gap:14px;align-items:baseline;padding:7px 22px;color:#fff;text-decoration:none;font:700 22px/1.2 var(--he)}
+.toc a:hover{background:rgba(255,255,255,.07)}
+.toc a span{font:400 16px var(--en);letter-spacing:1px;color:var(--yuv-gold);min-width:30px;direction:ltr}
+
+/* ---------- section frame: full-bleed spreads + giant folios ---------- */
+main{display:block}
+.hero,.sec{position:relative;overflow:hidden;color:var(--fg);padding:clamp(76px,10vw,150px) var(--gut) clamp(64px,8vw,120px);scroll-margin-top:62px}
+.hero::before,.sec::before{content:attr(data-folio);position:absolute;top:0;left:-.035em;transform:translateY(-24%);font:400 clamp(280px,56vw,1000px)/.8 var(--en);letter-spacing:0;color:var(--folio);direction:ltr;pointer-events:none;z-index:0;white-space:nowrap}
+.s-navy::before{color:transparent;-webkit-text-stroke:5px var(--yuv-orange);opacity:.32}
+.hero>*,.sec>*{position:relative;z-index:1}
+.sec>p,.sec>ul,.sec>ol,.hero .lead{max-width:780px}
+
+/* kicker row: chip + 6px rule to the margin */
+.sh{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:22px 16px;margin-bottom:clamp(22px,3vw,40px)}
+.sh::after{content:"";grid-row:1;grid-column:2;height:6px;border-radius:999px;background:var(--fg)}
+.sh>div{grid-column:1/-1;grid-row:2}
+.num{grid-row:1;grid-column:1;font:400 clamp(18px,1.8vw,22px)/1 var(--en);letter-spacing:3px;direction:ltr;padding:9px 18px 8px;border-radius:999px;background:var(--yuv-navy);color:var(--yuv-gold);white-space:nowrap}
+.num::after{content:" / 19";color:rgba(255,255,255,.55)}
+#s0 .num::after{content:" REEL"}
+.s-navy .num{background:var(--yuv-gold);color:var(--yuv-navy)}
+.s-navy .num::after{color:rgba(18,22,63,.6)}
+.s-navy .sh::after{background:var(--yuv-gold)}
+
+h1,h2,h3,h4{color:inherit;text-wrap:balance}
+h2{font:700 clamp(56px,8.6vw,132px)/.92 var(--heD);letter-spacing:.005em;margin:0 0 18px;max-width:1000px}
+h3{font:700 clamp(36px,3.8vw,54px)/1 var(--heD);margin:clamp(44px,5vw,68px) 0 12px;max-width:900px}
+h4{font:700 34px/1.15 var(--heD);margin:20px 0 6px}
+.sub{color:var(--muted);font:400 clamp(27px,2.4vw,33px)/1.45 var(--he);margin:0;max-width:900px}
+p{margin:12px 0}
+ul,ol{padding-inline-start:24px}
+li{margin:6px 0}
+li::marker{color:var(--acc-t);font-weight:800}
+.hl{background:var(--yuv-fire);color:var(--yuv-navy);padding:0 .14em;border-radius:.16em;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.term{font-size:.92em;color:var(--muted)}
+
+/* ---------- hero (Phoenix Day: sky) ---------- */
+.hero{background:var(--yuv-sky);padding-top:clamp(56px,7vw,104px)}
+.hero::after{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(60vmax 22vmax at 78% 18%,rgba(255,255,255,.55),transparent 70%),
+             radial-gradient(48vmax 16vmax at 12% 64%,rgba(255,255,255,.45),transparent 70%)}
+.kicker{display:inline-flex;gap:10px;align-items:center;font:700 20px/1.1 var(--he);color:var(--yuv-navy);background:rgba(255,255,255,.84);border-radius:999px;padding:7px 18px;box-shadow:var(--sh-con)}
+.kicker i{width:10px;height:10px;border-radius:999px;background:var(--yuv-fire);display:inline-block}
+h1{font:700 clamp(88px,16vw,240px)/.88 var(--heD);letter-spacing:0;margin:28px 0 18px}
+.deck{font:700 clamp(36px,4.4vw,62px)/1 var(--heD);margin:0 0 20px;max-width:900px}
+.hero>.sub{font:500 17px/1.6 var(--body);margin-top:6px}
+.lead{font:500 clamp(21px,1.9vw,24px)/1.6 var(--body);color:var(--muted)}
+
+/* ---------- hero top: the repo banner, mirrored for RTL ---------- */
+.hero-top{display:grid;grid-template-columns:minmax(0,1.04fr) minmax(0,1fr);gap:clamp(24px,4vw,64px);align-items:center;min-height:clamp(520px,42vw,620px);margin:0 0 clamp(36px,5vw,72px)}
+.hkick{display:flex;align-items:center;gap:16px;max-width:600px}
+.hkick b{font:400 clamp(16px,1.5vw,22px)/1 var(--en);letter-spacing:3px;background:var(--yuv-navy);color:var(--yuv-gold);padding:9px 18px 8px;border-radius:999px;white-space:nowrap;direction:ltr}
+.hkick i{flex:1;height:6px;border-radius:999px;background:var(--yuv-navy)}
+.hero-top h1{font:700 clamp(92px,12.4vw,200px)/.9 var(--heD);margin:26px 0 24px}
+.hero-top h1 .hl{display:inline-block;padding:.06em .12em 0;line-height:.88;border-radius:.1em}
+.hero-top .deck{font-size:clamp(30px,3.2vw,48px);line-height:1.02;max-width:620px;margin:0 0 16px}
+.hmono{font:500 clamp(14px,1.2vw,18px)/1.4 var(--mono);color:#23306a;margin:0 0 30px;direction:ltr;text-align:right}
+.hcta{display:inline-flex;align-items:center;gap:12px;background:#fff;color:var(--yuv-navy);border-radius:999px;padding:14px 30px 13px;font:700 clamp(23px,2vw,28px)/1 var(--heD);text-decoration:none;box-shadow:var(--sh);transition:transform .2s}
+.hcta span{color:var(--yuv-orange);font-size:.78em}
+.hmono .nb{white-space:nowrap}
+.hcta:hover{color:var(--yuv-navy);transform:translateY(-2px)}
+.hero-stage{position:relative;width:100%;aspect-ratio:1.19}
+.hshot{position:absolute;margin:0;background:var(--yuv-navy);border:clamp(6px,.7vw,10px) solid var(--yuv-navy);border-radius:clamp(14px,1.6vw,22px);overflow:hidden;box-shadow:var(--sh)}
+.hshot video{display:block;width:100%;height:100%;object-fit:cover;background:var(--yuv-navy)}
+.hs-wide{width:91%;aspect-ratio:16/9;left:-3%;top:7%;transform:rotate(3deg)}
+.hs-phone{width:34%;aspect-ratio:9/16;right:0;top:25%;border-radius:clamp(22px,2.6vw,34px);transform:rotate(-4deg)}
+.hero-top+.kicker{margin-bottom:6px}
+@media (max-width:900px){
+  .hero-top{grid-template-columns:1fr;min-height:0;gap:28px}
+  .hero-stage{max-width:560px;justify-self:center;aspect-ratio:1.22}
+  .hmono{text-align:right}
+}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0}
+.chip{border-radius:999px;background:var(--card);color:var(--fg);padding:6px 18px;font:700 24px/1.2 var(--he);box-shadow:var(--sh-con)}
+.chip b{color:var(--acc-t)}
+
+/* ---------- cards & callouts ---------- */
+.card{background:var(--card);color:var(--fg);border-radius:var(--r);padding:clamp(20px,2.4vw,32px);margin:22px 0;box-shadow:var(--sh)}
+.card.flat{background:var(--card-2);box-shadow:var(--sh-con)}
+.card h4:first-child{margin-top:0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media (max-width:760px){.grid2,.grid3{grid-template-columns:1fr}}
+.why,.warn,.ex,.def{position:relative;overflow:hidden;border-radius:var(--r);padding:20px 26px;padding-inline-start:36px;margin:24px 0;background:var(--card);color:var(--fg);box-shadow:var(--sh-con);max-width:900px}
+.why::before,.warn::before,.ex::before,.def::before{content:"";position:absolute;inset-block:0;inset-inline-start:0;width:9px;background:var(--rail)}
+.why{--rail:var(--yuv-fire)}
+.warn{--link:var(--yuv-gold);--link-h:#fff;--rail:var(--yuv-gold);background:var(--yuv-navy);color:#fff;--acc-t:var(--yuv-gold);--code-bg:rgba(255,255,255,.12)}
+.s-navy .warn{background:var(--yuv-navy-3)}
+.ex{--rail:var(--yuv-navy)}
+.s-navy .ex{--rail:var(--yuv-denim)}
+.def{--rail:var(--yuv-sky-6);background:var(--yuv-sky-2);color:var(--yuv-navy);--acc-t:var(--orange-t);--code-bg:rgba(18,22,63,.08)}
+.why b:first-child,.warn b:first-child,.ex b:first-child,.def b:first-child{display:block;font:700 34px/1.15 var(--heD);margin-bottom:4px}
+.warn b:first-child{color:var(--yuv-gold)}
+.sec>.tldr{list-style:none;padding:0;counter-reset:t;display:grid;gap:14px;max-width:none}
+.tldr li{counter-increment:t;display:flex;gap:20px;align-items:flex-start;padding:20px 26px;margin:0;border-radius:var(--r);background:var(--card);font-size:clamp(20px,1.8vw,23px);line-height:1.55}
+.tldr li::before{content:counter(t,decimal-leading-zero);font:400 clamp(40px,4vw,56px)/1 var(--en);color:var(--yuv-navy);min-width:1.3em}
+
+/* ---------- tables (no hairlines: navy head, zebra rows) ---------- */
+table{width:100%;border-collapse:separate;border-spacing:0;font:500 18px/1.5 var(--body);margin:20px 0;border-radius:var(--r);overflow:hidden;background:var(--card);box-shadow:var(--sh)}
+th,td{padding:14px 18px;text-align:start;vertical-align:top}
+th{font:700 23px/1.2 var(--heD);background:var(--yuv-navy);color:#fff}
+.s-navy th{background:var(--yuv-navy-3);color:var(--yuv-gold)}
+tr:nth-child(even) td{background:var(--card-2)}
+.tbl{overflow-x:auto;margin:20px 0;border-radius:var(--r)}
+.tbl table{margin:0}
+.yes{color:var(--yuv-sky-6);font-weight:800}.no{color:var(--yuv-raspberry);font-weight:800}
+.s-navy .yes{color:var(--yuv-sky-4)}.s-navy .no{color:var(--yuv-coral)}
+
+/* ---------- code ---------- */
+.code{position:relative;background:var(--yuv-navy-3);color:#E7ECFA;border-radius:var(--r);margin:20px 0;direction:ltr;box-shadow:var(--sh);overflow:hidden}
+.code::before{content:"";position:absolute;inset:0 0 auto;height:1px;background:linear-gradient(90deg,rgba(255,255,255,.22),transparent 70%)}
+.s-navy .code{box-shadow:var(--sh),inset 0 0 0 1px rgba(255,255,255,.08)}
+.code pre{letter-spacing:0;word-spacing:0;margin:0;padding:16px 24px 22px;overflow:auto;font:500 14px/1.65 var(--mono);white-space:pre-wrap;word-break:break-word;max-height:540px}
+.code .cp{position:absolute;top:12px;right:12px;border:0;border-radius:999px;background:var(--yuv-fire);color:var(--yuv-navy);font:700 19px/1.1 var(--he);padding:6px 16px;cursor:pointer}
+.code:not(:has(.lbl)) pre{padding-top:56px}
+.code .lbl{display:block;font:500 12.5px var(--mono);color:var(--yuv-gold);padding:16px 112px 0 24px}
+.tr{background:var(--card);color:var(--fg);border-radius:var(--r);padding:18px 24px;margin:-6px 0 22px;font-size:18.5px;line-height:1.6;box-shadow:var(--sh-con)}
+.tr::before{content:"תרגום";display:inline-block;font:700 19px/1.4 var(--heD);background:var(--yuv-fire);color:var(--yuv-navy);padding:0 12px;border-radius:999px;margin-inline-end:10px}
+details{background:var(--card);color:var(--fg);border-radius:var(--r);margin:16px 0;box-shadow:var(--sh-con);overflow:hidden}
+details>summary{cursor:pointer;padding:16px 24px;font:700 31px/1.15 var(--heD);list-style:none;display:flex;gap:12px;align-items:center}
+details>summary::-webkit-details-marker{display:none}
+details>summary::before{content:"+";font:400 28px/1 var(--en);color:var(--yuv-orange);width:18px}
+details[open]>summary::before{content:"–"}
+details>.in{padding:0 24px 20px}
+
+/* ---------- labs (always a light instrument card, on any surface) ---------- */
+.lab{--link:var(--yuv-navy);--link-h:var(--orange-t);--fg:var(--yuv-navy);--muted:#3B4472;--card:#fff;--card-2:var(--yuv-cloud);--acc-t:var(--orange-t);--code-bg:rgba(18,22,63,.08);
+  background:#fff;color:var(--yuv-navy);border-radius:var(--r);margin:28px 0;box-shadow:var(--sh);overflow:hidden}
+.lab .lh{display:flex;align-items:center;gap:12px;padding:14px 22px;font:700 25px/1.15 var(--heD);background:var(--yuv-cloud)}
+.lab .lh::before{content:"LAB";font:400 15px/1 var(--en);letter-spacing:3px;background:var(--yuv-navy);color:var(--yuv-gold);padding:6px 12px 5px;border-radius:999px}
+.lab .lb{padding:18px 22px 22px}
+.lab canvas{width:100%;display:block;background:var(--yuv-cloud);border-radius:var(--r-s);touch-action:none}
+.ctrls{display:flex;flex-wrap:wrap;gap:12px 22px;align-items:center;margin:14px 0 2px}
+.ctrls label{display:flex;align-items:center;gap:8px;font:700 21px/1.1 var(--he)}
+.ctrls output{font:500 13.5px var(--mono);min-width:54px;direction:ltr;display:inline-block}
+input[type=range]{accent-color:var(--yuv-orange);width:160px}
+input[type=checkbox]{accent-color:var(--yuv-orange);width:18px;height:18px}
+.btn{border:0;border-radius:999px;background:var(--yuv-navy);color:#fff;font:700 21px/1.1 var(--he);padding:8px 22px;cursor:pointer;box-shadow:var(--sh-con)}
+.btn.m{background:var(--yuv-fire);color:var(--yuv-navy)}
+.btn.o{background:transparent;color:var(--yuv-navy);border:2px solid var(--yuv-navy);box-shadow:none}
+.btn:focus-visible,.navbtn:focus-visible,.blocks button:focus-visible,.seg button:focus-visible{outline:3px solid var(--yuv-sky-6);outline-offset:3px}
+.readout{letter-spacing:0;word-spacing:0;font:500 14px/1.7 var(--mono);direction:ltr;text-align:left;background:var(--yuv-cloud);border-radius:var(--r-s);padding:12px 16px;margin-top:12px;white-space:pre-wrap}
+.seg{display:inline-flex;border:2px solid var(--yuv-navy);border-radius:999px;overflow:hidden}
+.seg button{border:0;background:transparent;font:700 19px/1.1 var(--he);padding:7px 16px;cursor:pointer;color:var(--yuv-navy)}
+.seg button.on{background:var(--yuv-navy);color:#fff}
+
+/* ---------- the hero film player ---------- */
+.film{position:relative;isolation:isolate;background:var(--yuv-navy);border-radius:var(--r);padding:12px;margin:clamp(30px,4vw,52px) 0 16px;box-shadow:var(--sh)}
+.film canvas{width:100%;aspect-ratio:16/9;display:block;background:var(--yuv-sky-3);border-radius:20px}
+.fbar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:12px 6px 4px;color:#fff;direction:ltr}
+.fbar .btn{background:var(--yuv-fire);color:var(--yuv-navy);box-shadow:none}
+.fbar input[type=range]{flex:1;min-width:160px;width:auto}
+.fbar .tc{letter-spacing:0;font:500 13px var(--mono);color:rgba(255,255,255,.8);min-width:230px}
+.fbar label{font:700 20px/1.1 var(--he);display:flex;gap:6px;align-items:center;direction:rtl}
+.ruler{position:relative;height:16px;margin:6px 6px 0;direction:ltr}
+.ruler i{position:absolute;top:2px;width:2px;height:8px;border-radius:2px;background:rgba(255,255,255,.3)}
+.ruler i.bar4{height:12px;background:rgba(255,255,255,.7)}
+.ruler i.drop{width:4px;height:14px;background:var(--yuv-orange)}
+
+/* neon edge: the "AI is thinking" ring (inputs, the primary CTA, one key card) */
+@keyframes neonSpin{to{--a:360deg}}
+.neon{position:relative;isolation:isolate}
+.neon::before,.neon::after{content:"";position:absolute;inset:-4px;padding:4px;border-radius:inherit;background:var(--yuv-neon);pointer-events:none;z-index:-1;
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;
+  mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;animation:neonSpin 4.2s linear infinite}
+.neon::after{inset:-12px;padding:12px;filter:blur(20px);opacity:.75}
+
+/* ---------- pipeline & anatomy ---------- */
+.pipe{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch;direction:ltr;margin:20px 0}
+.pipe .st{flex:1 1 150px;background:var(--card);color:var(--fg);border-radius:var(--r);padding:16px 18px;font:500 15.5px/1.5 var(--body);direction:rtl;box-shadow:var(--sh-con)}
+.pipe .st b{display:block;font:400 20px var(--en);letter-spacing:2px;direction:ltr;text-align:left;color:var(--acc-t);margin-bottom:4px}
+.pipe .ar{align-self:center;font:400 26px var(--en);color:var(--yuv-orange)}
+.blocks{display:flex;flex-wrap:wrap;gap:10px;direction:ltr;margin:14px 0}
+.blocks button{border:2px solid var(--fg);background:transparent;color:var(--fg);border-radius:999px;padding:8px 18px;font:700 14px var(--mono);cursor:pointer}
+.blocks button.on{background:var(--yuv-fire);border-color:transparent;color:var(--yuv-navy)}
+.anat{min-height:220px}
+
+/* ---------- reels ---------- */
+.reel{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2.25fr);gap:22px;align-items:start;margin:26px 0 8px}
+.reel figure{margin:0}
+.reel video{width:100%;display:block;background:var(--yuv-navy-3);border-radius:var(--r);box-shadow:var(--sh)}
+.reel-v video{aspect-ratio:9/16}.reel-h video{aspect-ratio:16/9}
+.reel figcaption{font:700 23px/1.3 var(--he);color:var(--muted);margin-top:10px}
+img.cmp{width:100%;display:block;border-radius:var(--r);margin:18px 0;box-shadow:var(--sh)}
+
+/* ---------- sources & footer ---------- */
+.src{max-width:none}
+.src li{font-size:17px;line-height:1.55;word-break:break-word}
+footer{background:var(--yuv-navy-3);color:rgba(255,255,255,.8);padding:clamp(60px,7vw,100px) var(--gut) clamp(130px,17vw,250px);font:500 17px/1.6 var(--body);position:relative;overflow:hidden}
+footer::before{content:"YUV.AI";position:absolute;bottom:-.16em;left:-.03em;font:400 clamp(130px,19vw,300px)/.8 var(--en);color:transparent;-webkit-text-stroke:3px rgba(255,143,58,.3);direction:ltr;pointer-events:none}
+footer>*{position:relative}
+footer .sig{font:400 clamp(54px,6vw,86px)/1.1 var(--hand);color:#fff;margin-bottom:6px}
+footer .bio{max-width:760px;font-size:20px;color:rgba(255,255,255,.86)}
+footer .links{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0 26px;direction:ltr;justify-content:flex-end}
+footer .links a{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:9px 16px;background:rgba(255,255,255,.07);color:var(--yuv-orange);font:700 15px var(--lat);text-decoration:none}
+footer .links a:hover{background:rgba(255,143,58,.16)}
+footer .links svg{width:18px;height:18px;fill:currentColor}
+footer .links .tx{font:800 14px var(--lat);width:18px;text-align:center}
+footer .credit{max-width:860px;font-size:15.5px;color:rgba(255,255,255,.66)}
+footer{--link:var(--yuv-gold);--link-h:#fff}
+
+@media (max-width:560px){
+  body{font-size:18.5px;line-height:1.65}
+  .card{padding:18px}
+  .fbar .tc{min-width:0}
+  .why,.warn,.ex,.def{padding:16px 18px;padding-inline-start:28px}
+  .tldr li{padding:16px 18px;gap:14px}
+  th,td{padding:11px 12px}
+  .brand small{display:none}
+  .hkick b{letter-spacing:2px;padding:8px 14px 7px}
+  .hcta{padding:12px 22px 11px}
+}
+.hcta2{display:inline-flex;align-items:center;gap:10px;margin-inline-start:14px;color:var(--yuv-navy);font:700 clamp(21px,1.8vw,25px)/1 var(--heD);text-decoration:none;border-bottom:3px solid var(--yuv-orange);padding-bottom:4px}
+.hcta2:hover{color:var(--orange-t)}
+footer .blogs{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin:28px 0 6px;max-width:900px}
+footer .blogs a{display:flex;gap:16px;align-items:flex-start;padding:18px 22px;border-radius:var(--r);background:rgba(255,255,255,.07);color:#fff;text-decoration:none;box-shadow:inset 0 0 0 1.5px rgba(255,143,58,.28)}
+footer .blogs a:hover{background:rgba(255,143,58,.14);color:#fff}
+footer .blogs svg{flex:none;width:30px;height:30px;fill:none;stroke:var(--yuv-orange);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;margin-top:2px}
+footer .blogs b{display:block;font:700 28px/1.1 var(--heD);color:#fff}
+footer .blogs span{display:block;font:500 16px/1.45 var(--body);color:rgba(255,255,255,.75)}
+footer .blogs small{display:block;font:500 13px/1.4 var(--mono);color:var(--yuv-gold);direction:ltr;text-align:right;margin-top:4px}
+/* ---------- header link + back to top (shared with catalog.html) ---------- */
+.bar .home{margin-inline-start:auto;color:#fff;text-decoration:none;font:700 21px/1 var(--he);border-radius:999px;padding:8px 16px;background:rgba(255,255,255,.08)}
+.bar .home:hover{color:var(--yuv-gold);background:rgba(255,255,255,.14)}
+.bar .home+.navbtn,.bar .lang+.navbtn{margin-inline-start:0}
+#toTop{position:fixed;bottom:22px;inset-inline-end:22px;z-index:60;width:58px;height:58px;border:0;border-radius:999px;background:var(--yuv-navy);color:var(--yuv-gold);display:grid;place-items:center;cursor:pointer;box-shadow:var(--sh),inset 0 0 0 2px rgba(255,199,78,.6);opacity:0;transform:translateY(16px) scale(.9);pointer-events:none;transition:opacity .2s,transform .2s}
+#toTop.show{opacity:1;transform:none;pointer-events:auto}
+#toTop svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+#toTop:hover{color:#fff}
+#toTop:focus-visible{outline:3px solid var(--yuv-sky-5);outline-offset:3px}
+@media (max-width:560px){#toTop{width:48px;height:48px;bottom:14px;inset-inline-end:14px}#toTop svg{width:22px;height:22px}}
+/* language switch in the top bar */
+.bar .lang{color:#fff;text-decoration:none;font:700 15px/1 var(--mono);letter-spacing:.04em;border:2px solid rgba(255,255,255,.3);border-radius:999px;padding:8px 13px;white-space:nowrap}
+.bar .lang:hover{border-color:var(--yuv-gold);color:var(--yuv-gold)}
+.bar .lang:lang(he){font:700 19px/1 'Karantina',system-ui,sans-serif;letter-spacing:0;padding:6px 13px}
+@media (max-width:560px){
+  .bar .wrap{gap:8px}
+  .bar .home{white-space:nowrap;padding:7px 11px;font-size:18px}
+  .navbtn{white-space:nowrap;padding:6px 12px;font-size:18px}
+  .bar .lang{padding:7px 9px;font-size:12px}
+}
+@media (max-width:359px){.bar .home{display:none}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.neon::before,.neon::after{animation:none}#toTop{transition:none}}
+</style>
+<link rel="stylesheet" href="catalog/en.css">
+</head>
+<body>
+<header class="bar"><div class="wrap">
+  <div class="brand"><span>YUV<b>.</b>AI</span><small>MOTION IN CODE</small></div>
+  <a class="home" href="catalog.en.html">Element catalog</a>
+  <a class="lang" href="index.html" hreflang="he" lang="he">עברית</a>
+  <button class="navbtn" id="tocBtn" aria-expanded="false" aria-controls="toc">Contents</button>
+</div><div class="prog" id="prog"></div></header>
+<nav class="toc" id="toc" aria-label="Contents"></nav>
+
+<main>
+
+<section class="hero" id="top">
+  <div class="hero-top">
+    <div class="hero-txt">
+      <div class="hkick"><b>YUV.AI · MOTION IN CODE</b><i></i></div>
+      <h1>Video<br>that is <span class="hl">code</span>.</h1>
+      <p class="deck">How Claude makes studio-grade launch films, without After Effects</p>
+      <p class="hmono"><span class="nb">seek(t) → Playwright → ffmpeg</span> · <span class="nb">60 fps · on the beat</span></p>
+      <a class="hcta neon" href="#s0"><span>▶</span>Watch the three films</a><a class="hcta2" href="catalog.en.html">Catalog: what you can ask for</a>
+    </div>
+    <div class="hero-stage">
+      <figure class="hshot hs-wide"><video class="hloop" autoplay muted loop playsinline preload="auto" poster="media/hero-launch-loop.jpg" aria-label="Clip from the YUV.AI MOTION launch film: a 3D card carousel that stops on every beat"><source src="media/hero-launch-loop.webm" type="video/webm"><source src="media/hero-launch-loop.mp4" type="video/mp4"></video></figure>
+      <figure class="hshot hs-phone"><video class="hloop" autoplay muted loop playsinline preload="auto" poster="media/hero-ketzev-loop.jpg" aria-label="Clip from the film for Ketzev, a fictional fitness app: a character drawn in code works out in sync with the app's rep counter"><source src="media/hero-ketzev-loop.webm" type="video/webm"><source src="media/hero-ketzev-loop.mp4" type="video/mp4"></video></figure>
+    </div>
+  </div>
+  <span class="kicker"><i></i>In-depth research · October 15, 2026 · The method of <span class="ltr">@twoclipping</span></span>
+  <p class="lead">The video below is not a video file. It's a small program that draws it in real time, frame after frame, from a single number: <b>time</b>. Just like <span class="ltr">@twoclipping</span>'s videos, only smaller. Press Play, drag the scrubber to any point, and then we'll take it apart together, from the ground up, crumb by crumb.</p>
+  <div class="film neon" id="film">
+    <canvas id="filmCanvas" width="1280" height="720" aria-label="Demo video drawn in code"></canvas>
+    <div class="ruler" id="filmRuler" aria-hidden="true"></div>
+    <div class="fbar">
+      <button class="btn neon" id="filmPlay">▶ Play</button>
+      <input type="range" id="filmScrub" min="0" max="9" step="0.0166667" value="0" aria-label="Time in the video">
+      <span class="tc" id="filmTC">t = 0.000s · frame 0 · beat 0</span>
+      <label><input type="checkbox" id="filmBlur"> Motion blur</label>
+      <label><input type="checkbox" id="filmSound" checked> Sound</label>
+    </div>
+  </div>
+  <p class="sub">The beat ruler under the picture: every line is a beat (half a second, because the song runs at 120 beats per minute), and the orange line is "the drop", the moment the music explodes. The music and effects here are synthesized in the browser for this demo only. The original method calls for real sound (and we'll see why).</p>
+  <div class="chips">
+    <span class="chip">Creator: <b>zero</b> · <span class="ltr">@twoclipping</span></span>
+    <span class="chip">Article: <b>September 28, 2026</b></span>
+    <span class="chip">UI morph post: <b>~0.93–0.98M</b> views</span>
+    <span class="chip">Opus 5.5 released: <b>September 22, 2026</b></span>
+  </div>
+</section>
+
+<!-- ============ THE FILM ============ -->
+<section class="sec s-navy" id="s0" data-folio="REEL" data-toc="The film: made with the method">
+  <div class="sh"><span class="num">▶</span><div><h2>The film: 27 seconds, 60fps, made entirely with this method</h2><p class="sub">One HTML file and one function of time. Every frame was captured with Playwright, the film was assembled with ffmpeg, and the music and effects are real, each one placed according to its measured peak.</p></div></div>
+  <div class="reel">
+    <figure class="reel-v"><video controls playsinline preload="metadata" poster="media/poster-9x16.jpg" src="media/motion-in-code-9x16.mp4"></video><figcaption>9:16 · Reels / TikTok</figcaption></figure>
+    <figure class="reel-h"><video controls playsinline preload="metadata" poster="media/poster-16x9.jpg" src="media/motion-in-code-16x9.mp4"></video><figcaption>16:9 · YouTube / LinkedIn</figcaption></figure>
+  </div>
+  <div class="chips">
+    <span class="chip"><b>1,602</b> frames per format</span>
+    <span class="chip"><b>0</b> single-frame jumps</span>
+    <span class="chip">Effects land <b>+7 to +17 ms</b> after the beat</span>
+    <span class="chip">Loudness <b>−13.6 LUFS</b></span>
+  </div>
+  <h3>A lesson that isn't in the article: same motion, two art directions</h3>
+  <p>The first version (on the right) worked technically: same timing, same springs, same sound. And yet it looked "anemic". The second version (on the left) didn't move the timing by a single second. It changed only the visual language:</p>
+  <img class="cmp" src="media/v1-vs-v2.jpg" alt="Comparison: version 1 on pale paper on the right, version 2 in magazine style on the left, at the same three moments in the film" loading="lazy">
+  <ul>
+    <li><b>A full-color page that changes on the first beat of every bar</b> (black, cyan, magenta), instead of one fixed pale paper. The change is a hard wipe led by a stripe of color, not a fade.</li>
+    <li><b>Magazine-scale typography:</b> a Rubik 900 headline at 150px, anchored to the right (the film is in Hebrew, which reads right to left), instead of 104px in the center. Subheads in Anton instead of a thin mono.</li>
+    <li><b>Giant folio numbers</b> (big section numbers, 01–07) that bleed past the edges of the frame. It's a layer of depth with no extra content at all.</li>
+    <li><b>Thick lines (4–9px) and no gray:</b> every color on screen is a brand color.</li>
+  </ul>
+  <h3>Next step: YUV.AI MOTION, the same method at full scale</h3>
+  <p>A 33-second launch film for a fictional product that turns any topic into a launch video. It's built with the kit that came out of this work, and not a single frame in it comes from editing software:</p>
+  <ul>
+    <li>An input box with a neon glow that pulses on the beat.</li>
+    <li>Typing in sixteenth notes (four keystrokes per beat), with the camera following the cursor.</li>
+    <li>A click that bursts into a card, which lands in a 3D carousel that stops on every beat.</li>
+    <li>An iPhone, and a MacBook whose lid opens on the beat, with code being written on the screen in real time.</li>
+    <li>A time-lapse of the sky going from day to sunset.</li>
+  </ul>
+  <p>Even the sea, the clouds and the sun are code: three.js and a shader, running on the same <code>seek(t)</code> clock. The code is open in the <a class="ltr" href="https://github.com/hoodini/motion-in-code/tree/main/kit">/kit</a> folder.</p>
+  <div class="reel">
+    <figure class="reel-v"><video controls playsinline preload="none" poster="media/poster-launch-9x16.jpg" src="media/yuv-motion-launch-9x16.mp4"></video><figcaption>9:16 · YUV.AI MOTION</figcaption></figure>
+    <figure class="reel-h"><video controls playsinline preload="none" poster="media/poster-launch-16x9.jpg" src="media/yuv-motion-launch-16x9.mp4"></video><figcaption>16:9 · YUV.AI MOTION</figcaption></figure>
+  </div>
+  <div class="chips">
+    <span class="chip"><b>1,960</b> frames per format</span>
+    <span class="chip"><b>0</b> frame jumps</span>
+    <span class="chip"><b>66</b> effects on the beat</span>
+    <span class="chip">Loudness <b>−13.7 LUFS</b></span>
+  </div>
+  <h3>And now a story: a product film for Ketzev, a fitness app</h3>
+  <p>A launch film isn't a list of features. Ketzev (Hebrew for "rhythm"), a fictional fitness app, gets a film built like a real commercial: a problem the viewer can feel, a turning point, the product from the inside, people using it, proof, and why now. 40 seconds, 84 beats, and here too every frame is code:</p>
+  <ul>
+    <li><b>The problem:</b> night, a couch, a phone. A calendar filling up with X marks, three notifications from apps that didn't work, and then everything shrinks into a dot that pulses like a heart and becomes the app icon.</li>
+    <li><b>The drop:</b> an iris (a circle that opens to reveal the next shot) onto a daytime sky, and the name lands on the beat.</li>
+    <li><b>The product from the inside:</b> the camera pushes into the screen, the feed scrolls on the beats, neon chips (small labels) explain each part, a tap turns a card into the next screen, and then a live workout screen.</li>
+    <li><b>Working out:</b> Noa does squats, and every rep lands on a beat and sends a "+1" to the counter on the phone. Daniel runs, Maya does push-ups, and the screen changes with them. The characters are drawn in code, with feet planted on the floor and arms driven by IK (inverse kinematics: the code places the hand, and the math works out the elbow and shoulder).</li>
+    <li><b>Proof and why:</b> a 30-day streak, a before-and-after chart, three reasons, and a download button with a glow.</li>
+  </ul>
+  <div class="reel">
+    <figure class="reel-v"><video controls playsinline preload="none" poster="media/poster-ketzev-9x16.jpg" src="media/ketzev-fitness-9x16.mp4"></video><figcaption>9:16 · Ketzev</figcaption></figure>
+    <figure class="reel-h"><video controls playsinline preload="none" poster="media/poster-ketzev-16x9.jpg" src="media/ketzev-fitness-16x9.mp4"></video><figcaption>16:9 · Ketzev</figcaption></figure>
+  </div>
+  <div class="why"><b>The takeaway</b>The method delivers studio-grade motion and timing, but not taste. Taste has to be written down as an explicit visual brief: the palette, the type scale, what happens to the background on every beat. If we don't write it, the model picks a "safe" default, which in practice means pale.</div>
+</section>
+
+<!-- ============ 1 TL;DR ============ -->
+<section class="sec s-fire" id="s1" data-folio="01" data-toc="Bottom line">
+  <div class="sh"><span class="num">01</span><div><h2>The bottom line, without a single word of jargon</h2><p class="sub">Five sentences. Everything else on this page is the proof behind them, broken down.</p></div></div>
+  <ol class="tldr">
+    <li><div><b>Claude doesn't draw video. It writes software that draws every image in the video.</b> A visual question ("make something beautiful") turns into a code question ("where is the button at second 4.2?"), and code questions are where Claude is excellent, precise and consistent.</div></li>
+    <li><div><b>Taste isn't left to guesswork.</b> zero's prompts don't say "make it pretty". They dictate exact colors, a font, and a long "don't" list of every cheap trick a model tends to reach for by default.</div></li>
+    <li><div><b>No cuts, only changes of shape (morphs).</b> A button doesn't disappear and get replaced by a page. The button itself grows and becomes the page. The eye follows the same object, and the brain reads it as one continuous, expensive-looking story.</div></li>
+    <li><div><b>The music is the clock.</b> First we measure the song (how many beats per minute, and when it explodes), and only then do we plan what happens on each beat. The motion "lands" on the rhythm because it was planned on the rhythm.</div></li>
+    <li><div><b>Claude checks its own work before we see it.</b> It captures stills, looks at them (it can read images), measures jumps and glitches as numbers, and only then renders. We give notes like a director, not like a programmer.</div></li>
+  </ol>
+</section>
+
+<!-- ============ 2 WHO ============ -->
+<section class="sec s-cloud" id="s2" data-folio="02" data-toc="Who, what and when">
+  <div class="sh"><span class="num">02</span><div><h2>Who is <span class="ltr">@twoclipping</span>, and what exactly did he publish</h2><p class="sub">Facts with sources. Anything we couldn't verify is marked as such.</p></div></div>
+  <div class="card">
+    <p><b>zero</b> (<span class="ltr">@twoclipping</span> on X) is a creator who blew up during the launch week of Claude Opus 5.5 (released September 22, 2026). His first post (one shape that morphs through a dozen interface states, on the beat) went up on September 24 and was measured at about 978,000 views and 11,900 likes (a different, later count: 933,000). Along with the videos, he published the full prompts and explicitly invited people to copy them ("steal it").</p>
+    <p>On September 28, 2026 he published a long article on X: <b>"How I Make $10K Launch Videos for $0 with Opus 5.5 (Full Course)"</b>. That's the article this page is built on. It contains 6 steps, 3 full prompts and 7 "luxury rules". According to an independent summary of the article, it ends with a recommendation of a creator/affiliate network for distribution, a part that wasn't in the copy of the text we worked from.</p>
+    <div class="tbl"><table>
+      <tr><th>Prompt</th><th>Format</th><th>What makes it special</th></tr>
+      <tr><td>UI Morph (the viral one)</td><td>1440×1440 · 0:14 · 120BPM</td><td>One shape that passes through 14 interface states, a perfect loop</td></tr>
+      <tr><td>Food ordering</td><td>1920×1080 · 0:15 · 130BPM</td><td>A user story: request → result → action</td></tr>
+      <tr><td>"Develop": printing photos</td><td>1440×1440 · 0:27 · 120BPM</td><td>"Liquid glass", a camera aperture, real footage; ~106K views</td></tr>
+      <tr><td>Beat-synced footage</td><td>1920×1080 · 10 bars</td><td>Real clips synced to the beat, a 3D carousel</td></tr>
+      <tr><td>Landing-page fly-over (our starting point)</td><td>1440×1152 · 14.5s</td><td>3D WebGL, depth of field, a fast-moving camera</td></tr>
+    </table></div>
+    <div class="warn"><b>What we didn't verify</b>X blocks automated access, so we didn't read the article directly on X. We relied on the copy of the text we worked from and on 4 secondary sources that quote it. The fly-over prompt we started from doesn't appear in any public list we could find, so its exact source (which post, which date) is unverified.</div>
+  </div>
+</section>
+
+<!-- ============ 3 TRANSLATION ============ -->
+<section class="sec s-denim" id="s3" data-folio="03" data-toc="zero's article, in brief">
+  <div class="sh"><span class="num">03</span><div><h2>The article, summarized step by step</h2><p class="sub">Our summary of each step, in our own words, with a clear link to zero's full original on X. Every technical term is explained in parentheses the first time it appears.</p></div></div>
+
+  <div class="card">
+    <h3>How I Make $10K Launch Videos for $0 with Opus 5.5 (Full Course)</h3>
+    <p>Published on X on September 28, 2026, less than a week after Claude Opus 5.5 was released, this article by zero (@twoclipping) open-sources his entire workflow for <b>motion design</b> <span class="term">(graphic animation: text, shapes and app screens that move, as opposed to filmed footage)</span>, the kind of launch video studios charge $5,000 to $15,000 for. What follows is our summary of each step. For his exact wording and his full prompts, <a href="https://x.com/twoclipping/status/2104446706741825818" target="_blank" rel="noopener">read the original on X</a>.</p>
+    <p>His headline claims: zero MCP <span class="term">(Model Context Protocol, a standard way to plug outside tools and services into Claude)</span>, zero external tools, no subscription to buy, and no After Effects <span class="term">(Adobe's professional animation software)</span> or any other editing app. Claude builds the whole video in code. He frames it as zero effort on his side, says every single frame is code that Opus 5.5 wrote, and admits he doesn't know even the first step of motion design.</p>
+
+    <h3>Step 1: Steal the idea</h3>
+    <p>The first point: this part takes no creativity. Every video he made started from something that already existed, such as UI animations on Dribbble <span class="term">(a site where designers post their work)</span>, an Apple keynote or another company's app promo. So we save a launch video we like and give it to Claude Code <span class="term">(Claude running in a terminal or app, where it can run commands, write files and look at images)</span>. Claude pulls frames out of it with ffmpeg <span class="term">(a free command-line program that cuts, converts and assembles video and audio)</span>, lays them out on contact sheets <span class="term">(one image holding a grid of many small frames)</span>, maps what happens on each beat <span class="term">(a pulse of the music)</span>, how each scene flows into the next, the camera moves, the colors and the fonts, and then writes the same structure for our product. No reference? Ask Claude for three ideas and pick one. His style tip: by default Claude leans toward dark, 3D-looking videos that still don't feel premium, so he steers toward flat, white, minimal 2D, and adds a short style line to his prompts so it doesn't slide back.</p>
+
+    <h3>Step 2: Turn Claude Code into a studio</h3>
+    <p>The studio is a single setup prompt. Claude Code installs ffmpeg and Playwright <span class="term">(a library that drives a browser with no screen: it opens a page, runs code in it and takes screenshots)</span> with Chromium <span class="term">(the open-source version of Chrome)</span>, then renders <span class="term">(produces the final images of)</span> a two-second test, a circle that grows into a pill shape on a spring, at 60fps <span class="term">(60 frames per second)</span>, and shows us the first and last frame. That is the whole studio: Opus writes one HTML file with a function called <code>seek(t)</code> <span class="term">(t stands for time)</span> that draws any frame on request, Playwright captures every frame, and ffmpeg turns them into an MP4. Because it's all code, when something looks wrong we just tell Claude, and it fixes only that part.</p>
+
+    <h3>Step 3: Get the assets, all for free</h3>
+    <p>All the raw material is free: music from <a href="https://mixkit.co/free-stock-music/" target="_blank" rel="noopener">Mixkit's free music library</a>, sound effects from <a href="https://mixkit.co/free-sound-effects/" target="_blank" rel="noopener">Mixkit's free sound effects</a>, footage and photos from <a href="https://www.pexels.com/" target="_blank" rel="noopener">Pexels</a>, fonts from <a href="https://fonts.google.com/" target="_blank" rel="noopener">Google Fonts</a>, plus our own screenshots and logo. We don't even download them ourselves. Claude Code fetches a royalty-free track around 120 BPM <span class="term">(beats per minute)</span> with a clear drop <span class="term">(the moment a song bursts open after a build-up)</span>, analyzes it with numpy <span class="term">(a Python library for number crunching)</span> to get the beat map <span class="term">(the exact time of every beat)</span> and the exact time of the drop, then downloads one sound effect per on-screen event and measures where each one peaks <span class="term">(reaches its loudest point)</span>. His rule: always use real sound effects. When he let Claude make its own, they sounded cheap.</p>
+
+    <h3>Step 4: The prompts</h3>
+    <p>Next he shares the exact prompts behind three demo films: a 15-second launch film for a food-ordering app (16:9), a 27-second Apple-style keynote for a photo-printing app (square), and a 14-second looping UI morph in which one shape travels through 14 interface states. We paste one into Claude Code running Opus 5.5, and Claude first asks us for what it needs. All three share one skeleton: what to ask us for, how it should look, what happens when, and the mistakes to avoid. He is upfront that these are not real launches, only demos of what Opus can do, and claims that once remixed with our own product and assets, the result can't be told apart from a $15,000 launch video. We don't reproduce the prompts here; they are in <a href="https://x.com/twoclipping/status/2104446706741825818" target="_blank" rel="noopener">his original article</a>. They lean on terms like closed-form springs <span class="term">(bouncy motion calculated straight from a formula for any moment, instead of simulated step by step)</span>, zooming in log space <span class="term">(a zoom where every doubling of size takes the same time, so it feels steady to the eye)</span> and subframes <span class="term">(extra in-between images blended into each frame to create motion blur)</span>. Each one gets its own section further down this page, with an interactive lab.</p>
+
+    <h3>Step 5: What makes it look expensive</h3>
+    <p>His warning: unless these rules are spelled out, the film looks like a PowerPoint deck. In short: nothing fades in <span class="term">(slowly appears out of transparency)</span>; things morph instead <span class="term">(one shape smoothly reshapes into the next)</span>, like a button that grows into the next screen. There are no cuts, so every scene grows out of the one before. Something happens on every beat of the song. Objects bounce a little as they land, like physical things. The camera makes one move at a time. Every click and whoosh has a real sound. And Claude checks its own work before we see it.</p>
+
+    <h3>Step 6: Wrap it up</h3>
+    <p>Once we like the plan, we ask for the final render: 60fps with motion blur <span class="term">(the natural smear a real camera puts on fast-moving things)</span>, every sound effect placed exactly on its moment, balanced audio, and a check of every frame for glitches before Claude shows us anything. Then we watch and give notes like a director, not like a programmer: this part drags, that fade looks cheap so turn it into a morph, land the zoom on the drop. In his experience, two or three rounds of notes and we're done.</p>
+
+    <p><a href="https://x.com/twoclipping/status/2104446706741825818" target="_blank" rel="noopener">Read zero's original article on X</a> for his exact wording and the full prompts.</p>
+  </div>
+
+  <div class="why"><b>The takeaway, in one sentence</b>The article sells "zero effort", but what it really shows is that a motion designer's professional know-how has moved out of the hands and into the prompt. Lines about closed-form springs, zooming in log space and 8 subframes are not decoration; they are exactly the knowledge a studio charges for. From here on, this page takes each of them apart all the way down, and then says honestly which parts of his headline are exaggerated.</div>
+</section>
+
+<!-- ============ 4 FRAMES ============ -->
+<section class="sec s-cloud" id="s4" data-folio="04" data-toc="Foundations: what video is">
+  <div class="sh"><span class="num">04</span><div><h2>Foundations: what is "video", anyway?</h2><p class="sub">Before any trick: what the thing itself physically is.</p></div></div>
+  <p><b>Video is a sequence of still images</b> (stills) shown very quickly, one after another. Each of these images is called a <b>frame</b>. The eye and the brain can't keep up with the "jumps" between images, so they stitch them together into continuous motion, like a flipbook.</p>
+  <p><b>FPS</b> (frames per second) = how many images are shown each second. At 60fps each image stays on screen for 1/60 of a second ≈ 16.7 milliseconds. <b>Why 60 and not 30?</b> Because most screens refresh 60 times per second, and in fast motion (a button growing, a camera pushing in) at 30fps every step is twice as big, so the eye starts to notice "stairs". The price: twice as many images to produce.</p>
+  <div class="ex"><b>The math for the film above</b>9 seconds × 60 frames = <b>540 images</b>. zero's food film: 14.8 seconds × 60 = 888 images. Every single one of them is an image that someone (or something) has to draw.</div>
+  <div class="lab"><div class="lh">The flipbook: jump to any frame</div><div class="lb">
+    <canvas id="flipCanvas" width="640" height="360"></canvas>
+    <div class="ctrls"><label>Frame <input type="range" id="flipF" min="0" max="539" value="240"><output id="flipO">240</output></label></div>
+    <div class="readout" id="flipR"></div>
+  </div></div>
+  <p>Notice what just happened: you jumped to frame 240, and the image appeared <b>instantly</b>, without "playing" the 239 frames before it. That's not obvious at all, and it's the heart of the whole method. To understand why, we first need to understand what a language model is good at.</p>
+</section>
+
+<!-- ============ 5 WHY CODE ============ -->
+<section class="sec s-navy" id="s5" data-folio="05" data-toc="The core trick: video as code">
+  <div class="sh"><span class="num">05</span><div><h2>The core trick: turn a pixel problem into a code problem</h2><p class="sub">Why this works with a language model specifically, and why now.</p></div></div>
+  <p>There are two completely different ways AI can "make video":</p>
+  <div class="grid2">
+    <div class="card flat"><h4>Path A: a video model (Veo, Sora, Flux Video)</h4><p>The model generates <b>pixels</b> directly: it "guesses" what the next image should look like, based on statistics from millions of videos. Excellent for realistic footage. Bad at anything that demands precision: correct text, an exact brand color, a button that stays the same button, timing to the millisecond. And there's no way to "fix just the fourth second": we generate again and everything changes.</p></div>
+    <div class="card flat"><h4>Path B: a language model that writes code (this method)</h4><p>Claude doesn't generate a single pixel. It writes <b>software</b> (a web page) that draws every frame. The text is exact because it's real text. The color is exact because it's <code>#FF8F3A</code>. And if the fourth second isn't good, we change three lines of code, and the rest of the film stays identical, down to the byte.</p></div>
+  </div>
+  <p><b>Why is this such a good fit for an LLM (large language model)?</b> At its core, a language model is a machine that writes text, and code is text with sharp rules. When we turn "make a beautiful animation" into "write a function that returns the button's width at time t", we move the task out of the area where the model is weak (visual guessing) and into the area where it's strongest (precise, long, consistent code). Why did this break out with Opus 5.5 specifically? There's no direct benchmark for "motion ability", but what the community points to is an unusually good sense of timing and rhythm, together with two things the method requires: writing and maintaining a long code file without breaking it, and <b>seeing</b> images.</p>
+  <div class="why"><b>The part everyone misses: Claude has eyes</b>Claude Code can open a PNG file and "see" it. So the loop is: write code → capture a few frames → look at them → fix. That's the difference between "one prompt and hope" and a process that improves itself. It's also the reason for the "contact sheets" in step 1: a model can't watch a video, but it can read one image that holds 30 small frames. And why 2 frames per second, exactly? Because at 120 BPM there's exactly one beat every half second, which means one image per beat.</div>
+  <div class="tbl"><table>
+    <tr><th></th><th>Video model</th><th>Rendered code (zero)</th></tr>
+    <tr><td>Exact text and logo</td><td class="no">Unreliable</td><td class="yes">Pixel-perfect</td></tr>
+    <tr><td>Spot fix ("just second 4")</td><td class="no">Regenerate everything</td><td class="yes">Change one line</td></tr>
+    <tr><td>Sync to music</td><td class="no">Approximate</td><td class="yes">To the millisecond</td></tr>
+    <tr><td>Same result on every run</td><td class="no">No</td><td class="yes">Yes (deterministic)</td></tr>
+    <tr><td>Realistic footage, people, nature</td><td class="yes">Excellent</td><td class="no">Only with real footage we bring in</td></tr>
+  </table></div>
+  <p>And this is where <code>seek(t)</code> comes in: the way "software that draws a frame" has to be built for any of this to work.</p>
+</section>
+
+<!-- ============ 6 SEEK ============ -->
+<section class="sec s-cloud" id="s6" data-folio="06" data-toc="seek(t): a pure function of time">
+  <div class="sh"><span class="num">06</span><div><h2><code>seek(t)</code>: every frame is a pure function of time</h2><p class="sub">The most important technical rule in all the prompts: "no CSS transitions, no timers, no state between frames".</p></div></div>
+  <p>A <b>function</b> is a machine: a value goes in, a value comes out. A <b>pure function</b> is one where the same input always gives the same output, and that doesn't depend on anything else: not on the computer's clock, not on what happened before. <code>seek(t)</code> takes a time <code>t</code> in seconds (say, 4.2) and draws the screen <b>exactly</b> as it should look at that moment. From nothing. Without remembering anything.</p>
+  <div class="code"><span class="lbl">film.html: the minimal shape of every film</span><button class="cp">Copy</button><pre>&lt;div id="dot"&gt;&lt;/div&gt;
+&lt;script&gt;
+const spring = (t, w = 12, z = 0.8) =&gt; { if (t &lt;= 0) return 0;
+  const wd = w * Math.sqrt(1 - z*z);
+  return 1 - Math.exp(-z*w*t) * (Math.cos(wd*t) + (z*w/wd) * Math.sin(wd*t)); };
+
+window.seek = (t) =&gt; {                 // t in seconds. Nothing else.
+  const grow = spring(t - 0.5);         // starts growing at 0.5s
+  const w = 44 + (380 - 44) * grow;     // circle (44px) -&gt; pill (380px)
+  dot.style.width = w + 'px';
+  dot.style.borderRadius = '999px';
+};
+seek(0);
+&lt;/script&gt;</pre></div>
+  <p><b>Why not just run a regular animation and record it?</b> Because a regular animation (a CSS transition, <code>setTimeout</code>, <code>requestAnimationFrame</code>) reads the <b>real clock</b>: "300 milliseconds have passed since I started, so I'm at 30%". But when we render, a single Playwright screenshot takes a variable amount of time: sometimes 40 milliseconds, sometimes 200. The clock keeps running during the screenshot, so every frame gets "caught" at a random moment. When we play the images back at a steady 60fps, the motion stutters, speeds up and slows down. With <code>seek(t)</code> we tell the page "be at <code>t=4.2</code>", wait as long as it takes, take the screenshot, and the next <code>t</code> is exactly 4.2 + 1/60. The film's time is completely decoupled from the computer's time.</p>
+  <div class="lab"><div class="lh">Simulation: real-clock animation vs. seek(t)</div><div class="lb">
+    <div class="grid2"><div><b>Real clock (timer)</b><canvas id="tmA" width="420" height="120"></canvas></div><div><b>seek(t)</b><canvas id="tmB" width="420" height="120"></canvas></div></div>
+    <canvas id="tmPlot" width="860" height="230" style="margin-top:12px"></canvas>
+    <div class="ctrls"><button class="btn" id="tmNew">New simulation</button><label>Max screenshot time <input type="range" id="tmMax" min="20" max="300" value="200"><output id="tmMaxO">200ms</output></label></div>
+    <div class="readout" id="tmR"></div>
+  </div></div>
+  <p>What you saw in the graph: the <code>seek(t)</code> line is perfectly straight (every frame advances exactly 1/60 of a second), while the timer line is jagged and jumpy, because each frame gets "caught" after a different screenshot time. And here are three more gifts <code>seek(t)</code> gives us:</p>
+  <ul>
+    <li><b>Jump to any moment:</b> Claude can capture just frame 240 to check the drop, without rendering everything.</li>
+    <li><b>Parallel rendering:</b> 7 browsers can render 7 different parts of the film at the same time (as we did in EP04 on the RTX 4090), because no frame depends on the one before it.</li>
+    <li><b>Surgical fixes:</b> changing the scene at second 6 doesn't touch a single frame before it.</li>
+  </ul>
+  <div class="def"><b>Definition: async seek(t)</b>The prompt that captures the frames as images says <code>async seek(t)</code>. <b>async</b> = a function that's allowed to "wait" before it finishes, for example until an image or a video frame has loaded. Playwright waits for it to finish and only then takes the screenshot. Without it, we'd capture a frame where the image hasn't appeared yet.</div>
+</section>
+
+<!-- ============ 7 EASING ============ -->
+<section class="sec s-denim" id="s7" data-folio="07" data-toc="Easing: how things accelerate">
+  <div class="sh"><span class="num">07</span><div><h2>Easing: why "linear" motion looks robotic</h2><p class="sub">The first layer of "taste", and what it looks like as numbers.</p></div></div>
+  <p>Say a button needs to move from point A to point B in one second. The simple way: at every moment, it has covered the same share of the distance as the share of time that has passed (50% of the time = 50% of the distance). That's called <b>linear</b>, and it looks mechanical, because nothing in the real world moves like that. A car speeds up, cruises, and slows down. A hand lifting a cup speeds up, then slows down before it reaches the table.</p>
+  <p><b>Easing</b> is a function that converts "how much of the time has passed" (u, between 0 and 1) into "how much of the distance we've covered" (also between 0 and 1). No formulas yet. First, just look at the balls:</p>
+  <div class="lab"><div class="lh">Four easing curves side by side</div><div class="lb">
+    <canvas id="ezCanvas" width="860" height="330"></canvas>
+    <div class="ctrls"><label>u (fraction of time passed) <input type="range" id="ezU" min="0" max="1" step="0.001" value="0.3"><output id="ezO">0.30</output></label><button class="btn" id="ezPlay">▶ Play</button></div>
+  </div></div>
+  <p>Now the formula, once we have a picture in our heads. <b>easeInOutCubic</b> (ease-in-out): for u below one half, <code>4u³</code> (it starts slowly, because u³ is tiny when u is small); for the second half, <code>1 − (−2u+2)³/2</code> (the mirror image: it slows down at the end). <b>easeOutCubic</b> (ease-out) = <code>1 − (1−u)³</code>: it shoots off and then slows down, great for things that "land". <b>easeOutExpo</b> slows down to an extreme. It looks "fast and expensive", but overused it feels templated.</p>
+  <div class="warn"><b>The limit of easing</b>A curve like this always ends at exactly 1 and stops dead. A real object that lands doesn't stop like that: it "bounces" a little past the target and settles. Worse: easing only knows how to go from A to B. What happens if the target changes halfway? It "jumps". For both of these we need a spring, which is the next section.</div>
+</section>
+
+<!-- ============ 8 SPRINGS ============ -->
+<section class="sec s-cloud" id="s8" data-folio="08" data-toc="Closed-form springs">
+  <div class="sh"><span class="num">08</span><div><h2>Closed-form springs: the secret behind the physical feel</h2><p class="sub">"Springs are closed-form step responses": what each word means, and why it's done exactly this way.</p></div></div>
+  <p><b>Intuition first:</b> picture a weight hanging from a spring, and we suddenly move the point it hangs from 10 cm down. The weight doesn't jump straight to the new spot: it accelerates toward it, overshoots a little, comes back, and settles. Two things determine how this looks:</p>
+  <ul>
+    <li><b>Stiffness</b> (ω, "omega"): a stiff spring = fast motion. In units: the natural frequency, in radians per second. ω=12 → a natural oscillation period of 2π/12 ≈ 0.52 seconds.</li>
+    <li><b>Damping</b> (ζ, "zeta"): how much "friction" there is. ζ less than 1 → it overshoots the target and comes back (springy). ζ=1 → it arrives as fast as possible without overshooting (critical damping). ζ greater than 1 → it crawls, "muddy".</li>
+  </ul>
+  <p><b>"Step response"</b> = how the spring reacts when the target jumps all at once (a "step") from 0 to 1. <b>"Closed-form"</b> = there's a formula that gives the position at any time <code>t</code> <b>directly</b>, without simulating step after step. And that's the whole point: a step-by-step simulation has to remember the position and velocity from the previous frame (in other words, "state"), and that breaks <code>seek(t)</code> (there's no way to jump to frame 240 without computing the 239 before it). The closed-form formula gives us a spring that is a pure function of time.</p>
+  <div class="def"><b>The formula (for damping less than 1), symbol by symbol</b>
+    <code>x(t) = 1 − e<sup>−ζωt</sup> · ( cos(ω<sub>d</sub>t) + (ζω/ω<sub>d</sub>)·sin(ω<sub>d</sub>t) )</code>, where <code>ω<sub>d</sub> = ω·√(1−ζ²)</code>.<br>
+    • <code>e<sup>−ζωt</sup></code>: "the envelope". It fades over time, and how fast depends on damping times stiffness. This is what makes the oscillation die out.<br>
+    • <code>cos</code> and <code>sin</code>: the oscillation itself (back and forth around the target), at frequency <code>ω<sub>d</sub></code>, which is the natural frequency "slowed down" a little by the damping.<br>
+    • The term <code>(ζω/ω<sub>d</sub>)·sin</code> is chosen so that at time 0 the velocity is exactly 0: the spring starts from rest, with no "kick".<br>
+    • The maximum overshoot falls straight out of the formula: <code>e<sup>−πζ/√(1−ζ²)</sup></code>. ζ=0.8 → 1.5%. ζ=0.6 → 9.5%. And that's what the prompt means by "a tiny overshoot at most": damping of roughly 0.75–0.9.</div>
+  <div class="lab"><div class="lh">Spring lab: circle → pill (the example from the article)</div><div class="lb">
+    <canvas id="spCanvas" width="860" height="300"></canvas>
+    <div class="ctrls">
+      <label>Stiffness ω <input type="range" id="spW" min="4" max="30" step="0.5" value="12"><output id="spWO">12</output></label>
+      <label>Damping ζ <input type="range" id="spZ" min="0.2" max="1.6" step="0.01" value="0.8"><output id="spZO">0.80</output></label>
+      <label><input type="checkbox" id="spMulti"> Three targets in a row</label>
+      <button class="btn" id="spPlay">▶ Play</button>
+    </div>
+    <div class="readout" id="spR"></div>
+  </div></div>
+  <h3>"The sum of one spring per change": how the target changes midway</h3>
+  <p>In the prompt: <i>"A value with many targets is the sum of one spring per change, so it stays a pure function of time."</i> Check the "Three targets in a row" box in the lab. The width starts at 44, at 0.0 seconds it gets a target of 380, at 0.35 it changes its mind to 200, and at 0.7 to 300. Instead of remembering "where I was", we compute: <code>value = 44 + (380−44)·spring(t) + (200−380)·spring(t−0.35) + (300−200)·spring(t−0.7)</code>. Each change adds its own spring, which starts at the moment of that change. Since every spring starts at velocity 0 and position 0, the sum is continuous (no jump), and the result is still a pure function of <code>t</code>.</p>
+  <h3>The "liquid indicator" trick: two edges, two springs</h3>
+  <p>In the UI morph prompt: <i>"The tab indicator's two edges ride different springs, so the leading edge stretches ahead of the trailing one."</i> The bar that marks the selected tab isn't one object that moves: it's two numbers, the right edge and the left edge. If the edge facing the direction of travel gets a stiffer spring than the trailing edge, the bar <b>stretches</b> along the way and contracts when it arrives, just like a drop of water. Click the tabs:</p>
+  <div class="lab"><div class="lh">Liquid tabs</div><div class="lb">
+    <canvas id="tabCanvas" width="860" height="140"></canvas>
+    <div class="ctrls"><label><input type="checkbox" id="tabSame"> Same spring for both edges (for comparison)</label></div>
+  </div></div>
+</section>
+
+<!-- ============ 9 MORPH ============ -->
+<section class="sec s-denim" id="s9" data-folio="09" data-toc="Morph instead of fade">
+  <div class="sh"><span class="num">09</span><div><h2>Change shape instead of disappearing: morph vs. fade</h2><p class="sub">Rules #1 and #2 in "what makes it look expensive", and why they work on the brain.</p></div></div>
+  <p><b>Fade (crossfade)</b> = the old image turns transparent while the new one appears. In the middle, both are half-transparent, one on top of the other. <b>Morph</b> = the very same object changes its width, height, corners and color until it becomes the next thing.</p>
+  <div class="lab"><div class="lh">The same transition, twice</div><div class="lb">
+    <div class="grid2"><div><b>Fade</b><canvas id="mfA" width="420" height="260"></canvas></div><div><b>Morph (shared element)</b><canvas id="mfB" width="420" height="260"></canvas></div></div>
+    <div class="ctrls"><label>Progress <input type="range" id="mfU" min="0" max="1" step="0.001" value="0.5"><output id="mfO">0.50</output></label><button class="btn" id="mfPlay">▶ Play</button></div>
+  </div></div>
+  <p><b>Why the brain prefers a morph:</b> our visual system is built to track <b>objects</b> over time (object permanence). When the button itself grows into a page, the eye never loses it for a moment, so the brain reads cause and effect: "I clicked, and this thing opened". In a fade, there's a moment where the eye sees two half-transparent things and doesn't know which one to focus on. The causal link breaks, and the result feels like "the next slide" in a presentation. Hence "it looks like a powerpoint".</p>
+  <div class="def"><b>Definition: shared element</b>In the prompt: <i>"Every handoff between layers is a shared element: the lime flood carries a copy of the bubble's words, the button carries its own label into the page."</i> When an object passes from one layer to another (for example, from the phone to full screen), it takes <b>its content with it</b>. In the film above: the pill with <code>seek(t)</code> grows into a card, and the orange button on that card is the one that floods the screen on the drop. It's not a color appearing out of nowhere.</div>
+  <div class="warn"><b>"Flood": the two numbers from the prompts</b>"A flood must clear the farthest corner and take about 0.35s, or it reads as a flash." An expanding circle has to reach a radius equal to the distance from its center <b>to the farthest corner</b> of the screen; otherwise an unpainted triangle is left in that corner. And 0.35 seconds: any faster and, at 60fps, half the screen changes in one or two frames, so the eye sees a "flash", not motion. Any slower and it no longer feels like an explosion on the drop.</div>
+</section>
+
+<!-- ============ 10 CAMERA ============ -->
+<section class="sec s-cloud" id="s10" data-folio="10" data-toc="Camera: log-space zoom">
+  <div class="sh"><span class="num">10</span><div><h2>The camera: one transform, and zoom "in log space"</h2><p class="sub">"The camera is one transform on a container... zoom interpolated in log space."</p></div></div>
+  <p>There's no real camera in a web page. The "camera" = <b>one box that wraps the whole world</b>, and we apply movement and scaling to it (a transform). Scaling the box 2× around a point = "zooming in 2× on that point". All of the camera's motion is a short list of keyframes (moments where we pin down exactly where the camera is), <code>[time, zoom, x, y]</code>, with easing in between.</p>
+  <p><b>Why "logarithmic"?</b> Zoom is <b>multiplicative</b>: going from 1 to 2 is "2×", and going from 2 to 4 is also "2×", and the eye experiences both as the same distance. If we compute the zoom linearly from 1 to 16, then halfway through the time the zoom is 8.5, meaning we've already covered 8.5× out of 16×. The eye feels a crazy surge at the start and a crawl at the end. In log space (<code>z = a·(b/a)<sup>u</sup></code>, where a is the starting zoom, b the final zoom and u the fraction of time that has passed), halfway through the time the zoom is 4 = √16: half of the <b>perceived</b> distance. The speed the eye experiences is the rate of change of <code>ln(z)</code> (the logarithm of the zoom), and that's exactly what the graph below measures.</p>
+  <div class="lab"><div class="lh">×16 zoom: linear vs. logarithmic</div><div class="lb">
+    <div class="grid2"><div><b>Linear</b><canvas id="zmA" width="420" height="240"></canvas></div><div><b>Logarithmic</b><canvas id="zmB" width="420" height="240"></canvas></div></div>
+    <canvas id="zmPlot" width="860" height="200" style="margin-top:10px"></canvas>
+    <div class="ctrls"><label>Time <input type="range" id="zmU" min="0" max="1" step="0.001" value="0.5"><output id="zmO">0.50</output></label><button class="btn" id="zmPlay">▶ Play</button></div>
+  </div></div>
+  <ul>
+    <li><b>"one move per scene"</b>: one camera move per scene. Two moves at once (say, a zoom plus a pan, which slides the view sideways, in another direction) = the eye doesn't know where to look.</li>
+    <li><b>"never zooms in and out back to back"</b>: zooming in and immediately zooming out looks like a camera that couldn't make up its mind. In the film above, the camera pushes in before the drop, and it makes the return to 1 <b>while the orange flood covers the entire screen</b>. A camera change over a solid-color surface is invisible. It's a classic editing trick.</li>
+    <li><b>"Never put will-change on anything the camera scales"</b>: <code>will-change</code> tells the browser "snapshot this element as an image and move the image around". When we scale up an image like that, the text goes blurry. Without it, the browser redraws the text at every size, so it stays sharp.</li>
+  </ul>
+</section>
+
+<!-- ============ 11 MUSIC ============ -->
+<section class="sec s-denim" id="s11" data-folio="11" data-toc="The music is the clock">
+  <div class="sh"><span class="num">11</span><div><h2>The music is the clock: BPM, beats, the drop and peak-aligned sound</h2><p class="sub">"Something happens on every beat", and how a computer "hears" the beat.</p></div></div>
+  <p><b>BPM</b> (Beats Per Minute) = how many beats in one minute. 120 BPM = 2 beats per second = a beat every 0.5 seconds. <b>Bar</b> = 4 beats. <b>Downbeat</b> = the first beat of the bar, the strong one. <b>The drop</b> = the moment when, after a build-up, all the instruments come in at once: the peak of the energy.</p>
+  <p>Once we know the BPM, planning the whole film becomes a table: on beat 0 this happens, on beat 1 that happens. That's why the prompts talk in beats, not seconds. We checked zero's numbers, and they're accurate:</p>
+  <div class="lab"><div class="lh">Beat calculator</div><div class="lb">
+    <div class="ctrls">
+      <label>BPM <input type="range" id="bcB" min="60" max="180" value="130"><output id="bcBO">130</output></label>
+      <label>Beats <input type="range" id="bcN" min="4" max="64" value="32"><output id="bcNO">32</output></label>
+      <span class="seg" id="bcPre"><button data-b="130" data-n="32" class="on">Food order</button><button data-b="120" data-n="54">Photo print</button><button data-b="120" data-n="28">UI morph</button></span>
+    </div>
+    <div class="readout" id="bcR"></div>
+  </div></div>
+  <h3>How numpy "hears" the rhythm, step by step</h3>
+  <p>The prompt says "Analyze it with numpy and give me the beat grid". Here's what happens under the hood (we run exactly this algorithm right here in the browser, on a song synthesized on the spot):</p>
+  <ol>
+    <li><b>What an audio file is:</b> a long list of numbers between −1 and 1, the position of the speaker's membrane. 22,050 numbers for every second.</li>
+    <li><b>Energy envelope:</b> we cut the audio into windows of 256 samples (~12 milliseconds) and compute the RMS (root mean square) of each window = "how loud" that window is.</li>
+    <li><b>Onset ("the start of a sound"):</b> for each window, how much louder it is than the one before (rises only). A drum strike = a sharp jump. This turns the song into a list of "hits".</li>
+    <li><b>Autocorrelation:</b> we slide the list of hits over itself at different offsets and check where it "lines up" with itself best. If there's a hit every 0.5 seconds, the 0.5-second offset gives the highest match → 120 BPM. (We favor tempos close to 120, because otherwise the algorithm might pick half or double the real tempo.)</li>
+    <li><b>Phase:</b> now we know how often, but we also need to know <b>when</b>. We search for the starting offset where the grid lands on the most hits.</li>
+    <li><b>The drop:</b> we compute the average energy of each beat and look for the beat with the biggest jump compared with the two beats before it.</li>
+  </ol>
+  <div class="lab"><div class="lh">Beat and drop detection: real, on a synthesized song</div><div class="lb">
+    <canvas id="btCanvas" width="860" height="300"></canvas>
+    <div class="ctrls">
+      <label>True BPM <input type="range" id="btB" min="90" max="150" value="120"><output id="btBO">120</output></label>
+      <label>Drop at beat <input type="range" id="btD" min="4" max="16" value="8"><output id="btDO">8</output></label>
+      <button class="btn" id="btRun">Analyze</button><button class="btn m" id="btPlay">▶ Play</button>
+    </div>
+    <div class="readout" id="btR"></div>
+  </div></div>
+  <div class="warn"><b>A real limitation</b>On a real song, automatic detection is sometimes wrong (half-tempo, a fake drop). That's why zero's beat-synced footage prompt says "Calibrate the grid to the real kick hits", meaning: line the grid up with the actual kick drum hits. And Howseen's open skill says it explicitly: "never trust an auto beat grid". The lesson: the grid is a hypothesis we test, not the truth.</div>
+
+  <h3>Sound effects placed "by measured peak": the small detail that makes the difference</h3>
+  <p>In the prompt: <i>"Place each so its measured peak, not its file start, lands on the event."</i> A "whoosh" file starts quiet and rises to a <b>peak</b>, the moment the ear hears as "there it is!". In our file the peak sits 0.42 seconds after the start of the file. If we play the file right at the drop, the peak arrives 0.42 seconds <b>after</b> the drop. That's almost a full beat late, and the ear feels that something isn't "landing". The fix: measure where the peak is, and start the file at <code>event time − peak time</code>.</p>
+  <div class="lab"><div class="lh">Whoosh on the beat: by file start vs. by peak</div><div class="lb">
+    <canvas id="pkCanvas" width="860" height="220"></canvas>
+    <div class="ctrls"><span class="seg" id="pkType"><button data-t="whoosh" class="on">whoosh</button><button data-t="pop">pop</button><button data-t="click">click</button></span>
+      <button class="btn o" id="pkNaive">▶ By file start</button><button class="btn m" id="pkPeak">▶ By peak</button></div>
+    <div class="readout" id="pkR"></div>
+  </div></div>
+  <div class="def"><b>Definition: loudnorm to -14 LUFS</b><b>LUFS</b> is a unit for measuring loudness <b>the way a human ear hears it</b> (not just the peak of the waveform). <code>loudnorm</code> is an ffmpeg filter that brings the whole film to a fixed, measured loudness. −14 LUFS is a common target for streaming platforms: that way our film won't sound quieter than everything else in the feed, and it won't get "turned down" automatically either.</div>
+</section>
+
+<!-- ============ 12 MOTION BLUR ============ -->
+<section class="sec s-cloud" id="s12" data-folio="12" data-toc="Motion blur from subframes">
+  <div class="sh"><span class="num">12</span><div><h2>Motion blur from subframes: why 4 leaves "ghosts" and 8 doesn't</h2><p class="sub">"8 subframes per frame blended with ffmpeg tmix": every word, every number.</p></div></div>
+  <p><b>The problem:</b> a real camera opens its shutter for a stretch of time (for example, half of the frame's duration, known as a "180° shutter"). Anything that moves during that time gets smeared across the image. That smear is "motion blur", and our brains are so used to it that without it, fast motion looks "stuttery" and artificial. But a browser screenshot is <b>a single, infinitely short instant</b>: zero smear.</p>
+  <p><b>The fix:</b> for every final frame, we capture N "subframes" at closely spaced times inside the shutter window and compute their pixel-by-pixel <b>average</b>. The average of 8 nearby positions of a circle = a smeared circle. <b>ffmpeg tmix</b> is exactly that: a filter that averages N consecutive frames.</p>
+  <p><b>Why 4 isn't enough for fast motion:</b> the distance between two subframes is <code>speed × shutter time ÷ N</code>. If that distance is bigger than the object itself, the copies don't touch each other, and we see 4 separate see-through copies: "ghost copies". The prompt says "use 8 and slow the move down". Those are the two ways to shrink that same number.</p>
+  <div class="lab"><div class="lh">Motion blur lab: a real average of subframes</div><div class="lb">
+    <canvas id="mbCanvas" width="860" height="220"></canvas>
+    <div class="ctrls">
+      <label>Speed <input type="range" id="mbV" min="200" max="9000" step="100" value="4800"><output id="mbVO">4800</output></label>
+      <label>Subframes N <input type="range" id="mbN" min="1" max="16" value="4"><output id="mbNO">4</output></label>
+      <label>Shutter <input type="range" id="mbS" min="0.1" max="1" step="0.05" value="0.5"><output id="mbSO">0.50</output></label>
+    </div>
+    <div class="readout" id="mbR"></div>
+  </div></div>
+  <p>And the ffmpeg command. <b>We actually tested it</b> before writing it here: we generated 24 synthetic subframes and verified that every output frame is the average of its own 8 subframes and doesn't mix in its neighbors:</p>
+  <div class="code"><span class="lbl">verified: each output frame = mean of its own 8 subframes</span><button class="cp">Copy</button><pre># 60 fps × 8 subframes = 480 images per second of film
+ffmpeg -framerate 480 -i sub_%06d.png \
+  -vf "tmix=frames=8,select='eq(mod(n\,8)\,7)',setpts=N/(60*TB)" \
+  -r 60 -c:v libx264 -pix_fmt yuv420p -crf 16 video.mp4</pre></div>
+  <p><code>tmix=frames=8</code> averages each frame with the 7 before it. <code>select='eq(mod(n,8),7)'</code> keeps only every eighth frame: the one whose average covers exactly one complete group. <code>setpts</code> rewrites the timestamps for 60fps. <b>A gotcha from Howseen's skill:</b> never average across a hard cut (an instant switch from one scene to the next), or the two scenes smear into each other.</p>
+</section>
+
+<!-- ============ 13 QA ============ -->
+<section class="sec s-denim" id="s13" data-folio="13" data-toc="Claude checks itself">
+  <div class="sh"><span class="num">13</span><div><h2>"It checks its own work": quality control Claude does on its own</h2><p class="sub">The seventh rule, and the reason the result doesn't look like "one prompt and a prayer".</p></div></div>
+  <p>Every one of zero's prompts ends with a <code>&lt;start&gt;</code> block that requires, <b>before writing the full film</b>, a beat map and 4 stills for approval. And after the render, two checks: one frame per beat, and a scan for "pops".</p>
+  <h3>Check 1: a contact sheet, one frame per beat</h3>
+  <p>This is exactly what Claude "looks" at. Here's the sheet for the film above, computed right now from that same <code>seek(t)</code>, with one frame every half second:</p>
+  <div class="lab"><div class="lh">Contact sheet: 18 beats in one image</div><div class="lb"><canvas id="csCanvas" width="1280" height="400"></canvas></div></div>
+  <h3>Check 2: the pop scan, catching a one-frame glitch</h3>
+  <p>A <b>pop</b> = a single frame where something jumps to the wrong place and immediately snaps back (a layer that showed up too early, a variable that wasn't set). At 60fps the eye catches it as an annoying "flicker", but it's very hard to find by watching. <b>The algorithm:</b> for every pair of consecutive frames, we compute the average difference between their pixels. In smooth motion, that difference changes slowly. A pop creates a <b>spike</b>, 3x or more above its neighbors, exactly as the prompt puts it: "frame-difference spikes 3x their neighbours".</p>
+  <div class="lab"><div class="lh">Pop scanner: we inject a glitch and hunt for it</div><div class="lb">
+    <canvas id="ppCanvas" width="860" height="260"></canvas>
+    <div class="ctrls"><button class="btn m" id="ppNew">Inject a new glitch</button><button class="btn o" id="ppClean">No glitch</button></div>
+    <div class="readout" id="ppR"></div>
+  </div></div>
+  <div class="why"><b>Why this matters especially for AI</b>A model that writes long code makes small mistakes: a forgotten z-index (the setting that decides which layer sits on top), or a variable not initialized before the first seek. Both are listed in zero's gotchas. Numeric checks turn "I think it looks good" into "I measured it: no spikes". That's exactly the difference between a viral demo and something we can hand over to a client.</div>
+</section>
+
+<!-- ============ 14 PIPELINE ============ -->
+<section class="sec s-navy" id="s14" data-folio="14" data-toc="The full pipeline">
+  <div class="sh"><span class="num">14</span><div><h2>The full pipeline: from an HTML file to an MP4</h2><p class="sub">Now that every part is defined, we can see the whole chain.</p></div></div>
+  <div class="pipe">
+    <div class="st"><b>REFERENCE</b>Reference video → 2fps → contact sheets → beat structure</div><span class="ar">→</span>
+    <div class="st"><b>ASSETS</b>Song (BPM + drop), SFX with measured peaks, images, logo</div><span class="ar">→</span>
+    <div class="st"><b>BEAT MAP</b>A table: beat → what happens, which object, which sound</div><span class="ar">→</span>
+    <div class="st"><b>4 STILLS</b>Human approval before the film is written</div><span class="ar">→</span>
+    <div class="st"><b>seek(t)</b>One HTML file, everything a function of t</div><span class="ar">→</span>
+    <div class="st"><b>RENDER</b>Playwright × N subframes → PNG</div><span class="ar">→</span>
+    <div class="st"><b>FFMPEG</b>tmix → 60fps · SFX by peak · loudnorm</div><span class="ar">→</span>
+    <div class="st"><b>QA</b>One frame per beat · pop scan · director's notes</div>
+  </div>
+  <div class="code"><span class="lbl">render.mjs: the whole renderer (Node + Playwright)</span><button class="cp">Copy</button><pre>import { chromium } from 'playwright';
+const FPS = 60, SUB = 8, SHUTTER = 0.5, DUR = 9;      // seconds
+const browser = await chromium.launch({ args: ['--use-angle=d3d11', '--enable-gpu', '--ignore-gpu-blocklist'] });
+const page = await browser.newPage({ viewport: { width: 1920, height: 1080 } });
+await page.goto('http://localhost:8000/film.html');
+await page.evaluate(() =&gt; document.fonts.ready);       // never shoot before fonts load
+let i = 0;
+for (let f = 0; f &lt; DUR * FPS; f++) {
+  for (let k = 0; k &lt; SUB; k++) {                       // subframes spread across the shutter
+    const t = f / FPS + (SHUTTER / FPS) * ((k + 0.5) / SUB - 0.5);
+    await page.evaluate(t =&gt; window.seek(t), t);         // may be async (images, video)
+    await page.screenshot({ path: `out/sub_${String(i++).padStart(6, '0')}.png` });
+  }
+}
+await browser.close();</pre></div>
+  <div class="lab"><div class="lh">Render cost calculator</div><div class="lb">
+    <div class="ctrls">
+      <label>Length (s) <input type="range" id="rcD" min="5" max="120" value="15"><output id="rcDO">15</output></label>
+      <label>FPS <input type="range" id="rcF" min="24" max="60" step="6" value="60"><output id="rcFO">60</output></label>
+      <label>Subframes <input type="range" id="rcS" min="1" max="16" value="8"><output id="rcSO">8</output></label>
+      <label>Captures per second per worker <input type="range" id="rcW" min="1" max="30" value="6"><output id="rcWO">6</output></label>
+      <label>Workers <input type="range" id="rcK" min="1" max="12" value="7"><output id="rcKO">7</output></label>
+    </div>
+    <div class="ctrls"><span class="seg" id="rcPre"><button data-w="7" data-k="1">CPU cloud (EP01)</button><button data-w="6" data-k="7" class="on">My 4090 (EP04)</button></span></div>
+    <div class="readout" id="rcR"></div>
+  </div></div>
+  <p>The numbers on the buttons come from our real renders in this project: in the cloud environment (CPU only) we got about 7 frames per second; on my RTX 4090, with 7 workers (browser copies rendering side by side) running in parallel, about 6 per second each. Subframes multiply the work, so for drafts we render without motion blur and at low resolution, and save motion blur for the master.</p>
+</section>
+
+<!-- ============ 15 ANATOMY ============ -->
+<section class="sec s-cloud" id="s15" data-folio="15" data-toc="Anatomy of the prompt">
+  <div class="sh"><span class="num">15</span><div><h2>Anatomy of the prompt: the six blocks, and why each one works on an LLM</h2><p class="sub">All of zero's prompts are built on exactly the same skeleton. Click a block.</p></div></div>
+  <div class="blocks" id="anBlocks"></div>
+  <div class="card anat" id="anBody"></div>
+  <div class="why"><b>The principle that ties all six blocks together</b>When we don't tell a language model exactly what we want, it gives us the <b>average</b> of what it saw in training. In motion design, the average is exactly "the template": dark background, glow, particles, fade. The prompt from zero doesn't add "creativity". It <b>deletes the average options</b> (the banned list), <b>sets the numbers</b> (colors, BPM, seconds, sizes), <b>passes on engineering knowledge</b> (build), <b>saves us the bugs he has already hit</b> (gotchas), and <b>brings a human into the loop cheaply</b> (start). It's a prompt written like a director's technical spec, not like a request.</div>
+</section>
+
+<!-- ============ 16 FLYOVER ============ -->
+<section class="sec s-denim" id="s16" data-folio="16" data-toc="Bonus: the fly-over prompt">
+  <div class="sh"><span class="num">16</span><div><h2>Bonus: the 3D fly-over prompt</h2><p class="sub">Exactly the same skeleton, but here zero breaks his own "2D only" rule, on purpose.</p></div></div>
+  <details><summary>Full prompt + explanation</summary><div class="in">
+    <div class="code"><span class="lbl">original · paste into Claude Code</span><button class="cp">Copy</button><pre data-prompt="fly"></pre></div>
+    <div class="tr" id="tr-fly"></div>
+  </div></details>
+  <p><b>What's new here compared with the previous three prompts:</b></p>
+  <h3>1. A camera driven by speed, not by positions</h3>
+  <p>"Drive the camera from one speed curve, never from a position key every half second... Integrate it into the page position." Instead of telling the camera "at 0.5 seconds be at y=300, at 1.0 be at y=700", we define <b>how fast</b> it travels at every moment, and <b>add up</b> (integrate) that speed over time to get the position. Why? Because when we connect fixed positions with a smooth curve, the speed between the keys turns "wavy": it speeds up and slows down around each key. The eye reads this as a glide that stalls and lurches ("stops or surges in the glide" is on the banned list). When we start from the speed, it stays exactly as flat as we defined it.</p>
+  <div class="lab"><div class="lh">Speed curve → position, vs. a key every half second</div><div class="lb">
+    <canvas id="fsCanvas" width="860" height="300"></canvas>
+    <div class="readout" id="fsR"></div>
+  </div></div>
+  <h3>2. Asymmetric depth of field</h3>
+  <p>"blur radius = 75 × (focus − depth) / depth in front of the focus and 6 × (depth − focus) / depth behind it, capped at 120px". <b>Depth of field</b> = how much of the image is sharp. In a real lens, things very close to the lens blur much faster than things far away, and that's what gives the "macro" feel of an expensive miniature. The multiplier of 75 in front versus 6 behind (12.5 times more) creates exactly this: the page near the lens "melts", while whatever sits behind the focus stays almost sharp.</p>
+  <div class="lab"><div class="lh">How much blur at each depth</div><div class="lb">
+    <canvas id="dfCanvas" width="860" height="240"></canvas>
+    <div class="ctrls"><label>Focus distance <input type="range" id="dfF" min="900" max="2400" value="1360"><output id="dfFO">1360</output></label></div>
+  </div></div>
+  <h3>3. Three engineering details that explain "why does mine look cheap?"</h3>
+  <ul>
+    <li><b>Mipmaps + 16x anisotropic filtering:</b> A texture (here, the image of the page) seen at a steep angle and from far away gets squeezed into far fewer pixels than it actually contains. Without preparation, each frame "samples" different pixels, so distant text flickers (shimmer). Mipmaps = pre-shrunk versions of the image, made in advance. Anisotropic filtering = sampling that understands the image is stretched more in one direction than the other (because of the angle).</li>
+    <li><b>"drawn lowest first with no depth buffer":</b> We draw from the lowest layer up to the highest, like a painter who paints the background first (the "painter's algorithm"). No depth buffer (the GPU's per-pixel record of what is closest to the camera), because the layers are partly transparent, and a depth buffer can't handle transparency.</li>
+    <li><b>"fade them into the haze colour first":</b> A card that turns transparent reveals whatever is behind it, and in 3D that looks like a "ghost". So first we tint it to the background's haze color (it "dissolves" into the air), and only at the very end cut it to transparent.</li>
+  </ul>
+  <div class="warn"><b>Two things this prompt requires, worth knowing up front</b>(1) It needs a real GPU (<code>--use-angle=d3d11</code>) and 16 subframes per frame, which means rendering on a local PC, not in the cloud. 14.5 × 60 × 16 = 13,920 captures (seconds × fps × subframes). (2) It starts with "open my link": it captures the <b>real</b> landing page, so any change to a section's height on that page shifts all the timing ("lock the page before timing anything").</div>
+</section>
+
+<!-- ============ 17 CRITIQUE ============ -->
+<section class="sec s-cloud" id="s17" data-folio="17" data-toc="Critical analysis: what's overstated">
+  <div class="sh"><span class="num">17</span><div><h2>What we can learn from this, including what's overstated</h2><p class="sub">The method is excellent. Its headline, less so.</p></div></div>
+  <div class="tbl"><table>
+    <tr><th>The claim</th><th>What's true</th><th>What's overstated / missing</th></tr>
+    <tr><td>"$0"</td><td>No need for After Effects or paid stock footage.</td><td>Claude itself costs money (a subscription or tokens). One source reports ~90K input tokens + 15K output tokens per film ≈ $0.66 at list price. That's for one film, before revision rounds, rendering and the time we put in.</td></tr>
+    <tr><td>"0 effort" / "I don't know step 1 of motion design"</td><td>No animator's hands needed.</td><td>The prompts are packed with deep professional knowledge (180° shutter, logarithmic zoom, closed-form springs, LUFS). The knowledge didn't disappear: it moved into the prompt. Change the prompts without understanding them, and they break.</td></tr>
+    <tr><td>"One prompt"</td><td>One prompt drives the process.</td><td>In practice: reference → assets → beat map → stills → render → 2–3 rounds of notes. Another creator (<span class="ltr">@rexan_wong</span>) who examined videos like these also concluded that "one prompt" is really a workflow.</td></tr>
+    <tr><td>"You can't tell it from a $15K video"</td><td>The demos really are high quality.</td><td>These are demos in one style he likes (2D, white, Apple-like). A studio also sells strategy, copy and a client process. The claim is his; nobody measured it.</td></tr>
+    <tr><td>"It's all free on Mixkit/Pexels"</td><td>Both have large free libraries.</td><td>Mixkit has a <b>separate license for each type of item</b> (music, SFX, "free" vs. "restricted" video). Pexels has restrictions on identifiable people and brands. Check every file before any commercial use.</td></tr>
+  </table></div>
+  <div class="why"><b>The big picture</b>The real shift here isn't "AI makes video". It's that motion design has turned into <b>director-led software engineering</b>: a spec, tests, targeted fixes, versions. Whoever can write the spec (taste + numbers + a banned list) and give precise notes wins. That's exactly the difference between zero's videos and "my one prompt video looked mid".</div>
+  <div class="warn"><b>A note on Opus 5.5's effort level</b>Community documentation for video prompts recommends running at a high effort level (high/xhigh), not the default. Effort is the setting for how much the model thinks before it answers. On a different technical benchmark (Terminal-Bench-Science), scores improved up to xhigh and dipped slightly at max. This wasn't measured on video specifically, but it's a reasonable starting point: xhigh for planning and writing the film.</div>
+</section>
+
+<!-- ============ 18 ADOPT ============ -->
+<section class="sec s-sky" id="s18" data-folio="18" data-toc="How we're adopting it">
+  <div class="sh"><span class="num">18</span><div><h2>How we're adopting it from now on: the YUV.AI Motion Method</h2><p class="sub">What we already have from EP01–EP06 (our first six episodes), what changes, and our prompt.</p></div></div>
+  <div class="tbl"><table>
+    <tr><th>Part</th><th>What we've done so far</th><th>From now on</th></tr>
+    <tr><td>Engine</td><td>Paused GSAP timeline / <code>render(t)</code> (EP01, EP04)</td><td>Same idea, but with <b>closed-form springs</b> and a strict "zero state" rule. A paused GSAP timeline is fine, as long as there are no timers</td></tr>
+    <tr><td>Clock</td><td>The voiceover's word timings (Scribe/Whisper)</td><td><b>Two clocks:</b> the voiceover for captions, the <b>beats</b> for transitions. The main event lands on the drop</td></tr>
+    <tr><td>Transitions</td><td>Whip/slice/flash cuts (EP03)</td><td><b>Morph + shared element</b> between scenes. Short captions with hard cuts stay: that's a separate layer</td></tr>
+    <tr><td>Camera</td><td>A punch-zoom on every cut (EP03 vertical)</td><td>One move per scene, logarithmic zoom, reset hidden under a flood</td></tr>
+    <tr><td>Sound</td><td>SFX placed at the start of an event; sometimes synthesized (EP02)</td><td>Real SFX, <b>aligned by measured peak</b>; ducking (the music dips) under the voiceover; −14 LUFS (already in place)</td></tr>
+    <tr><td>Motion blur</td><td>None</td><td>6–8 subframes + tmix, in the master render only</td></tr>
+    <tr><td>QA</td><td>Contact sheets, audit.py for legibility</td><td>+ a frame per beat, pop scan, right-to-left (RTL) check</td></tr>
+    <tr><td>Process</td><td>"Work to the end without asking"</td><td>One cheap gate: <b>a beat map + 4 stills</b> before the full film (can be auto-approved if nobody is available)</td></tr>
+  </table></div>
+  <h3>Our prompt: zero's skeleton, adapted to Hebrew, right-to-left and our brand</h3>
+  <div class="code"><span class="lbl">YUV.AI motion prompt · paste into Claude Code (Opus 5.5, effort xhigh)</span><button class="cp">Copy</button><pre id="yuvPrompt"></pre></div>
+  <div class="ex"><b>The next step we'd take</b>Turn this into a permanent Claude Code skill (<code>yuv-motion</code>) so there's nothing to paste. And before building from scratch, look at <a href="https://github.com/howseen-ai/claude-motion-design" target="_blank" rel="noopener">howseen-ai/claude-motion-design</a>: an open-source skill (MIT license) built on the same principles, including render.py, a pop scan and drop detection, and inspired directly by zero's prompts. We can take its engine and put our own layer on top (Hebrew, RTL, brand, frame capture on our RTX 4090).</div>
+  <div class="why"><b>Want to see what else you can ask for?</b>We built <a href="catalog.en.html">a live catalog of 18 elements</a>: Recharts charts, shadcn/ui interfaces, official icons and logos, kinetic typography, 3D in three.js, and effects. Each one comes with a demo whose timeline you can drag, an explanation from scratch, and a full prompt to copy. At the end, a prompt builder assembles a whole film.</div>
+</section>
+
+<!-- ============ 19 SOURCES ============ -->
+<section class="sec s-denim" id="s19" data-folio="19" data-toc="Sources">
+  <div class="sh"><span class="num">19</span><div><h2>Sources</h2><p class="sub">All links were checked and live on October 15, 2026.</p></div></div>
+  <ol class="src" id="srcList"></ol>
+</section>
+<footer>
+  <div class="sig">Yuval Avidani</div>
+  <p class="bio">AI segment host on Channel 12 News (Israel's leading TV news channel), 2× GitHub Star, AWS Gen AI Superstar, founder of YUV.AI. Building, teaching and shipping AI that works.</p>
+  <div class="blogs">
+    <a href="https://yuv.ai/blog" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><div><b>The blog</b><span>Guides, tool reviews and deep dives, in English and Hebrew.</span><small>yuv.ai/blog</small></div></a>
+    <a href="https://news.yuv.ai" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8M15 18h-5M10 6h8v4h-8Z"/></svg><div><b>The newsroom</b><span>The YUV.AI newsroom: what is new in AI, in Hebrew.</span><small>news.yuv.ai</small></div></a>
+    <a href="catalog.en.html"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><div><b>The motion catalog</b><span>18 live elements, each explained from zero, with a full prompt.</span><small>catalog.html</small></div></a>
+  </div>
+  <nav class="links" aria-label="Links">
+    <a href="https://yuv.ai" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm6.9 6h-2.9a15.7 15.7 0 0 0-1.4-3.6A8 8 0 0 1 18.9 8ZM12 4.1c.8 1.1 1.5 2.4 1.9 3.9h-3.8c.4-1.5 1.1-2.8 1.9-3.9ZM4.3 14a8 8 0 0 1 0-4h3.3a16.5 16.5 0 0 0 0 4H4.3Zm.8 2h2.9c.3 1.3.8 2.5 1.4 3.6A8 8 0 0 1 5.1 16Zm2.9-8H5.1a8 8 0 0 1 4.3-3.6C8.8 5.5 8.3 6.7 8 8Zm4 11.9c-.8-1.1-1.5-2.4-1.9-3.9h3.8c-.4 1.5-1.1 2.8-1.9 3.9Zm2.3-5.9H9.7a14.7 14.7 0 0 1 0-4h4.6a14.7 14.7 0 0 1 0 4Zm.3 5.6c.6-1.1 1.1-2.3 1.4-3.6h2.9a8 8 0 0 1-4.3 3.6Zm1.8-5.6a16.5 16.5 0 0 0 0-4h3.3a8 8 0 0 1 0 4h-3.3Z"/></svg><span>yuv.ai</span></a>
+    <a href="https://linktr.ee/yuvai" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m13.73635 5.85251 4.00467-4.11665 2.3248 2.3808-4.20064 4.00466h5.9085v3.30473h-5.9365l4.22865 4.10766-2.3248 2.3338L12.0005 12.099l-5.74052 5.76852-2.3248-2.3248 4.22864-4.10766h-5.9375V8.12132h5.9085L3.93417 4.11666l2.3248-2.3808 4.00468 4.11665V0h3.4727zm-3.4727 10.30614h3.4727V24h-3.4727z"/></svg><span>Linktree</span></a>
+    <a href="https://x.com/yuvalav" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.234 10.162 22.977 0h-2.072l-7.591 8.824L7.251 0H.258l9.168 13.343L.258 24H2.33l8.016-9.318L16.749 24h6.993zm-2.837 3.299-.929-1.329L3.076 1.56h3.182l5.965 8.532.929 1.329 7.754 11.09h-3.182z"/></svg><span>@yuvalav</span></a>
+    <a href="https://instagram.com/yuval_770" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"/></svg><span>Instagram</span></a>
+    <a href="https://www.tiktok.com/@yuval.ai" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg><span>TikTok</span></a>
+    <a href="https://youtube.com/@yuv-ai" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg><span>YouTube</span></a>
+    <a href="https://github.com/hoodini" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg><span>GitHub</span></a>
+    <a href="https://www.linkedin.com/in/yuval-avidani-87081474/" target="_blank" rel="noopener"><span class="tx" aria-hidden="true">in</span><span>LinkedIn</span></a>
+    <a href="https://facebook.com/yuval.avidani" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"/></svg><span>Facebook</span></a>
+  </nav>
+  <p class="credit">The original method and prompts belong to zero (<a href="https://x.com/twoclipping" target="_blank" rel="noopener" class="ltr">@twoclipping</a>). This page is an analysis for learning purposes. Every lab is computed live in the browser: there is not a single fake number here.</p>
+</footer>
+</main>
+
+<script type="text/plain" id="P-fly"><inputs>
+Ask me for: my landing page link, my brand name and logo mark, a two-part closing line (a statement, then a short italic tail), and a 15 second track (optional).
+</inputs>
+
+<direction>
+A 14.5 second 3D fly-over of my landing page, 1440x1152 at 60fps. The page lies flat on a bright studio floor (#f9fbfb in the middle, #f2f3f6 in the corners) with a soft wide shadow around it and 24px rounded corners. One continuous camera, never a cut: it starts low over the hero and glides backwards down the page at one steady speed while looking up it, rises straight overhead to show the whole page as one strip, dives into the hero and lands it as a card under a two-line title. Focus is razor thin in front of the subject and almost none behind it, so everything near the lens melts. Cards float a little above the page with soft shadows; photos, chips and the testimonial lift off and stand up toward the lens as the camera passes them. Four small tiles of my logo lift off beside the hero button and stay with the film until the end card. The title is Geist 500, the italic tail Instrument Serif.
+Banned: cuts, crossfades, stops or surges in the glide, the camera turning or swinging sideways, zooming in and back out, glows, any text laid over the page before the end card.
+</direction>
+
+<structure>
+14.5 seconds: flight 0-8.2s, rise 7.75-9.25s, overhead 9.25-9.47s, dive 9.47-9.97s, title card 9.97-14.5s.
+The camera 56° off straight-down and 1360px from the point it looks at, centred on the top half of the hero, the phone or product mockup sharp, four 32px logo tiles beside the button → 0-0.6: the glide eases in from rest → 0.1-1.35: the tiles lift, grow to 140-200px and hang just outside the page's top corners while the hero's chips rise to 60-80px and stand up 30° → 1.25-1.6: the glide doubles to cruising speed as the hero falls behind → 1.6: the second section's title passes the centre of the frame, its photos blurred near the lens → 1.35-2.7: that section's main photos lift to 100-130px and stand up 46°, two of its chips fly up to about 200px, stand up 54° and pass the left and right edges at 2.5 → 1.2-2.4: the tiles trail the camera 300px down the page, then drift out of the top → 3.0-7.3: every following section passes through at the same steady speed, each one sharp as it crosses the middle of the frame and soft below it; a logo tile drifts past the left edge close and blurred at 5.4 → 5.45-6.3: the testimonial card rises from 22 to 112px, stands up 30° and shows a 34px white edge → 7.3-8.2: the glide eases off as the footer arrives, the footer title sharp at 8.0 → 7.75-9.25: the rise, zooming out at an even rate while the tilt flattens (8.15-8.95) and the page's bottom edge settles 42px above the frame bottom → 9.25-9.47: the whole page as one centred strip, creeping 3.5% closer → 9.47-9.97: the dive, the page's top edge pinned to the frame top while it grows, everything below the hero fading out, then the top drops to y 283 so the hero lands as a 1018px wide card with 38px corners and a soft shadow; two logo tiles sit on its top corners, one crisp at the right edge, two huge soft blurs drift in at the bottom corners → 10.02: a white badge pill (logo + brand, 21px) fades in at y 44 → 10.12: line 1 at 74px, one word every 0.06s → 10.36: the italic tail at 82px in grey #8b8b92, one word every 0.05s, each word rising 16px out of a 12px blur in 0.34s → 10.6-14.5: hold, the card creeping 2% closer, the tiles drifting a few px.
+</structure>
+
+<build>
+1. Open my link in headless Chromium (Playwright) at 1440px wide, device scale 2, and scroll to the bottom once so lazy images and scroll animations finish. Mark the pieces that lift (cards, phone or product mockups, chips, feature photos, the testimonial, the hero button) with data-layer. Screenshot the full page with them hidden, then each piece alone on a transparent background with 28px padding, and save every piece's page position to a JSON.
+2. One WebGL2 film page, 1440x1152, every frame computed from time inside seek(t): no timers, no CSS transitions. The page is a textured quad on the floor and each piece its own quad at its height, drawn lowest first with no depth buffer. Use mipmaps and 16x anisotropic filtering or the far text shimmers.
+3. Drive the camera from one speed curve, never from a position key every half second. Focal length 1880px, 56° tilt, distance easing out from 1360 to 1700px and never back in, no turning. Speed down the page as a share of cruise (cruise is about 770 page px/s): 0 at 0s, 0.5 by 0.6s, held at 0.5 to 1.25s, 1.0 by 1.6s, held between 0.94 and 1.1 to 7.3s, then easing to 0.12 by 8.3s. Integrate it into the page position.
+4. Depth of field per pixel: blur radius = 75 x (focus - depth) / depth in front of the focus and 6 x (depth - focus) / depth behind it, capped at 120px, 40 taps on a golden-angle disc, each tap read from a mip level matched to the blur. Keep the focus on whatever crosses the middle of the frame.
+5. A lifted piece stands up by turning about its own middle, top edge rising toward the lens. Each casts a shadow on whatever is under it: the same picture in flat #1a2133, offset (0.10z, 4 + 0.36z), blurred 7 + 0.5z, 26% opacity.
+6. Rise: zoom out in log scale with a smooth trapezoid speed (speeding up 7.75-8.35s, even 8.35-8.95s, slowing to a stop at 9.25s) and hand the glide over to a camera that holds the page's bottom edge at that 42px line from 8.3 to 8.65s. Dive: log scale on a quadratic ease in-out, then solve the look-at point from the pinned edge. A rounded-rect mask morphs from the full page to the hero, 24px to 38px corners.
+7. Render with Playwright on the real GPU (--use-angle=d3d11 --enable-gpu --ignore-gpu-blocklist): 60fps, 16 subframes across 0.7 of a frame for motion blur, H.264 MP4. The track's hit goes on 9.97s, whooshes on 8.66 and 9.80.
+</build>
+
+<gotchas>
+If you can't run code on my computer, tell me straight away that you can only make a live preview here and that the MP4 needs Claude Code. Phones or cards that fade out with transparency show whatever is behind them, so fade them into the haze colour first and only cut to transparent at the very end. Keep most lifts tiny (20-40px) and lock the page before timing anything, because any change in a section's height shifts everything after it. Before the final render, measure a quick 30fps preview with optical flow: the speed down the page must never dip and the zoom must never turn into a zoom-in during the flight.
+</gotchas>
+
+<start>
+Ask me for the inputs, capture my page, then show me stills at 0, 1.6, 2.5, 5, 6.5, 9.3 and 11 seconds before you render.
+</start></script>
+<script type="text/plain" id="P-yuv"><inputs>
+Ask me for: the topic and the ONE idea the viewer must leave with, the script or my recorded voice-over (if there is VO, transcribe it with word-level timings first), the format (16:9, 9:16, or both from one engine with two layouts; default both), the real assets I own (screenshots, logos, footage, my talking-head video if any), and a royalty-free track around 120 BPM with a clear drop (Mixkit; check the license of that exact file). If I skip any, use sensible defaults and tell me in one line which ones you picked.
+</inputs>
+
+<direction>
+YUV.AI motion style (Phoenix Day), 2D with at most one 3D hero moment, one continuous take: every scene is made out of the previous one. Objects change shape instead of fading: text rises out of a mask line, a pill grows into a card, a fire flood pours out of one object and later shrinks back into another. Palette: a bright sky base (gradient #5EA9F2 > #93CBFF > #DDF0FF, or a real sky), light denim #AFCBEF or cloud #EEF3FB for dense content, navy #12163F for type and UI, and the phoenix fire gradient (#FFC74E > #FF8F3A > #F56B49) as the one accent: keywords sit on a fire marker block behind navy text, sweeping left to right. A rotating neon conic edge (cyan, blue, violet, pink, orange, gold) goes only around the key input or CTA and pulses on the beat. Phoenix Night (navy base, white type, gold kickers) only for drama: the drop, a sunset, the end card. Headlines are Anton uppercase at magazine scale (130-170px at 1080p), letter-spacing 0, never negative, anchored left, and only one Anton block per frame; Inter 500-800 for captions, labels and any running text (paragraphs, lists, tables); code and numbers in JetBrains Mono. Giant Anton folio numerals bleed off the frame. If the film is in Hebrew or Arabic (right to left): Karantina Bold for Hebrew headlines and Assistant for running text, words enter from the right, and numbers and Latin stay LTR inside RTL lines. Pills and inputs are fully round (999px), cards 36-48px, never 8-12px; shadows are two layers tinted navy. Short-phrase captions (1-3 words) may hard-cut on their own layer; scenes never cut. The camera makes one move per scene on eased keyframes and never zooms in and back out. If there is a talking-head video: graphics never cover my face; put big words behind me and captions in front of me for depth.
+Banned: crossfades, blur-ins, any glow other than the neon edge, particles, lens flares, camera shake, bouncy easing, holds longer than 1s, the retired palettes (purple #5E17EB + yellow #FFEC00, flat magenta + cyan, pale paper or grey pages), anything that looks like a template.
+</direction>
+
+<structure>
+Analyze the track first with numpy: tempo, a beat grid calibrated to the real kick hits (never trust the automatic grid blindly), energy per bar, and the drop. Then write a beat map: one row per beat with what happens, which object it is made out of, and the sound effect on it. The ONE idea lands exactly on the drop. Something happens on every beat; every scene change sits on a downbeat. If there is VO, captions follow the word timings and scene changes follow the beats. The last beat returns to the YUV.AI mark.
+</structure>
+
+<build>
+1. One HTML scene module shared by both layouts (1920x1080 and 1080x1920). Every style is computed from time inside async seek(t): no CSS transitions, no timers, no state between frames. Await document.fonts.ready and every image decode before the first seek.
+2. The camera is one transform on a container, keyed [time, zoom, x, y] with eased segments; zoom is interpolated in log space. Reset the camera only while a flood covers the whole frame.
+3. Springs are closed-form step responses (zeta 0.78-0.9: a tiny overshoot at most). A value with many targets is the sum of one spring per change. Indicators and knobs ride two springs, one per edge, so the leading edge stretches.
+4. Every handoff is a shared element: the object that leaves carries its own content into the next scene.
+5. Text runs left to right. For a right-to-left film (Hebrew, Arabic), canvas text sets ctx.direction = 'rtl' and DOM text uses dir="rtl" with <bdi> around Latin and numbers.
+6. Sound: one downloaded SFX per event (Mixkit), never synthesized, each placed so its measured peak (not its file start) lands on the event; music ducked under the VO with sidechaincompress; loudnorm to -14 LUFS.
+7. Render with Playwright on my PC GPU (Chromium --use-angle=d3d11 --enable-gpu --ignore-gpu-blocklist) with parallel workers. Drafts: 30fps, half resolution, no motion blur. Master: 60fps, 6 subframes across half a frame blended with ffmpeg tmix (never across a hard cut), H.264 yuv420p BT.709.
+8. QA before I watch: one still per beat on a contact sheet that you look at yourself, a frame-difference scan for single-frame pops (spikes 3x their neighbours), a type check that no word is clipped or orphaned (and, in a right-to-left film, that no word is reversed), and a check that nothing covers my face.
+</build>
+
+<gotchas>
+Never put will-change on anything the camera scales, or text renders blurry. Text that swaps inside a morphing shape needs its own mask and its own enter/exit timing. A flood must clear the farthest corner and take about 0.35s, or it reads as a flash. Set z-index on every layer. Never set opacity or filter on a preserve-3d element; fade its wrapper. Declare every variable before the first seek() runs. Lock layouts and copy before timing anything. Paths with Hebrew characters break cmd/bat scripts on Windows: keep work folders ASCII. Commit outputs to new filenames and verify MD5 after transferring.
+</gotchas>
+
+<start>
+Ask me for the inputs, then show me the beat map and 4 stills (open, the drop, the middle, the end card) in both layouts before you write the full film.
+</start></script>
+<script>/* ============================================================
+   ENGINE — pure functions of time. No timers, no hidden state.
+   Everything on the page (the film and every lab) uses these.
+   ============================================================ */
+const E = (() => {
+  const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+  const lerp = (a, b, u) => a + (b - a) * u;
+  const inv = (a, b, x) => clamp((x - a) / (b - a));
+  const ease = {
+    linear: u => u,
+    inOutCubic: u => (u < .5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2),
+    outCubic: u => 1 - Math.pow(1 - u, 3),
+    inCubic: u => u * u * u,
+    outExpo: u => (u >= 1 ? 1 : 1 - Math.pow(2, -10 * u)),
+    inOutQuad: u => (u < .5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2),
+  };
+  // eased tween between t0..t1
+  const tw = (t, t0, t1, a, b, fn = ease.inOutCubic) => lerp(a, b, fn(inv(t0, t1, t)));
+
+  /* Closed-form spring step response: position goes 0 -> 1 when a target
+     changes at time 0. omega = natural frequency (rad/s, "stiffness"),
+     zeta = damping ratio (<1 overshoots, =1 critical, >1 sluggish). */
+  function spring(t, omega = 12, zeta = 0.8) {
+    if (t <= 0) return 0;
+    if (zeta < 1) {
+      const wd = omega * Math.sqrt(1 - zeta * zeta);
+      return 1 - Math.exp(-zeta * omega * t) * (Math.cos(wd * t) + (zeta * omega / wd) * Math.sin(wd * t));
+    }
+    if (zeta === 1) return 1 - Math.exp(-omega * t) * (1 + omega * t);
+    const s = Math.sqrt(zeta * zeta - 1);
+    const r1 = -omega * (zeta - s), r2 = -omega * (zeta + s);
+    return 1 + (r2 * Math.exp(r1 * t) - r1 * Math.exp(r2 * t)) / (r1 - r2);
+  }
+  const overshoot = zeta => (zeta >= 1 ? 0 : Math.exp(-Math.PI * zeta / Math.sqrt(1 - zeta * zeta)));
+  /* settle time: first time after which |x-1| stays below tol (numeric, exact enough) */
+  function settle(omega, zeta, tol = 0.02) {
+    let last = 0;
+    for (let t = 0; t < 10; t += 0.001) if (Math.abs(spring(t, omega, zeta) - 1) > tol) last = t;
+    return last;
+  }
+  /* A value that changes target many times = start + sum of one spring per change.
+     keys: [[time, value], ...] sorted. Still a pure function of t. */
+  function springKeys(t, keys, omega = 12, zeta = 0.8) {
+    let v = keys[0][1];
+    for (let i = 1; i < keys.length; i++) v += (keys[i][1] - keys[i - 1][1]) * spring(t - keys[i][0], omega, zeta);
+    return v;
+  }
+  /* zoom is multiplicative -> interpolate in log space */
+  const logLerp = (a, b, u) => a * Math.pow(b / a, u);
+
+  /* ---------- deterministic noise ---------- */
+  function rng(seed = 1) { let s = seed >>> 0; return () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296); }
+
+  /* ---------- AUDIO: synthesize a 120-BPM demo track ---------- */
+  function synthTrack({ bpm = 120, beats = 18, dropBeat = 8, sr = 22050, sfx = [] } = {}) {
+    const beat = 60 / bpm, dur = beats * beat + 0.6, n = Math.floor(dur * sr);
+    const out = new Float32Array(n), r = rng(7);
+    const add = (t0, len, fn) => { const i0 = Math.floor(t0 * sr), m = Math.floor(len * sr); for (let i = 0; i < m && i0 + i < n; i++) if (i0 + i >= 0) out[i0 + i] += fn(i / sr); };
+    const noise = () => r() * 2 - 1;
+    // soft pad (A minor) the whole time, swelling into the drop
+    const pad = [110, 130.81, 164.81, 220];
+    for (let i = 0; i < n; i++) {
+      const t = i / sr, b = t / beat;
+      const amp = b < dropBeat ? 0.02 + 0.03 * (b / dropBeat) : 0.05;
+      let s = 0; for (const f of pad) s += Math.sin(2 * Math.PI * f * t);
+      out[i] += amp * s / pad.length;
+    }
+    for (let k = 0; k < beats; k++) {
+      const t0 = k * beat;
+      if (k < dropBeat) {
+        add(t0, 0.03, t => noise() * 0.10 * Math.exp(-t * 120)); // quiet hat on the beat
+      } else {
+        // kick: sine sweeping 150 -> 45 Hz
+        add(t0, 0.35, t => { const ph = 2 * Math.PI * (45 * t + (105 / 22) * (1 - Math.exp(-22 * t))); return Math.sin(ph) * 0.9 * Math.exp(-t * 7); });
+        add(t0 + beat / 2, 0.04, t => noise() * 0.18 * Math.exp(-t * 90)); // off-beat hat
+        add(t0, beat, t => Math.sin(2 * Math.PI * 55 * t) * 0.22 * Math.exp(-t * 2)); // bass
+      }
+    }
+    // riser over the 2 beats before the drop
+    add((dropBeat - 2) * beat, 2 * beat, t => noise() * 0.12 * Math.pow(t / (2 * beat), 2));
+    for (const s of sfx) addSfx(out, sr, s.type, s.at);
+    let peak = 0; for (let i = 0; i < n; i++) peak = Math.max(peak, Math.abs(out[i]));
+    if (peak > 0.98) for (let i = 0; i < n; i++) out[i] *= 0.98 / peak;
+    return { samples: out, sr, beat, dur };
+  }
+
+  /* SFX shapes. `peakAt` is where each one is loudest inside its own file. */
+  const SFX = {
+    pop: { len: 0.12, peakAt: 0.004, fn: t => Math.sin(2 * Math.PI * (900 - 2400 * t) * t) * 0.45 * Math.exp(-t * 40) },
+    click: { len: 0.05, peakAt: 0.001, fn: (t, r) => (r() * 2 - 1) * 0.5 * Math.exp(-t * 260) },
+    whoosh: { len: 0.6, peakAt: 0.42, fn: (t, r) => (r() * 2 - 1) * 0.35 * (t < 0.42 ? Math.pow(t / 0.42, 3) : Math.exp(-(t - 0.42) * 16)) },
+  };
+  function addSfx(out, sr, type, at) {
+    const s = SFX[type], r = rng(type.length * 31 + Math.floor(at * 100));
+    const start = at - s.peakAt; // <- the whole trick: start = event - measured peak
+    const i0 = Math.floor(start * sr), m = Math.floor(s.len * sr);
+    for (let i = 0; i < m; i++) { const j = i0 + i; if (j >= 0 && j < out.length) out[j] += s.fn(i / sr, r); }
+  }
+  /* measure where a sound is loudest: RMS in 5 ms windows, take the max */
+  function measurePeak(samples, sr, win = 0.005) {
+    const w = Math.max(1, Math.floor(win * sr)); let best = 0, at = 0;
+    for (let i = 0; i + w < samples.length; i += w) {
+      let e = 0; for (let j = 0; j < w; j++) e += samples[i + j] * samples[i + j];
+      if (e > best) { best = e; at = (i + w / 2) / sr; }
+    }
+    return at;
+  }
+  function renderSfx(type, sr = 22050) {
+    const s = SFX[type], r = rng(5), m = Math.floor(s.len * sr), o = new Float32Array(m);
+    for (let i = 0; i < m; i++) o[i] = s.fn(i / sr, r); return o;
+  }
+
+  /* ---------- AUDIO: find tempo, beat phase and the drop ---------- */
+  function analyze(samples, sr, hop = 256) {
+    const nF = Math.floor(samples.length / hop), env = new Float32Array(nF);
+    for (let f = 0; f < nF; f++) { let e = 0; for (let j = 0; j < hop; j++) { const x = samples[f * hop + j]; e += x * x; } env[f] = Math.sqrt(e / hop); }
+    // onset strength = how much louder this window is than the previous one
+    const on = new Float32Array(nF);
+    for (let f = 1; f < nF; f++) on[f] = Math.max(0, env[f] - env[f - 1]);
+    const fps = sr / hop;
+    // autocorrelation over lags that correspond to 60..200 BPM
+    const minL = Math.floor(fps * 60 / 200), maxL = Math.ceil(fps * 60 / 60);
+    const ac = [];
+    for (let L = minL; L <= maxL; L++) { let s = 0; for (let f = 0; f + L < nF; f++) s += on[f] * on[f + L]; ac.push([L, s]); }
+    // prefer tempos near 120 (log-gaussian), like real beat trackers do
+    let bi = 0, bv = -1;
+    ac.forEach(([L, s], i) => { const bpm = 60 * fps / L, w = Math.exp(-0.5 * Math.pow(Math.log2(bpm / 120) / 0.9, 2)); if (s * w > bv) { bv = s * w; bi = i; } });
+    // parabolic interpolation around the peak for sub-frame precision
+    let L = ac[bi][0];
+    if (bi > 0 && bi < ac.length - 1) { const a = ac[bi - 1][1], b = ac[bi][1], c = ac[bi + 1][1]; const d = (a - 2 * b + c); if (d !== 0) L += 0.5 * (a - c) / d; }
+    const bpm = 60 * fps / L, period = L;
+    // phase: which offset makes the beats land on the most onset energy
+    let bestPh = 0, bestS = -1;
+    for (let p = 0; p < period; p += 0.25) { let s = 0; for (let k = p; k < nF; k += period) s += on[Math.round(k)] || 0; if (s > bestS) { bestS = s; bestPh = p; } }
+    const firstBeat = bestPh / fps, beatLen = 60 / bpm;
+    // energy per bar (4 beats); the drop = biggest jump from one bar to the next
+    const bars = [];
+    for (let t = firstBeat; t + 4 * beatLen <= samples.length / sr + 1e-6; t += 4 * beatLen) {
+      const a = Math.floor(t * fps), b = Math.floor((t + 4 * beatLen) * fps); let e = 0; for (let f = a; f < b && f < nF; f++) e += env[f]; bars.push([t, e / Math.max(1, b - a)]);
+    }
+    // finer: energy per beat, drop = beat with the largest rise vs the previous 2 beats
+    const beatsE = [];
+    for (let t = firstBeat; t + beatLen <= samples.length / sr; t += beatLen) {
+      const a = Math.floor(t * fps), b = Math.floor((t + beatLen) * fps); let e = 0; for (let f = a; f < b; f++) e += env[f]; beatsE.push([t, e / (b - a)]);
+    }
+    let drop = 0, jump = 0;
+    for (let i = 2; i < beatsE.length; i++) { const prev = (beatsE[i - 1][1] + beatsE[i - 2][1]) / 2, r = beatsE[i][1] / (prev + 1e-9); if (r > jump) { jump = r; drop = beatsE[i][0]; } }
+    return { bpm, firstBeat, beatLen, drop, dropRatio: jump, env, onset: on, fps, ac, bars, beatsE };
+  }
+
+  /* ---------- motion blur: running average of N subframes ----------
+     drawing a new subframe with alpha 1/(k+1) over the accumulator is
+     exactly acc*(k/(k+1)) + new*(1/(k+1)) = the running mean. */
+  function blurDraw(ctx, t, drawFn, { n = 1, shutter = 0.5, fps = 60, scratch } = {}) {
+    if (n <= 1) { drawFn(ctx, t); return; }
+    const sctx = scratch.getContext('2d'), span = shutter / fps;
+    for (let k = 0; k < n; k++) {
+      const ts = t - span / 2 + span * (k + 0.5) / n;
+      sctx.setTransform(1, 0, 0, 1, 0, 0); sctx.clearRect(0, 0, scratch.width, scratch.height);
+      drawFn(sctx, ts);
+      ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1 / (k + 1); ctx.drawImage(scratch, 0, 0); ctx.restore();
+    }
+  }
+
+  /* ---------- fly-over: camera speed curve, integrated ---------- */
+  function flySpeed(t) { // share of cruise speed, per the prompt's spec
+    if (t < 0.6) return 0.5 * ease.inOutCubic(t / 0.6);
+    if (t < 1.25) return 0.5;
+    if (t < 1.6) return lerp(0.5, 1.0, ease.inOutCubic((t - 1.25) / 0.35));
+    if (t < 7.3) return 1.0 + 0.06 * Math.sin((t - 1.6) * 0.9); // "held between 0.94 and 1.1"
+    if (t < 8.3) return lerp(1.0 + 0.06 * Math.sin(5.7 * 0.9), 0.12, ease.inOutCubic((t - 7.3) / 1.0));
+    return 0.12;
+  }
+  function flyIntegrate(tEnd = 8.3, dt = 1 / 600, cruise = 770) {
+    const pts = []; let y = 0;
+    for (let t = 0; t <= tEnd + 1e-9; t += dt) { pts.push([t, y, flySpeed(t) * cruise]); y += flySpeed(t) * cruise * dt; }
+    return pts;
+  }
+  /* depth of field from the prompt: strong in front of focus, weak behind */
+  const dofBlur = (depth, focus) => Math.min(120, depth < focus ? 75 * (focus - depth) / depth : 6 * (depth - focus) / depth);
+
+  return { clamp, lerp, inv, ease, tw, spring, overshoot, settle, springKeys, logLerp, rng, synthTrack, SFX, addSfx, measurePeak, renderSfx, analyze, blurDraw, flySpeed, flyIntegrate, dofBlur };
+})();
+if (typeof module !== 'undefined') module.exports = E;
+</script>
+<script>(() => {
+'use strict';
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+// Phoenix Day: navy ink on cloud, fire accent; gold only on navy; sky-6 for a second series; raspberry for playheads
+const C = { ink: '#12163F', paper: '#EEF3FB', mag: '#FF8F3A', magT: '#B4501A', cyan: '#FFC74E', cyanD: '#2C78D2', muted: '#4A5280', line: 'rgba(18,22,63,.14)', yellow: '#D74270', white: '#fff' };
+function fireFill(x, x0, y0, x1, y1) { const g = x.createLinearGradient(x0, y0, x1, y1); g.addColorStop(0, '#FFC74E'); g.addColorStop(0.5, '#FF8F3A'); g.addColorStop(1, '#F56B49'); return g; }
+function skyFill(x, H) { const g = x.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#5EA9F2'); g.addColorStop(0.4, '#93CBFF'); g.addColorStop(1, '#DDF0FF'); return g; }
+const DPR = Math.min(2, window.devicePixelRatio || 1);
+const { clamp, lerp, inv, ease, spring, springKeys, logLerp } = E;
+const FONT_HE = '"Inter",system-ui,sans-serif', FONT_EN = '"Anton",Impact,sans-serif', FONT_MONO = '"JetBrains Mono",ui-monospace,monospace', FONT_BODY = '"Inter",system-ui,sans-serif';
+
+/* ---------- canvas helpers ---------- */
+function prep(c) {
+  const W = +(c.dataset.w || c.getAttribute('width')), H = +(c.dataset.h || c.getAttribute('height'));
+  c.dataset.w = W; c.dataset.h = H;
+  const k = Math.max(1, Math.min(2.5, ((c.clientWidth || W) * DPR) / W));
+  c.width = Math.round(W * k); c.height = Math.round(H * k); c._k = c.width / W; c._W = W; c._H = H;
+  return ctx2(c);
+}
+function ctx2(c) { const x = c.getContext('2d'); x.setTransform(c._k, 0, 0, c._k, 0, 0); return x; }
+function rr(x, X, Y, w, h, r) { r = Math.max(0, Math.min(r, Math.abs(w) / 2, Math.abs(h) / 2)); x.beginPath(); x.moveTo(X + r, Y); x.arcTo(X + w, Y, X + w, Y + h, r); x.arcTo(X + w, Y + h, X, Y + h, r); x.arcTo(X, Y + h, X, Y, r); x.arcTo(X, Y, X + w, Y, r); x.closePath(); }
+function hex2rgb(h) { const n = parseInt(h.slice(1), 16); return [n >> 16 & 255, n >> 8 & 255, n & 255]; }
+function mixC(a, b, u) { const A = hex2rgb(a), B = hex2rgb(b); return `rgb(${A.map((v, i) => Math.round(lerp(v, B[i], u))).join(',')})`; }
+function axes(x, X, Y, w, h, o = {}) {
+  x.save(); x.strokeStyle = C.line; x.lineWidth = 1; x.strokeRect(X, Y, w, h);
+  x.fillStyle = C.muted; x.font = `500 11px ${FONT_MONO}`;
+  if (o.title) { x.fillStyle = C.ink; x.font = `700 14px ${FONT_BODY}`; x.textAlign = 'left'; x.fillText(o.title, X + 4, Y - 7); x.direction = 'ltr'; }
+  if (o.yl) { x.save(); x.fillStyle = C.muted; x.font = `500 11px ${FONT_MONO}`; x.textAlign = 'left'; x.fillText(o.yl, X + 6, Y + 14); x.restore(); }
+  if (o.xl) { x.fillStyle = C.muted; x.font = `500 11px ${FONT_MONO}`; x.textAlign = 'right'; x.fillText(o.xl, X + w - 4, Y + h - 6); }
+  x.restore();
+}
+function poly(x, pts, color, lw = 2, dash) { x.save(); x.strokeStyle = color; x.lineWidth = lw; if (dash) x.setLineDash(dash); x.beginPath(); pts.forEach((p, i) => i ? x.lineTo(p[0], p[1]) : x.moveTo(p[0], p[1])); x.stroke(); x.restore(); }
+function txt(x, s, X, Y, o = {}) { x.save(); x.fillStyle = o.color || C.ink; x.font = o.font || `700 16px ${FONT_BODY}`; x.textAlign = o.align || 'left'; x.textBaseline = o.base || 'alphabetic'; x.direction = o.rtl ? 'rtl' : 'ltr'; x.fillText(s, X, Y); x.restore(); }
+const fmt = (v, d = 2) => Number(v).toFixed(d);
+function onVisible(el, fn) { let done = false; const io = new IntersectionObserver(es => { if (!done && es.some(e => e.isIntersecting)) { done = true; io.disconnect(); fn(); } }, { rootMargin: '300px' }); io.observe(el); }
+function bindRange(id, outId, fmtFn, cb) { const r = $(id), o = outId && $(outId); const f = () => { if (o) o.textContent = fmtFn ? fmtFn(+r.value) : r.value; cb && cb(+r.value); }; r.addEventListener('input', f); f(); return r; }
+let audioCtx = null;
+function AC() { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); if (audioCtx.state === 'suspended') audioCtx.resume(); return audioCtx; }
+function toBuffer(samples, sr) { const ac = AC(); const b = ac.createBuffer(1, samples.length, sr); b.copyToChannel ? b.copyToChannel(samples, 0) : b.getChannelData(0).set(samples); return b; }
+function playBuf(buf, offset = 0) { const ac = AC(); const s = ac.createBufferSource(); s.buffer = buf; const g = ac.createGain(); g.gain.value = 0.8; s.connect(g).connect(ac.destination); s.start(0, offset); return s; }
+
+/* =========================================================
+   THE FILM — one seek(t). The running example of the page.
+   ========================================================= */
+const FILM = { W: 1280, H: 720, dur: 9, beat: 0.5 };
+function camAt(t) { const u = ease.inOutCubic(inv(2.6, 3.9, t)); return t < 4.36 ? { z: logLerp(1, 1.35, u), dy: lerp(0, 22, u) } : { z: 1, dy: 0 }; }
+function toScreen(px, py, t) { const c = camAt(t); return [(px - 640) * c.z + 640, (py - 360 - c.dy) * c.z + 360]; }
+function filmGeom(t) {
+  const w = springKeys(t, [[0, 44], [1.0, 380], [2.75, 820]], 11, 0.8);
+  const h = springKeys(t, [[0, 44], [1.0, 96], [2.75, 440]], 11, 0.8);
+  const press = springKeys(t, [[0, 1], [2.5, 0.93], [2.62, 1]], 30, 0.7);
+  const sc = spring(t - 0.2, 16, 0.7) * press;
+  const r = (h / 2) * (1 - ease.inOutCubic(inv(2.75, 3.25, t)));
+  return { w: w * sc, h: h * sc, r: r * sc, x: 640 - w * sc / 2, y: 360 - h * sc / 2 };
+}
+function ctaPos(t) { const g = filmGeom(t); return [g.x + 120, g.y + g.h - 74]; }
+const FLOOD_O = (() => { const p = ctaPos(4.0); return toScreen(p[0], p[1], 4.0); })();
+const FLOOD_R = Math.max(...[[0, 0], [1280, 0], [0, 720], [1280, 720]].map(([a, b]) => Math.hypot(a - FLOOD_O[0], b - FLOOD_O[1]))) * 1.03;
+function floodAt(t) {
+  if (t < 4.0 || t >= 6.75) return null;
+  if (t < 6.3) return [FLOOD_O[0], FLOOD_O[1], FLOOD_R * ease.outCubic(inv(4.0, 4.35, t))];
+  const u = ease.inOutCubic(inv(6.3, 6.75, t));
+  return [lerp(FLOOD_O[0], 640, u), lerp(FLOOD_O[1], 360, u), logLerp(FLOOD_R, 22, u)];
+}
+function drawCursor(x, X, Y, s) {
+  x.save(); x.translate(X, Y); x.scale(s, s); x.beginPath(); x.moveTo(0, 0); x.lineTo(0, 30); x.lineTo(8, 23); x.lineTo(14, 36); x.lineTo(19, 34); x.lineTo(13, 21); x.lineTo(23, 21); x.closePath();
+  x.fillStyle = C.ink; x.strokeStyle = '#fff'; x.lineWidth = 2.2; x.lineJoin = 'round'; x.stroke(); x.fill(); x.restore();
+}
+function drawFilm(x, t) {
+  const k = x.canvas.width / FILM.W; x.setTransform(k, 0, 0, k, 0, 0);
+  x.fillStyle = skyFill(x, 720); x.fillRect(0, 0, 1280, 720);
+  // ---------------- world (under the camera) ----------------
+  if (t < 4.36) {
+    const cam = camAt(t);
+    x.save(); x.translate(640, 360); x.scale(cam.z, cam.z); x.translate(-640, -360 - cam.dy);
+    const g = filmGeom(t);
+    if (g.w > 0.5) {
+      rr(x, g.x, g.y, g.w, g.h, g.r); x.fillStyle = C.ink; x.fill();
+      // label rises out of a mask line, then leaves through it
+      if (t > 1.2 && t < 3.0) {
+        x.save(); rr(x, g.x, g.y, g.w, g.h, g.r); x.clip();
+        const dy = 50 * (1 - ease.outCubic(inv(1.25, 1.6, t))) + 70 * ease.inCubic(inv(2.75, 3.0, t));
+        txt(x, '▶  seek(t)', 640, 372 + dy, { color: '#fff', font: `500 34px ${FONT_MONO}`, align: 'center', base: 'middle' });
+        x.restore();
+      }
+      // card content: bars draw across, right-to-left (Hebrew reads RTL)
+      if (t > 2.95) {
+        x.save(); rr(x, g.x, g.y, g.w, g.h, g.r); x.clip();
+        const right = g.x + g.w - 64, top = g.y + 70;
+        const rows = [[3.0, 560, 'rgba(255,255,255,.92)', 30], [3.25, 400, C.cyan, 22], [3.5, 480, 'rgba(255,255,255,.45)', 22]];
+        rows.forEach(([t0, len, col, hh], i) => {
+          const L = len * ease.outCubic(inv(t0, t0 + 0.35, t)); if (L <= 0) return;
+          rr(x, right - L, top + i * 62, L, hh, 999); x.fillStyle = col; x.fill();
+        });
+        // the CTA: a fire pill pops on beat 7.5
+        const cs = spring(t - 3.75, 16, 0.7);
+        if (cs > 0.01) { const [cx, cy] = ctaPos(t); rr(x, cx - 80 * cs, cy - 28 * cs, 160 * cs, 56 * cs, 999); x.fillStyle = fireFill(x, cx - 80, cy - 28, cx + 80, cy + 28); x.fill();
+          if (cs > 0.6) txt(x, 'Launch', cx, cy + 1, { color: C.ink, font: `800 ${Math.round(26 * cs)}px ${FONT_HE}`, align: 'center', base: 'middle' }); }
+        x.restore();
+      }
+    }
+    // cursor (lives in the world, so it scales with the camera)
+    let cx = 1180, cy = 780;
+    if (t > 1.6) { const u = ease.inOutCubic(inv(1.6, 2.3, t)); cx = lerp(1180, 760, u); cy = lerp(780, 378, u); }
+    if (t > 2.8) { const u = ease.inOutCubic(inv(2.8, 3.4, t)); cx = lerp(760, 1320, u); cy = lerp(378, 820, u); }
+    const cl = springKeys(t, [[0, 1], [2.5, 0.82], [2.6, 1]], 32, 0.7);
+    if (t > 1.55 && t < 3.45) drawCursor(x, cx, cy, cl);
+    x.restore();
+  }
+  // ---------------- screen space: the flood ----------------
+  const fl = floodAt(t);
+  if (fl) { x.beginPath(); x.arc(fl[0], fl[1], Math.max(0, fl[2]), 0, Math.PI * 2); x.fillStyle = fireFill(x, 0, 0, 1280, 720); x.fill(); }
+  // words on the drop, one per beat, rising out of a mask line
+  if (t > 4.45 && t < 6.3) {
+    const words = ['BUILD.', 'RENDER.', 'SHIP.'], times = [4.5, 5.0, 5.5];
+    x.save(); x.font = `400 96px ${FONT_EN}`; x.direction = 'ltr';
+    const ws = words.map(w => x.measureText(w).width), gap = 34, tot = ws.reduce((a, b) => a + b, 0) + gap * 2;
+    x.beginPath(); x.rect(0, 286, 1280, 140); x.clip();
+    let xl = 640 - tot / 2;
+    words.forEach((w, i) => {
+      const dy = 120 * (1 - ease.outCubic(inv(times[i], times[i] + 0.35, t))) + 130 * ease.inCubic(inv(6.0, 6.28, t));
+      x.fillStyle = C.ink; x.textAlign = 'left'; x.fillText(w, xl, 400 + dy); xl += ws[i] + gap;
+    });
+    x.restore();
+  }
+  // ---------------- the wordmark: the dot is its period ----------------
+  if (t >= 6.75) {
+    x.save(); x.font = `400 172px ${FONT_EN}`; x.textBaseline = 'alphabetic';
+    const L = 'YUV', Rt = 'AI', wL = x.measureText(L).width, wR = x.measureText(Rt).width, rp = 15, gap = 12;
+    const tot = wL + gap + rp * 2 + gap + wR, left = 640 - tot / 2, yb = 430;
+    const dX = left + wL + gap + rp, dY = yb - rp;
+    const p = spring(t - 6.75, 14, 0.82);
+    const pulse = springKeys(t, [[0, 1], [8.0, 1.3], [8.12, 1]], 26, 0.6);
+    const letters = []; let acc = left;
+    for (const ch of L) { const w = x.measureText(ch).width; letters.push([ch, acc + w / 2, w]); acc += w; }
+    acc = dX + rp + gap;
+    for (const ch of Rt) { const w = x.measureText(ch).width; letters.push([ch, acc + w / 2, w]); acc += w; }
+    letters.forEach(([ch, fx], i) => {
+      const j = i < 3 ? 2 - i : i - 3; // distance from the dot
+      const s = spring(t - (6.85 + j * 0.05), 13, 0.78); if (s <= 0.002) return;
+      const X = lerp(dX, fx, s);
+      x.save(); x.translate(X, yb); x.scale(s, s); x.fillStyle = C.ink; x.textAlign = 'center'; x.fillText(ch, 0, 0); x.restore();
+    });
+    x.beginPath(); x.arc(lerp(640, dX, p), lerp(360, dY, p), lerp(22, rp, p) * pulse, 0, Math.PI * 2); x.fillStyle = fireFill(x, dX - 22, dY - 22, dX + 22, dY + 22); x.fill();
+    if (t > 7.45) {
+      x.beginPath(); x.rect(0, yb + 30, 1280, 60); x.clip();
+      const dy = 50 * (1 - ease.outCubic(inv(7.5, 7.85, t)));
+      x.letterSpacing = '7px'; txt(x, 'FLY HIGH WITH AI', 640, yb + 70 + dy, { color: C.ink, font: `500 24px ${FONT_MONO}`, align: 'center' });
+    }
+    x.restore();
+  }
+  // HUD: the only input is t
+  const fh = floodAt(t), onMag = !!fh && Math.hypot(80 - fh[0], 40 - fh[1]) < fh[2];
+  txt(x, `seek(${t.toFixed(3)})`, 28, 40, { color: onMag ? 'rgba(18,22,63,.85)' : 'rgba(18,22,63,.7)', font: `500 18px ${FONT_MONO}` });
+  if (t >= 3.98 && t < 4.6) txt(x, 'beat 8 · DROP', 28, 66, { color: C.ink, font: `700 16px ${FONT_MONO}` });
+}
+
+/* ---------- film player ---------- */
+function initFilm() {
+  const cv = $('#filmCanvas'); prep(cv); const ctx = ctx2(cv);
+  const scratch = document.createElement('canvas'); scratch.width = cv.width; scratch.height = cv.height;
+  const scrub = $('#filmScrub'), tc = $('#filmTC'), playB = $('#filmPlay'), blurC = $('#filmBlur'), sndC = $('#filmSound');
+  const ruler = $('#filmRuler');
+  for (let b = 0; b <= 18; b++) { const i = document.createElement('i'); i.style.left = (b / 18 * 100) + '%'; if (b % 4 === 0) i.className = 'bar4'; if (b === 8) i.className = 'drop'; ruler.appendChild(i); }
+  let track = null, buf = null, src = null, playing = false, t0 = 0, wall0 = 0, cur = 0, poster = true; // first paint shows the drop as a poster; Play starts at 0
+  const getTrack = () => track || (track = E.synthTrack({ bpm: 120, beats: 18, dropBeat: 8, sfx: [{ type: 'pop', at: 0.2 }, { type: 'pop', at: 1.0 }, { type: 'click', at: 2.5 }, { type: 'whoosh', at: 4.0 }, { type: 'pop', at: 4.5 }, { type: 'pop', at: 5.0 }, { type: 'pop', at: 5.5 }, { type: 'pop', at: 6.85 }, { type: 'click', at: 8.0 }] }));
+  function draw(t) {
+    cur = t;
+    if (blurC.checked) { scratch.width = cv.width; scratch.height = cv.height; E.blurDraw(ctx, t, drawFilm, { n: 6, shutter: 0.5, fps: 60, scratch }); }
+    else drawFilm(ctx, t);
+    tc.textContent = `t = ${t.toFixed(3)}s · frame ${Math.round(t * 60)} · beat ${(t / 0.5).toFixed(1)}`;
+    scrub.value = t;
+  }
+  function stop() { playing = false; playB.textContent = '▶ Play'; if (src) { try { src.stop(); } catch (e) { } src = null; } }
+  function loop() {
+    if (!playing) return;
+    let t = sndC.checked && src ? AC().currentTime - t0 : (performance.now() - wall0) / 1000 + t0;
+    if (t >= FILM.dur) { draw(FILM.dur - 1e-3); stop(); return; }
+    draw(t); requestAnimationFrame(loop);
+  }
+  playB.addEventListener('click', () => {
+    if (playing) { stop(); return; }
+    let start = poster || cur >= FILM.dur - 0.02 ? 0 : cur; poster = false;
+    playing = true; playB.textContent = '❚❚ Pause';
+    if (sndC.checked) { try { const tr = getTrack(); buf = buf || toBuffer(tr.samples, tr.sr); src = playBuf(buf, start); t0 = AC().currentTime - start; } catch (e) { src = null; } }
+    if (!src) { t0 = start; wall0 = performance.now(); }
+    requestAnimationFrame(loop);
+  });
+  scrub.addEventListener('input', () => { poster = false; stop(); draw(+scrub.value); });
+  blurC.addEventListener('change', () => draw(cur));
+  draw(5.7);
+  document.fonts && document.fonts.ready.then(() => draw(cur));
+  window.addEventListener('resize', () => { prep(cv); draw(cur); });
+  return { draw: () => draw(cur) };
+}
+
+/* ---------- §4 flipbook ---------- */
+function initFlip() {
+  const cv = $('#flipCanvas'); prep(cv); const ctx = ctx2(cv);
+  bindRange('#flipF', '#flipO', null, f => { drawFilm(ctx, f / 60); $('#flipR').textContent = `frame ${f}  →  t = ${f} / 60 = ${(f / 60).toFixed(4)} s  →  seek(${(f / 60).toFixed(4)}) paints this exact image\nframes before it that had to be played first: 0`; });
+}
+
+/* ---------- §6 timer vs seek ---------- */
+function initTimer() {
+  const a = $('#tmA'), b = $('#tmB'), pl = $('#tmPlot'); prep(a); prep(b); prep(pl);
+  const N = 90; let seed = 3, maxMs = 200, tT = [], sT = [];
+  const ballX = t => 30 + 360 * ((t / 1.5) % 1);
+  function sim() {
+    const r = E.rng(seed); tT = []; sT = []; let acc = 0;
+    for (let i = 0; i < N; i++) { tT.push(acc); sT.push(i / 60); acc += (15 + r() * (maxMs - 15)) / 1000; }
+    const steps = tT.slice(1).map((v, i) => (v - tT[i]) * 1000);
+    $('#tmR').textContent = `seek(t): every frame advances exactly 16.7 ms · ${N} frames = ${(N / 60).toFixed(2)} s of animation\ntimer:   frames advance ${Math.min(...steps).toFixed(0)}–${Math.max(...steps).toFixed(0)} ms (avg ${(steps.reduce((p, c) => p + c, 0) / steps.length).toFixed(0)}) · ${N} frames = ${tT[N - 1].toFixed(2)} s of animation\n→ played back at 60 fps the timer version runs ${(tT[N - 1] / (N / 60)).toFixed(1)}x too fast and stutters`;
+    plot();
+  }
+  function plot() {
+    const x = ctx2(pl); x.clearRect(0, 0, 860, 230);
+    const X = 50, Y = 24, w = 790, h = 180, maxT = Math.max(tT[N - 1], 1.5);
+    axes(x, X, Y, w, h, { title: 'Animation time captured in each frame', xl: 'frame →', yl: 'animation time (s)' });
+    poly(x, tT.map((v, i) => [X + i / (N - 1) * w, Y + h - v / maxT * h]), C.mag, 2.5);
+    poly(x, sT.map((v, i) => [X + i / (N - 1) * w, Y + h - v / maxT * h]), C.ink, 2.5);
+    txt(x, 'timer', X + w - 40, Y + 16, { color: C.magT, font: `700 13px ${FONT_MONO}` });
+    txt(x, 'seek(t)', X + w - 60, Y + h - sT[N - 1] / maxT * h - 8, { color: C.ink, font: `700 13px ${FONT_MONO}` });
+  }
+  function drawBall(c, t, col) { const x = ctx2(c); x.fillStyle = C.paper; x.fillRect(0, 0, 420, 120); x.strokeStyle = C.line; x.beginPath(); x.moveTo(30, 60); x.lineTo(390, 60); x.stroke(); x.beginPath(); x.arc(ballX(t), 60, 18, 0, 7); x.fillStyle = col; x.fill(); }
+  function anim(now) { const i = Math.floor(now / 1000 * 60) % N; drawBall(a, tT[i], C.mag); drawBall(b, sT[i], C.ink); requestAnimationFrame(anim); }
+  $('#tmNew').addEventListener('click', () => { seed++; sim(); });
+  bindRange('#tmMax', '#tmMaxO', v => v + 'ms', v => { maxMs = v; sim(); });
+  requestAnimationFrame(anim);
+}
+
+/* ---------- §7 easing ---------- */
+function initEase() {
+  const cv = $('#ezCanvas'); prep(cv); let u = 0.3, playing = false, st = 0;
+  const list = [['linear', ease.linear, C.muted], ['inOutCubic', ease.inOutCubic, C.ink], ['outCubic', ease.outCubic, C.mag], ['outExpo', ease.outExpo, C.cyanD]];
+  function draw() {
+    const x = ctx2(cv); x.clearRect(0, 0, 860, 330);
+    const X = 40, Y = 22, S = 280;
+    axes(x, X, Y, S, S, { title: 'u (time) → progress', xl: 'u →', yl: 'progress' });
+    list.forEach(([n, f, col]) => poly(x, Array.from({ length: 101 }, (_, i) => [X + i / 100 * S, Y + S - f(i / 100) * S]), col, n === 'linear' ? 1.5 : 2.5, n === 'linear' ? [5, 4] : null));
+    x.strokeStyle = C.yellow; x.lineWidth = 2; x.beginPath(); x.moveTo(X + u * S, Y); x.lineTo(X + u * S, Y + S); x.stroke();
+    list.forEach(([n, f, col], i) => {
+      const yy = 50 + i * 70, x0 = 380, x1 = 830, p = f(u);
+      x.strokeStyle = C.line; x.lineWidth = 2; x.beginPath(); x.moveTo(x0, yy); x.lineTo(x1, yy); x.stroke();
+      x.beginPath(); x.arc(x0 + (x1 - x0) * p, yy, 15, 0, 7); x.fillStyle = col; x.fill();
+      x.beginPath(); x.arc(X + u * S, Y + S - p * S, 4, 0, 7); x.fill();
+      txt(x, `${n}  ${(p * 100).toFixed(0)}%`, x0, yy - 22, { color: col, font: `600 13px ${FONT_MONO}` });
+    });
+  }
+  const r = bindRange('#ezU', '#ezO', v => v.toFixed(2), v => { u = v; draw(); });
+  $('#ezPlay').addEventListener('click', () => { playing = !playing; st = performance.now(); if (playing) requestAnimationFrame(tick); });
+  function tick(now) { if (!playing) return; const s = ((now - st) / 1000) % 1.8; u = clamp(s / 1.2); r.value = u; $('#ezO').textContent = u.toFixed(2); draw(); requestAnimationFrame(tick); }
+  draw();
+}
+
+/* ---------- §8 spring lab ---------- */
+function initSpring() {
+  const cv = $('#spCanvas'); prep(cv); let w = 12, z = 0.8, multi = false, tp = 0.9, playing = false, st = 0;
+  const val = t => springKeys(t, multi ? [[-1, 44], [0, 380], [0.35, 200], [0.7, 300]] : [[-1, 44], [0, 380]], w, z);
+  function draw() {
+    const x = ctx2(cv); x.clearRect(0, 0, 860, 300);
+    const X = 40, Y = 24, gw = 440, gh = 250, T = 1.5, lo = 0, hi = 480;
+    axes(x, X, Y, gw, gh, { title: multi ? 'width = one spring per target change, summed' : 'pill width over time', xl: 't (s) →', yl: 'width px' });
+    const my = v => Y + gh - (v - lo) / (hi - lo) * gh, mx = t => X + t / T * gw;
+    const targets = multi ? [[0, 380], [0.35, 200], [0.7, 300]] : [[0, 380]];
+    targets.forEach(([t0, v], i) => { const t1 = targets[i + 1] ? targets[i + 1][0] : T; poly(x, [[mx(t0), my(v)], [mx(t1), my(v)]], C.muted, 1, [4, 4]); });
+    if (!multi) { const band = 0.02 * 336; x.fillStyle = 'rgba(44,120,210,.12)'; x.fillRect(X, my(380 + band), gw, my(380 - band) - my(380 + band)); }
+    const pts = []; for (let i = 0; i <= 300; i++) { const t = i / 300 * T; pts.push([mx(t), my(val(t))]); }
+    poly(x, pts, C.mag, 2.5);
+    x.strokeStyle = C.yellow; x.lineWidth = 2; x.beginPath(); x.moveTo(mx(tp), Y); x.lineTo(mx(tp), Y + gh); x.stroke();
+    if (!multi && z < 1) { const tpk = Math.PI / (w * Math.sqrt(1 - z * z)); if (tpk < T) { x.beginPath(); x.arc(mx(tpk), my(val(tpk)), 5, 0, 7); x.fillStyle = C.ink; x.fill(); txt(x, `+${(E.overshoot(z) * 100).toFixed(1)}%`, mx(tpk) + 8, my(val(tpk)) - 6, { font: `700 12px ${FONT_MONO}` }); } }
+    // preview: circle -> pill, exactly the article's 2-second test
+    const pw = val(tp), ph = 44 + (96 - 44) * clamp((pw - 44) / 336, 0, 1.5);
+    x.save(); x.beginPath(); x.rect(500, 24, 340, 250); x.fillStyle = C.paper; x.fill(); x.clip();
+    const sw = pw * 0.8, sh = ph * 0.8; rr(x, 670 - sw / 2, 150 - sh / 2, sw, sh, 999); x.fillStyle = C.ink; x.fill(); x.restore();
+    txt(x, `t = ${tp.toFixed(2)}s · width = ${pw.toFixed(1)}px`, 670, 260, { align: 'center', font: `500 12px ${FONT_MONO}`, color: C.muted });
+    const wd = z < 1 ? w * Math.sqrt(1 - z * z) : 0;
+    $('#spR').textContent = `omega = ${w} rad/s   zeta = ${z.toFixed(2)}   ${z < 1 ? 'underdamped (overshoots)' : z === 1 ? 'critically damped' : 'overdamped (no overshoot, slower)'}\n` +
+      `overshoot = exp(-pi*zeta/sqrt(1-zeta^2)) = ${z < 1 ? (E.overshoot(z) * 100).toFixed(2) + '%' : '0%'}${z < 1 ? `   omega_d = ${wd.toFixed(2)} rad/s` : ''}\n` +
+      `settles within 2% after ${E.settle(w, z).toFixed(3)} s   ${z >= 0.75 && z <= 0.92 ? '← "a tiny overshoot at most" ✓' : z < 0.75 ? '← bouncy: the prompts ban this' : ''}`;
+  }
+  bindRange('#spW', '#spWO', v => v, v => { w = v; draw(); });
+  bindRange('#spZ', '#spZO', v => v.toFixed(2), v => { z = v; draw(); });
+  $('#spMulti').addEventListener('change', e => { multi = e.target.checked; draw(); });
+  $('#spPlay').addEventListener('click', () => { playing = !playing; st = performance.now(); if (playing) requestAnimationFrame(tick); });
+  function tick(now) { if (!playing) return; tp = ((now - st) / 1000) % 1.9; tp = Math.min(tp, 1.5); draw(); requestAnimationFrame(tick); }
+  draw();
+}
+
+/* ---------- §8 liquid tabs ---------- */
+function initTabs() {
+  const cv = $('#tabCanvas'); prep(cv);
+  const labels = ['Overview', 'Beats', 'Springs', 'Render'], TW = 215;
+  const edges = k => [k * TW + 16, (k + 1) * TW - 16];
+  let cur = 0; const [l0, r0] = edges(0); const evL = [[-99, l0, 14]], evR = [[-99, r0, 14]];
+  const ev = (t, list) => { let v = list[0][1]; for (let i = 1; i < list.length; i++) v += (list[i][1] - list[i - 1][1]) * spring(t - list[i][0], list[i][2], 0.85); return v; };
+  let animUntil = 0;
+  function draw() {
+    const now = performance.now() / 1000, x = ctx2(cv); x.clearRect(0, 0, 860, 140);
+    x.fillStyle = C.paper; x.fillRect(0, 0, 860, 140);
+    const L = ev(now, evL), R = ev(now, evR);
+    rr(x, L, 44, R - L, 52, 999); x.fillStyle = C.ink; x.fill();
+    labels.forEach((s, i) => { const [a, b] = edges(i), mid = (a + b) / 2, inside = mid > L && mid < R; txt(x, s, mid, 72, { align: 'center', base: 'middle', font: `700 21px ${FONT_HE}`, color: inside ? '#fff' : C.ink }); });
+    txt(x, `width now: ${(R - L).toFixed(0)}px (rest: ${TW - 32}px)`, 12, 126, { font: `500 12px ${FONT_MONO}`, color: C.muted });
+    if (now < animUntil) requestAnimationFrame(draw);
+  }
+  cv.addEventListener('click', e => {
+    const rect = cv.getBoundingClientRect(), px = (e.clientX - rect.left) / rect.width * 860, k = clamp(Math.floor(px / TW), 0, 3);
+    if (k === cur) return; const now = performance.now() / 1000, [nl, nr] = edges(k), movingRight = nl > edges(cur)[0], same = $('#tabSame').checked;
+    const fast = same ? 16 : 26, slow = same ? 16 : 11;
+    evL.push([now, nl, movingRight ? slow : fast]); evR.push([now, nr, movingRight ? fast : slow]); cur = k;
+    animUntil = now + 1.6; requestAnimationFrame(draw);
+  });
+  draw();
+}
+
+/* ---------- §9 morph vs fade ---------- */
+function initMorph() {
+  const a = $('#mfA'), b = $('#mfB'); prep(a); prep(b); let u = 0.5, playing = false, st = 0;
+  const A = { x: 140, y: 186, w: 140, h: 52, r: 26 }, B = { x: 40, y: 30, w: 340, h: 200, r: 0 };
+  function bg(x) { x.fillStyle = C.paper; x.fillRect(0, 0, 420, 260); }
+  function drawA(x, al) { x.globalAlpha = al; rr(x, A.x, A.y, A.w, A.h, A.r); x.fillStyle = C.ink; x.fill(); txt(x, 'Open', A.x + A.w / 2, A.y + A.h / 2 + 1, { color: '#fff', align: 'center', base: 'middle', font: `700 22px ${FONT_HE}` }); x.globalAlpha = 1; }
+  function drawB(x, al, prog = 1) { x.globalAlpha = al; rr(x, B.x, B.y, B.w, B.h, B.r); x.fillStyle = C.ink; x.fill(); txt(x, 'Open', B.x + 24, B.y + 46, { color: '#fff', align: 'left', font: `700 30px ${FONT_HE}` });
+    [[0.0, 240, 'rgba(255,255,255,.8)'], [0.15, 180, C.cyan], [0.3, 210, 'rgba(255,255,255,.4)']].forEach(([d, L, c], i) => { const l = L * ease.outCubic(clamp((prog - d) / 0.5)); if (l > 0) { rr(x, B.x + 24, B.y + 80 + i * 36, l, 16, 999); x.fillStyle = c; x.fill(); } }); x.globalAlpha = 1; }
+  function draw() {
+    let x = ctx2(a); bg(x); drawA(x, 1 - u); drawB(x, u);
+    x = ctx2(b); bg(x); const e = ease.inOutCubic(clamp(u / 0.7));
+    const R = { x: lerp(A.x, B.x, e), y: lerp(A.y, B.y, e), w: lerp(A.w, B.w, e), h: lerp(A.h, B.h, e), r: lerp(A.r, 0, e) };
+    rr(x, R.x, R.y, R.w, R.h, R.r); x.fillStyle = C.ink; x.fill();
+    const fs = lerp(22, 30, e), lx = lerp(A.x + A.w / 2, B.x + 24, e), ly = lerp(A.y + A.h / 2 + 1, B.y + 46 - 10, e);
+    txt(x, 'Open', lx, ly, { color: '#fff', align: e < 0.5 ? 'center' : 'left', base: 'middle', font: `700 ${fs}px ${FONT_HE}` });
+    if (u > 0.6) { x.save(); rr(x, R.x, R.y, R.w, R.h, R.r); x.clip(); [[0.0, 240, 'rgba(255,255,255,.8)'], [0.15, 180, C.cyan], [0.3, 210, 'rgba(255,255,255,.4)']].forEach(([d, L, c], i) => { const l = L * ease.outCubic(clamp(((u - 0.6) / 0.4 - d) / 0.5)); if (l > 0) { rr(x, B.x + 24, B.y + 80 + i * 36, l, 16, 999); x.fillStyle = c; x.fill(); } }); x.restore(); }
+  }
+  const r = bindRange('#mfU', '#mfO', v => v.toFixed(2), v => { u = v; draw(); });
+  $('#mfPlay').addEventListener('click', () => { playing = !playing; st = performance.now(); if (playing) requestAnimationFrame(tick); });
+  function tick(now) { if (!playing) return; const s = ((now - st) / 1000) % 2.6; u = clamp((s - 0.4) / 1.4); r.value = u; $('#mfO').textContent = u.toFixed(2); draw(); requestAnimationFrame(tick); }
+  draw();
+}
+
+/* ---------- §10 zoom ---------- */
+function initZoom() {
+  const a = $('#zmA'), b = $('#zmB'), pl = $('#zmPlot'); prep(a); prep(b); prep(pl); let u = 0.5, playing = false, st = 0;
+  const zl = u => lerp(1, 16, ease.inOutCubic(u)), zg = u => logLerp(1, 16, ease.inOutCubic(u));
+  function scene(c, z) {
+    const x = ctx2(c); x.fillStyle = C.paper; x.fillRect(0, 0, 420, 240);
+    x.save(); x.translate(210, 120); x.scale(z, z);
+    for (let i = 0; i < 6; i++) { const s = 200 / Math.pow(2, i); x.strokeStyle = i % 2 ? C.mag : C.ink; x.lineWidth = 2 / z; x.strokeRect(-s / 2, -s / 2 * 0.55, s, s * 0.55); x.fillStyle = i % 2 ? C.mag : C.ink; x.font = `500 ${11 / Math.pow(2, i)}px ${FONT_MONO}`; x.fillText('×' + Math.pow(2, i), -s / 2 + 3 / Math.pow(2, i), -s / 2 * 0.55 + 12 / Math.pow(2, i)); }
+    x.restore(); txt(x, `zoom ×${z.toFixed(2)}`, 10, 228, { font: `600 12px ${FONT_MONO}`, color: C.muted });
+  }
+  function draw() {
+    scene(a, zl(u)); scene(b, zg(u));
+    const x = ctx2(pl); x.clearRect(0, 0, 860, 200); const X = 50, Y = 22, w = 790, h = 160;
+    axes(x, X, Y, w, h, { title: 'Speed the eye feels: d ln(zoom) / dt', xl: 'time →' });
+    const sp = f => Array.from({ length: 201 }, (_, i) => { const t = i / 200, d = 1e-3; return [t, (Math.log(f(Math.min(1, t + d))) - Math.log(f(Math.max(0, t - d)))) / ((Math.min(1, t + d) - Math.max(0, t - d)))]; });
+    const A = sp(zl), B = sp(zg), mx = Math.max(...A.map(p => p[1]), ...B.map(p => p[1]));
+    poly(x, A.map(([t, v]) => [X + t * w, Y + h - v / mx * h]), C.ink, 2.5); poly(x, B.map(([t, v]) => [X + t * w, Y + h - v / mx * h]), C.mag, 2.5);
+    x.strokeStyle = C.yellow; x.lineWidth = 2; x.beginPath(); x.moveTo(X + u * w, Y); x.lineTo(X + u * w, Y + h); x.stroke();
+    txt(x, 'linear', X + 0.1 * w, Y + 20, { color: C.ink, font: `700 13px ${FONT_MONO}` }); txt(x, 'log space', X + 0.55 * w, Y + 20, { color: C.magT, font: `700 13px ${FONT_MONO}` });
+  }
+  const r = bindRange('#zmU', '#zmO', v => v.toFixed(2), v => { u = v; draw(); });
+  $('#zmPlay').addEventListener('click', () => { playing = !playing; st = performance.now(); if (playing) requestAnimationFrame(tick); });
+  function tick(now) { if (!playing) return; const s = ((now - st) / 1000) % 3.6; u = clamp(s / 3); r.value = u; $('#zmO').textContent = u.toFixed(2); draw(); requestAnimationFrame(tick); }
+  draw();
+}
+
+/* ---------- §11 beat calculator ---------- */
+function initBeatCalc() {
+  let B = 130, N = 32;
+  const facts = { '130/32': 'the food film: 0:15 in the player (14.8 seconds in the prompt) ✓', '120/54': 'the print film: 0:27 in the player ✓', '120/28': 'UI morph: 7 bars × 4 = 28 beats → 0:14 in the player ✓' };
+  function upd() {
+    const beat = 60 / B; $('#bcR').textContent = `1 beat = 60 / ${B} = ${beat.toFixed(4)} s  (= ${(beat * 60).toFixed(1)} frames at 60 fps)\n1 bar  = 4 beats = ${(beat * 4).toFixed(3)} s\n${N} beats = ${(N * beat).toFixed(2)} s${facts[B + '/' + N] ? '\n' + facts[B + '/' + N] : ''}`;
+    $$('#bcPre button').forEach(b => b.classList.toggle('on', +b.dataset.b === B && +b.dataset.n === N));
+  }
+  const rb = bindRange('#bcB', '#bcBO', null, v => { B = v; upd(); }), rn = bindRange('#bcN', '#bcNO', null, v => { N = v; upd(); });
+  $$('#bcPre button').forEach(b => b.addEventListener('click', () => { B = +b.dataset.b; N = +b.dataset.n; rb.value = B; rn.value = N; $('#bcBO').textContent = B; $('#bcNO').textContent = N; upd(); }));
+  upd();
+}
+
+/* ---------- §11 beat detection (real) ---------- */
+function initBeat() {
+  const cv = $('#btCanvas'); prep(cv); let bpm = 120, dropB = 8, tr = null, an = null, src = null, buf = null, st = 0, playing = false;
+  function run() {
+    tr = E.synthTrack({ bpm, beats: Math.max(dropB + 8, 16), dropBeat: dropB }); buf = null;
+    const t0 = performance.now(); an = E.analyze(tr.samples, tr.sr); const ms = performance.now() - t0;
+    const trueDrop = dropB * 60 / bpm;
+    $('#btR').textContent = `true tempo ${bpm} BPM   → detected ${an.bpm.toFixed(2)} BPM   (error ${(an.bpm - bpm).toFixed(2)})\ntrue drop ${trueDrop.toFixed(3)} s → detected ${an.drop.toFixed(3)} s   (error ${((an.drop - trueDrop) * 1000).toFixed(1)} ms, energy x${an.dropRatio.toFixed(1)})\nanalysed ${(tr.samples.length / tr.sr).toFixed(1)} s of audio, ${tr.samples.length.toLocaleString()} samples, in ${ms.toFixed(0)} ms`;
+    draw(-1);
+  }
+  function draw(ph) {
+    const x = ctx2(cv); x.clearRect(0, 0, 860, 300); const X = 20, w = 820, dur = tr.samples.length / tr.sr, mx = t => X + t / dur * w;
+    x.fillStyle = C.paper; x.fillRect(X, 10, w, 280);
+    // waveform (min/max per column)
+    const s = tr.samples, per = Math.floor(s.length / w);
+    x.strokeStyle = C.muted; x.lineWidth = 1; x.beginPath();
+    for (let i = 0; i < w; i++) { let lo = 1, hi = -1; for (let j = 0; j < per; j += 4) { const v = s[i * per + j]; if (v < lo) lo = v; if (v > hi) hi = v; } x.moveTo(X + i, 80 - hi * 60); x.lineTo(X + i, 80 - lo * 60); }
+    x.stroke(); txt(x, 'waveform', X + 6, 26, { font: `600 11px ${FONT_MONO}`, color: C.muted });
+    // envelope + onset
+    const env = an.env, on = an.onset, me = Math.max(...env), mo = Math.max(...on);
+    poly(x, Array.from(env, (v, i) => [X + i / env.length * w, 200 - v / me * 50]), C.ink, 1.5);
+    x.strokeStyle = C.mag; x.lineWidth = 1.5; x.beginPath(); for (let i = 0; i < on.length; i++) { if (on[i] < mo * 0.05) continue; const xx = X + i / on.length * w; x.moveTo(xx, 280); x.lineTo(xx, 280 - on[i] / mo * 60); } x.stroke();
+    txt(x, 'energy (RMS)', X + 6, 156, { font: `600 11px ${FONT_MONO}` }); txt(x, 'onsets', X + 6, 226, { font: `600 11px ${FONT_MONO}`, color: C.magT });
+    // detected grid
+    for (let t = an.firstBeat; t < dur; t += an.beatLen) { x.strokeStyle = 'rgba(44,120,210,.55)'; x.lineWidth = 1; x.beginPath(); x.moveTo(mx(t), 140); x.lineTo(mx(t), 152); x.stroke(); }
+    txt(x, `detected grid · ${an.bpm.toFixed(1)} BPM`, X + w - 6, 138, { font: `600 11px ${FONT_MONO}`, color: C.cyanD, align: 'right' });
+    x.strokeStyle = C.mag; x.lineWidth = 3; x.beginPath(); x.moveTo(mx(an.drop), 14); x.lineTo(mx(an.drop), 288); x.stroke();
+    txt(x, 'DROP', mx(an.drop) + 5, 24, { font: `700 12px ${FONT_MONO}`, color: C.magT });
+    if (ph >= 0) { x.strokeStyle = C.yellow; x.lineWidth = 2.5; x.beginPath(); x.moveTo(mx(ph), 10); x.lineTo(mx(ph), 290); x.stroke(); }
+  }
+  bindRange('#btB', '#btBO', null, v => { bpm = v; });
+  bindRange('#btD', '#btDO', null, v => { dropB = v; });
+  $('#btRun').addEventListener('click', run);
+  $('#btPlay').addEventListener('click', () => {
+    if (playing) { try { src.stop(); } catch (e) { } playing = false; draw(-1); return; }
+    buf = buf || toBuffer(tr.samples, tr.sr); src = playBuf(buf, 0); st = AC().currentTime; playing = true;
+    const dur = tr.samples.length / tr.sr; src.onended = () => { playing = false; draw(-1); };
+    (function tick() { if (!playing) return; draw(AC().currentTime - st); if (AC().currentTime - st < dur) requestAnimationFrame(tick); })();
+  });
+  run();
+}
+
+/* ---------- §11 SFX by peak ---------- */
+function initPeak() {
+  const cv = $('#pkCanvas'); prep(cv); let type = 'whoosh';
+  const sr = 22050, beat = 0.5, EV = 1.0;
+  function draw() {
+    const s = E.renderSfx(type, sr), pk = E.measurePeak(s, sr), x = ctx2(cv); x.clearRect(0, 0, 860, 220);
+    // file view
+    const fw = 300, X = 20; x.fillStyle = C.paper; x.fillRect(X, 10, fw, 90);
+    x.strokeStyle = C.ink; x.lineWidth = 1; x.beginPath(); const per = Math.max(1, Math.floor(s.length / fw));
+    for (let i = 0; i < fw; i++) { let m = 0; for (let j = 0; j < per; j++) m = Math.max(m, Math.abs(s[i * per + j] || 0)); x.moveTo(X + i, 55 - m * 80); x.lineTo(X + i, 55 + m * 80); } x.stroke();
+    const px = X + pk / (s.length / sr) * fw; x.strokeStyle = C.mag; x.lineWidth = 2.5; x.beginPath(); x.moveTo(px, 12); x.lineTo(px, 98); x.stroke();
+    txt(x, `${type}.mp3 · peak at ${pk.toFixed(3)} s`, X + 4, 116, { font: `600 12px ${FONT_MONO}`, color: C.magT });
+    // timeline: 4 beats, event on beat 2
+    const TX = 360, TW = 480, T = 2.0, mx = t => TX + t / T * TW;
+    x.fillStyle = C.paper; x.fillRect(TX, 10, TW, 190);
+    for (let b = 0; b <= 4; b++) { x.strokeStyle = C.line; x.lineWidth = 1; x.beginPath(); x.moveTo(mx(b * beat), 14); x.lineTo(mx(b * beat), 196); x.stroke(); txt(x, `beat ${b}`, mx(b * beat) + 3, 26, { font: `500 11px ${FONT_MONO}`, color: C.muted }); }
+    x.strokeStyle = C.ink; x.lineWidth = 2; x.setLineDash([5, 4]); x.beginPath(); x.moveTo(mx(EV), 14); x.lineTo(mx(EV), 196); x.stroke(); x.setLineDash([]);
+    txt(x, 'EVENT', mx(EV) + 4, 42, { font: `700 11px ${FONT_MONO}` });
+    const len = s.length / sr;
+    const lane = (y, start, col, label) => { x.fillStyle = col; x.globalAlpha = .18; x.fillRect(mx(start), y, len / T * TW, 34); x.globalAlpha = 1; x.strokeStyle = col; x.strokeRect(mx(start), y, len / T * TW, 34); const p = mx(start + pk); x.strokeStyle = col; x.lineWidth = 3; x.beginPath(); x.moveTo(p, y - 4); x.lineTo(p, y + 38); x.stroke(); x.lineWidth = 1; txt(x, label, mx(start) + 4, y + 22, { font: `600 11px ${FONT_MONO}`, color: col }); };
+    lane(70, EV, C.ink, 'start = event'); lane(140, EV - pk, C.mag, 'start = event − peak');
+    $('#pkR').textContent = `start at the event      → loudest moment lands ${(pk * 1000).toFixed(0)} ms late (${(pk / beat).toFixed(2)} beats)\nstart at event − peak   → loudest moment lands exactly on the event (0 ms)`;
+  }
+  function audition(aligned) {
+    const s = E.renderSfx(type, sr), pk = E.measurePeak(s, sr), n = Math.floor(2.3 * sr), out = new Float32Array(n);
+    for (let b = 0; b < 4; b++) { const i0 = Math.floor(b * beat * sr); for (let i = 0; i < 0.3 * sr && i0 + i < n; i++) { const t = i / sr; out[i0 + i] += Math.sin(2 * Math.PI * (45 * t + (105 / 22) * (1 - Math.exp(-22 * t)))) * 0.6 * Math.exp(-t * 8); } }
+    const st = Math.floor((aligned ? EV - pk : EV) * sr); for (let i = 0; i < s.length; i++) if (st + i >= 0 && st + i < n) out[st + i] += s[i] * 1.6;
+    playBuf(toBuffer(out, sr));
+  }
+  $$('#pkType button').forEach(b => b.addEventListener('click', () => { type = b.dataset.t; $$('#pkType button').forEach(o => o.classList.toggle('on', o === b)); draw(); }));
+  $('#pkNaive').addEventListener('click', () => audition(false)); $('#pkPeak').addEventListener('click', () => audition(true));
+  draw();
+}
+
+/* ---------- §12 motion blur ---------- */
+function initBlur() {
+  const cv = $('#mbCanvas'); prep(cv); const scratch = document.createElement('canvas'); let v = 4800, n = 4, sh = 0.5; const D = 52, TH = 6;
+  function scene(x, t) { const k = x.canvas.width / 860; x.setTransform(k, 0, 0, k, 0, 0); x.fillStyle = C.ink; x.fillRect(0, 0, 860, 220); const cx = 470 + v * t; x.fillStyle = '#fff'; x.beginPath(); x.arc(cx, 110, D / 2, 0, 7); x.fill(); x.fillRect(cx - 90 - TH / 2, 55, TH, 110); x.fillStyle = C.mag; x.fillRect(cx - 130 - TH / 2, 55, TH, 110); }
+  function draw() {
+    const x = cv.getContext('2d'); scratch.width = cv.width; scratch.height = cv.height;
+    E.blurDraw(x, 0, scene, { n, shutter: sh, fps: 60, scratch });
+    const gap = v * sh / 60 / n, smear = v * sh / 60;
+    const thin = n === 1 ? 'frozen (no blur)' : gap > TH ? 'GHOSTS — separate copies of the 6px strokes (the "4 subframes leave ghost copies" bug)' : 'smooth ✓';
+    const big = n === 1 ? 'frozen (no blur)' : gap > D ? 'ghosts' : gap > D / 4 ? 'visible steps' : 'smooth ✓';
+    $('#mbR').textContent = `per frame things travel ${(v / 60).toFixed(1)} px · shutter open ${(sh * 100).toFixed(0)}% of the frame → smear ${smear.toFixed(1)} px\ngap between subframe copies = v × shutter / (60 × N) = ${gap.toFixed(1)} px\n6px strokes (like text): ${thin}\n52px disc: ${big}\n→ thin details ghost first; to fix: more subframes (N=${Math.max(n, Math.ceil(v * sh / 60 / TH))}) or a slower move`;
+  }
+  bindRange('#mbV', '#mbVO', null, x => { v = x; draw(); }); bindRange('#mbN', '#mbNO', null, x => { n = x; draw(); }); bindRange('#mbS', '#mbSO', x => x.toFixed(2), x => { sh = x; draw(); });
+  draw();
+}
+
+/* ---------- §13 contact sheet ---------- */
+function initSheet() {
+  const cv = $('#csCanvas'); prep(cv); const x = ctx2(cv); const off = document.createElement('canvas'); off.width = 640; off.height = 360; const ox = off.getContext('2d');
+  const draw = () => { x.clearRect(0, 0, 1280, 400); for (let b = 0; b < 18; b++) { const col = b % 6, row = Math.floor(b / 6), X = col * (200 + 16), Y = row * 134; drawFilm(ox, b * 0.5); x.drawImage(off, X, Y, 200, 112.5); x.strokeStyle = b === 8 ? C.mag : C.line; x.lineWidth = b === 8 ? 3 : 1; x.strokeRect(X, Y, 200, 112.5); txt(x, `beat ${b} · ${(b * 0.5).toFixed(1)}s${b === 8 ? ' · DROP' : ''}`, X + 2, Y + 128, { font: `600 12px ${FONT_MONO}`, color: b === 8 ? C.mag : C.muted }); } };
+  draw(); document.fonts && document.fonts.ready.then(draw);
+}
+
+/* ---------- §13 pop scan ---------- */
+function initPops() {
+  const cv = $('#ppCanvas'); prep(cv); const W = 160, H = 90, N = 72; const off = document.createElement('canvas'); off.width = W; off.height = H; const ox = off.getContext('2d', { willReadFrequently: true });
+  let seed = 11;
+  function frame(i, glitch) {
+    const u = i / (N - 1); ox.fillStyle = C.paper; ox.fillRect(0, 0, W, H);
+    let bx = 20 + 120 * ease.inOutCubic(u), by = 45 + 12 * Math.sin(u * Math.PI * 2);
+    if (glitch) { by += 34; bx -= 26; }
+    ox.beginPath(); ox.arc(bx, by, 12, 0, 7); ox.fillStyle = C.ink; ox.fill();
+    ox.fillStyle = C.mag; ox.fillRect(8, 8, 30 + 100 * u, 6);
+    return ox.getImageData(0, 0, W, H).data;
+  }
+  function run(withGlitch) {
+    const r = E.rng(seed++), g = withGlitch ? 10 + Math.floor(r() * (N - 20)) : -1;
+    const frames = []; for (let i = 0; i < N; i++) frames.push(frame(i, i === g));
+    const d = [0]; for (let i = 1; i < N; i++) { let s = 0; const a = frames[i], b = frames[i - 1]; for (let j = 0; j < a.length; j += 4) s += Math.abs(a[j] - b[j]) + Math.abs(a[j + 1] - b[j + 1]) + Math.abs(a[j + 2] - b[j + 2]); d.push(s / (W * H)); }
+    const flagged = [];
+    for (let i = 1; i < N; i++) { const nb = []; for (let j = i - 5; j <= i + 5; j++) if (j >= 1 && j < N && Math.abs(j - i) > 1) nb.push(d[j]); nb.sort((p, q) => p - q); const med = nb[Math.floor(nb.length / 2)] || 1e-9; if (d[i] > 3 * med && d[i] > 0.5) flagged.push(i); }
+    const popFrames = []; flagged.forEach(i => { if (flagged.includes(i + 1)) popFrames.push(i); });
+    const x = ctx2(cv); x.clearRect(0, 0, 860, 260); const X = 40, Y = 20, w = 560, h = 200, mx = Math.max(...d) * 1.1;
+    axes(x, X, Y, w, h, { title: 'Average difference from the previous frame', xl: 'frame →' });
+    d.forEach((v, i) => { const bw = w / N; x.fillStyle = flagged.includes(i) ? C.mag : C.ink; x.fillRect(X + i * bw + 1, Y + h - v / mx * h, bw - 2, v / mx * h); });
+    const show = g >= 0 ? g : 36;
+    [-1, 0, 1].forEach((o, k) => { const f = frame(show + o, show + o === g); const id = new ImageData(new Uint8ClampedArray(f), W, H); ox.putImageData(id, 0, 0); x.drawImage(off, 640, 20 + k * 78, 120, 67.5); x.strokeStyle = show + o === g ? C.mag : C.line; x.lineWidth = show + o === g ? 3 : 1; x.strokeRect(640, 20 + k * 78, 120, 67.5); txt(x, `frame ${show + o}`, 768, 58 + k * 78, { font: `600 12px ${FONT_MONO}`, color: show + o === g ? C.mag : C.muted }); });
+    $('#ppR').textContent = g >= 0 ? `injected a one-frame glitch at frame ${g}\nspikes > 3x neighbours at transitions: ${flagged.join(', ') || 'none'}\n→ pop detected at frame ${popFrames.join(', ') || '?'} ${popFrames.includes(g) ? '✓ found it' : ''}` : `no glitch injected\nspikes > 3x neighbours: ${flagged.length ? flagged.join(', ') : 'none'} → ${flagged.length ? 'false alarm' : 'clean ✓ (smooth motion never triggers it)'}`;
+  }
+  $('#ppNew').addEventListener('click', () => run(true)); $('#ppClean').addEventListener('click', () => run(false));
+  run(true);
+}
+
+/* ---------- §14 render cost ---------- */
+function initCost() {
+  const st = { D: 15, F: 60, S: 8, W: 6, K: 7 };
+  const mmss = s => s < 60 ? `${s.toFixed(0)} s` : `${Math.floor(s / 60)} min ${String(Math.round(s % 60)).padStart(2, '0')} s`;
+  function upd() {
+    const fr = st.D * st.F, shots = fr * st.S, rate = st.W * st.K, t = shots / rate, t1 = fr / rate;
+    $('#rcR').textContent = `${st.D} s × ${st.F} fps = ${fr.toLocaleString()} frames × ${st.S} subframes = ${shots.toLocaleString()} screenshots\n${st.W} shots/s × ${st.K} workers = ${rate} shots/s → ${mmss(t)}\nsame film without motion blur (1 subframe): ${mmss(t1)}  ·  draft at half res is ~4x faster again`;
+    $$('#rcPre button').forEach(b => b.classList.toggle('on', +b.dataset.w === st.W && +b.dataset.k === st.K));
+  }
+  const map = { D: '#rcD', F: '#rcF', S: '#rcS', W: '#rcW', K: '#rcK' }, rs = {};
+  for (const [k, id] of Object.entries(map)) rs[k] = bindRange(id, id + 'O', null, v => { st[k] = v; upd(); });
+  $$('#rcPre button').forEach(b => b.addEventListener('click', () => { st.W = +b.dataset.w; st.K = +b.dataset.k; rs.W.value = st.W; rs.K.value = st.K; $('#rcWO').textContent = st.W; $('#rcKO').textContent = st.K; upd(); }));
+  upd();
+}
+
+/* ---------- §15 anatomy ---------- */
+const ANAT = [
+  ['<inputs>', 'what to ask for before starting', 'A list of materials Claude must ask for, and what to do when some are skipped ("If I skip any, use the defaults").',
+    'Without real materials, a model invents them: placeholder images, a generic logo, music that is "roughly right". That is the number one source of the template look. Asking up front turns a guess into real material, and the defaults (in the food prompt: specific dishes from Pexels and a specific Mixkit song) keep the work moving when nobody answers.',
+    '"Real footage only, never placeholder cards." · "If I skip any, use the defaults: ... Mixkit \\"Cat Walk\\"."',
+    'Claude invents assets, or stops halfway through to ask.'],
+  ['<direction>', 'taste: what is allowed and what is banned', 'A format sentence (length, resolution, fps, "2D only", "one continuous take"), a motion grammar ("objects change shape instead"), colors as hex codes, fonts by name, and a Banned list.',
+    '"Beautiful" is an infinite space; <code>#f5f5f2</code> and Geist are a single point. The banned list is the strongest part: it deletes exactly the model\'s most statistically likely choices (glow, particles, crossfades, dark backgrounds), the ones zero saw Claude fall back on by default.',
+    '"Banned: crossfades, blur-ins, 3D, particles, camera moves that reverse direction, holds longer than 1s, anything that looks like a template."',
+    'A dark trailer with neon and particles that "does not look high end".'],
+  ['<structure>', 'what happens when, in beats', 'The BPM, the number of beats, and for every beat: what happens and which object it is born from ("the send button grows into an orange wok").',
+    'This turns a story into a schedule with numbers we can check. And the phrasing "X grows into Y" forces continuity while writing: there is no way to write a scene without saying which scene it comes from. It is also the spec Claude checks the stills against.',
+    '"Beat 12, the drop: a lime circle floods out of the wok edge to edge in about 0.35s."',
+    'Random pacing, dead time, and peaks that miss the music.'],
+  ['<build>', 'how to build it: the engineering', 'seek(t), closed-form springs, a logarithmic camera, shared elements, sound effects placed by their peak, subframes, a pop scan.',
+    'These are the technical decisions that make the taste buildable and checkable. Left to choose, Claude may use CSS transitions or real-time animation, which look fine in a browser but cannot be rendered deterministically. This is the block that holds the "step 1 of motion design" zero says he never learned.',
+    '"Every style is computed from time inside seek(t): no CSS transitions, no timers, no state between frames."',
+    'Stutter, drift out of sync, and no way to fix one scene without breaking the others.'],
+  ['<gotchas>', 'the scars: bugs he already hit', 'A short list of specific failures, with the fix for each one.',
+    'Every line here is a fix round saved. Models repeat the same web traps (z-index, will-change blurring text, preserve-3d flattening, http.server without range requests). Written down up front, Claude avoids them in the first draft instead of discovering them in the third render.',
+    '"Set z-index on every layer, or the card floats over the flood." · "Declare every variable before the first seek() runs."',
+    'The same bugs, every time, after a long render.'],
+  ['<start>', 'a cheap approval gate before the expensive work', 'Ask for the inputs → show a beat map + 4 stills → only then write the film.',
+    'A still costs seconds; a full render costs long minutes. The gate catches direction mistakes before the expensive stage, and it also forces the model to plan before it writes code (plan → approve → execute), a pattern that improves agent work on long tasks in general.',
+    '"Ask me for the inputs, then show me the beat map and 4 stills (ask, drop, chat, outro) before you write the full film."',
+    '20 minutes of rendering the wrong idea.']
+];
+function initAnat() {
+  const host = $('#anBlocks'), body = $('#anBody');
+  ANAT.forEach((a, i) => { const b = document.createElement('button'); b.textContent = a[0]; b.addEventListener('click', () => show(i)); host.appendChild(b); });
+  function show(i) {
+    const [tag, title, what, why, quote, without] = ANAT[i];
+    $$('#anBlocks button').forEach((b, j) => b.classList.toggle('on', j === i));
+    body.innerHTML = `<h3 style="margin-top:0"><code>${tag.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code>: ${title}</h3><p><b>What it is:</b> ${what}</p><p><b>Why it works on an LLM:</b> ${why}</p><div class="code"><span class="lbl">from his prompts</span><pre>${quote.replace(/\\"/g, '"')}</pre></div><p><b>What happens without it:</b> ${without}</p>`;
+  }
+  show(0);
+}
+
+/* ---------- §16 fly-over speed ---------- */
+function initFly() {
+  const cv = $('#fsCanvas'); prep(cv); const x = ctx2(cv);
+  const pts = E.flyIntegrate(8.3, 1 / 600);
+  const posAt = t => { const i = Math.min(pts.length - 1, Math.round(t * 600)); return pts[i][1]; };
+  // the "bad" way: position keys every 0.5 s, rounded like a human would key them, joined by Catmull-Rom
+  const keys = []; for (let t = 0; t <= 8.5; t += 0.5) keys.push([t, Math.round(posAt(Math.min(t, 8.3)) / 50) * 50]);
+  const cr = t => { const i = Math.min(keys.length - 2, Math.floor(t / 0.5)), p0 = keys[Math.max(0, i - 1)][1], p1 = keys[i][1], p2 = keys[i + 1][1], p3 = keys[Math.min(keys.length - 1, i + 2)][1], u = (t - keys[i][0]) / 0.5;
+    return 0.5 * ((2 * p1) + (-p0 + p2) * u + (2 * p0 - 5 * p1 + 4 * p2 - p3) * u * u + (-p0 + 3 * p1 - 3 * p2 + p3) * u * u * u); };
+  const X = 50, w = 790, T = 8.3, mx = t => X + t / T * w;
+  axes(x, X, 20, w, 150, { title: 'Camera speed down the page (share of cruise speed)', xl: 't (s) →' });
+  const sy = v => 170 - v / 1.4 * 150;
+  poly(x, [[X, sy(0.94)], [X + w, sy(0.94)]], C.muted, 1, [3, 4]); poly(x, [[X, sy(1.1)], [X + w, sy(1.1)]], C.muted, 1, [3, 4]);
+  const keySpeed = []; let worstK = 0, worstS = 0;
+  for (let t = 0.01; t < T; t += 0.01) { const v = (cr(t + 0.005) - cr(t - 0.005)) / 0.01 / 770; keySpeed.push([mx(t), sy(v)]); if (t > 1.8 && t < 7.1) worstK = Math.max(worstK, Math.abs(v - E.flySpeed(t))); }
+  poly(x, keySpeed, C.cyanD, 2);
+  poly(x, pts.filter((_, i) => i % 5 === 0).map(p => [mx(p[0]), sy(p[2] / 770)]), C.mag, 2.5);
+  txt(x, 'speed curve, integrated (the prompt)', X + 8, 40, { color: C.magT, font: `700 12px ${FONT_MONO}` });
+  txt(x, 'position keys every 0.5 s → wobbly speed', X + 8, 56, { color: C.cyanD, font: `700 12px ${FONT_MONO}` });
+  axes(x, X, 200, w, 90, { title: 'Position down the page (the integral of speed)', xl: 't (s) →' });
+  const maxP = pts[pts.length - 1][1]; poly(x, pts.filter((_, i) => i % 5 === 0).map(p => [mx(p[0]), 290 - p[1] / maxP * 86]), C.ink, 2.5);
+  $('#fsR').textContent = `integrated: cruise stays inside 0.94–1.10 by construction · travels ${Math.round(maxP)} page px by 8.3 s\nkeyed every 0.5 s: during cruise the speed deviates up to ${(worstK * 100).toFixed(0)}% from the intended curve → "stops or surges in the glide"`;
+}
+function initDof() {
+  const cv = $('#dfCanvas'); prep(cv);
+  function draw(f) {
+    const x = ctx2(cv); x.clearRect(0, 0, 860, 240); const X = 50, Y = 20, w = 790, h = 190, d0 = 300, d1 = 4000, mx = d => X + (d - d0) / (d1 - d0) * w, my = b => Y + h - b / 130 * h;
+    axes(x, X, Y, w, h, { title: 'Blur radius (px) by distance from the lens', xl: 'depth (px) →' });
+    poly(x, [[X, my(120)], [X + w, my(120)]], C.muted, 1, [4, 4]); txt(x, 'cap 120px', X + w - 70, my(120) - 4, { font: `500 11px ${FONT_MONO}`, color: C.muted });
+    const P = []; for (let d = d0; d <= d1; d += 10) P.push([mx(d), my(E.dofBlur(d, f))]); poly(x, P, C.mag, 2.5);
+    x.strokeStyle = C.ink; x.lineWidth = 2; x.beginPath(); x.moveTo(mx(f), Y); x.lineTo(mx(f), Y + h); x.stroke(); txt(x, 'focus', mx(f) + 4, Y + 14, { font: `700 12px ${FONT_MONO}` });
+    const nearD = f * 0.6, farD = f * 1.6;
+    [[nearD, 'near'], [farD, 'far']].forEach(([d, n]) => { const b = E.dofBlur(d, f); x.beginPath(); x.arc(mx(d), my(b), 5, 0, 7); x.fillStyle = C.ink; x.fill(); txt(x, `${n} ${Math.round(d)}px → ${b.toFixed(1)}px blur`, mx(d) + 8, my(b) - 8, { font: `600 12px ${FONT_MONO}` }); });
+  }
+  bindRange('#dfF', '#dfFO', null, draw);
+}
+
+/* ---------- translations & prompts ---------- */
+const TR = {};
+const SOURCES = [
+  ['zero (@twoclipping): How I Make $10K Launch Videos for $0 with Opus 5.5 (Full Course), X, September 28, 2026', 'https://x.com/twoclipping/status/2104446706741825818'],
+  ['zero: the viral UI morph post with its prompt, X, September 24, 2026', 'https://x.com/twoclipping/status/2103273003555402193'],
+  ['Latent Space · AINews: Opus 5.5 is good at explainer videos (view counts, Terminal-Bench, @rexan_wong)', 'https://www.latent.space/p/ainews-opus-55-is-good-at-explainer'],
+  ['João Queirós: How zero Makes Code-Rendered Launch Videos With Opus 5.5 (an independent summary, with a critique of the "$0" claim)', 'https://www.ai.joaoqueiros.com/blog/opus-5-5-code-rendered-launch-video-zero-workflow'],
+  ['yihui-dev/awesome-opus5-5-videos: 703 prompts, including zero\'s', 'https://github.com/yihui-dev/awesome-opus5-5-videos'],
+  ['zero\'s "beat-synced footage" prompt (3 subframes, preserve-3d)', 'https://github.com/yihui-dev/awesome-opus5-5-videos/blob/main/prompts/twoclipping-000267.md'],
+  ['howseen-ai/claude-motion-design: an open-source (MIT) skill for the same method', 'https://github.com/howseen-ai/claude-motion-design'],
+  ['BeatAPI (Hugging Face blog): token cost per film (~90K/15K)', 'https://huggingface.co/blog/karmen-beatapi/how-to-make-videos-with-claude-opus-5-5'],
+  ['laozhang blog: Claude Opus 5.5 Video Generation: Code In, Rendered MP4 Out (effort high/xhigh)', 'https://blog.laozhang.ai/en/posts/claude-opus-5-5-video-generation'],
+  ['claudevideo.org: an index of 1,276 Opus 5.5 films by views', 'https://claudevideo.org/videos'],
+  ['Revid: Claude Opus 5.5 motion graphics, ranked (Develop: ~106K views)', 'https://www.revid.ai/claude-motion-graphics'],
+  ['Mixkit License: a separate license for each item type', 'https://mixkit.co/license/'],
+  ['Pexels License', 'https://www.pexels.com/license/'],
+  ['Playwright: Screenshots', 'https://playwright.dev/docs/screenshots'],
+  ['FFmpeg Filters Documentation (tmix, loudnorm)', 'https://ffmpeg.org/ffmpeg-filters.html']
+];
+
+function initStatic() {
+  for (const k of ['food', 'print', 'ui', 'fly']) {
+    const el = document.getElementById('P-' + k); if (!el) continue; const src = el.textContent.trim();
+    $$(`pre[data-prompt="${k}"]`).forEach(p => p.textContent = src);
+    const tr = document.getElementById('tr-' + k); if (tr) tr.remove();
+  }
+  $('#yuvPrompt').textContent = document.getElementById('P-yuv').textContent.trim();
+  $('#srcList').innerHTML = SOURCES.map(([t, u]) => `<li>${t.replace(/</g, '&lt;')} · <a href="${u}" target="_blank" rel="noopener" class="ltr">${u.replace(/^https?:\/\//, '')}</a></li>`).join('');
+  // copy buttons
+  $$('.code .cp').forEach(b => b.addEventListener('click', async () => { const t = b.parentElement.querySelector('pre').textContent; try { await navigator.clipboard.writeText(t); } catch (e) { const ta = document.createElement('textarea'); ta.value = t; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); } b.textContent = 'Copied ✓'; setTimeout(() => b.textContent = 'Copy', 1400); }));
+  // table of contents + progress
+  const toc = $('#toc'); $$('section[data-toc]').forEach(s => { const a = document.createElement('a'); a.href = '#' + s.id; a.innerHTML = `<span>${s.querySelector('.num').textContent}</span>${s.dataset.toc}`; a.addEventListener('click', () => { toc.classList.remove('open'); $('#tocBtn').setAttribute('aria-expanded', 'false'); }); toc.appendChild(a); });
+  $('#tocBtn').addEventListener('click', () => { const o = toc.classList.toggle('open'); $('#tocBtn').setAttribute('aria-expanded', o); });
+  const prog = $('#prog'); window.addEventListener('scroll', () => { const h = document.documentElement; prog.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%'; }, { passive: true });
+}
+
+/* ---------- boot: labs start when they scroll near ---------- */
+function boot() {
+  initStatic();
+  initFilm();
+  const lazy = [['#flipCanvas', initFlip], ['#tmA', initTimer], ['#ezCanvas', initEase], ['#spCanvas', initSpring], ['#tabCanvas', initTabs], ['#mfA', initMorph], ['#zmA', initZoom], ['#bcR', initBeatCalc], ['#btCanvas', initBeat], ['#pkCanvas', initPeak], ['#mbCanvas', initBlur], ['#csCanvas', initSheet], ['#ppCanvas', initPops], ['#rcR', initCost], ['#anBlocks', initAnat], ['#fsCanvas', initFly], ['#dfCanvas', initDof]];
+  lazy.forEach(([sel, fn]) => { const el = $(sel); if (el) onVisible(el, () => { try { fn(); } catch (e) { console.error(sel, e); } }); });
+  if (document.fonts) document.fonts.ready.then(() => { window.__fontsReady = true; });
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
+})();
+</script>
+<script>
+(() => {
+  const vids = [...document.querySelectorAll('video.hloop')];
+  if (!vids.length) return;
+  const still = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (still) { vids.forEach(v => { v.removeAttribute('autoplay'); v.pause(); }); return; }
+  if (!('IntersectionObserver' in window)) return;
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) { const p = e.target.play(); if (p && p.catch) p.catch(() => {}); } else e.target.pause();
+  }), { threshold: 0.05 });
+  vids.forEach(v => io.observe(v));
+})();
+</script>
+<button id="toTop" type="button" aria-label="Back to top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+<script>
+(function () { /* back to top: shows after 900px of scroll */
+  var b = document.getElementById('toTop'); if (!b) return;
+  var rm = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var on = function () { b.classList.toggle('show', (document.documentElement.scrollTop || document.body.scrollTop) > 900); };
+  window.addEventListener('scroll', on, { passive: true }); on();
+  b.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: rm ? 'auto' : 'smooth' }); });
+})();
+</script>
+</body>
+</html>

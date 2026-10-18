@@ -1,9 +1,10 @@
 <p align="center">
-  <a href="https://hoodini.github.io/motion-in-code/"><img src="media/readme/banner.jpg" alt="Motion in Code: studio-grade launch films, written as code by Claude Opus 5.5" width="100%"></a>
+  <a href="https://news.yuv.ai/motion"><img src="media/readme/banner.jpg" alt="Motion in Code: studio-grade launch films, written as code by Claude Opus 5.5" width="100%"></a>
 </p>
 
 <p align="center">
-  <a href="https://hoodini.github.io/motion-in-code/"><img alt="Live page" src="https://img.shields.io/badge/LIVE_PAGE-hoodini.github.io%2Fmotion--in--code-FF8F3A?style=for-the-badge&labelColor=12163F"></a>
+  <a href="https://news.yuv.ai/motion"><img alt="Live page in Hebrew" src="https://img.shields.io/badge/HEBREW-news.yuv.ai%2Fmotion-FF8F3A?style=for-the-badge&labelColor=12163F"></a>
+  <a href="https://yuv.ai/motion"><img alt="Live page in English" src="https://img.shields.io/badge/ENGLISH-yuv.ai%2Fmotion-5EA9F2?style=for-the-badge&labelColor=12163F"></a>
   <img alt="1080p, 60 fps, motion blur" src="https://img.shields.io/badge/1080P_%C2%B7_60_FPS-motion_blur-FFC74E?style=for-the-badge&labelColor=12163F">
   <img alt="Made with Claude Opus 5.5" src="https://img.shields.io/badge/MADE_WITH-Claude_Opus_5.5-F56B49?style=for-the-badge&labelColor=12163F">
 </p>
@@ -12,8 +13,8 @@ No After Effects and no timeline editor. Every frame of these films is a pure fu
 
 This repo holds four things:
 
-- **[The page](https://hoodini.github.io/motion-in-code/)**: a Hebrew deep dive into the method, in 19 chapters with 16 live labs.
-- **[The catalog](https://hoodini.github.io/motion-in-code/catalog.html)**: 18 live building blocks you can ask Claude for, each explained from zero with a full prompt, plus a prompt builder.
+- **The page** ([Hebrew](https://news.yuv.ai/motion) · [English](https://yuv.ai/motion)): a deep dive into the method, in 19 chapters with 16 live labs.
+- **The catalog** ([Hebrew](https://news.yuv.ai/motion/catalog) · [English](https://yuv.ai/motion/catalog)): 18 live building blocks you can ask Claude for, each explained from zero with a full prompt, plus a prompt builder.
 - **[The films](#-the-films)**: three finished films made with the method, each in 9:16 and 16:9.
 - **[The kit](#-the-kit)**: the open code behind the films.
 
@@ -47,15 +48,15 @@ The first version worked technically and still looked anemic. The second changed
 
 ## 📖 The page
 
-<p align="center"><a href="https://hoodini.github.io/motion-in-code/"><img src="media/readme/desk.jpg" width="100%" alt="Four sections of the page: the scrubbable hero film, the bottom line, the reel, the pipeline"></a></p>
+<p align="center"><a href="https://news.yuv.ai/motion"><img src="media/readme/desk.jpg" width="100%" alt="Four sections of the page: the scrubbable hero film, the bottom line, the reel, the pipeline"></a></p>
 
-<p align="center"><a href="https://hoodini.github.io/motion-in-code/"><img src="media/readme/mobile.jpg" width="100%" alt="The page on a phone: hero, the bottom line and the core trick"></a></p>
+<p align="center"><a href="https://news.yuv.ai/motion"><img src="media/readme/mobile.jpg" width="100%" alt="The page on a phone: hero, the bottom line and the core trick"></a></p>
 
 ## 🗂 The catalog
 
-**[hoodini.github.io/motion-in-code/catalog.html](https://hoodini.github.io/motion-in-code/catalog.html)** is a live catalog of the building blocks you can ask Claude to put in a motion film, written in Hebrew for people who have never opened After Effects.
+**[news.yuv.ai/motion/catalog](https://news.yuv.ai/motion/catalog)** (Hebrew) and **[yuv.ai/motion/catalog](https://yuv.ai/motion/catalog)** (English) are a live catalog of the building blocks you can ask Claude to put in a motion film, written for people who have never opened After Effects.
 
-<p align="center"><a href="https://hoodini.github.io/motion-in-code/catalog.html"><img src="media/readme/catalog.jpg" width="100%" alt="The catalog: zero-knowledge foundations, a shadcn/ui app tour controlled by t, three.js devices with live screens, and the prompt builder"></a></p>
+<p align="center"><a href="https://news.yuv.ai/motion/catalog"><img src="media/readme/catalog.jpg" width="100%" alt="The catalog: zero-knowledge foundations, a shadcn/ui app tour controlled by t, three.js devices with live screens, and the prompt builder"></a></p>
 
 | Chapter | What's inside |
 |---|---|
@@ -77,9 +78,26 @@ npm i
 node build.mjs                 # -> ../catalog/ (code-split per demo) and catalog.html's CSS
 ```
 
+## 🌍 Where the pages live
+
+The Hebrew pages are the source. `index.html` (the method) and `catalog.html` (the catalog) are edited here, the English edition is assembled from them, and both are published to their own domains, each with that site's own reading analytics (page views, the sections people reached, scroll depth, engaged time and every prompt copy).
+
+| Edition | Address | Repo it is published into |
+| --- | --- | --- |
+| Hebrew | [news.yuv.ai/motion](https://news.yuv.ai/motion) · [/catalog](https://news.yuv.ai/motion/catalog) | `hoodini/yuvai-newsroom` |
+| English | [yuv.ai/motion](https://yuv.ai/motion) · [/catalog](https://yuv.ai/motion/catalog) | `hoodini/yuv-ai-portfolio` |
+
+The old GitHub Pages addresses redirect to the Hebrew pages. Media stays here and is served from GitHub Pages.
+
+```bash
+python3 i18n/gen_en_css.py     # English type + left-to-right overrides -> catalog/en.css
+python3 i18n/build_en.py       # index.en.html + catalog.en.html from the Hebrew pages and the slices in i18n/en/
+python3 site/export.py --news ../yuvai-newsroom --yuv ../yuv-ai-portfolio   # public/motion in both sites
+```
+
 ## 🧪 The labs
 
-<p align="center"><a href="https://hoodini.github.io/motion-in-code/#s8"><img src="media/readme/labs.jpg" width="100%" alt="Six of the labs: springs, beat and drop detection, motion blur, pop scanner, log-space zoom, wall clock vs seek(t)"></a></p>
+<p align="center"><a href="https://news.yuv.ai/motion#s8"><img src="media/readme/labs.jpg" width="100%" alt="Six of the labs: springs, beat and drop detection, motion blur, pop scanner, log-space zoom, wall clock vs seek(t)"></a></p>
 
 Each lab computes live in the browser with [`engine/engine.js`](engine/engine.js), the same math the films use. The engine has tests:
 

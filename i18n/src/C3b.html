@@ -1,0 +1,276 @@
+<!-- ============ 05 3D ============ -->
+<section class="sec s-navy" id="c5" data-folio="05" data-toc="תלת-ממד: three.js">
+  <div class="sh"><span class="num">05</span><div><h2>תלת-ממד עם three.js</h2><p class="sub">טלפונים, זכוכית, חלקיקים, ים. ומה כל מילה בפרומפט אומרת.</p></div></div>
+  <div class="body">
+    <p><b>three.js</b> היא הספרייה הפופולרית ביותר לתלת-ממד ברשת, חינמית ב-MIT. היא יושבת מעל WebGL, הדרך לצייר עם כרטיס המסך, וחוסכת את אלפי שורות הקוד שהוא דורש. כדי להבין פרומפט של תלת-ממד, עוזר לחשוב על סט צילומים:</p>
+    <ul>
+      <li><b>Scene</b> (סצנה): הבמה, שעליה מניחים הכל.</li>
+      <li><b>Camera</b> (מצלמה): מאיפה מסתכלים, ובאיזו זווית ראייה (רחבה כמו עדשה רחבה, או צרה כמו עדשת טלה, עדשת זום).</li>
+      <li><b>Mesh</b> (גוף): כל אובייקט. הוא בנוי משני חלקים: <b>Geometry</b>, הצורה עצמה, ו-<b>Material</b>, החומר של המעטפת: צבע, כמה הוא מבריק, כמה הוא מחוספס, האם הוא שקוף. כרטיס המסך יודע לצייר מהר מאוד דבר אחד, משולשים, ולכן כל צורה, גם כדור, מפורקת להרבה משולשים קטנים.</li>
+      <li><b>Light</b> (אור), ו-<b>Environment map</b>: תמונת 360° של הסביבה שמשתקפת במשטחים מבריקים. בלעדיה מתכת וזכוכית נראות אפורות ומתות, כי למתכת כמעט אין צבע משלה: רואים בה את מה שהיא משקפת, ובלי סביבה היא משקפת כלום.</li>
+      <li><b>Renderer</b> (הצלם): הופך את כל זה לתמונה דו-ממדית אחת, הפריים.</li>
+    </ul>
+    <p>עוד שני מושגים שחוזרים בפרומפטים. <b>PBR</b> (Physically Based Rendering) הם חומרים שמגיבים לאור לפי חוקי הפיזיקה, ולכן נראים אמיתיים בכל תאורה. שולטים בהם בעיקר בשני מספרים בין 0 ל-1: <code>metalness</code> (כמה הוא מתכת) ו-<code>roughness</code> (כמה הוא מחוספס: 0 הוא מראה, 1 הוא גיר). <b>GLTF</b> הוא פורמט הקובץ הסטנדרטי למודלים תלת-ממדיים, "ה-JPEG של התלת-ממד": מודל שבניתם בתוכנת תלת-ממד (למשל Blender, החינמית, שמופיעה בסוף הפרק) או הורדתם מאתר נכנס ל-three.js כקובץ GLTF. בכל ההדגמות כאן אפשר לגרור כדי לסובב. זה רק בתצוגה המקדימה: בסרטון, הזווית נקבעת מ-t.</p>
+  </div>
+
+  <article class="el" id="e-devices">
+    <div class="el-h"><span class="el-n">05.1</span><h3 class="el-t">טלפון ולפטופ עם מסכים חיים</h3><div class="el-tags"><span>three.js</span><span>CanvasTexture</span><span>PBR</span><span class="lic">MIT</span></div></div>
+    <div class="el-demo" data-demo="d3-devices"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>מה רואים</h4><p>מכסה של לפטופ נפתח, טלפון עולה לידו, והמצלמה מסתובבת לאט. על המסכים יש תוכן חי: בטלפון מונה של שכיבות סמיכה שמתמלא, בלפטופ קוד שמוקלד. הכל בונה את עצמו מצורות פשוטות בקוד, בלי שום קובץ מודל.</p>
+        <h4>תשובה כנה על "אייפון" ו"מקבוק"</h4><p>אלה מכשירים <b>גנריים</b> בהשראת טלפון ולפטופ מודרניים, לא מודלים של אפל. העיצוב של המכשירים והלוגו של אפל מוגנים. אם צריך מכשיר מוכר, משתמשים במודל GLTF שהרישיון שלו מתיר את השימוש, או בתבניות המכשירים הרשמיות שאפל מפרסמת למשווקים, לפי ההנחיות שלה.</p></div>
+        <div><h4>איך זה עובד</h4><ul>
+          <li>הגוף של כל מכשיר הוא קופסה עם פינות מעוגלות, בחומר PBR מתכתי, ומשתקף בו "חדר סטודיו" וירטואלי (<code>RoomEnvironment</code>).</li>
+          <li><b>המסך החי</b>: מציירים את ממשק המשתמש על Canvas דו-ממדי רגיל בכל פריים, והופכים אותו לטקסטורה (<code>CanvasTexture</code>), "מדבקה" שנמתחת על המסך התלת-ממדי. <code>needsUpdate = true</code> אומר ל-three.js להעתיק את הציור החדש לכרטיס המסך. ברירת המחדל היא לא להעתיק, כי העתקת תמונה לכרטיס המסך בכל פריים היא פעולה יקרה, וברוב הטקסטורות התמונה לא משתנה.</li>
+          <li>המכסה הוא ציר: הסיבוב שלו מחושב מ-t עם קפיץ. המצלמה נעה על מסלול עגול סביב המכשירים.</li></ul></div>
+      </div>
+      <div class="fit"><div class="y"><b>מתי כן</b>"זה עובד בכל מכשיר", הצגת אפליקציה בתוך העולם, מעבר מממשק שטוח למוצר אמיתי.</div><div class="n"><b>מתי לא</b>כשהצופה צריך לקרוא את מה שעל המסך: בזווית תלת-ממדית טקסט קטן נבלע. הראו את המסך שטוח, ורק אז הכניסו אותו למכשיר.</div></div>
+      <div class="prompt"><h5>פרומפט מלא</h5><div class="code"><span class="lbl">3D phone + laptop with live screens · three.js</span><button class="cp" type="button">העתק פרומפט</button><pre>&lt;inputs&gt;
+Ask me what each screen should show. If I skip it: the phone shows a push-up counter ring filling to 12 reps with a Hebrew title, the laptop shows code typing line by line.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 9-second 3D clip, 1920x1080, 60fps, three.js. A generic modern laptop opens its lid while a generic phone rises beside it; the camera orbits slowly around both. Both screens are live and animate in sync with the film.
+Devices: rounded aluminium-like bodies (PBR, metalness 0.8, roughness 0.3), black glass screens with a thin bezel, no brand logos. Background: the clear sky gradient #5EA9F2 → #93CBFF → #DDF0FF, a soft contact shadow under the devices. Accent colours on screen: #FFC74E, #FF8F3A, #F56B49.
+Banned: Apple logos or exact Apple product shapes, floating particles, lens flares, a camera that reverses direction.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM. Beats 0-3: lid opens on a spring. Beats 2-5: the phone rises. Beats 4-17: slow orbit, the counter ring fills on screen, the code types on the laptop at one line per beat.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file with three.js that exposes window.seek(t); every transform and every screen pixel is computed from t, no clocks.
+Build the devices from rounded boxes. For each screen, draw its UI on an offscreen 2D canvas every frame, wrap it in a CanvasTexture with colorSpace = SRGBColorSpace, and set needsUpdate = true after drawing. Use RoomEnvironment through PMREMGenerator for reflections and ACES tone mapping. The lid's rotation and the phone's height come from closed-form springs of t; the camera orbit angle is a smooth function of t.
+Capture with Playwright at 60fps (preserveDrawingBuffer on the renderer), assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Forgetting needsUpdate = true leaves the screen frozen on its first frame.
+- Screen text drawn on the canvas must be large; on a tilted 3D screen anything under about 28px becomes unreadable.
+- Never call renderer.setAnimationLoop; render once inside seek(t).
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me 3 stills (lid half open, phone up, mid orbit) before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-glass">
+    <div class="el-h"><span class="el-n">05.2</span><h3 class="el-t">כדור זכוכית נושם</h3><div class="el-tags"><span>three.js</span><span>MeshPhysicalMaterial</span><span>shader</span></div></div>
+    <div class="el-demo" data-demo="d3-glass"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>מה רואים</h4><p>כדור זכוכית שמשנה את צורתו לאט, כמו טיפה, וטבעת וכדורים קטנים סובבים סביבו. מאחוריו כתוב YUV.AI, והזכוכית מעקמת את הטקסט, בדיוק כמו כוס מים שמעוותת את מה שמאחוריה.</p>
+        <h4>החומר: זכוכית אמיתית</h4><p><code>MeshPhysicalMaterial</code> הוא החומר המתקדם של three.js. שלוש הגדרות הופכות אותו לזכוכית: <b>transmission</b> (כמה אור עובר דרכו), <b>thickness</b> (כמה הוא עבה, כי זכוכית עבה מעקמת יותר), ו-<b>ior</b>, מקדם השבירה: כמה האור מתכופף כשהוא נכנס לחומר. לזכוכית זה בערך 1.5, למים 1.33.</p></div>
+        <div><h4>איך הוא "נושם"</h4><p>כל נקודה על פני הכדור נדחפת החוצה או פנימה לפי <b>רעש</b> (noise): פונקציה שנותנת ערכים אקראיים אבל חלקים, כך ששכנות מקבלות ערכים קרובים, וזה נראה אורגני ולא מרצד. את החישוב עושה <b>שיידר</b> (shader): תוכנה קטנה שרצה על כרטיס המסך, על כל הנקודות במקביל. מכניסים לשיידר המובנה של three.js כמה שורות בעזרת <code>onBeforeCompile</code>, ומעבירים לו את t כמשתנה (<code>uTime</code>).</p></div>
+      </div>
+      <div class="fit"><div class="y"><b>מתי כן</b>רגע "פרימיום", לוגו או שם מוצר מאחורי זכוכית, מעבר בין פרקים.</div><div class="n"><b>מתי לא</b>רקע בהיר ושטוח: לזכוכית אין מה לשבור, והיא נראית כמו פלסטיק אפור.</div></div>
+      <div class="prompt"><h5>פרומפט מלא</h5><div class="code"><span class="lbl">liquid glass orb · three.js</span><button class="cp" type="button">העתק פרומפט</button><pre>&lt;inputs&gt;
+Ask me for the word that sits behind the glass. If I skip it, use "YUV.AI".
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 12-second loopable 3D clip, 1920x1080, 60fps. A liquid glass orb slowly breathes (its surface swells and settles organically) in front of a large word set in Anton in the fire gradient #FFC74E → #FF8F3A → #F56B49, which it refracts. An orange torus ring tilts slowly behind it and five small glossy spheres in brand colours (#FFC74E, #12163F, #F56B49, #5EA9F2, #D74270) orbit it. Background: the sky gradient #2C78D2 → #93CBFF → #F4FBFF, one white key light from the upper right.
+Banned: rainbow chromatic aberration, bloom everywhere, particles, a glass that looks grey.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+One breath cycle every 4 beats at 120 BPM (2s). The orbiting spheres complete one orbit over the full 12s so the clip loops seamlessly.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file with three.js that exposes window.seek(t); every uniform and transform is computed from t.
+Material: MeshPhysicalMaterial with transmission 1, thickness 1.2, ior 1.45, roughness 0.05, an environment map from RoomEnvironment via PMREMGenerator. Displace vertices along their normals with 3D simplex noise injected through onBeforeCompile; the shader's uTime uniform is set from t every frame. Use a high-segment sphere (at least 128×128) so the displacement is smooth.
+Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Transmission needs an environment map and something behind the object, or the glass reads as grey.
+- After displacing vertices, recompute normals in the shader (or use a normal-from-noise approximation), or the lighting looks flat.
+- For a seamless loop, make every periodic motion an integer number of cycles over the clip's length.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me 2 stills (inhale and exhale) before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-particles">
+    <div class="el-h"><span class="el-n">05.3</span><h3 class="el-t">20,000 חלקיקים שמשנים צורה</h3><div class="el-tags"><span>three.js</span><span>Points</span><span>GPU</span></div></div>
+    <div class="el-demo" data-demo="d3-particles"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>מה רואים</h4><p>עשרים אלף נקודות שעוברות בין ארבע צורות: כדור, קשר, המילה AI, וגלקסיה. אותה טכניקה מופעלת בראש העמוד. רגע: "חלקיקים" ברשימת האסור של zero, לא? כן, כי חלקיקים <b>סתמיים</b> ברקע הם קלישאה. חלקיקים שהופכים למילה ומספרים משהו הם כבר טכניקה.</p></div>
+        <div><h4>איך זה עובד</h4><ul>
+          <li><code>Points</code> הוא אובייקט של three.js שמצייר כל נקודה ברשימה כנקודה על המסך, כולן בבת אחת על כרטיס המסך. 20,000 כאלה ב-DOM היו חונקים את הדפדפן (ראו מעבדה 0.6).</li>
+          <li>לכל צורה מחשבים מראש 20,000 מיקומי יעד. את המילה דוגמים מציור שלה: כותבים אותה על Canvas דו-ממדי, וקוראים אילו פיקסלים נצבעו.</li>
+          <li>המיקום של כל נקודה = ערבוב בין הצורה הקודמת לבאה, לפי התקדמות עם האטה: <code>mix(A, B, ease(p))</code>. לכל נקודה עיכוב קטן משלה, כדי שהמעבר ייראה כמו נחיל ולא כמו בלוק.</li></ul></div>
+      </div>
+      <div class="fit"><div class="y"><b>מתי כן</b>פתיחה או סגירה, "מכאוס לסדר", לוגו שנבנה מאלפי נקודות.</div><div class="n"><b>מתי לא</b>כרקע שזז מאחורי טקסט: זו בדיוק הקלישאה, והיא מתחרה בקריאה.</div></div>
+      <div class="prompt"><h5>פרומפט מלא</h5><div class="code"><span class="lbl">particle morph · three.js Points</span><button class="cp" type="button">העתק פרומפט</button><pre>&lt;inputs&gt;
+Ask me for the word or logo the particles should form. If I skip it, use "AI".
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+An 11-second 3D clip, 1920x1080, 60fps. 20,000 particles morph from a sphere into a torus knot, into a word, into a spiral galaxy, holding each shape for about 1.6s. Particles are small soft dots in #FFC74E, #FF8F3A, #F56B49 and a little #5DE4E9, additive blending on #0B0E2A. The camera drifts slowly.
+Banned: particles drifting randomly in the background, bloom halos around everything, a linear morph.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM. Each morph takes 3 beats (1.5s) and starts on a downbeat; each hold is just over 3 beats.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file with three.js that exposes window.seek(t); positions are computed from t every frame, no simulation state.
+THREE.Points with a fixed count of 20,000. Precompute a Float32Array of target positions per shape: sphere (Fibonacci sphere), torus knot (TorusKnotGeometry vertices, resampled), word (draw it on a 2D canvas, sample lit pixels, add a little depth jitter), galaxy (logarithmic spiral arms with noise). position = mix(A, B, easeInOut(progress)), with a small per-particle delay. Custom point shader for round soft dots.
+Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Every shape must have exactly the same particle count; resample, never truncate.
+- Seed the random jitter (a fixed seed), so frame 300 is identical on every render.
+- Additive blending with depthWrite on causes black squares; set depthWrite: false.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me one still of each shape before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-ocean">
+    <div class="el-h"><span class="el-n">05.4</span><h3 class="el-t">ים ושמיים: מיום לשקיעה</h3><div class="el-tags"><span>three.js</span><span>Sky</span><span>Water</span></div></div>
+    <div class="el-demo" data-demo="d3-ocean"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>מה רואים</h4><p>ים רגוע ושמיים שעוברים מצהריים לשקיעה וחזרה, בשתים-עשרה שניות. זה ה-time-lapse מסרט ההשקה YUV.AI MOTION, שבו המכשירים צפים מעל המים.</p></div>
+        <div><h4>איך זה עובד</h4><ul>
+          <li><code>Sky</code> הוא תוסף של three.js שמחשב את צבע השמיים מהמיקום של השמש, לפי מודל פיזיקלי של פיזור אור באטמוספרה. למה כתום? האוויר מפזר אור כחול הרבה יותר מאור אדום. כשהשמש נמוכה, האור שלה עובר דרך הרבה יותר אוויר בדרך אלינו, רוב הכחול מתפזר לצדדים, ומה שמגיע הוא בעיקר כתום ואדום. לא מציירים שקיעה: מורידים את השמש.</li>
+          <li><code>Water</code> הוא תוסף שמצייר את הסצנה פעם נוספת, כמו במראה מתחת לפני המים, ומעוות את ההשתקפות בדפוס גלים שזז לפי t.</li>
+          <li>שעת היום היא מספר אחד שמחושב מ-t, וממנו נגזרים גובה השמש, צבע האור והחשיפה.</li></ul></div>
+      </div>
+      <div class="fit"><div class="y"><b>מתי כן</b>"מעבר זמן", אווירה, רקע לסצנת מוצר תלת-ממדית, סיום רגשי.</div><div class="n"><b>מתי לא</b>סרטון ממשק טהור: עולם שלם מסיח את הדעת מהאפליקציה.</div></div>
+      <div class="prompt"><h5>פרומפט מלא</h5><div class="code"><span class="lbl">ocean time-lapse · three.js Sky + Water</span><button class="cp" type="button">העתק פרומפט</button><pre>&lt;inputs&gt;
+Ask me whether something should float above the water (a product, a logo). If I skip it, keep the scene empty.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 12-second 3D clip, 1920x1080, 60fps. A calm open ocean under a physically based sky. Time of day goes from midday to golden hour to sunset and back to day, so the clip loops. The camera is low over the water and drifts forward slowly. Warm sunset tones should land near #FF8F3A and #F56B49, the day sky near #5EA9F2.
+Banned: lens flares, birds, a sun that jumps, choppy stormy waves.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM. The sun reaches its lowest point on beat 12 (6s), exactly mid-clip.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file with three.js and its Sky and Water addons, exposing window.seek(t).
+One number tod(t) from 0 (midday) to 1 (sunset) drives the sun's elevation, the Sky's turbidity and rayleigh, the directional light's colour and the renderer's exposure. The Water shader's time uniform is set from t every frame.
+Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- The Water addon advances its own time if you let it. Set material.uniforms.time.value from t every frame.
+- Update the sun direction on both the Sky and the Water, or the reflection points at a different sun.
+- Lower exposure at sunset, or the sky blows out to white.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me stills at midday, golden hour and sunset before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-carousel">
+    <div class="el-h"><span class="el-n">05.5</span><h3 class="el-t">קרוסלת כרטיסים שנעצרת על הביט</h3><div class="el-tags"><span>three.js</span><span>sum of springs</span></div></div>
+    <div class="el-demo" data-demo="d3-carousel"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>מה רואים</h4><p>שישה כרטיסים על טבעת בתלת-ממד, שמסתובבת צעד אחד בכל ביט, עוברת קצת את המקום ונעצרת. זה הרגע מסרט ההשקה שבו הלחיצה מתפוצצת לקרוסלה.</p></div>
+        <div><h4>איך זה עובד: סכום של קפיצים</h4><p>הזווית של הטבעת היא <b>סכום</b>: לכל ביט יש קפיץ משלו, שמתחיל בזמן של אותו ביט ומוסיף צעד אחד (60°, כי 360° חלקי 6 כרטיסים). <code>angle = Σ step × spring(t − beat_i)</code>. הסימן Σ (סיגמה) פירושו "חבר את כולם": לכל ביט i, שמתחיל בזמן beat_i, מוסיפים את הקפיץ שלו. כל קפיץ עובר קצת את היעד וחוזר, ולכן כל צעד "נוחת". ומאחר שזה סכום של נוסחאות סגורות, אפשר לחשב את הזווית בכל רגע, גם אם קופצים לאמצע.</p><p>כל כרטיס מסתובב גם סביב עצמו כדי לפנות תמיד למצלמה, אחרת הטקסט בכרטיסים שמאחור נראה הפוך, כמו בראי.</p></div>
+      </div>
+      <div class="fit"><div class="y"><b>מתי כן</b>הצגת קטגוריות, פיצ'רים או תבניות, כשכל אחד מקבל ביט.</div><div class="n"><b>מתי לא</b>כשצריך לקרוא את תוכן הכרטיסים לעומק: הם עוברים מהר מדי.</div></div>
+      <div class="prompt"><h5>פרומפט מלא</h5><div class="code"><span class="lbl">3D card carousel on the beat · three.js</span><button class="cp" type="button">העתק פרומפט</button><pre>&lt;inputs&gt;
+Ask me for the card titles (6 to 8). If I skip them, use the six categories of this catalog in Hebrew: גרפים, ממשק, אייקונים, טיפוגרפיה, תלת-ממד, אפקטים.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 6.6-second 3D clip, 1920x1080, 60fps. Six cards stand on a ring in 3D, facing outward. The ring snaps one card forward on every beat with a small overshoot. The front card is slightly larger and fully lit; the others dim with distance. Cards: white with a 28px radius, a navy title in Karantina 700 and a fire-gradient icon chip; background the sky gradient #5EA9F2 → #93CBFF → #DDF0FF.
+Banned: continuous spinning, motion blur streaks, cards that show mirrored text.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM: a snap every 0.5s for 12 beats.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file with three.js exposing window.seek(t).
+Each card is a plane with a CanvasTexture drawn once. Ring rotation = sum over beats of step × spring(t − beatTime_i), with step = 2π / cardCount and this closed-form spring, ω = 14 and ζ = 0.6: spring(t) = 1 − e^(−ζωt)·(cos(ω_d·t) + (ζω/ω_d)·sin(ω_d·t)), ω_d = ω·√(1 − ζ²). Each card's own rotation counter-rotates so it always faces the camera.
+Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- If the cards face the ring's centre instead of the camera, the far ones read mirrored.
+- Use sRGB colour space on the textures, or the brand colours look washed out.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me stills at beats 1, 4 and 8 before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-eq">
+    <div class="el-h"><span class="el-n">05.6</span><h3 class="el-t">אקולייזר תלת-ממדי</h3><div class="el-tags"><span>three.js</span><span>InstancedMesh</span></div></div>
+    <div class="el-demo" data-demo="d3-eq"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>מה רואים</h4><p>רשת של 20×20 עמודים שגל עובר בה, וכל ביט נותן לה "בעיטה" מהמרכז החוצה. הצבע תלוי בגובה: נמוך בכחול, בינוני בכתום, גבוה בזהב. כאן הגל מחושב מנוסחה; בסרט אמיתי הגבהים מגיעים מהמוזיקה עצמה.</p>
+        <h4>מהמוזיקה, בלי לשבור את השעון</h4><p>מנתח שמע חי בדפדפן רץ לפי שעון הקיר, ולכן לא מתאים לצילום. במקום זה מנתחים את השיר <b>מראש</b>: לכל פריים מחשבים את <b>הספקטרום</b>, כמה אנרגיה יש בכל תדר (בס, אמצע, גבוהים), ושומרים בטבלה. בזמן הצילום רק קוראים את השורה של t.</p></div>
+        <div><h4>איך זה עובד: צורה אחת, 400 מופעים</h4><p>כל אובייקט נפרד ב-three.js הוא הוראת ציור נפרדת שהמעבד שולח לכרטיס המסך (<b>draw call</b>). אלפי הוראות כאלה בכל פריים מאטות את המעבד, גם כשכרטיס המסך פנוי. זה חשוב בעיקר לתצוגה המקדימה (0.6); הסרטון ייצא חלק בכל מקרה. <code>InstancedMesh</code> שולח <b>הוראה אחת</b>: "צייר את הקופסה הזו 400 פעמים, הנה המיקום והצבע של כל אחת". אותה תמונה, חלק קטן מהעבודה.</p></div>
+      </div>
+      <div class="fit"><div class="y"><b>מתי כן</b>סרטון מוזיקלי, "המוזיקה היא השעון", מעבר אנרגטי לפני הדרופ.</div><div class="n"><b>מתי לא</b>סרטון בלי מוזיקה בולטת: אקולייזר שזז על שקט נראה מנותק.</div></div>
+      <div class="prompt"><h5>פרומפט מלא</h5><div class="code"><span class="lbl">3D audio equalizer · InstancedMesh</span><button class="cp" type="button">העתק פרומפט</button><pre>&lt;inputs&gt;
+Ask me for the music track. If I skip it, use a royalty-free 120 BPM track with a clear kick (Mixkit, licensed for commercial use) and tell me which one.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 12-second 3D clip, 1920x1080, 60fps. A 20×20 grid of bars seen from a three-quarter angle above. Bar heights follow the music: bass in the centre, highs at the edges, and every kick sends a ring-shaped pulse from the centre outward. Colour by height from blue #2C78D2 through orange #FF8F3A to gold #FFC74E. Background #0B0E2A, a soft rim light.
+Banned: random heights not tied to the audio, bloom on everything, a camera that shakes.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+The track's own beat grid drives everything: measure the BPM and the kick times first.
+&lt;/structure&gt;
+
+&lt;build&gt;
+Analyse the track offline first (Python with librosa, or ffmpeg plus an FFT): for every frame at 60fps, store the energy of 20 frequency bands and the kick onsets in a JSON file.
+Then one HTML file with three.js exposing window.seek(t): one InstancedMesh of 400 boxes; for each frame, read row round(t × 60) of the JSON, set each instance's scale.y and colour with setMatrixAt and setColorAt, then set instanceMatrix.needsUpdate and instanceColor.needsUpdate. The pulse is a ring whose radius grows from each kick time.
+Capture with Playwright at 60fps and mux the same audio with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- A live Web Audio analyser runs on the wall clock. Precompute the spectrum, or picture and sound drift apart.
+- Scale boxes from their base, not their centre (translate the geometry up by half its height once).
+- Smooth the band energies over 2-3 frames, or the bars flicker.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me the detected BPM, the kick times and 2 stills before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+  <div class="body">
+    <h3>כשצריך יותר מזה</h3>
+    <ul>
+      <li><b>React Three Fiber</b>: three.js בצורת רכיבי React. שימושי כשהסצנה גדולה והפרויקט כבר ב-React. MIT. גרסה 9 שלו מיועדת ל-React 19.</li>
+      <li><b>Spline</b>: עורך תלת-ממד ויזואלי בדפדפן, בלי קוד. מעצבים ביד ומייצאים ל-GLTF, ל-three.js או ל-React. יש תוכנית חינמית.</li>
+      <li><b>Blender</b>: תוכנת תלת-ממד מלאה וחינמית, ברישיון GPL: מותר להשתמש בה לכל מטרה, גם מסחרית, ומה שיוצרים בה שלכם; התנאים של GPL חלים רק על מי שמשנה את התוכנה עצמה ומפיץ אותה. בונים בה מודלים מותאמים אישית ומייצאים GLTF. עקומת לימוד תלולה, תוצאה בלי גבולות.</li>
+    </ul>
+  </div>
+</section>
+

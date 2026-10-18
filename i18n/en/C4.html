@@ -1,0 +1,241 @@
+<!-- ============ 06 FX ============ -->
+<section class="sec s-cloud" id="c6" data-folio="06" data-toc="Effects and transitions">
+  <div class="sh"><span class="num">06</span><div><h2>Effects and transitions</h2><p class="sub">The "AI is thinking" neon, glass, an aurora glow, and transitions without a fade.</p></div></div>
+
+  <article class="el" id="e-neon">
+    <div class="el-h"><span class="el-n">06.1</span><h3 class="el-t">Neon edge: "the AI is thinking"</h3><div class="el-tags"><span>CSS</span><span>conic-gradient</span><span>mask</span></div></div>
+    <div class="el-demo" data-demo="fx-neon"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>What you see</h4><p>A text field with a colored edge spinning around it and a soft halo that pulses on every beat, while a request types itself inside. This has become the standard visual cue for the moment an AI is processing a request.</p></div>
+        <div><h4>How it works</h4><ul>
+          <li><b>conic-gradient</b> is a color gradient that sweeps around a point, like the hands of a clock: every angle gets a different color. Change the starting angle, and the colors rotate.</li>
+          <li><b>mask</b> cuts only a thin ring at the edge out of that gradient, so all that's left is a colored outline.</li>
+          <li>A second copy of the same gradient, blurred and placed behind, creates the halo. On every beat it briefly gets stronger.</li>
+          <li>The angle = t × 1.5 radians. A <b>radian</b> is a unit of angle, like a degree: a full turn is 2π, about 6.28 radians. At 1.5 radians per second we get a full turn about every 4.2 seconds, slow enough to feel like "thinking" rather than dizzying. On the page itself (the button at the top) the neon spins with a regular CSS animation, because nothing is being captured there. In the film, the angle comes from t.</li></ul></div>
+      </div>
+      <div class="fit"><div class="y"><b>When to use</b>A prompt field, the main action button, one central card. One element per screen.</div><div class="n"><b>When not to</b>On everything: neon everywhere cancels itself out and turns into noise.</div></div>
+      <div class="prompt"><h5>Full prompt</h5><div class="code"><span class="lbl">neon "AI is thinking" edge · CSS</span><button class="cp" type="button">Copy prompt</button><pre>&lt;inputs&gt;
+Ask me for the request that types into the field. If I skip it, use "Launch film for a fitness app".
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 6-second clip, 1920x1080, 60fps. A large white pill-shaped input field on the sky gradient #5EA9F2 → #93CBFF → #DDF0FF. Around it, an iridescent neon edge (a conic gradient of #5DE4E9, #4FA3FF, #8B6CFF, #FF66C4, #FF8F3A, #FFC74E) rotates slowly, with a soft blurred halo behind it that swells on every beat. The placeholder "What is the film about?" is replaced by the request typing in, with a blinking caret, and a round send button in the fire gradient with its arrow pointing right. Text in Inter, left to right.
+Banned: a glow that covers the text, neon on more than this one element, flicker.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM. The halo pulses on every beat. Typing starts on beat 2 at one letter per 16th note.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file exposing window.seek(t); every style is computed from t.
+The ring is a pseudo-element with background: conic-gradient(from var(--ang), …), masked to a 4px ring (-webkit-mask-composite: xor plus the standard mask-composite: exclude); a second copy behind it has filter: blur(22px). Set --ang = t × 1.5rad and the halo opacity from a beat-synced spring on every frame. Do not use a CSS keyframe animation.
+Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- A CSS @keyframes rotation runs on the wall clock and breaks the capture. Set the angle from t.
+- If you register --ang with @property and inherits: false, a value set on the element never reaches its ::before. Leave it unregistered (plain custom properties inherit) or register it with inherits: true.
+- Keep the mask on both -webkit-mask (with -webkit-mask-composite: xor) and mask (with mask-composite: exclude).
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me a still before typing and one mid-typing before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-glasscard">
+    <div class="el-h"><span class="el-n">06.2</span><h3 class="el-t">Glass card</h3><div class="el-tags"><span>CSS</span><span>backdrop-filter</span></div></div>
+    <div class="el-demo" data-demo="fx-glass"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>What you see</h4><p>A milky data card floating over moving blobs of color. The card itself is almost transparent; what gives it its look is the blur of whatever is behind it. Move the blur slider, and switch the glass off to see the difference.</p></div>
+        <div><h4>How it works</h4><p><code>backdrop-filter: blur()</code> blurs <b>what's behind</b> the element, not the element itself. <code>saturate()</code> boosts the colors of that blurred background, and that's what gives it the "liquid" feel. Add a thin, semi-transparent white border, and the glass seems to have thickness. The blobs move by the sin and cos of t.</p></div>
+      </div>
+      <div class="fit"><div class="y"><b>When to use</b>An info card over a colorful moving background, a notification over a photo, an interface in the "glass" style of modern operating systems.</div><div class="n"><b>When not to</b>Over a flat, solid background: there's nothing to blur, and the card just looks gray.</div></div>
+      <div class="prompt"><h5>Full prompt</h5><div class="code"><span class="lbl">frosted glass card · CSS backdrop-filter</span><button class="cp" type="button">Copy prompt</button><pre>&lt;inputs&gt;
+Ask me for the number and label on the card. If I skip them, use 268 "minutes this week" with a "+12%" chip.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 10-second loopable clip, 1080x1920, 60fps. Four large soft colour blobs (#FF8F3A, #5EA9F2, #FFC74E, #D74270) drift slowly on navy #12163F. A frosted glass card floats in the centre: background white at 16% opacity, a 1.5px white border at 40%, strong backdrop blur and saturation. On it, a big number in Inter 800, an uppercase label in Anton, and a small fire-gradient chip. The card springs in at the start.
+Banned: a glass card over a flat background, heavy drop shadows, noise textures on the card.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+The card springs in on beat 1 at 120 BPM; the blobs complete whole cycles over 10s so the clip loops.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file exposing window.seek(t); blob positions and the card's scale are computed from t, no CSS animations.
+The card uses backdrop-filter: blur(22px) saturate(1.6) (plus -webkit-backdrop-filter). Blob positions = sin/cos of t with different speeds, each completing an integer number of cycles in 10s.
+Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- backdrop-filter only shows when something moves behind the card; keep the blobs passing under it.
+- An ancestor with opacity below 1, filter, mask, clip-path, mix-blend-mode or will-change creates a new backdrop root and the card stops seeing the blobs; keep those off the card's ancestors.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me one still before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-aurora">
+    <div class="el-h"><span class="el-n">06.3</span><h3 class="el-t">Aurora background</h3><div class="el-tags"><span>Canvas 2D</span><span>blur</span><span>grain</span></div></div>
+    <div class="el-demo" data-demo="fx-aurora"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>What you see</h4><p>A background of huge, soft blobs of color drifting slowly, with a fine grain like film. Check "No blur" and the secret is out: these are five plain circles.</p>
+        <h4>How it works</h4><p>We draw five large circles in the brand colors, each moving along a path made of the sin and cos of t at its own speed, and blur them all with a very heavy blur (70 pixels). On top goes a faint layer of random noise.</p></div>
+        <div><h4>Why the grain matters</h4><p>A video stores each color channel (red, green, blue) in 8 bits, which means 256 levels. A subtle gradient, say from navy to a slightly lighter navy, uses maybe 20 of them. Across 1,000 pixels that's 20 steps, each 50 pixels wide, and the eye sees <b>stripes</b> (banding). The video file's compression makes it even worse. Subtle noise breaks up the stripes, because the eye averages it into one smooth tone. This technique is called <b>dithering</b>.</p></div>
+      </div>
+      <div class="fit"><div class="y"><b>When to use</b>A background for a headline or an end scene, a change of mood between chapters.</div><div class="n"><b>When not to</b>Behind small text or a busy interface: it lowers the contrast.</div></div>
+      <div class="prompt"><h5>Full prompt</h5><div class="code"><span class="lbl">aurora background with grain · Canvas</span><button class="cp" type="button">Copy prompt</button><pre>&lt;inputs&gt;
+Ask me for the headline that sits on top. If I skip it, use "FLY HIGH" in Anton.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 14-second loopable background clip, 1920x1080, 60fps. Five huge soft colour blobs (#5EA9F2, #FF8F3A, #FFC74E, #D74270, #93CBFF) drift slowly on navy #12163F and blend into an aurora, with fine film grain on top. The headline sits centred in white.
+Banned: hard edges, fast movement, a rainbow, grain so strong it looks dirty.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+No beat sync: the motion is slow and continuous. Every blob completes a whole number of cycles in 14s so the clip loops.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file exposing window.seek(t), drawing on a 2D canvas.
+Draw five large circles with ctx.filter = 'blur(70px)' at positions from sin/cos of t with different speeds. Overlay a tiled noise texture generated once from a seeded random function, at about 9% opacity.
+Capture with Playwright at 60fps. Encode with ffmpeg at a high bitrate (or -tune grain) so the compression keeps the grain.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Smooth gradients band after video compression. The grain hides it, but only if the encoder keeps it.
+- Generate the noise from a fixed seed so every frame uses the same pattern (a changing pattern looks like TV static).
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me one still with and one without grain before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-trans">
+    <div class="el-h"><span class="el-n">06.4</span><h3 class="el-t">Four transitions without a fade</h3><div class="el-tags"><span>Canvas 2D</span><span>flood</span><span>morph</span><span>wipe</span><span>iris</span></div></div>
+    <div class="el-demo" data-demo="transitions"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>Why no fade</h4><p>A <b>fade</b> (crossfade) is when one image slowly disappears and the next one appears underneath it. It's the first transition in every editing app, which is exactly why it looks like a "template". zero's rule: <b>every scene is born from an object that's already on screen.</b> That way the eye has something to follow instead of being cut off.</p>
+        <h4>FLOOD: fill the frame</h4><p>A button is pressed, and its color spreads out as a circle until it fills the whole screen. The final radius = the distance from the button to the farthest corner, so not a single sliver is left behind.</p>
+        <h4>MORPH: change shape</h4><p>A small pill widens, then grows taller and changes its corner rounding until it becomes a card. Width, height and corner radius each ride a spring of their own.</p></div>
+        <div><h4>WIPE: sweep across</h4><p>A new page enters from the right, led by a fire-gradient band. That band is what turns a plain wipe into something with energy.</p>
+        <h4>IRIS: close to a dot</h4><p>The screen closes into a shrinking circle until only a dot is left, and that dot becomes the dot in the YUV.AI logo. The radius shrinks <b>on a logarithmic scale</b>: in every equal stretch of time it shrinks by the same factor. In a 1920×1080 film it starts at 1,100 pixels, the distance from the center of the screen to a corner, so at first the circle covers everything, and it ends at 14, the size of the dot in the logo. Four equal steps: 1,100, 370, 125, 42, 14, each one 3 times smaller than the one before. Why not linear? A linear shrink removes the same number of pixels every frame: 18 pixels out of 1,100 are barely noticeable, but 18 out of 30 is more than half. So the circle hardly moves at first and then slams shut all at once, because the eye perceives changes in size as ratios, not as pixels.</p></div>
+      </div>
+      <div class="fit"><div class="y"><b>When to use</b>In every transition between scenes. Pick by the object on screen: a button floods, a pill becomes a card, a dot becomes a logo.</div><div class="n"><b>When not to</b>A transition that doesn't grow out of an object on screen looks like a cut, however polished it is.</div></div>
+      <div class="prompt"><h5>Full prompt</h5><div class="code"><span class="lbl">four transitions without a crossfade · Canvas</span><button class="cp" type="button">Copy prompt</button><pre>&lt;inputs&gt;
+Ask me for the scenes on each side of each transition. If I skip them, use simple title cards in my brand.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+An 11-second clip, 1920x1080, 60fps, showing four transitions in a row. FLOOD: a "Start" button is pressed and its fire gradient floods the frame as a growing circle. MORPH: a navy pill widens, then grows into a card with a progress bar. WIPE: a new page slides in from the right led by a fire-gradient band. IRIS: the frame closes into a shrinking circle that becomes the dot of the YUV.AI logo.
+Colours: navy #12163F, denim #AFCBEF, light #EEF3FB and #DDF0FF, fire #FFC74E → #FF8F3A → #F56B49. Titles in Anton, uppercase.
+Banned: crossfades, blur transitions, any transition that does not start from an object already on screen.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM. Each transition gets 2.8s; the main motion of each starts on a downbeat and takes about one beat.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file exposing window.seek(t), drawing on a 2D canvas.
+Flood: radius = distance from the button to the farthest corner × 1.03 × easeOut(progress). Morph: width, height and corner radius each follow a sum of springs. Wipe: clip the new page to a rectangle whose edge follows an eased progress, and draw a fire band at the edge. Iris: radius interpolated in log space, exp(lerp(log(rStart), log(rEnd), easeInOut(p))).
+Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- A flood radius smaller than the farthest corner leaves a sliver of the old scene.
+- Linear iris shrinking crawls at the start and snaps shut at the end; use log space.
+- Give each layer an explicit z-order so the flood covers the old scene but not the label it came from.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me one still in the middle of each transition before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+</section>
+
+<!-- ============ 07 TOOLS ============ -->
+<section class="sec s-denim" id="c7" data-folio="07" data-toc="Tools map">
+  <div class="sh"><span class="num">07</span><div><h2>Tools map: what else is out there</h2><p class="sub">The catalog is built on HTML and seek(t). Here are the tools that do the same job differently, and when each one wins.</p></div></div>
+  <div class="body"><p>All license and pricing details were checked on October 17, 2026. Prices change, so before any commercial work it's worth checking again through the link in the sources.</p></div>
+  <div class="tbl"><table class="tools">
+    <tr><th>Tool</th><th>What it is</th><th>When to pick it</th><th>License and price</th></tr>
+    <tr><td>HTML + seek(t)<small>This page's method</small></td><td>One HTML file that Claude writes from scratch, with a function that draws any moment. Playwright captures, ffmpeg assembles.</td><td>One film under full control, without installing a <b>framework</b> (a ready-made structure for a whole project, with its own rules and commands). Every library in the catalog fits inside it.</td><td class="lic">Free</td></tr>
+    <tr><td>Remotion<small>remotion.dev</small></td><td>A framework where every video is a React component that receives the frame number. Renders to MP4, in the cloud too.</td><td>Lots of similar videos from one template (for example, a personal video for every customer), or a team that already works in React.</td><td class="lic">Free for individuals and companies of up to 3 employees; paid company license above that</td></tr>
+    <tr><td>HyperFrames<small>HeyGen · v0.8</small></td><td>An HTML file where every element has <code>data-start</code> and <code>data-duration</code>, plus <b>deterministic</b> capture to MP4: every frame always comes out the same, exactly like seek(t). Built for <b>AI agents</b> (AI that carries out actions on its own, like Claude Code), and it ships with <b>skills</b>: instruction files that teach an agent how to work with the tool.</td><td>When we want the seek(t) method with a ready-made tool that runs from terminal commands (init, preview, render). It's still before version 1.0, so things may still change.</td><td class="lic">Open source, Apache 2.0</td></tr>
+    <tr><td>GSAP<small>gsap.com</small></td><td>An animation library built on timelines. A timeline can be paused and jumped to any moment, which makes it a good fit for frame-by-frame capture.</td><td>Complex choreography of many elements. HyperFrames uses it by default.</td><td class="lic">Completely free, commercial use included, with all plugins. Webflow's license (not open source) only forbids using it to build a no-code animation tool that competes with Webflow</td></tr>
+    <tr><td>Motion Canvas<small>motioncanvas.io</small></td><td>A library in TypeScript (a version of JavaScript where every value is labeled with its type, so mistakes get caught early), plus an editor with a live preview, for vector animations timed to a voiceover.</td><td>Explainer videos with a voiceover, diagrams, code that changes on screen.</td><td class="lic">Open source, MIT</td></tr>
+    <tr><td>Lottie<small>lottie-web</small></td><td>An animation format based on JSON (a simple text format for storing data). An animator builds the animation in After Effects and exports it with the Bodymovin plugin, and it plays in the browser and in apps. It can jump to any frame (<code>goToAndStop</code>).</td><td>When there's a ready-made animation from a designer, or from the LottieFiles library, and we want to drop it into a film.</td><td class="lic">The player is open source (MIT); each animation has its own license</td></tr>
+    <tr><td>Rive<small>rive.app</small></td><td>An editor for interactive animations that react to the user, using a "state machine": a list of states, such as "idle", "hover" and "pressed", plus rules for when to move between them.</td><td>Animation inside an app or a website that reacts to clicks. Less so for a linear film.</td><td class="lic">The players (runtimes) are open source (MIT); exporting requires a paid plan, from $9 a month billed annually</td></tr>
+    <tr><td>Spline<small>spline.design</small></td><td>A visual 3D editor in the browser.</td><td>Designing a 3D scene by hand, then exporting it to GLTF or to code.</td><td class="lic">Free plan, plus paid plans</td></tr>
+    <tr><td>React Three Fiber<small>pmndrs</small></td><td>three.js as React components.</td><td>A large 3D scene inside a React project.</td><td class="lic">Open source, MIT</td></tr>
+  </table></div>
+  <div class="body">
+    <h3>How to choose, in four questions</h3>
+    <ol>
+      <li><b>One film or a hundred?</b> One: HTML and seek(t). A hundred from the same template: Remotion or HyperFrames.</li>
+      <li><b>Is there a ready-made animation from a designer?</b> Lottie fits into any of these approaches.</li>
+      <li><b>Does it live inside an app and react to the user?</b> Rive. At that point it's no longer a video question.</li>
+      <li><b>Need a custom 3D model?</b> Blender or Spline, export to GLTF, and bring it into three.js.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ 08 BUILDER ============ -->
+<section class="sec s-fire" id="c8" data-folio="08" data-toc="Prompt builder">
+  <div class="sh"><span class="num">08</span><div><h2>Prompt builder</h2><p class="sub">Pick a format, a length, branding and elements from the catalog, and get one complete prompt for the whole film.</p></div></div>
+  <div class="body">
+    <p>There's no AI here. The builder assembles the prompt from fixed parts, so it's easy to see exactly which sentence each choice adds: every element adds a line to each of the six blocks, for example how to build it in <code>&lt;build&gt;</code> and which bug to warn about in <code>&lt;gotchas&gt;</code>. The music tempo and the length are converted into a number of beats, and the elements are spread across the film between a four-beat opening and a four-beat ending, in story order: first the product, then the proof (charts and numbers), and finally the trust (logos). Transitions and the background don't get a beat range of their own, because they aren't scenes: they're woven through the whole film. Write field 1 in English, since it goes into the prompt word for word.</p>
+  </div>
+  <article class="el" id="e-builder">
+    <div class="el-h"><span class="el-n">08.1</span><h3 class="el-t">Your prompt</h3><div class="el-tags"><span>6 blocks</span><span>live</span></div></div>
+    <div class="el-demo" data-demo="prompt-builder"><div class="stage"></div></div>
+    <div class="el-body"><p>Next step: paste it into Claude Code (or any coding agent), answer the questions it asks in <code>&lt;inputs&gt;</code>, and approve the beat map and the stills before the full render. The whole process, from capture to music, is in the <a href="index.html#s14">pipeline chapter on the method page</a>. (A coding agent is an AI that writes and runs code by itself, on your own computer.)</p></div>
+  </article>
+</section>
+
+<!-- ============ 09 SOURCES ============ -->
+<section class="sec s-cloud" id="c9" data-folio="09" data-toc="Sources">
+  <div class="sh"><span class="num">09</span><div><h2>Sources</h2><p class="sub">All links were checked and live on October 17, 2026.</p></div></div>
+  <ol class="src">
+    <li><a href="https://github.com/recharts/recharts" target="_blank" rel="noopener">Recharts</a>: the charting library, MIT.</li>
+    <li><a href="https://ui.shadcn.com/docs" target="_blank" rel="noopener">shadcn/ui · Introduction</a>: "This is not a component library", and how to add components.</li>
+    <li><a href="https://www.radix-ui.com/primitives" target="_blank" rel="noopener">Radix Primitives</a>: unstyled components that handle behavior and accessibility.</li>
+    <li><a href="https://tailwindcss.com" target="_blank" rel="noopener">Tailwind CSS</a></li>
+    <li><a href="https://lucide.dev" target="_blank" rel="noopener">Lucide</a>: the icon library, ISC.</li>
+    <li><a href="https://simpleicons.org" target="_blank" rel="noopener">Simple Icons</a> and <a href="https://github.com/simple-icons/simple-icons/blob/develop/DISCLAIMER.md" target="_blank" rel="noopener">their legal disclaimer</a> about trademarks.</li>
+    <li><a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> and <a href="https://threejs.org/docs/pages/MeshPhysicalMaterial.html" target="_blank" rel="noopener">MeshPhysicalMaterial</a>.</li>
+    <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/font-variant-numeric" target="_blank" rel="noopener">MDN · font-variant-numeric</a> (tabular-nums).</li>
+    <li><a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/stroke-dashoffset" target="_blank" rel="noopener">MDN · stroke-dashoffset</a></li>
+    <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/backdrop-filter" target="_blank" rel="noopener">MDN · backdrop-filter</a></li>
+    <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/gradient/conic-gradient" target="_blank" rel="noopener">MDN · conic-gradient()</a></li>
+    <li><a href="https://playwright.dev" target="_blank" rel="noopener">Playwright</a> and <a href="https://ffmpeg.org" target="_blank" rel="noopener">FFmpeg</a></li>
+    <li><a href="https://github.com/remotion-dev/remotion/blob/main/LICENSE.md" target="_blank" rel="noopener">Remotion · LICENSE</a>: free for individuals and companies of up to 3 employees.</li>
+    <li><a href="https://github.com/heygen-com/hyperframes" target="_blank" rel="noopener">HyperFrames (HeyGen)</a>, Apache 2.0, and <a href="https://yuv.ai/blog/hyperframes-heygen" target="_blank" rel="noopener">my review on yuv.ai</a>.</li>
+    <li><a href="https://gsap.com/pricing/" target="_blank" rel="noopener">GSAP · Pricing</a>: completely free, plugins included, and <a href="https://gsap.com/community/standard-license/" target="_blank" rel="noopener">the standard license</a>: commercial use is allowed, a no-code animation tool that competes with Webflow is not.</li>
+    <li><a href="https://github.com/motion-canvas/motion-canvas" target="_blank" rel="noopener">Motion Canvas</a>, MIT.</li>
+    <li><a href="https://github.com/airbnb/lottie-web" target="_blank" rel="noopener">lottie-web</a>, MIT, and <a href="https://en.wikipedia.org/wiki/Lottie_(file_format)" target="_blank" rel="noopener">Lottie on Wikipedia</a> (the Bodymovin plugin dates from 2015, Airbnb's libraries from 2017).</li>
+    <li><a href="https://rive.app/blog/rive-s-new-9-mo-plan" target="_blank" rel="noopener">Rive · the new $9/mo plan</a> (October 20, 2025): the runtimes are MIT, exporting needs a paid plan.</li>
+    <li><a href="https://spline.design" target="_blank" rel="noopener">Spline</a></li>
+    <li><a href="https://github.com/pmndrs/react-three-fiber" target="_blank" rel="noopener">React Three Fiber</a>, MIT.</li>
+    <li><a href="https://github.com/chartjs/Chart.js" target="_blank" rel="noopener">Chart.js</a>, <a href="https://github.com/apache/echarts" target="_blank" rel="noopener">Apache ECharts</a>, <a href="https://github.com/d3/d3" target="_blank" rel="noopener">D3</a></li>
+    <li><a href="index.html#s19" >Method page sources</a>: zero's original article and prompts (<span class="ltr">@twoclipping</span>).</li>
+  </ol>
+</section>
+

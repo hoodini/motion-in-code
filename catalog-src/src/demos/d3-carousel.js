@@ -1,9 +1,10 @@
 // Six cards on a ring that snaps one card per beat. Angle = a sum of springs, one per snap.
+import { EN, T, DIR } from '../ui/i18n.js';
 import { view3d, orbit, gradientTexture, contactShadow, THREE } from '../ui/three.js';
 import { makeCard3D } from '../../../kit/src/world.js';
 import { sk } from '../../../kit/src/core.js';
 import { C, fontsReady, fire } from '../ui/canvas.js';
-const CARDS = [['01', 'גרפים', 'RECHARTS'], ['02', 'ממשק', 'SHADCN/UI'], ['03', 'לוגואים', 'SIMPLE ICONS'], ['04', 'תלת־ממד', 'THREE.JS'], ['05', 'טיפוגרפיה', 'KINETIC TYPE'], ['06', 'אפקטים', 'GLOW · GLASS']];
+const CARDS = [['01', T('גרפים', 'CHARTS'), 'RECHARTS'], ['02', T('ממשק', 'UI'), 'SHADCN/UI'], ['03', T('לוגואים', 'LOGOS'), 'SIMPLE ICONS'], ['04', T('תלת־ממד', '3D'), 'THREE.JS'], ['05', T('טיפוגרפיה', 'TYPE'), 'KINETIC TYPE'], ['06', T('אפקטים', 'EFFECTS'), 'GLOW · GLASS']];
 const BEAT = 0.75;
 export async function mount(stage) {
   await fontsReady();
@@ -16,7 +17,7 @@ export async function mount(stage) {
     const dark = i % 2 === 0; x.fillStyle = dark ? C.navy : '#FFFFFF'; x.fillRect(0, 0, 512, 640);
     x.font = '400 300px Anton'; x.fillStyle = dark ? 'rgba(255,143,58,.18)' : 'rgba(18,22,63,.07)'; x.textAlign = 'left'; x.fillText(num, -10, 610);
     x.fillStyle = fire(x, 0, 0, 512, 0); x.fillRect(40, 60, 120, 14);
-    x.font = '700 120px Karantina'; x.direction = 'rtl'; x.textAlign = 'right'; x.fillStyle = dark ? '#FFFFFF' : C.navy; x.fillText(he, 472, 230);
+    x.font = EN ? '400 110px Anton' : '700 120px Karantina'; x.direction = DIR; x.textAlign = 'right'; x.fillStyle = dark ? '#FFFFFF' : C.navy; x.fillText(he, 472, 230);
     x.font = '400 34px Anton'; x.direction = 'ltr'; x.letterSpacing = '4px'; x.textAlign = 'right'; x.fillStyle = dark ? C.gold : C.orange; x.fillText(en, 472, 290);
     const card = makeCard3D(c, { w: 1.2, h: 1.5, r: 0.09 });
     const a = (i / CARDS.length) * Math.PI * 2; card.position.set(Math.sin(a) * R, 0, Math.cos(a) * R); card.rotation.y = a;

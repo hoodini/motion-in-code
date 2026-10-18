@@ -1,10 +1,13 @@
 // Small shared helpers for 2D demos.
+import { EN, T, DIR } from './i18n.js';
 export const C = { navy: '#12163F', navy2: '#1E2357', navy3: '#0B0E2A', cloud: '#EEF3FB', denim: '#AFCBEF', gold: '#FFC74E', orange: '#FF8F3A', coral: '#F56B49',
   sky1: '#F4FBFF', sky2: '#DDF0FF', sky3: '#BDE1FF', sky4: '#93CBFF', sky5: '#5EA9F2', sky6: '#2C78D2', white: '#FFFFFF', raspberry: '#D74270', azure: '#5EA1C1', muted: '#4A5280', line: 'rgba(18,22,63,.14)' };
-export const F = { he: s => `700 ${s}px Karantina, sans-serif`, heR: s => `400 ${s}px Karantina, sans-serif`, text: s => `500 ${s}px Assistant, sans-serif`, textB: s => `700 ${s}px Assistant, sans-serif`, en: s => `400 ${s}px Anton, sans-serif`, mono: s => `500 ${s}px "JetBrains Mono", monospace`, monoB: s => `700 ${s}px "JetBrains Mono", monospace` };
+// headline / text faces follow the edition: Karantina + Assistant in Hebrew, Anton + Inter in English
+export const F = { he: s => EN ? `400 ${s}px Anton, sans-serif` : `700 ${s}px Karantina, sans-serif`, heR: s => EN ? `400 ${s}px Anton, sans-serif` : `400 ${s}px Karantina, sans-serif`, text: s => `500 ${s}px ${EN ? 'Inter' : 'Assistant'}, sans-serif`, textB: s => `700 ${s}px ${EN ? 'Inter' : 'Assistant'}, sans-serif`, en: s => `400 ${s}px Anton, sans-serif`, mono: s => `500 ${s}px "JetBrains Mono", monospace`, monoB: s => `700 ${s}px "JetBrains Mono", monospace` };
 export async function fontsReady() {
   if (!document.fonts) return;
-  await Promise.all(['700 40px Karantina', '400 40px Karantina', '500 20px Assistant', '700 20px Assistant', '400 40px Anton', '500 16px "JetBrains Mono"'].map(f => document.fonts.load(f, 'אבג abc 123')));
+  const faces = EN ? ['400 40px Anton', '500 20px Inter', '700 20px Inter'] : ['700 40px Karantina', '400 40px Karantina', '500 20px Assistant', '700 20px Assistant', '400 40px Anton'];
+  await Promise.all([...faces, '500 16px "JetBrains Mono"'].map(f => document.fonts.load(f, 'אבג abc 123')));
 }
 /** a canvas with a fixed logical size (W×H) that stays sharp at any CSS width / DPR */
 export function canvas2d(stage, W, H, cls = '') {

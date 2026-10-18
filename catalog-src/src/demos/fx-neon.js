@@ -1,14 +1,15 @@
 // The neon edge: a conic (colour-wheel) gradient painted around a shape, masked to a thin ring, plus a blurred copy.
 // Its angle and glow strength are CSS variables that t sets, so the "AI is thinking" glow can be rendered to video.
+import { EN, T, DIR } from '../ui/i18n.js';
 import { spring, clamp } from '../../../kit/src/core.js';
 export function mount(stage) {
   stage.classList.add('fxn');
-  stage.innerHTML = `<div class="fxn-stage"><div class="fxn-box"><span class="fxn-ph">על מה הסרטון?</span><span class="fxn-txt"></span><i class="fxn-caret"></i><b class="fxn-go">→</b></div></div>
-  <div class="ctrl-row"><label class="chk"><input type="checkbox" class="fxn-halo" checked> הילה מטושטשת</label><label class="chk"><input type="checkbox" class="fxn-beat" checked> פועם על הביט</label></div>`;
+  stage.innerHTML = `<div class="fxn-stage"><div class="fxn-box"><span class="fxn-ph">${T('על מה הסרטון?', 'What is the film about?')}</span><span class="fxn-txt"></span><i class="fxn-caret"></i><b class="fxn-go">→</b></div></div>
+  <div class="ctrl-row"><label class="chk"><input type="checkbox" class="fxn-halo" checked> ${T('הילה מטושטשת', 'Blurred halo')}</label><label class="chk"><input type="checkbox" class="fxn-beat" checked> ${T('פועם על הביט', 'Pulse on the beat')}</label></div>`;
   const box = stage.querySelector('.fxn-box'), txt = stage.querySelector('.fxn-txt'), ph = stage.querySelector('.fxn-ph'), caret = stage.querySelector('.fxn-caret');
   const halo = stage.querySelector('.fxn-halo'), beat = stage.querySelector('.fxn-beat');
   halo.addEventListener('change', () => stage.classList.toggle('nohalo', !halo.checked));
-  const Q = 'השקה לאפליקציית כושר';
+  const Q = T('השקה לאפליקציית כושר', 'Launch film for a fitness app');
   return {
     dur: 6,
     render(t) {

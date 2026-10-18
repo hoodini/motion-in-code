@@ -1,0 +1,77 @@
+<section class="sec s-cloud" id="s15" data-folio="15" data-toc="אנטומיה של הפרומפט">
+  <div class="sh"><span class="num">15</span><div><h2>אנטומיה של הפרומפט: 6 בלוקים, ולמה כל אחד עובד על LLM</h2><p class="sub">כל הפרומפטים שלו בנויים בדיוק באותו שלד. לחצו על בלוק.</p></div></div>
+  <div class="blocks" id="anBlocks"></div>
+  <div class="card anat" id="anBody"></div>
+  <div class="why"><b>העיקרון שמחבר את כל ששת הבלוקים</b>מודל שפה, כשלא אומרים לו מה בדיוק, נותן את <b>הממוצע</b> של מה שראה באימון — ובמושן דיזיין הממוצע הוא בדיוק "התבנית": רקע כהה, זוהר, חלקיקים, פייד. הפרומפט של zero לא מוסיף "יצירתיות"; הוא <b>מוחק את האפשרויות הממוצעות</b> (רשימת האסור), <b>קובע את המספרים</b> (צבעים, BPM, שניות, גדלים), <b>מעביר ידע הנדסי</b> (build), <b>חוסך את הבאגים שהוא כבר פגש</b> (gotchas), ו<b>מכניס אדם ללולאה בזול</b> (start). זה פרומפט שנכתב כמו מפרט טכני של במאי — לא כמו בקשה.</div>
+</section>
+
+<!-- ============ 16 FLYOVER ============ -->
+<section class="sec s-denim" id="s16" data-folio="16" data-toc="בונוס: פרומפט ה-Fly-over">
+  <div class="sh"><span class="num">16</span><div><h2>בונוס: פרומפט ה-Fly-over התלת-ממדי ששלחת</h2><p class="sub">אותו שלד בדיוק — אבל כאן הוא שובר את חוק ה"2D only" שלו, ובכוונה.</p></div></div>
+  <details><summary>הפרומפט המלא + תרגום</summary><div class="in">
+    <div class="code"><span class="lbl">original · paste into Claude Code</span><button class="cp">העתק</button><pre data-prompt="fly"></pre></div>
+    <div class="tr" id="tr-fly"></div>
+  </div></details>
+  <p><b>מה חדש כאן לעומת שלושת הקודמים:</b></p>
+  <h3>1. מצלמה שמונעת ממהירות — לא ממיקומים</h3>
+  <p>"Drive the camera from one speed curve, never from a position key every half second... Integrate it into the page position." במקום לומר למצלמה "ב-0.5 שנייה תהיי ב-y=300, ב-1.0 ב-y=700", מגדירים <b>כמה מהר</b> היא נוסעת בכל רגע, ו<b>מסכמים</b> (אינטגרציה) את המהירות לאורך הזמן כדי לקבל מיקום. למה? כי כשמחברים מיקומים בעקומה חלקה, המהירות בין המפתחות "גלית" — מאיצה ומאטה סביב כל מפתח. העין מרגישה את זה כגלישה שנתקעת וקופצת ("stops or surges in the glide" — ברשימת האסור). כשמתחילים מהמהירות, היא שטוחה בדיוק כמו שהגדרתם.</p>
+  <div class="lab"><div class="lh">עקומת מהירות ← מיקום, מול מפתחות כל חצי שנייה</div><div class="lb">
+    <canvas id="fsCanvas" width="860" height="300"></canvas>
+    <div class="readout" id="fsR"></div>
+  </div></div>
+  <h3>2. עומק שדה (Depth of Field) אסימטרי</h3>
+  <p>"blur radius = 75 × (focus − depth) / depth in front of the focus and 6 × (depth − focus) / depth behind it, capped at 120px". <b>עומק שדה</b> = כמה מהתמונה חד. בעדשה אמיתית, מה שקרוב מאוד לעדשה מיטשטש הרבה יותר מהר ממה שרחוק — וזה מה שנותן תחושת "מקרו", מיניאטורה יקרה. המקדם 75 מלפנים מול 6 מאחור (פי 12.5) יוצר בדיוק את זה: הדף שליד העדשה "נמס", מה שמאחורי הפוקוס כמעט חד.</p>
+  <div class="lab"><div class="lh">כמה טשטוש בכל עומק</div><div class="lb">
+    <canvas id="dfCanvas" width="860" height="240"></canvas>
+    <div class="ctrls"><label>מרחק הפוקוס <input type="range" id="dfF" min="900" max="2400" value="1360"><output id="dfFO">1360</output></label></div>
+  </div></div>
+  <h3>3. שלושה פרטים הנדסיים שמסבירים "למה זה נראה זול אצלי"</h3>
+  <ul>
+    <li><b>Mipmaps + סינון אנאיזוטרופי 16x:</b> טקסטורה (תמונת הדף) שנראית בזווית חדה ורחוק מתכווצת להרבה פחות פיקסלים ממה שיש בה. בלי הכנה, כל פריים "דוגם" פיקסלים אחרים ← טקסט רחוק מהבהב (shimmer). Mipmaps = גרסאות מוקטנות מראש של התמונה; סינון אנאיזוטרופי = דגימה שמבינה שהתמונה נמתחת יותר בכיוון אחד (בגלל הזווית).</li>
+    <li><b>"drawn lowest first with no depth buffer":</b> מציירים מהשכבה הנמוכה לגבוהה, כמו צייר שמצייר קודם רקע ("אלגוריתם הצייר"). בלי depth buffer כי השכבות שקופות בחלקן, ו-depth buffer לא יודע להתמודד עם שקיפות.</li>
+    <li><b>"fade them into the haze colour first":</b> כרטיס שנעשה שקוף חושף את מה שמאחוריו — ובתלת-ממד זה נראה כמו "רוח". קודם צובעים אותו לצבע האובך של הרקע (הוא "נבלע" באוויר), ורק בסוף חותכים לשקיפות.</li>
+  </ul>
+  <div class="warn"><b>שני דברים שהפרומפט הזה מבקש ושצריך לדעת מראש</b>(1) הוא דורש GPU אמיתי (<code>--use-angle=d3d11</code>) ו-16 תת-פריימים לפריים — כלומר רינדור על ה-PC שלך, לא בענן. 14.5 × 60 × 16 = ‏13,920 צילומים. (2) הוא מתחיל ב"open my link" — הוא מצלם את דף הנחיתה <b>האמיתי</b> שלך, ולכן כל שינוי בגובה של סקשן בדף מזיז את כל התזמון ("lock the page before timing anything").</div>
+</section>
+
+<!-- ============ 17 CRITIQUE ============ -->
+<section class="sec s-cloud" id="s17" data-folio="17" data-toc="ניתוח ביקורתי: מה מוגזם">
+  <div class="sh"><span class="num">17</span><div><h2>מה אפשר להבין מזה — כולל מה מוגזם</h2><p class="sub">השיטה מצוינת. הכותרת שלה — פחות.</p></div></div>
+  <div class="tbl"><table>
+    <tr><th>הטענה</th><th>מה נכון</th><th>מה מוגזם / חסר</th></tr>
+    <tr><td>"$0"</td><td>אין צורך ב-After Effects או בסטוק בתשלום.</td><td>Claude עצמו עולה (מנוי או טוקנים). מקור אחד מדווח ~90K טוקני קלט + 15K פלט לסרט ≈ ‏0.66$ במחיר מחירון — לסרט אחד, לפני סבבי תיקון, רינדור וזמן שלך.</td></tr>
+    <tr><td>"0 effort" / "לא יודע שלב 1 במושן"</td><td>לא צריך ידיים של אנימטור.</td><td>הפרומפטים מלאים בידע מקצועי עמוק (תריס 180°, זום לוגריתמי, קפיצים אנליטיים, LUFS). הידע לא נעלם — הוא עבר לפרומפט. מי שמשנה את הפרומפטים בלי להבין אותם — שובר אותם.</td></tr>
+    <tr><td>"פרומפט אחד"</td><td>פרומפט אחד מניע את התהליך.</td><td>בפועל: רפרנס → נכסים → מפת ביטים → סטילס → רינדור → 2–3 סבבי הערות. גם יוצר אחר (<span class="ltr">@rexan_wong</span>) שבדק סרטונים כאלה הגיע למסקנה ש"פרומפט אחד" הוא בעצם תהליך עבודה.</td></tr>
+    <tr><td>"לא תוכלו להבדיל מ-$15K"</td><td>הדמואים באמת ברמה גבוהה.</td><td>אלה דמואים בסגנון אחד שהוא אהב (2D, לבן, אפל). סטודיו מוכר גם אסטרטגיה, קופי ותהליך מול לקוח. הטענה היא שלו, לא נמדדה.</td></tr>
+    <tr><td>"הכל חינם ב-Mixkit/Pexels"</td><td>יש שם ספריות חינמיות גדולות.</td><td>ל-Mixkit יש <b>רישיון נפרד לכל סוג פריט</b> (מוזיקה, SFX, וידאו "חופשי" מול "מוגבל"). ל-Pexels יש מגבלות על אנשים מזוהים ומותגים. חובה לבדוק כל קובץ לפני פרסום מסחרי.</td></tr>
+  </table></div>
+  <div class="why"><b>התמונה הגדולה</b>המהפכה כאן היא לא "AI עושה וידאו". היא שעיצוב תנועה הפך ל<b>הנדסת תוכנה שמונחית על ידי במאי</b>: מפרט, בדיקות, תיקונים נקודתיים, גרסאות. מי שמנצח הוא מי שיודע לכתוב את המפרט (טעם + מספרים + רשימת אסור) ולתת הערות מדויקות. זה בדיוק ההבדל בין הסרטונים של zero לבין "my one prompt video looked mid".</div>
+  <div class="warn"><b>הערה על רמת המאמץ של Opus 5.5</b>בתיעוד הקהילתי של פרומפטי וידאו ממליצים להריץ ב-effort גבוה (high/xhigh) ולא בברירת המחדל. במדד טכני אחר (Terminal-Bench-Science) נמדד שיפור עד xhigh וירידה קלה ב-max. זה לא נמדד על וידאו ספציפית — אבל זו נקודת התחלה סבירה: xhigh לתכנון ולכתיבת הסרט.</div>
+</section>
+
+<!-- ============ 18 ADOPT ============ -->
+<section class="sec s-sky" id="s18" data-folio="18" data-toc="איך אנחנו מאמצים את זה">
+  <div class="sh"><span class="num">18</span><div><h2>איך אנחנו מאמצים את זה מעכשיו — YUV.AI Motion Method</h2><p class="sub">מה כבר יש לנו מ-EP01–EP06, מה משתנה, והפרומפט שלנו.</p></div></div>
+  <div class="tbl"><table>
+    <tr><th>רכיב</th><th>מה עשינו עד היום</th><th>מעכשיו</th></tr>
+    <tr><td>מנוע</td><td>GSAP timeline מושהה / <code>render(t)</code> (EP01, EP04)</td><td>אותו רעיון, אבל <b>קפיצים אנליטיים</b> וכלל "אפס מצב" קשיח. GSAP מושהה בסדר — כל עוד אין טיימרים</td></tr>
+    <tr><td>שעון</td><td>מילים של הקריינות (Scribe/Whisper)</td><td><b>שני שעונים:</b> קריינות לכתוביות, <b>ביטים</b> למעברים. האירוע המרכזי על הדרופ</td></tr>
+    <tr><td>מעברים</td><td>whip/slice/flash cuts (EP03)</td><td><b>Morph + shared element</b> בסצנות. כתוביות קצרות עם חיתוך קשה נשארות — זו שכבה נפרדת</td></tr>
+    <tr><td>מצלמה</td><td>punch-zoom בכל קאט (EP03 אנכי)</td><td>תנועה אחת לסצנה, זום לוגריתמי, איפוס מתחת להצפה</td></tr>
+    <tr><td>סאונד</td><td>SFX ממוקמים בתחילת אירוע; לפעמים מסונתזים (EP02)</td><td>SFX אמיתיים, <b>לפי שיא נמדד</b>; ducking מתחת לקריינות; ‎−14 LUFS (כבר יש)</td></tr>
+    <tr><td>מושן בלר</td><td>אין</td><td>6–8 תת-פריימים + tmix, רק במאסטר</td></tr>
+    <tr><td>QA</td><td>contact sheets, audit.py לקריאות</td><td>+ פריים לכל ביט, סריקת pops, בדיקת RTL</td></tr>
+    <tr><td>תהליך</td><td>"תעבוד עד הסוף בלי לשאול"</td><td>שער אחד זול: <b>מפת ביטים + 4 סטילס</b> לפני הסרט המלא (אפשר לאשר אוטומטית אם לא זמין)</td></tr>
+  </table></div>
+  <h3>הפרומפט שלנו — בשלד של zero, מותאם לעברית, RTL והמותג</h3>
+  <div class="code"><span class="lbl">YUV.AI motion prompt · paste into Claude Code (Opus 5.5, effort xhigh)</span><button class="cp">העתק</button><pre id="yuvPrompt"></pre></div>
+  <div class="ex"><b>הצעד הבא שהייתי עושה</b>להפוך את זה לסקיל קבוע (<code>yuv-motion</code>) כך שלא צריך להדביק כלום — ולפני שבונים מאפס, לבחון את <a href="https://github.com/howseen-ai/claude-motion-design" target="_blank" rel="noopener">howseen-ai/claude-motion-design</a>: סקיל קוד-פתוח (MIT) שבנוי על אותם עקרונות, כולל render.py, סריקת pops וזיהוי דרופ, שנבנה בהשראה ישירה מהפרומפטים של zero. אפשר לקחת ממנו את המנוע ולשים מעליו את השכבה שלנו (עברית, RTL, מותג, מצלמה על ה-4090).</div>
+  <div class="why"><b>רוצים לראות מה עוד אפשר לבקש?</b>בנינו <a href="catalog.html">קטלוג חי של 18 אלמנטים</a>: גרפים של Recharts, ממשק shadcn/ui, אייקונים ולוגואים רשמיים, טיפוגרפיה קינטית, תלת-ממד ב-three.js ואפקטים. כל אחד עם הדגמה שאפשר לגרור בה את הזמן, הסבר מאפס ופרומפט מלא להעתקה, ובסוף בונה פרומפטים שמרכיב סרט שלם.</div>
+</section>
+
+<!-- ============ 19 SOURCES ============ -->
+<section class="sec s-denim" id="s19" data-folio="19" data-toc="מקורות">
+  <div class="sh"><span class="num">19</span><div><h2>מקורות</h2><p class="sub">כל הקישורים נבדקו כחיים ב-15.10.2026.</p></div></div>
+  <ol class="src" id="srcList"></ol>
+</section>
+

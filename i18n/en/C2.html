@@ -1,0 +1,259 @@
+<!-- ============ 01 DATA ============ -->
+<section class="sec s-cloud" id="c1" data-folio="01" data-toc="Data and charts">
+  <div class="sh"><span class="num">01</span><div><h2>Data and charts</h2><p class="sub">The moment the film proves something: growth, results, progress.</p></div></div>
+  <div class="body">
+    <p>A good launch film answers the question "Why should I believe you?", and most of the time the answer is a number. In the film for Ketzev (Hebrew for "rhythm"), a fictional fitness app, this is the moment the user sees how far they came this month. The four elements here are four ways to show a number: a line that unfolds over time, a comparison between days, one big number, and a percentage of a goal.</p>
+    <p>The library we use here is <b>Recharts</b>: a collection of React components for charts, which draws them as SVG (that is, vector graphics, sharp at any zoom). Under the hood it borrows parts of a library called D3 for the math: where each tick mark goes, how to smooth a curve. It's free under the MIT license, and the current version is 3. The main alternatives, and when to pick them:</p>
+    <ul>
+      <li><b>Chart.js</b>: draws on Canvas and doesn't need React. Fast and simple, less flexible in styling. MIT.</li>
+      <li><b>Apache ECharts</b>: hundreds of chart types, maps included. Heavier. Apache 2.0.</li>
+      <li><b>D3</b>: the low-level layer itself. Full control over every pixel, and a lot more code. ISC.</li>
+    </ul>
+    <p>The rule for choosing: if the project is in React and the chart is a standard one, Recharts. If we need a shape that has no name, D3. Either way, the built-in animation is off and everything is computed from t.</p>
+  </div>
+
+  <article class="el" id="e-chart-area">
+    <div class="el-h"><span class="el-n">01.1</span><h3 class="el-t">An area chart that draws itself</h3><div class="el-tags"><span>Recharts</span><span>React</span><span>SVG</span><span class="lic">MIT</span></div></div>
+    <div class="el-demo" data-demo="chart-area"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>What you see</h4><p>30 days of workout minutes in the Ketzev app. The line draws itself from left to right, an orange dot rides its tip, and at the end a dashed goal line lands: 60 minutes. The viewer watches the trend being built instead of receiving it ready-made.</p>
+        <h4>Try it</h4><p>Check "Let Recharts animate on its own". Now the library animates by the wall clock, and the scrubber no longer controls it. That's exactly the animation that would break during capture.</p></div>
+        <div><h4>How it works</h4><ul>
+          <li>On every frame we compute from t how much of the line is already revealed, and pass Recharts only those points, plus one in-between point so the tip moves smoothly instead of jumping a whole day at a time.</li>
+          <li><code>isAnimationActive={false}</code> turns off the library's own animation. The reveal is ours.</li>
+          <li><code>type="monotone"</code> smooths the line without overshooting the data, so we don't invent peaks that never happened.</li>
+          <li>The fill is a gradient from orange to transparent, and the goal is a <code>ReferenceLine</code> whose thickness grows on a spring.</li></ul></div>
+      </div>
+      <div class="fit"><div class="y"><b>When to use</b>The proof moment: "look how far you've come". One clear trend, with an ending that lands on the beat.</div><div class="n"><b>When not to</b>More than three lines, or exact values the viewer needs to read in two seconds. In that case, one big number (01.3) works better.</div></div>
+      <div class="prompt"><h5>Full prompt</h5><div class="code"><span class="lbl">area chart · Recharts · paste into Claude Code</span><button class="cp" type="button">Copy prompt</button><pre>&lt;inputs&gt;
+Ask me for the data series (one value per day) and its label. If I skip it, invent a plausible 30-day series of workout minutes that trends upward with natural noise, and say so.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 7-second clip, 1920x1080, 60fps. A Recharts AreaChart draws itself from left to right as the data is revealed. A dot in the accent colour rides the tip of the line. At the end, a dashed goal line at 60 lands on a beat with the label "Goal: 60 min".
+Look: light background #EEF3FB, navy text and grid #12163F, the line is a gradient #FFC74E → #FF8F3A → #F56B49, the area fill is the same orange fading to transparent. Axis labels in Inter; the title in Anton, uppercase. Swap the colours and fonts for your brand.
+Banned: 3D charts, drop shadows on the line, legends that nobody needs, gridlines on both axes.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM, a beat every 0.5s. Beats 0-1: the empty axes. Beats 1-9: the line draws with an ease-in-out. Beat 10: the goal line springs in. Beats 10-13: hold, with the dot pulsing once per beat.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file with React and Recharts that exposes window.seek(t). Every frame is computed from t alone: no CSS transitions, no timers, no state between frames.
+Set isAnimationActive={false} on every series. For each frame, compute how far along the line we are, pass only the points revealed so far plus one interpolated point at the tip, and render with flushSync so the DOM is ready before the screenshot.
+Use type="monotone" for the curve. The goal line's stroke width and label size come from a closed-form spring of t.
+Render with Playwright at 60fps and assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Recharts animates on its own clock by default. If isAnimationActive is left on anywhere, captured frames jump.
+- Fix the Y axis domain (for example 0 to 80), or the axis rescales every frame as points are added.
+- Wait for document.fonts.ready before the first frame.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me 3 stills (beat 1, beat 6, beat 12) before rendering the full clip.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-chart-bars">
+    <div class="el-h"><span class="el-n">01.2</span><h3 class="el-t">Bars that land on the beat</h3><div class="el-tags"><span>Recharts</span><span>BarChart</span><span class="lic">MIT</span></div></div>
+    <div class="el-demo" data-demo="chart-bars"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>What you see</h4><p>A week of workouts. Each bar jumps up on its own beat, half a second after the one before it, overshoots its height a little and settles back. Today's bar is painted in the brand's "fire" gradient (yellow, orange, red). The days run left to right, Sunday to Saturday. (If your film is in Hebrew or Arabic, which read right to left, reverse the order so the week starts on the right.)</p></div>
+        <div><h4>How it works</h4><ul>
+          <li>The height of each bar = its value × <code>spring(t − beatTime)</code>, where beatTime is the moment of that bar's own beat. We subtract the beat time to give each bar its own clock that starts at zero: before its beat the result is negative, the spring returns 0, and the bar hasn't started yet. The spring overshoots 1 a little and comes back, which is why the bar "lands" instead of stopping dead.</li>
+          <li>The number above a bar appears only once the bar is 60% of the way up, so the number doesn't jump ahead of it.</li>
+          <li>Today's color comes from <code>Cell</code>, a Recharts component that lets each bar have its own color.</li></ul></div>
+      </div>
+      <div class="fit"><div class="y"><b>When to use</b>Comparing 4 to 12 items and highlighting one of them. Perfect for a musical rhythm, because every bar is a beat.</div><div class="n"><b>When not to</b>More than 12 bars: they get too thin to read on a phone screen, and the animation drags on too long.</div></div>
+      <div class="prompt"><h5>Full prompt</h5><div class="code"><span class="lbl">bar chart on the beat · Recharts</span><button class="cp" type="button">Copy prompt</button><pre>&lt;inputs&gt;
+Ask me for the 7 values and which bar to highlight. If I skip them, use workout minutes for a week (Sunday to Saturday) and highlight Friday.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 5.5-second clip, 1080x1920 for Reels, 60fps. A Recharts BarChart of 7 days where each bar springs up on its own beat, overshoots slightly and settles. The highlighted bar is filled with the gradient #FFC74E → #FF8F3A → #F56B49; the others are navy #12163F on a light #EEF3FB background. Day labels Sun to Sat, ordered left to right. The value appears above each bar once it is most of the way up.
+Banned: bars growing all at once, bouncing more than once, 3D bars.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM. Bar i lands on beat i+1 (0.5s apart). The highlighted bar gets a small extra scale pop on its beat.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file with React and Recharts that exposes window.seek(t); every frame is computed from t alone, no CSS transitions or timers.
+BarChart with isAnimationActive={false}. Each bar's value = target × spring(t − beatTime), where spring is this closed-form damped spring with ω = 13 and ζ = 0.5: spring(t) = 1 − e^(−ζωt)·(cos(ω_d·t) + (ζω/ω_d)·sin(ω_d·t)), ω_d = ω·√(1 − ζ²). Use Cell for per-bar colours. Render each frame with flushSync. Capture with Playwright at 60fps and assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Clamp the spring at 0 so a bar never dips below the axis.
+- Fix the Y domain so the axis does not rescale while bars grow.
+- Pass all 7 bars from the first frame (bars that have not started at 0) and animate only their heights. Adding bars as they appear changes the category widths, and every bar slides sideways.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me stills at beats 2, 5 and 10 before the full render.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-kpi">
+    <div class="el-h"><span class="el-n">01.3</span><h3 class="el-t">Counters that count up</h3><div class="el-tags"><span>CSS</span><span>tabular-nums</span><span>Intl.NumberFormat</span></div></div>
+    <div class="el-demo" data-demo="kpi"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>What you see</h4><p>Three numbers that run from zero to their final value, one after another, and land with a small hop past the value and back. No library at all: it's just a number computed from t and written into an element.</p>
+        <h4>Try it</h4><p>Uncheck "Fixed-width digits" and watch the numbers shake while they count.</p></div>
+        <div><h4>Why they shake</h4><p>In many fonts, for example Inter, the font the numbers here are set in, the digit 1 is narrower than the digit 8. These are called <b>proportional digits</b>. When the number changes every frame, its width changes, and everything around it moves. The fix is a font feature called <code>tabular-nums</code>: every digit gets the same width, like in a table. (This works only if the font includes such digits; Inter does.) One line of CSS: <code>font-variant-numeric: tabular-nums</code>.</p>
+        <p>And for the thousands separators (1,248) we use <code>Intl.NumberFormat</code>, the browser's built-in tool for formatting numbers the way each language writes them.</p></div>
+      </div>
+      <div class="fit"><div class="y"><b>When to use</b>One number that is the story: "1,248 minutes". It reads instantly, even on a phone.</div><div class="n"><b>When not to</b>More than three counters at the same moment: the eye doesn't know where to look.</div></div>
+      <div class="prompt"><h5>Full prompt</h5><div class="code"><span class="lbl">count-up KPI tiles</span><button class="cp" type="button">Copy prompt</button><pre>&lt;inputs&gt;
+Ask me for up to three KPIs (value, label, optional suffix like % or +). If I skip them, use: 1,248 "Workout minutes", 30 "Day streak", +38% "This month".
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 4.5-second clip, 1920x1080, 60fps. Three KPI tiles side by side, ordered left to right. Each number counts up from 0 to its value and lands with a small overshoot, one tile per beat. Numbers in Inter 800, labels in Inter 600. Light tiles #EEF3FB on white, navy numbers #12163F, the middle number in orange #B4501A.
+Banned: slot-machine rolling digits, confetti, numbers that keep moving after they land.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM. Tile 1 starts on beat 1, tile 2 on beat 2, tile 3 on beat 3. Each count lasts 1.2s with an ease-out and a tiny spring at the end.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file exposing window.seek(t); every value is computed from t alone, no timers or CSS transitions.
+displayed = round(target × easeOut(progress(t))); format with Intl.NumberFormat('en-US'); keep the suffix outside the number in its own span. Use font-variant-numeric: tabular-nums on every number. Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Without tabular-nums the numbers change width every frame and the tiles shake.
+- Round before you format. Given the raw value, Intl.NumberFormat shows decimals (1,247.6) on the in-between frames.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me one still mid-count and one at the end before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-ring">
+    <div class="el-h"><span class="el-n">01.4</span><h3 class="el-t">Progress ring</h3><div class="el-tags"><span>SVG</span><span>stroke-dasharray</span></div></div>
+    <div class="el-demo" data-demo="ring"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>What you see</h4><p>A ring that fills to 78% of the weekly goal, with the number counting up in the center. The ring we know from fitness apps, drawn in code, with no library at all.</p>
+        <h4>Try it</h4><p>Check "Show the full outline" and see that the ring is really one long dashed line.</p></div>
+        <div><h4>How it works</h4><p>In SVG we can turn a circle's outline into a dashed line. <code>stroke-dasharray</code> sets the length of the dash and also the length of the gap after it, and <code>stroke-dashoffset</code> shifts where the pattern starts. The trick: make the dash and the gap both as long as the whole circumference (2πr: two times pi, about 6.28, times the radius r). When we shift the dash, the gap slides into its place, and the gap is nothing, so only part of the dash stays visible:</p>
+        <p><code>offset = circumference × (1 − progress)</code>. When progress is 0, the whole dash sits off the circle. At 1, it covers everything. The numbers update live in the dark box. And we rotate the circle by −90°, because in SVG a circle starts at 3 o'clock, and we want it to start at 12.</p></div>
+      </div>
+      <div class="fit"><div class="y"><b>When to use</b>A percentage of a goal, a countdown, loading. A shape everyone knows from their watch and their phone.</div><div class="n"><b>When not to</b>Comparing several values: nested rings are hard to read. Bars (01.2) are clearer.</div></div>
+      <div class="prompt"><h5>Full prompt</h5><div class="code"><span class="lbl">progress ring · SVG</span><button class="cp" type="button">Copy prompt</button><pre>&lt;inputs&gt;
+Ask me for the goal and the reached value. If I skip them, fill to 78% with the label "of weekly goal".
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 4-second clip, 1080x1080, 60fps. A circular progress ring fills from 12 o'clock to its value with a spring that settles, while the percentage counts up in the centre. Track in navy at 10% opacity, the arc in the gradient #FFC74E → #FF8F3A → #F56B49 with round caps, 22px thick at a 92px radius (scale up for 1080). Number in Inter 800, label in Inter 600.
+Banned: glow, multiple nested rings, a ring that spins after it lands.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+Beat 1: the track appears. Beats 1-5: the arc fills with a closed-form spring, ω = 6 and ζ = 0.85: spring(t) = 1 − e^(−ζωt)·(cos(ω_d·t) + (ζω/ω_d)·sin(ω_d·t)), ω_d = ω·√(1 − ζ²). Beat 6: a small scale pop on the number.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file exposing window.seek(t); every attribute is computed from t, no CSS transitions.
+SVG circle with stroke-dasharray = 2πr and stroke-dashoffset = 2πr × (1 − progress(t)), rotated −90° around its centre so it starts at 12 o'clock. The number uses tabular-nums. Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- With round caps, a 0% ring still shows a dot. Hide the arc until progress passes 1%.
+- Set the dash values as attributes every frame; a CSS transition on stroke-dashoffset would run on the wall clock.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me a still at 50% and at the end before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+</section>
+
+<!-- ============ 02 UI ============ -->
+<section class="sec s-sky" id="c2" data-folio="02" data-toc="UI: shadcn/ui">
+  <div class="sh"><span class="num">02</span><div><h2>Real UI with shadcn/ui</h2><p class="sub">A product film needs an app that looks real. Here's how to get one without designing it from scratch.</p></div></div>
+  <div class="body">
+    <p>The most important scene in Ketzev's film is a tour of the app: someone types, clicks, switches a tab, and we see that the product works. For it to look like a real app, we build it from real interface components. Three concepts, each one stacked on the one before:</p>
+    <ul>
+      <li><b>Tailwind CSS</b> is a way to write styling with <b>classes</b>: a class is a label we stick on an element, and the CSS decides what each label does. In Tailwind every label does one small thing, so instead of writing a separate CSS file, we write <code>rounded-full bg-primary px-4</code>: fully rounded, in the primary color, with horizontal padding.</li>
+      <li><b>Radix</b> is a library of components with no styling at all, which handles all the behavior: the keyboard, focus, and screen readers (software that reads the screen aloud for people with visual impairments). A tab that works properly with the Tab key, for example.</li>
+      <li><b>shadcn/ui</b> combines the two. It describes itself as "not a component library": instead of installing a package, we copy each component's code into the project (<code>npx shadcn add button</code>), and it's ours to change. That's exactly what lets us adapt it for video.</li>
+    </ul>
+    <p>shadcn/ui is very popular, which is why it looks "like a real app". For the same reason, it can also look generic. In the demo below, every component got the Phoenix colors, the YUV.AI brand palette (navy, orange, gold), and the brand fonts (Anton for headlines, Inter for text), and that's what makes them ours.</p>
+  </div>
+
+  <article class="el" id="e-ui">
+    <div class="el-h"><span class="el-n">02.1</span><h3 class="el-t">An app tour, built from real components</h3><div class="el-tags"><span>shadcn/ui</span><span>Radix</span><span>Tailwind</span><span>React</span><span class="lic">MIT</span></div></div>
+    <div class="el-demo split" data-demo="ui-scene"><div class="stage"></div>
+      <ol class="ui-steps">
+        <li data-from="0" data-to="0.9"><b>Card enters</b><span>A card with a title, rising on a spring.</span></li>
+        <li data-from="0.9" data-to="2.4"><b>Input gets typed into</b><span>"Morning workout", one letter every 0.1 seconds, with a caret placed by measuring the text width.</span></li>
+        <li data-from="2.4" data-to="3.4"><b>Button gets pressed</b><span>The cursor arrives and clicks, and the button shrinks and changes color.</span></li>
+        <li data-from="3.4" data-to="4.4"><b>Progress fills</b><span>From 0 to 72% on a slow spring.</span></li>
+        <li data-from="4.4" data-to="6.6"><b>Tabs switch</b><span>Today → Week → Month, and the big number updates.</span></li>
+        <li data-from="6.6" data-to="7.2"><b>Switch turns on</b><span>The little knob jumps to the other side.</span></li>
+        <li data-from="7.2" data-to="8.8"><b>Slider moves</b><span>Intensity from 30 to 80.</span></li>
+        <li data-from="8.8" data-to="9.6"><b>Alert drops in</b><span>A message: weekly goal reached.</span></li>
+        <li data-from="9.6" data-to="11.1"><b>Badge pops</b><span>A small label that pops past its size and settles back.</span></li>
+      </ol>
+      <div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>What you see</h4><p>A Ketzev screen built from nine real shadcn/ui components. The list on the side marks which component is acting right now. Drag the scrubber backward and watch every component return to exactly the state it had at that moment, the tab and the switch included.</p>
+        <h4>Controlled components: the key idea here</h4><p>A regular switch remembers by itself whether it's on. This is called <b>internal state</b>. In a film that's a problem: if the switch "remembers" it was turned on and we jump back in time, it stays on. That's why every component here is <b>controlled</b>: it decides nothing on its own. On every frame we tell it from the outside what its state is, for example <code>checked={t &gt; 6.6}</code>.</p></div>
+        <div><h4>How it works</h4><ul>
+          <li>The components were copied from shadcn/ui, and every <code>transition</code> class was deleted from them. A class like that makes the browser animate changes by itself, on the wall clock.</li>
+          <li>Every value is a function of t: the typed text, the active tab, the switch position, the slider value.</li>
+          <li>The mouse cursor computes where the real button sits on the screen and glides to it, slowing down as it arrives.</li>
+          <li>The colors are defined once as <b>variables</b> (<code>--primary</code>, <code>--accent</code>). A variable is a name for a value we store once, and every element "inherits" the variables of the element that wraps it. So we define them once at the top, and all the components get them. That's how we swap a brand in one line.</li></ul></div>
+      </div>
+      <div class="fit"><div class="y"><b>When to use</b>A product film, a feature demo, "here's how it works". When the viewer needs to believe there's a real app.</div><div class="n"><b>When not to</b>When there are real screenshots and a product that already exists: use the real screens, and rebuild only what moves.</div></div>
+      <div class="prompt"><h5>Full prompt</h5><div class="code"><span class="lbl">app tour · shadcn/ui · paste into Claude Code</span><button class="cp" type="button">Copy prompt</button><pre>&lt;inputs&gt;
+Ask me for my app's name, its main screen (screenshot or description) and the one action the tour should show. If I skip them, invent a believable fitness app called "Ketzev" with a workout card.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+An 11-second product tour, 1080x1920, 60fps, built from real shadcn/ui components: Card, Input, Button, Progress, Tabs, Switch, Slider, Alert and Badge. A cursor types "Morning workout" into the search input with a real keystroke rhythm, clicks the start button, the weekly progress fills to 72%, the tabs switch day → week → month, a reminders switch flips on, an intensity slider moves from 30 to 80, an alert drops in ("Weekly goal reached") and a badge pops.
+The UI is left to right (dir="ltr"). Restyle the shadcn tokens to my brand: navy #12163F as --primary, orange #FF8F3A as --accent, #EEF3FB as --background, radius 28px. Headlines in Anton, uppercase; UI text in Inter.
+Banned: default shadcn grey look, default Tailwind colours, generic lorem ipsum, a cursor that teleports.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+Card enters 0-0.9s, typing 0.9-2.4s, click at 3.1s, progress 3.4-4.4s, tabs at 4.4s and 5.4s, switch at 6.6s, slider 7.2-8.8s, alert at 8.8s, badge at 9.6s. Every event lands on a beat at 120 BPM.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file with React, exposing window.seek(t). Add the components with npx shadcn add (or copy their source), then:
+- Delete every transition-* and animate-* class from them.
+- Make every component controlled: value, checked, the active tab and the slider value are props computed from t. Render each frame with flushSync.
+- The cursor's target is measured from the real button's bounding box; its path is an ease-in-out from off-screen.
+- Measure the typed text width with canvas measureText so the caret sits exactly after the last letter.
+Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Radix components keep internal state. If they are not controlled from t, scrubbing backwards leaves them in the wrong state.
+- Some transitions hide inside the parts: the Progress indicator ships with transition-all and the Switch thumb with transition-transform. Miss one and that part lags behind t.
+- Tailwind's preflight reset can break the rest of the page; scope it or disable it.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me 4 stills (typing, click, tabs on month, alert) before the full render.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+</section>
+

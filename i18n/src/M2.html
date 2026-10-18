@@ -1,0 +1,76 @@
+<section class="sec s-denim" id="s3" data-folio="03" data-toc="התרגום המלא">
+  <div class="sh"><span class="num">03</span><div><h2>המאמר — בתרגום מלא לעברית</h2><p class="sub">נאמן למקור. השמטתי רק שתי שורות של "שמרו בסימניות / תנו לייק". הפרומפטים נשארים באנגלית (כדי להדביק) ומתחתם תרגום. מונחים טכניים מוסברים בסוגריים במקום הראשון שבו הם מופיעים.</p></div></div>
+
+  <div class="card">
+    <h3>איך אני מפיק סרטוני השקה של 10 אלף דולר ב-0 דולר עם Opus 5.5 (הקורס המלא)</h3>
+    <p>אני פותח בקוד פתוח את כל תהליך העבודה שלי ליצירת עיצובי תנועה (<b>motion design</b> <span class="term">— אנימציה גרפית: טקסט, צורות וממשקים שזזים, בניגוד לצילום</span>) שסטודיואים גובים עליהם 5,000 עד 15,000 דולר.</p>
+    <p>זה משתמש ב-0 MCP <span class="term">(Model Context Protocol — דרך לחבר לקלוד כלים חיצוניים כמו שירותים ואפליקציות)</span>, ב-0 כלים חיצוניים, ואני לא מוכר לכם שום מנוי. לא צריך After Effects <span class="term">(תוכנת האנימציה המקצועית של Adobe)</span> או שום תוכנת עריכה — קלוד בונה את כל הדבר בקוד.</p>
+    <p>למטה כל שלב: איך אני מוצא את הרעיון, איך אני מנסח את הפרומפט, ואיך זה הופך למוצר מוגמר — באפס מאמץ, כשקלוד מטפל בכל התהליך. כל פריים בודד כאן הוא קוד ש-Opus 5.5 כתב, ואני לא מכיר אפילו את שלב 1 של מושן דיזיין.</p>
+
+    <h3>שלב 1: לגנוב את הרעיון</h3>
+    <p>לא צריך להיות יצירתיים בחלק הזה. כל סרטון שעשיתי התחיל ממשהו שכבר קיים: אנימציות ממשק מ-Dribbble <span class="term">(אתר שבו מעצבים מציגים עבודות)</span>, קינוט של אפל, אפילו פרומו של אפליקציה של מישהו אחר. אז מצאו סרטון השקה שאתם אוהבים, שמרו אותו ותנו אותו ל-Claude Code <span class="term">(קלוד שרץ בטרמינל/אפליקציה ויכול להריץ פקודות, לכתוב קבצים ולראות תמונות)</span> עם זה:</p>
+    <div class="code"><button class="cp">העתק</button><pre>Extract 2 frames per second from reference.mp4 with ffmpeg and put them on contact sheets. Go through them and break the video into beats: what happens on each beat, how each scene turns into the next, the camera moves, the colors and the fonts. Then write the same structure for my product: [your product + link].</pre></div>
+    <div class="tr">חלץ 2 פריימים לשנייה מ-reference.mp4 עם ffmpeg <span class="term">(תוכנת קוד פתוח מהטרמינל שחותכת, ממירה ומרכיבה וידאו ואודיו)</span> ושים אותם על גיליונות מגע <span class="term">(contact sheets — תמונה אחת שמכילה רשת של הרבה פריימים קטנים)</span>. עבור עליהם ופרק את הסרטון לביטים <span class="term">(beats — הפעימות של המוזיקה)</span>: מה קורה בכל ביט, איך כל סצנה הופכת לבאה, תנועות המצלמה, הצבעים והפונטים. ואז כתוב את אותו מבנה למוצר שלי: [המוצר שלך + קישור].</div>
+    <p>אין רפרנס? בקשו ממנו 3 רעיונות למוצר ובחרו אחד. טיפ אחד: קלוד נוטה כברירת מחדל לסרטונים כהים שנראים תלת-ממדיים, והם עדיין לא נראים יוקרתיים — אז אני דוחף את שלי למראה דו-ממדי, לבן ומינימליסטי. זה מה שבאמת מרגיש פרימיום. אם אתם כותבים פרומפט משלכם, הוסיפו את זה כדי שלא יברח לתלת-ממד כהה:</p>
+    <div class="code"><button class="cp">העתק</button><pre>Style: 2D only. Warm white background, black UI, one accent color, one clean font (Geist or Inter). No 3D, no dark mode, no glows, no particles. Think Apple keynote, not a video game trailer.</pre></div>
+    <div class="tr">סגנון: דו-ממד בלבד. רקע לבן-חם, ממשק שחור, צבע אקסנט אחד, פונט נקי אחד (Geist או Inter). בלי תלת-ממד, בלי מצב כהה, בלי זוהר, בלי חלקיקים. תחשוב קינוט של אפל, לא טריילר של משחק וידאו.</div>
+
+    <h3>שלב 2: להפוך את Claude Code לסטודיו</h3>
+    <p>פתחו את Claude Code והדביקו:</p>
+    <div class="code"><button class="cp">העתק</button><pre>Set up a motion design studio in this folder. Install ffmpeg and Playwright with Chromium. Then render a 2 second test where a black circle grows into a pill on a spring, 60fps, and show me the first and last frame.</pre></div>
+    <div class="tr">הקם סטודיו למושן דיזיין בתיקייה הזו. התקן ffmpeg ו-Playwright <span class="term">(ספרייה ששולטת בדפדפן בלי מסך — פותחת דף, מריצה בו קוד ומצלמת אותו)</span> עם Chromium <span class="term">(הגרסה הפתוחה של כרום)</span>. ואז רנדר <span class="term">(render — לייצר את התמונות הסופיות)</span> מבחן של 2 שניות שבו עיגול שחור גדל לגלולה על קפיץ, ב-60fps <span class="term">(60 תמונות לשנייה)</span>, והראה לי את הפריים הראשון והאחרון.</div>
+    <p>זה כל הסטודיו שלכם. Opus כותב קובץ HTML אחד עם פונקציה בשם <code>seek(t)</code> שמציירת כל פריים שתבקשו, Playwright מצלם כל פריים, ו-ffmpeg הופך אותם ל-MP4. כיוון שהכל קוד — אם משהו נראה לא טוב, פשוט אומרים לקלוד והוא מתקן רק את החלק הזה.</p>
+
+    <h3>שלב 3: להשיג את הנכסים — הכל בחינם</h3>
+    <ul>
+      <li>מוזיקה חינמית: <a href="https://mixkit.co/free-stock-music/" target="_blank" rel="noopener">mixkit.co/free-stock-music</a></li>
+      <li>אפקטים קוליים חינמיים: <a href="https://mixkit.co/free-sound-effects/" target="_blank" rel="noopener">mixkit.co/free-sound-effects</a></li>
+      <li>וידאו ותמונות חינמיים: <a href="https://www.pexels.com/" target="_blank" rel="noopener">pexels.com</a></li>
+      <li>פונטים חינמיים: <a href="https://fonts.google.com/" target="_blank" rel="noopener">fonts.google.com</a></li>
+      <li>ועוד צילומי מסך והלוגו שלכם.</li>
+    </ul>
+    <p>גם את זה לא מורידים בעצמכם — הדביקו ל-Claude Code:</p>
+    <div class="code"><button class="cp">העתק</button><pre>Download a royalty-free track around 120 BPM with a clear drop from mixkit.co/free-stock-music. Analyze it with numpy and give me the beat grid and the exact time of the drop. Then download one sound effect per event from mixkit.co/free-sound-effects and measure where each one peaks.</pre></div>
+    <div class="tr">הורד טראק ללא תמלוגים בסביבות 120 BPM <span class="term">(פעימות לדקה)</span> עם דרופ ברור <span class="term">(הרגע שבו השיר "מתפוצץ" אחרי בנייה)</span> מ-mixkit. נתח אותו עם numpy <span class="term">(ספריית חישוב מספרי בפייתון)</span> ותן לי את רשת הביטים ואת הזמן המדויק של הדרופ. ואז הורד אפקט סאונד אחד לכל אירוע ומדוד איפה כל אחד מגיע לשיא שלו.</div>
+    <p>תמיד השתמשו באפקטי סאונד אמיתיים — בהתחלה נתתי לו לייצר את שלו, והם נשמעו זול מאוד.</p>
+
+    <h3>שלב 4: הפרומפטים</h3>
+    <p>אלה הפרומפטים המדויקים שהשתמשתי בהם. הדביקו אחד ל-Claude Code עם Opus 5.5 — הוא ישאל אתכם קודם מה הוא צריך. כולם בנויים באותה צורה: מה לבקש מכם, איך זה צריך להיראות, מה קורה מתי, והטעויות שצריך להימנע מהן. הערה: אלה לא השקות אמיתיות — אלה דמואים שעשיתי כדי להראות מה Opus מסוגל. תעשו להם רמיקס עם המוצר והנכסים שלכם, ולא תוכלו להבדיל ביניהם לבין סרטון השקה של 15 אלף דולר.</p>
+    <p>שלושת הפרומפטים מופיעים כאן במלואם. מונחים כמו "קפיץ בנוסחה סגורה", "מרחב לוגריתמי" ו"תת-פריימים" מוסברים בהמשך העמוד לעומק, עם מעבדה אינטראקטיבית לכל אחד — אבל כבר בתרגום כל מונח מקבל הסבר קצר במקום.</p>
+
+    <details><summary>פרומפט 1 — סרט השקה: הזמנת אוכל (15 שניות, 16:9)</summary><div class="in">
+      <div class="code"><span class="lbl">original · paste into Claude Code</span><button class="cp">העתק</button><pre data-prompt="food"></pre></div>
+      <div class="tr" id="tr-food"></div>
+    </div></details>
+    <details><summary>פרומפט 2 — קינוט בסגנון אפל: אפליקציית הדפסת תמונות (27 שניות, ריבוע)</summary><div class="in">
+      <div class="code"><span class="lbl">original · paste into Claude Code</span><button class="cp">העתק</button><pre data-prompt="print"></pre></div>
+      <div class="tr" id="tr-print"></div>
+    </div></details>
+    <details><summary>פרומפט 3 — UI Morph: צורה אחת, 14 מצבים (14 שניות, לופ)</summary><div class="in">
+      <div class="code"><span class="lbl">original · paste into Claude Code</span><button class="cp">העתק</button><pre data-prompt="ui"></pre></div>
+      <div class="tr" id="tr-ui"></div>
+    </div></details>
+
+    <h3>שלב 5: מה גורם לזה להיראות יקר</h3>
+    <p>אם לא תגידו לו את הדברים האלה — זה ייראה כמו מצגת פאוורפוינט:</p>
+    <ol>
+      <li>שום דבר לא נכנס בפייד (התעמעמות) — דברים משנים צורה. כפתור גדל והופך לעמוד הבא.</li>
+      <li>אין חיתוכים — כל סצנה יוצאת מתוך הקודמת.</li>
+      <li>משהו קורה על כל ביט של השיר.</li>
+      <li>דברים קופצים קצת כשהם נוחתים, כמו חפצים אמיתיים.</li>
+      <li>המצלמה עושה תנועה אחת בכל פעם.</li>
+      <li>לכל קליק ו-whoosh יש סאונד אמיתי.</li>
+      <li>הוא בודק את העבודה של עצמו לפני שאתם צופים.</li>
+    </ol>
+
+    <h3>שלב 6: לסגור את זה</h3>
+    <p>כשאתם אוהבים את התוכנית, תגידו לו:</p>
+    <div class="code"><button class="cp">העתק</button><pre>Render the final video in 60fps with motion blur. Put every sound effect exactly on the moment it belongs to, balance the audio, and check every frame for glitches before you show me.</pre></div>
+    <div class="tr">רנדר את הסרטון הסופי ב-60fps עם מושן בלר <span class="term">(מריחת תנועה — הטשטוש הטבעי שמצלמה אמיתית יוצרת על דברים שזזים מהר)</span>. מקם כל אפקט סאונד בדיוק ברגע שהוא שייך אליו, אזן את האודיו, ובדוק כל פריים לתקלות לפני שאתה מראה לי.</div>
+    <p>ואז צפו ותנו לו הערות כמו במאי, לא כמו מתכנת: "החלק הזה איטי מדי", "הפייד הזה נראה זול — תגרום לו לשנות צורה", "תגרום לזום להכות על הדרופ". בדרך כלל זה לוקח 2–3 סבבים וסיימתם.</p>
+  </div>
+
+  <div class="why"><b>מה אפשר להבין מזה — במשפט אחד</b>המאמר מוכר "אפס מאמץ", אבל מה שהוא באמת מראה הוא שכל הידע המקצועי של מעצב תנועה עבר מהידיים — אל הפרומפט. השורות כמו "קפיצים בנוסחה סגורה", "זום במרחב לוגריתמי" ו"8 תת-פריימים" הן לא קישוט; הן בדיוק הידע שסטודיו גובה עליו כסף. מכאן ואילך העמוד מפרק כל אחת מהן עד הסוף — ואחר כך אומר ביושר מה בכותרת שלו מוגזם.</div>
+</section>
+
+<!-- ============ 4 FRAMES ============ -->

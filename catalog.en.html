@@ -1,0 +1,1147 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- motion:head -->
+<link rel="canonical" href="https://yuv.ai/motion/catalog">
+<link rel="alternate" hreflang="he" href="https://news.yuv.ai/motion/catalog">
+<link rel="alternate" hreflang="en" href="https://yuv.ai/motion/catalog">
+<link rel="alternate" hreflang="x-default" href="https://yuv.ai/motion/catalog">
+<meta property="og:url" content="https://yuv.ai/motion/catalog">
+<meta property="og:type" content="article"><meta property="og:site_name" content="YUV.AI">
+<meta property="og:locale" content="en_US"><meta property="og:locale:alternate" content="he_IL">
+<script>if (/github\.io$/.test(location.hostname)) location.replace('https://yuv.ai/motion/catalog' + location.search + location.hash);</script>
+<!-- /motion:head -->
+<title>Motion Catalog · YUV.AI</title>
+<meta name="description" content="A live catalog of building blocks for AI motion films: Recharts charts, shadcn/ui interfaces, official icons and logos, kinetic typography, three.js 3D and effects. Every element comes with a live demo, an explanation from zero and a full prompt.">
+<meta property="og:title" content="The Motion Catalog: what we can ask Claude for">
+<meta property="og:description" content="18 live elements, 9 foundations, 18 full prompts and a prompt builder. No prior knowledge needed. YUV.AI">
+<meta property="og:image" content="https://hoodini.github.io/motion-in-code/media/readme/social-preview.jpg">
+<meta property="og:image:width" content="1280"><meta property="og:image:height" content="640">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Gveret+Levin&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&family=Karantina:wght@300;400;700&family=Assistant:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#12163F">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='f' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23FFC74E'/%3E%3Cstop offset='.5' stop-color='%23FF8F3A'/%3E%3Cstop offset='1' stop-color='%23F56B49'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='18' fill='%2312163F'/%3E%3Ccircle cx='32' cy='32' r='13' fill='url(%23f)'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="catalog/site.css">
+<link rel="stylesheet" href="catalog/tw.css">
+<link rel="stylesheet" href="catalog/catalog.css">
+<link rel="stylesheet" href="catalog/en.css">
+<script type="module" src="catalog/main.js"></script>
+</head>
+<body>
+<header class="bar"><div class="wrap">
+  <a class="brand" href="index.en.html" style="text-decoration:none"><span>YUV<b>.</b>AI</span><small>MOTION CATALOG</small></a>
+  <a class="home" href="index.en.html">The method</a>
+  <a class="lang" href="catalog.html" hreflang="he" lang="he">עברית</a>
+  <button class="navbtn" id="tocBtn" aria-expanded="false" aria-controls="toc">Contents</button>
+</div><div class="prog" id="prog"></div></header>
+<nav class="toc" id="toc" aria-label="Contents"></nav>
+
+<main>
+
+<!-- ============ HERO ============ -->
+<section class="hero cat-hero" id="top">
+  <div class="hero-top">
+    <div class="hero-txt">
+      <div class="hkick"><b>YUV.AI · MOTION CATALOG</b><i></i></div>
+      <h1>What you can<br><span class="hl">ask for</span>.</h1>
+      <p class="deck">A live catalog of building blocks for AI motion graphics, explained from zero</p>
+      <p class="hmono"><span class="nb">Recharts · shadcn/ui · Lucide</span> · <span class="nb">Simple Icons · three.js</span></p>
+      <a class="hcta neon" href="#c0"><span>▶</span>Start with the foundations</a><a class="hcta2" href="#c8">Straight to the prompt builder</a>
+    </div>
+    <div class="cat-stage" data-demo="hero-particles" data-variant="hero" data-notb><div class="stage"></div><span class="hint">Drag to rotate</span></div>
+  </div>
+  <p class="lead"><b>Motion graphics</b> are videos in which everything is drawn and animated, not filmed: text, charts, icons and shapes. They're usually made in Adobe's After Effects; here we write them as code. Everything that moves on this page is code running right now in your browser. There isn't a single video file here. Every element is something we can ask Claude to put into a film, and next to each one there are three things: <b>a live demo</b> where you can drag time back and forth, <b>an explanation from zero</b> (what it is, how it works under the hood, when to use it and when not to), and <b>a full prompt</b> to copy. No background in After Effects or programming needed: every term is explained where it first appears. On this page, an <b>element</b> is a whole building block you can put in a film, like a chart or a 3D phone.</p>
+  <div class="stats"><span><b>18</b>live elements</span><span><b>9</b>foundation concepts</span><span><b>18</b>full prompts</span><span><b>1</b>prompt builder</span></div>
+</section>
+
+<!-- ============ HOW TO READ ============ -->
+<section class="sec s-cloud" id="how" data-folio="?" data-toc="How to read the catalog">
+  <div class="sh"><span class="num">HOW</span><div><h2>How to read the catalog</h2><p class="sub">Four parts in every card, and one example that runs through the whole page.</p></div></div>
+  <div class="legend">
+    <div><i>LIVE</i><b>Demo</b>Every demo is drawn from a single number: time. The bar under it, the scrubber, is the clock. Drag it to any moment and you'll see exactly the image (the frame) for that moment. That's exactly how a film gets captured.</div>
+    <div><i>WHAT · HOW</i><b>What and how</b>What you see, and how it works under the hood, step by step. Including what the library (ready-made code someone else wrote, explained in 0.3) does for us, so we know exactly what we're asking for.</div>
+    <div><i>FIT</i><b>When to use, when not to</b>Where the element serves the story, and where it only adds noise. A beautiful element in the wrong place weakens a film.</div>
+    <div><i>PROMPT</i><b>Prompt</b>A complete prompt, ready to paste into Claude Code: the version of Claude that works directly on your computer, writing files, running commands and checking the result. Use the prompt on its own, or combine several elements in the prompt builder at the end.</div>
+  </div>
+  <div class="def"><b>The running example: Ketzev</b>Ketzev (Hebrew for "rhythm") is a fictional fitness app. Every element in the catalog is shown as a possible scene in its launch film: the chart shows the user's progress, the interface (what we see and tap on screen: buttons, fields, menus) shows the app itself, and the 3D phone shows it on a device. That way we see not only <b>what</b> each element is, but <b>where</b> it fits in the story. The full Ketzev film, built with the same method, is on <a href="index.en.html#s0">the method page</a>.</div>
+  <h3>All the elements at a glance</h3>
+  <div class="idx" id="idx"></div>
+</section>
+
+<!-- ============ 00 FOUNDATIONS ============ -->
+<section class="sec s-denim" id="c0" data-folio="00" data-toc="Foundations: 9 concepts">
+  <div class="sh"><span class="num">00</span><div><h2>Nine concepts, and then it all makes sense</h2><p class="sub">No After Effects and no programming background. Each concept builds on the one before it, so it pays to read them in order.</p></div></div>
+
+  <div class="step"><span class="k">0.1</span><h3>A video is a stack of pictures</h3><p class="sub">And if we can draw any picture on demand, we can make a video.</p></div>
+  <div class="body">
+    <p>A video is a fast sequence of still pictures. Each of these pictures is called a <b>frame</b>. When the pictures change fast enough, the eye stops seeing separate images and sees continuous motion. How fast? That's the <b>fps</b>, short for frames per second. Cinema uses 24, the web usually 30, and motion graphics of interfaces 60. Why isn't 24 enough? Because a camera smears fast movement (this is called motion blur), and the smear fills the gap between pictures. A picture drawn in code is perfectly sharp, so at 24 or 30 we see it jump. At 60 the jumps are small enough, and phone screens refresh at least 60 times per second too.</p>
+    <div class="pic" aria-hidden="true"><span class="fr"><i style="left:8%"></i></span><span class="ar">›</span><span class="fr"><i style="left:22%"></i></span><span class="ar">›</span><span class="fr"><i style="left:42%"></i></span><span class="ar">›</span><span class="fr"><i style="left:60%"></i></span><span class="ar">›</span><span class="fr"><i style="left:70%"></i></span><span class="ar">›</span><span class="fr"><i style="left:72%"></i></span></div>
+    <p>The price of 60: more pictures to compute. A 30-second video at 60fps is 30 × 60 = <b>1,800 pictures</b>. Every picture is made of <b>pixels</b>, tiny squares of a single color, and the <b>resolution</b> says how many there are: 1920×1080 means 1,920 pixels across and 1,080 down. The ratio between width and height is the <b>aspect ratio</b>: 16:9 is a landscape screen (YouTube, presentations), and 9:16 is a portrait screen (Reels, TikTok, Shorts).</p>
+    <p>And here's the insight the whole catalog stands on: <b>to make a video, all we need is a way to draw picture number N.</b> If we can draw any frame on demand, we can ask for frame 0, then 1, then 2, all the way to 1,799, and stitch them together. That's the whole secret of "video that is code".</p>
+  </div>
+
+  <div class="step"><span class="k">0.2</span><h3>A web page: three languages, three layers</h3><p class="sub">Why the browser is the best drawing engine for AI videos.</p></div>
+  <div class="body">
+    <p>Where do the pictures come from? From a web page. The browser (Chrome, for example) is a free and remarkably powerful drawing engine: it can draw text in any language, including right-to-left languages like Hebrew and Arabic, in any font, plus shapes, images, video and even 3D. And Claude writes web page code fluently, because it's the most common kind of code on the internet.</p>
+    <p>A web page is built from three languages, and each one is responsible for a different layer. The demo below has one button from the Ketzev film. Toggle each layer off and on and see what it contributes:</p>
+    <ul>
+      <li><b>HTML</b> says <b>what's there</b> on screen: "there's a button, and it says Start workout". Each such item, a button or a heading or an image, is called an <b>element</b>.</li>
+      <li><b>CSS</b> says <b>how it looks</b>: orange, fully rounded, in the Anton font. Without CSS we get the browser's plain gray default button.</li>
+      <li><b>JavaScript</b> (JS for short) says <b>what happens</b>. In our case: how the button changes over time. Without JS the button freezes.</li>
+    </ul>
+  </div>
+  <article class="el" id="e-layers">
+    <div class="el-h"><span class="el-n">LAB 0.2</span><h3>The three layers of one button</h3><div class="el-tags"><span>HTML</span><span>CSS</span><span>JS</span></div></div>
+    <div class="el-demo" data-demo="basics-layers"><div class="stage"></div><div class="tb-host"></div></div>
+  </article>
+  <div class="body">
+    <p>The JS lines in the demo use <code>seek</code> and <code>spring</code>. No need to understand them yet; they're explained in steps 0.7 and 0.8.</p>
+    <p>So how does a page like this become a video file? With two free tools. <b>Playwright</b> is a Microsoft tool that opens an invisible browser and drives it from code: "open the page, set the time to 0.5 seconds, capture", and again and again, 1,800 times. <b>ffmpeg</b> is a veteran program that stitches the pictures, together with the music, into a single MP4 file. It also <b>compresses</b>: 1,800 full pictures weigh several gigabytes, while an MP4 file mostly stores what changed from one picture to the next and gives up tiny differences, which is why it's hundreds of times smaller. The price: fine details, like a slow color gradient, can suffer.</p>
+  </div>
+
+  <div class="step"><span class="k">0.3</span><h3>Library, npm and license</h3><p class="sub">Why we don't write everything from scratch, and why the exact name matters.</p></div>
+  <div class="body">
+    <p>A <b>library</b> is code someone else wrote, tested and shared, so we don't have to write it ourselves. Drawing a chart correctly, with axes, ticks, labels and spacing, is weeks of work. A library like Recharts does it in ten lines. <b>npm</b> is the world's largest registry of JavaScript libraries, and it's free: the command <code>npm install recharts</code> downloads the library into the project. A library packaged for npm is called a <b>package</b>, and it has a version number like 3.2.1. The first number goes up when the new version is no longer compatible with code written for the old one, the middle one when a capability is added without breaking anything, and the last one when a bug is fixed. That's why we specify a version: if Claude knows version 2 and the project installs version 3, some of the code might not work. (A command like this is typed in the <b>terminal</b>, a text window where we give the computer instructions. In practice, Claude Code types it for us.)</p>
+    <p>Why does this matter in a prompt? Because Claude knows the popular libraries well, and the right way to use them. When we write "a Recharts area chart", it knows exactly what to build. When we write just "a chart", it may improvise a homemade version that looks average. <b>An exact name turns a vague request into a clear target.</b></p>
+    <p>A <b>license</b> is the legal permission to use the code. Every element in the catalog is marked with its license, and three types keep coming up:</p>
+    <ul>
+      <li><b>MIT and ISC</b>: almost anything goes, including commercial work for a client. The only condition is keeping the copyright notice in the code.</li>
+      <li><b>Apache 2.0</b>: similar, and adds protection against patent claims.</li>
+      <li><b>CC0</b>: public domain. No conditions at all.</li>
+    </ul>
+    <div class="warn"><b>A code license is not a trademark license</b>The logo file (in SVG format, which we'll meet in 0.5) can be completely free, and the logo itself is still a <b>trademark</b>: a name or symbol the law reserves for a company, so that nobody can present themselves as the company or as acting on its behalf. Showing a logo to say that a product works with that company's service is fine, but implying that the company endorses us is not, and most companies' brand guidelines forbid distorting or recoloring their logo. Some tools are also free only up to a certain size: Remotion, a tool for making videos from code that we'll meet in chapter 07, is free for individuals and for companies of up to three employees. Before any commercial work, check.</div>
+  </div>
+
+  <div class="step"><span class="k">0.4</span><h3>Components and React</h3><p class="sub">Lego bricks with settings, and why they're perfect for video.</p></div>
+  <div class="body">
+    <p>A <b>component</b> is a building block we can use again and again, with settings. Like a Lego brick that comes in several colors and sizes: the same button can be orange or transparent, large or small. These settings are called <b>props</b>. <b>React</b> is a library from Meta for building interfaces out of components. Instead of telling the browser "move this, color that", we describe to it <b>what the screen should look like</b> given the data. Every time the description changes, React compares it with the previous one and changes only what actually changed on the page.</p>
+    <p>And that's exactly what video needs. We compute the frame's data from the time ("at second 3.6, progress is 72%"), hand it to React, and it draws exactly that frame. The same input always gives the same picture. A <b>function</b> is a recipe in code: we put a value in (the input) and it returns a result (the output), for example time goes in and a progress percentage comes out. A function that has no hidden memory, and whose result depends only on its input, is called a <b>pure function</b>:</p>
+    <div class="code"><span class="lbl">a React component that is a pure function of time</span><pre>function Frame({ t }) {                       // t = the time in seconds
+  const progress = Math.min(100, t * 20);     // 0% at t=0, 100% at t=5
+  return &lt;Progress value={progress} /&gt;;       // a ready-made progress-bar component
+}</pre></div>
+    <p>The progress is t times 20, but never more than 100 (<code>Math.min</code> picks the smaller of the two). The number goes to a ready-made component that draws a progress bar (<code>Progress</code>, which we'll meet in chapter 02).</p>
+  </div>
+
+  <div class="step"><span class="k">0.5</span><h3>Vector vs. raster</h3><p class="sub">Why logos and icons need to be SVG.</p></div>
+  <div class="body">
+    <p>There are two ways to store an image. <b>Vector</b> stores a <b>description</b>: "a circle, the center is here, the radius is this much, the color is orange". When we enlarge it, the computer redraws it from the description, so the edges stay sharp at any size. The web's vector format is called <b>SVG</b>. <b>Raster</b> stores a <b>grid of pixels</b> (PNG, JPG): when we enlarge it, each pixel becomes a big square, or smears if smoothing is turned on.</p>
+    <p>In motion this is critical, because the camera zooms: a 3× push-in on a logo is a 3× enlargement. In the demo, both sides show exactly the same icon. Turn up the zoom and see what happens to each one:</p>
+  </div>
+  <article class="el" id="e-vector">
+    <div class="el-h"><span class="el-n">LAB 0.5</span><h3>The same icon, two ways to store it</h3><div class="el-tags"><span>SVG</span><span>PNG</span></div></div>
+    <div class="el-demo" data-demo="basics-vector"><div class="stage"></div></div>
+  </article>
+  <div class="body"><p>The rule: logos, icons, shapes and text are always vector. Photos are raster by nature, and that's fine, as long as their resolution is higher than the size they'll appear at after the zoom.</p></div>
+
+  <div class="step"><span class="k">0.6</span><h3>Three ways to draw: DOM, Canvas, WebGL</h3><p class="sub">And why particles and 3D need the graphics card.</p></div>
+  <div class="body">
+    <ul>
+      <li><b>DOM</b> (short for Document Object Model) is the usual way. The browser keeps every element as an object in memory, with all its styles, works out what goes where, and draws. Excellent for text and interfaces, and slow when there are thousands of elements, because each one has to be stored and computed.</li>
+      <li><b>Canvas</b> is a blank drawing board of pixels. We give it commands ("draw a circle here") every frame, and it doesn't remember what was drawn. Very fast for thousands of shapes, but everything is on us: no automatic layout, no line wrapping.</li>
+      <li><b>WebGL</b> is a way to draw through the <b>graphics card</b> (GPU). A regular processor has a few powerful cores that each work through tasks one after another; a graphics card has thousands of small cores that compute thousands of points <b>in parallel</b>. That's why 3D and tens of thousands of particles go through it. The three.js library makes it comfortable to use.</li>
+    </ul>
+    <p>In the demo, the same points are drawn in all three ways, and the time is measured right now on your device. Slide it to 30,000 and press "Measure now":</p>
+  </div>
+  <article class="el" id="e-cost">
+    <div class="el-h"><span class="el-n">LAB 0.6</span><h3>What it costs to draw N points</h3><div class="el-tags"><span>DOM</span><span>Canvas 2D</span><span>WebGL</span></div></div>
+    <div class="el-demo" data-demo="basics-cost"><div class="stage"></div></div>
+  </article>
+  <div class="body">
+    <p>Why is the number 16.7 marked? At 60fps each frame gets 1,000 ÷ 60 = 16.7 milliseconds. Anything that takes longer stutters <b>in live playback</b>. But here's the important nuance: <b>when we produce a video file, there is no budget.</b> Playwright waits as long as each frame needs, so a heavy scene that stutters in the <b>preview</b> (the live playback in the browser while we work, before we produce a file) will come out perfectly smooth in the video. On one condition, which is the subject of the next step: the page draws each frame from a time number it's given, not from the clock. The budget matters for the preview and for working speed, not for the result.</p>
+  </div>
+
+  <div class="step"><span class="k">0.7</span><h3>The clock t: why a library's animation breaks video</h3><p class="sub">The rule that applies to every element in this catalog.</p></div>
+  <div class="body">
+    <p>Most libraries animate by the <b>wall clock</b>: "move this over one and a half seconds of real time". In a browser that's perfect. But while capturing a video, each frame takes 100 to 500 milliseconds to capture, because for every capture the browser has to finish drawing, turn about 2 million pixels into an image file and hand it to the program doing the capturing. That's 6 to 30 times longer than the 16.7 milliseconds of live playback. Meanwhile, the library's animation keeps running in real time, and within a few frames it's already over. The video jumps.</p>
+    <p>The fix, applied in every demo on this page: <b>turn off the library's animation and compute everything from t</b>. Frame number i gets t = i ÷ 60, and draws whatever should be on screen at that moment. That way frame 37 is always the same picture, no matter how long it took to capture. The function that draws the picture for moment t is called <code>seek(t)</code>. The demo captures 12 frames with both methods, with random capture times, just like in real life:</p>
+  </div>
+  <article class="el" id="e-clock">
+    <div class="el-h"><span class="el-n">LAB 0.7</span><h3>Wall clock vs. seek(t)</h3><div class="el-tags"><span>seek(t)</span><span>Playwright</span></div></div>
+    <div class="el-demo" data-demo="basics-clock"><div class="stage"></div></div>
+  </article>
+  <div class="body"><p>In the top row, the dot reaches the end after just a frame or two, and the rest are wasted. In the bottom row, each frame shows a small, equal step. Every prompt on this page includes the sentence that enforces this. Most libraries have a way to turn off their built-in animation: in the Recharts chart library (chapter 01) it's a single setting, <code>isAnimationActive={false}</code>. The interface components we'll meet in chapter 02 have no such switch, so we delete the instructions in their code that make the browser animate on its own.</p></div>
+
+  <div class="step"><span class="k">0.8</span><h3>Motion that looks real: easing and springs</h3><p class="sub">Why motion at a constant speed looks robotic.</p></div>
+  <div class="body">
+    <p>Nothing in the world moves at a constant speed: a ball speeds up as it falls, a door slows down before it closes. That's why motion at a constant speed (<b>linear</b> motion) looks mechanical. <b>Easing</b> is a curve that converts "how much of the time has passed" (from 0 to 1) into "how much of the way we've covered". It comes in three common shapes, and we'll see their names in the prompts: <b>ease-in</b> starts slow and speeds up, <b>ease-out</b> slows down at the end, and <b>ease-in-out</b> does both.</p>
+    <p>A <b>spring</b> is a curve that overshoots the target a little and comes back, like a door on a spring hinge. It has two settings: <b>stiffness</b> (how fast it gets there) and <b>damping</b> (how quickly the bounces die down: higher damping, fewer bounces). In the catalog we compute the spring with a <b>closed-form formula</b>: we plug in t and immediately get the position, without computing all the frames before it. That's why it obeys the t rule:</p>
+    <div class="code"><span class="lbl">a closed-form spring: position at time t, straight from the formula</span><pre>const spring = (t, w = 12, z = 0.8) =&gt; {    // w = frequency (higher = faster), z = damping, must stay below 1
+  if (t &lt;= 0) return 0;
+  const wd = w * Math.sqrt(1 - z * z);
+  return 1 - Math.exp(-z * w * t) * (Math.cos(wd * t) + (z * w / wd) * Math.sin(wd * t));
+};
+// spring(0.1) = 0.38, spring(0.2) = 0.79, spring(0.4) = 1.013 (just past the target), spring(0.6) = 1.005, then 1</pre></div>
+    <p>How to read it: in the code, <b>w</b> is the stiffness (a higher number means a faster spring; technically it's the spring's frequency) and <b>z</b> is the damping. <code>Math.exp(…)</code> is the brake, a number that starts at 1 and shrinks over time, which is why the oscillation fades. <code>cos</code> and <code>sin</code> rise and fall in a smooth, repeating wave between -1 and 1, and they are the oscillation itself. (If a point's horizontal position is cos of t and its vertical position is sin of t, the point moves in a circle. That's how the circles move in several of the effects later on.) <b>z</b> must stay below 1, because at 1 the formula divides by zero; 0.99 means almost no bounce. When the prompts say "closed-form springs", this is what they mean. An interactive lab for playing with stiffness and damping is in <a href="index.en.html#s8">the springs chapter on the method page</a>.</p>
+  </div>
+
+  <div class="step"><span class="k">0.9</span><h3>How we ask: the six blocks</h3><p class="sub">The skeleton every prompt in the catalog is built on.</p></div>
+  <div class="body">
+    <p>Every prompt here is built on the same skeleton, developed by the creator zero (<span class="ltr">@twoclipping</span>) for his launch films. A language model that doesn't get precise instructions gives us the <b>average</b> of what it has seen, and in motion the average is a "template": dark background, glow, particles and a fade (a transition where one picture slowly dissolves and the next one appears beneath it). The six blocks erase the average:</p>
+    <ul>
+      <li><code>&lt;inputs&gt;</code>: what Claude needs to ask us for before it starts (data, logo, music), and what to do if we don't provide it.</li>
+      <li><code>&lt;direction&gt;</code>: the taste. Format, colors as exact codes, fonts by name, and a list of what's forbidden. An exact color is written like this: <code>#FF8F3A</code>. That's three pairs of characters: how much red, how much green and how much blue, from 00 (none) to FF (the most, 255). Lots of red, some green and a little blue make orange, and that way Claude gets exactly the shade we mean.</li>
+      <li><code>&lt;structure&gt;</code>: what happens when, in beats of the music. A <b>beat</b> is a single pulse of the song, and tempo is measured in beats per minute (BPM). At 120 BPM: 60 seconds divided by 120 = half a second per beat. 120 is common in popular music, and the numbers come out round: one beat = 0.5 seconds = 30 frames at 60fps.</li>
+      <li><code>&lt;build&gt;</code>: how to build it. This is where the t rule and the technical instructions for each library go.</li>
+      <li><code>&lt;gotchas&gt;</code>: known bugs, listed up front, so Claude avoids them on the first pass.</li>
+      <li><code>&lt;start&gt;</code>: a cheap approval gate. First a <b>beat map</b> (a list of what happens on each beat) and four <b>stills</b> (single pictures from the film), and only after we approve, the full film. It's cheap because four pictures are created in seconds, while <b>rendering</b>, producing all the frames into the final file, takes many minutes.</li>
+    </ul>
+    <p>Library names, function names and technical terms are English anyway, so these prompts work as-is in any tool. The on-screen text inside them is whatever language the film uses: here it's English, and for a film in another language we just swap those strings. A full breakdown of each block, and why it works on a language model, is in <a href="index.en.html#s15">the anatomy chapter on the method page</a>.</p>
+  </div>
+</section>
+
+<!-- ============ 01 DATA ============ -->
+<section class="sec s-cloud" id="c1" data-folio="01" data-toc="Data and charts">
+  <div class="sh"><span class="num">01</span><div><h2>Data and charts</h2><p class="sub">The moment the film proves something: growth, results, progress.</p></div></div>
+  <div class="body">
+    <p>A good launch film answers the question "Why should I believe you?", and most of the time the answer is a number. In the film for Ketzev (Hebrew for "rhythm"), a fictional fitness app, this is the moment the user sees how far they came this month. The four elements here are four ways to show a number: a line that unfolds over time, a comparison between days, one big number, and a percentage of a goal.</p>
+    <p>The library we use here is <b>Recharts</b>: a collection of React components for charts, which draws them as SVG (that is, vector graphics, sharp at any zoom). Under the hood it borrows parts of a library called D3 for the math: where each tick mark goes, how to smooth a curve. It's free under the MIT license, and the current version is 3. The main alternatives, and when to pick them:</p>
+    <ul>
+      <li><b>Chart.js</b>: draws on Canvas and doesn't need React. Fast and simple, less flexible in styling. MIT.</li>
+      <li><b>Apache ECharts</b>: hundreds of chart types, maps included. Heavier. Apache 2.0.</li>
+      <li><b>D3</b>: the low-level layer itself. Full control over every pixel, and a lot more code. ISC.</li>
+    </ul>
+    <p>The rule for choosing: if the project is in React and the chart is a standard one, Recharts. If we need a shape that has no name, D3. Either way, the built-in animation is off and everything is computed from t.</p>
+  </div>
+
+  <article class="el" id="e-chart-area">
+    <div class="el-h"><span class="el-n">01.1</span><h3 class="el-t">An area chart that draws itself</h3><div class="el-tags"><span>Recharts</span><span>React</span><span>SVG</span><span class="lic">MIT</span></div></div>
+    <div class="el-demo" data-demo="chart-area"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>What you see</h4><p>30 days of workout minutes in the Ketzev app. The line draws itself from left to right, an orange dot rides its tip, and at the end a dashed goal line lands: 60 minutes. The viewer watches the trend being built instead of receiving it ready-made.</p>
+        <h4>Try it</h4><p>Check "Let Recharts animate on its own". Now the library animates by the wall clock, and the scrubber no longer controls it. That's exactly the animation that would break during capture.</p></div>
+        <div><h4>How it works</h4><ul>
+          <li>On every frame we compute from t how much of the line is already revealed, and pass Recharts only those points, plus one in-between point so the tip moves smoothly instead of jumping a whole day at a time.</li>
+          <li><code>isAnimationActive={false}</code> turns off the library's own animation. The reveal is ours.</li>
+          <li><code>type="monotone"</code> smooths the line without overshooting the data, so we don't invent peaks that never happened.</li>
+          <li>The fill is a gradient from orange to transparent, and the goal is a <code>ReferenceLine</code> whose thickness grows on a spring.</li></ul></div>
+      </div>
+      <div class="fit"><div class="y"><b>When to use</b>The proof moment: "look how far you've come". One clear trend, with an ending that lands on the beat.</div><div class="n"><b>When not to</b>More than three lines, or exact values the viewer needs to read in two seconds. In that case, one big number (01.3) works better.</div></div>
+      <div class="prompt"><h5>Full prompt</h5><div class="code"><span class="lbl">area chart · Recharts · paste into Claude Code</span><button class="cp" type="button">Copy prompt</button><pre>&lt;inputs&gt;
+Ask me for the data series (one value per day) and its label. If I skip it, invent a plausible 30-day series of workout minutes that trends upward with natural noise, and say so.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 7-second clip, 1920x1080, 60fps. A Recharts AreaChart draws itself from left to right as the data is revealed. A dot in the accent colour rides the tip of the line. At the end, a dashed goal line at 60 lands on a beat with the label "Goal: 60 min".
+Look: light background #EEF3FB, navy text and grid #12163F, the line is a gradient #FFC74E → #FF8F3A → #F56B49, the area fill is the same orange fading to transparent. Axis labels in Inter; the title in Anton, uppercase. Swap the colours and fonts for your brand.
+Banned: 3D charts, drop shadows on the line, legends that nobody needs, gridlines on both axes.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM, a beat every 0.5s. Beats 0-1: the empty axes. Beats 1-9: the line draws with an ease-in-out. Beat 10: the goal line springs in. Beats 10-13: hold, with the dot pulsing once per beat.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file with React and Recharts that exposes window.seek(t). Every frame is computed from t alone: no CSS transitions, no timers, no state between frames.
+Set isAnimationActive={false} on every series. For each frame, compute how far along the line we are, pass only the points revealed so far plus one interpolated point at the tip, and render with flushSync so the DOM is ready before the screenshot.
+Use type="monotone" for the curve. The goal line's stroke width and label size come from a closed-form spring of t.
+Render with Playwright at 60fps and assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Recharts animates on its own clock by default. If isAnimationActive is left on anywhere, captured frames jump.
+- Fix the Y axis domain (for example 0 to 80), or the axis rescales every frame as points are added.
+- Wait for document.fonts.ready before the first frame.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me 3 stills (beat 1, beat 6, beat 12) before rendering the full clip.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-chart-bars">
+    <div class="el-h"><span class="el-n">01.2</span><h3 class="el-t">Bars that land on the beat</h3><div class="el-tags"><span>Recharts</span><span>BarChart</span><span class="lic">MIT</span></div></div>
+    <div class="el-demo" data-demo="chart-bars"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>What you see</h4><p>A week of workouts. Each bar jumps up on its own beat, half a second after the one before it, overshoots its height a little and settles back. Today's bar is painted in the brand's "fire" gradient (yellow, orange, red). The days run left to right, Sunday to Saturday. (If your film is in Hebrew or Arabic, which read right to left, reverse the order so the week starts on the right.)</p></div>
+        <div><h4>How it works</h4><ul>
+          <li>The height of each bar = its value × <code>spring(t − beatTime)</code>, where beatTime is the moment of that bar's own beat. We subtract the beat time to give each bar its own clock that starts at zero: before its beat the result is negative, the spring returns 0, and the bar hasn't started yet. The spring overshoots 1 a little and comes back, which is why the bar "lands" instead of stopping dead.</li>
+          <li>The number above a bar appears only once the bar is 60% of the way up, so the number doesn't jump ahead of it.</li>
+          <li>Today's color comes from <code>Cell</code>, a Recharts component that lets each bar have its own color.</li></ul></div>
+      </div>
+      <div class="fit"><div class="y"><b>When to use</b>Comparing 4 to 12 items and highlighting one of them. Perfect for a musical rhythm, because every bar is a beat.</div><div class="n"><b>When not to</b>More than 12 bars: they get too thin to read on a phone screen, and the animation drags on too long.</div></div>
+      <div class="prompt"><h5>Full prompt</h5><div class="code"><span class="lbl">bar chart on the beat · Recharts</span><button class="cp" type="button">Copy prompt</button><pre>&lt;inputs&gt;
+Ask me for the 7 values and which bar to highlight. If I skip them, use workout minutes for a week (Sunday to Saturday) and highlight Friday.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 5.5-second clip, 1080x1920 for Reels, 60fps. A Recharts BarChart of 7 days where each bar springs up on its own beat, overshoots slightly and settles. The highlighted bar is filled with the gradient #FFC74E → #FF8F3A → #F56B49; the others are navy #12163F on a light #EEF3FB background. Day labels Sun to Sat, ordered left to right. The value appears above each bar once it is most of the way up.
+Banned: bars growing all at once, bouncing more than once, 3D bars.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM. Bar i lands on beat i+1 (0.5s apart). The highlighted bar gets a small extra scale pop on its beat.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file with React and Recharts that exposes window.seek(t); every frame is computed from t alone, no CSS transitions or timers.
+BarChart with isAnimationActive={false}. Each bar's value = target × spring(t − beatTime), where spring is this closed-form damped spring with ω = 13 and ζ = 0.5: spring(t) = 1 − e^(−ζωt)·(cos(ω_d·t) + (ζω/ω_d)·sin(ω_d·t)), ω_d = ω·√(1 − ζ²). Use Cell for per-bar colours. Render each frame with flushSync. Capture with Playwright at 60fps and assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Clamp the spring at 0 so a bar never dips below the axis.
+- Fix the Y domain so the axis does not rescale while bars grow.
+- Pass all 7 bars from the first frame (bars that have not started at 0) and animate only their heights. Adding bars as they appear changes the category widths, and every bar slides sideways.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me stills at beats 2, 5 and 10 before the full render.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-kpi">
+    <div class="el-h"><span class="el-n">01.3</span><h3 class="el-t">Counters that count up</h3><div class="el-tags"><span>CSS</span><span>tabular-nums</span><span>Intl.NumberFormat</span></div></div>
+    <div class="el-demo" data-demo="kpi"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>What you see</h4><p>Three numbers that run from zero to their final value, one after another, and land with a small hop past the value and back. No library at all: it's just a number computed from t and written into an element.</p>
+        <h4>Try it</h4><p>Uncheck "Fixed-width digits" and watch the numbers shake while they count.</p></div>
+        <div><h4>Why they shake</h4><p>In many fonts, for example Inter, the font the numbers here are set in, the digit 1 is narrower than the digit 8. These are called <b>proportional digits</b>. When the number changes every frame, its width changes, and everything around it moves. The fix is a font feature called <code>tabular-nums</code>: every digit gets the same width, like in a table. (This works only if the font includes such digits; Inter does.) One line of CSS: <code>font-variant-numeric: tabular-nums</code>.</p>
+        <p>And for the thousands separators (1,248) we use <code>Intl.NumberFormat</code>, the browser's built-in tool for formatting numbers the way each language writes them.</p></div>
+      </div>
+      <div class="fit"><div class="y"><b>When to use</b>One number that is the story: "1,248 minutes". It reads instantly, even on a phone.</div><div class="n"><b>When not to</b>More than three counters at the same moment: the eye doesn't know where to look.</div></div>
+      <div class="prompt"><h5>Full prompt</h5><div class="code"><span class="lbl">count-up KPI tiles</span><button class="cp" type="button">Copy prompt</button><pre>&lt;inputs&gt;
+Ask me for up to three KPIs (value, label, optional suffix like % or +). If I skip them, use: 1,248 "Workout minutes", 30 "Day streak", +38% "This month".
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 4.5-second clip, 1920x1080, 60fps. Three KPI tiles side by side, ordered left to right. Each number counts up from 0 to its value and lands with a small overshoot, one tile per beat. Numbers in Inter 800, labels in Inter 600. Light tiles #EEF3FB on white, navy numbers #12163F, the middle number in orange #B4501A.
+Banned: slot-machine rolling digits, confetti, numbers that keep moving after they land.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM. Tile 1 starts on beat 1, tile 2 on beat 2, tile 3 on beat 3. Each count lasts 1.2s with an ease-out and a tiny spring at the end.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file exposing window.seek(t); every value is computed from t alone, no timers or CSS transitions.
+displayed = round(target × easeOut(progress(t))); format with Intl.NumberFormat('en-US'); keep the suffix outside the number in its own span. Use font-variant-numeric: tabular-nums on every number. Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Without tabular-nums the numbers change width every frame and the tiles shake.
+- Round before you format. Given the raw value, Intl.NumberFormat shows decimals (1,247.6) on the in-between frames.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me one still mid-count and one at the end before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-ring">
+    <div class="el-h"><span class="el-n">01.4</span><h3 class="el-t">Progress ring</h3><div class="el-tags"><span>SVG</span><span>stroke-dasharray</span></div></div>
+    <div class="el-demo" data-demo="ring"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>What you see</h4><p>A ring that fills to 78% of the weekly goal, with the number counting up in the center. The ring we know from fitness apps, drawn in code, with no library at all.</p>
+        <h4>Try it</h4><p>Check "Show the full outline" and see that the ring is really one long dashed line.</p></div>
+        <div><h4>How it works</h4><p>In SVG we can turn a circle's outline into a dashed line. <code>stroke-dasharray</code> sets the length of the dash and also the length of the gap after it, and <code>stroke-dashoffset</code> shifts where the pattern starts. The trick: make the dash and the gap both as long as the whole circumference (2πr: two times pi, about 6.28, times the radius r). When we shift the dash, the gap slides into its place, and the gap is nothing, so only part of the dash stays visible:</p>
+        <p><code>offset = circumference × (1 − progress)</code>. When progress is 0, the whole dash sits off the circle. At 1, it covers everything. The numbers update live in the dark box. And we rotate the circle by −90°, because in SVG a circle starts at 3 o'clock, and we want it to start at 12.</p></div>
+      </div>
+      <div class="fit"><div class="y"><b>When to use</b>A percentage of a goal, a countdown, loading. A shape everyone knows from their watch and their phone.</div><div class="n"><b>When not to</b>Comparing several values: nested rings are hard to read. Bars (01.2) are clearer.</div></div>
+      <div class="prompt"><h5>Full prompt</h5><div class="code"><span class="lbl">progress ring · SVG</span><button class="cp" type="button">Copy prompt</button><pre>&lt;inputs&gt;
+Ask me for the goal and the reached value. If I skip them, fill to 78% with the label "of weekly goal".
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 4-second clip, 1080x1080, 60fps. A circular progress ring fills from 12 o'clock to its value with a spring that settles, while the percentage counts up in the centre. Track in navy at 10% opacity, the arc in the gradient #FFC74E → #FF8F3A → #F56B49 with round caps, 22px thick at a 92px radius (scale up for 1080). Number in Inter 800, label in Inter 600.
+Banned: glow, multiple nested rings, a ring that spins after it lands.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+Beat 1: the track appears. Beats 1-5: the arc fills with a closed-form spring, ω = 6 and ζ = 0.85: spring(t) = 1 − e^(−ζωt)·(cos(ω_d·t) + (ζω/ω_d)·sin(ω_d·t)), ω_d = ω·√(1 − ζ²). Beat 6: a small scale pop on the number.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file exposing window.seek(t); every attribute is computed from t, no CSS transitions.
+SVG circle with stroke-dasharray = 2πr and stroke-dashoffset = 2πr × (1 − progress(t)), rotated −90° around its centre so it starts at 12 o'clock. The number uses tabular-nums. Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- With round caps, a 0% ring still shows a dot. Hide the arc until progress passes 1%.
+- Set the dash values as attributes every frame; a CSS transition on stroke-dashoffset would run on the wall clock.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me a still at 50% and at the end before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+</section>
+
+<!-- ============ 02 UI ============ -->
+<section class="sec s-sky" id="c2" data-folio="02" data-toc="UI: shadcn/ui">
+  <div class="sh"><span class="num">02</span><div><h2>Real UI with shadcn/ui</h2><p class="sub">A product film needs an app that looks real. Here's how to get one without designing it from scratch.</p></div></div>
+  <div class="body">
+    <p>The most important scene in Ketzev's film is a tour of the app: someone types, clicks, switches a tab, and we see that the product works. For it to look like a real app, we build it from real interface components. Three concepts, each one stacked on the one before:</p>
+    <ul>
+      <li><b>Tailwind CSS</b> is a way to write styling with <b>classes</b>: a class is a label we stick on an element, and the CSS decides what each label does. In Tailwind every label does one small thing, so instead of writing a separate CSS file, we write <code>rounded-full bg-primary px-4</code>: fully rounded, in the primary color, with horizontal padding.</li>
+      <li><b>Radix</b> is a library of components with no styling at all, which handles all the behavior: the keyboard, focus, and screen readers (software that reads the screen aloud for people with visual impairments). A tab that works properly with the Tab key, for example.</li>
+      <li><b>shadcn/ui</b> combines the two. It describes itself as "not a component library": instead of installing a package, we copy each component's code into the project (<code>npx shadcn add button</code>), and it's ours to change. That's exactly what lets us adapt it for video.</li>
+    </ul>
+    <p>shadcn/ui is very popular, which is why it looks "like a real app". For the same reason, it can also look generic. In the demo below, every component got the Phoenix colors, the YUV.AI brand palette (navy, orange, gold), and the brand fonts (Anton for headlines, Inter for text), and that's what makes them ours.</p>
+  </div>
+
+  <article class="el" id="e-ui">
+    <div class="el-h"><span class="el-n">02.1</span><h3 class="el-t">An app tour, built from real components</h3><div class="el-tags"><span>shadcn/ui</span><span>Radix</span><span>Tailwind</span><span>React</span><span class="lic">MIT</span></div></div>
+    <div class="el-demo split" data-demo="ui-scene"><div class="stage"></div>
+      <ol class="ui-steps">
+        <li data-from="0" data-to="0.9"><b>Card enters</b><span>A card with a title, rising on a spring.</span></li>
+        <li data-from="0.9" data-to="2.4"><b>Input gets typed into</b><span>"Morning workout", one letter every 0.1 seconds, with a caret placed by measuring the text width.</span></li>
+        <li data-from="2.4" data-to="3.4"><b>Button gets pressed</b><span>The cursor arrives and clicks, and the button shrinks and changes color.</span></li>
+        <li data-from="3.4" data-to="4.4"><b>Progress fills</b><span>From 0 to 72% on a slow spring.</span></li>
+        <li data-from="4.4" data-to="6.6"><b>Tabs switch</b><span>Today → Week → Month, and the big number updates.</span></li>
+        <li data-from="6.6" data-to="7.2"><b>Switch turns on</b><span>The little knob jumps to the other side.</span></li>
+        <li data-from="7.2" data-to="8.8"><b>Slider moves</b><span>Intensity from 30 to 80.</span></li>
+        <li data-from="8.8" data-to="9.6"><b>Alert drops in</b><span>A message: weekly goal reached.</span></li>
+        <li data-from="9.6" data-to="11.1"><b>Badge pops</b><span>A small label that pops past its size and settles back.</span></li>
+      </ol>
+      <div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>What you see</h4><p>A Ketzev screen built from nine real shadcn/ui components. The list on the side marks which component is acting right now. Drag the scrubber backward and watch every component return to exactly the state it had at that moment, the tab and the switch included.</p>
+        <h4>Controlled components: the key idea here</h4><p>A regular switch remembers by itself whether it's on. This is called <b>internal state</b>. In a film that's a problem: if the switch "remembers" it was turned on and we jump back in time, it stays on. That's why every component here is <b>controlled</b>: it decides nothing on its own. On every frame we tell it from the outside what its state is, for example <code>checked={t &gt; 6.6}</code>.</p></div>
+        <div><h4>How it works</h4><ul>
+          <li>The components were copied from shadcn/ui, and every <code>transition</code> class was deleted from them. A class like that makes the browser animate changes by itself, on the wall clock.</li>
+          <li>Every value is a function of t: the typed text, the active tab, the switch position, the slider value.</li>
+          <li>The mouse cursor computes where the real button sits on the screen and glides to it, slowing down as it arrives.</li>
+          <li>The colors are defined once as <b>variables</b> (<code>--primary</code>, <code>--accent</code>). A variable is a name for a value we store once, and every element "inherits" the variables of the element that wraps it. So we define them once at the top, and all the components get them. That's how we swap a brand in one line.</li></ul></div>
+      </div>
+      <div class="fit"><div class="y"><b>When to use</b>A product film, a feature demo, "here's how it works". When the viewer needs to believe there's a real app.</div><div class="n"><b>When not to</b>When there are real screenshots and a product that already exists: use the real screens, and rebuild only what moves.</div></div>
+      <div class="prompt"><h5>Full prompt</h5><div class="code"><span class="lbl">app tour · shadcn/ui · paste into Claude Code</span><button class="cp" type="button">Copy prompt</button><pre>&lt;inputs&gt;
+Ask me for my app's name, its main screen (screenshot or description) and the one action the tour should show. If I skip them, invent a believable fitness app called "Ketzev" with a workout card.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+An 11-second product tour, 1080x1920, 60fps, built from real shadcn/ui components: Card, Input, Button, Progress, Tabs, Switch, Slider, Alert and Badge. A cursor types "Morning workout" into the search input with a real keystroke rhythm, clicks the start button, the weekly progress fills to 72%, the tabs switch day → week → month, a reminders switch flips on, an intensity slider moves from 30 to 80, an alert drops in ("Weekly goal reached") and a badge pops.
+The UI is left to right (dir="ltr"). Restyle the shadcn tokens to my brand: navy #12163F as --primary, orange #FF8F3A as --accent, #EEF3FB as --background, radius 28px. Headlines in Anton, uppercase; UI text in Inter.
+Banned: default shadcn grey look, default Tailwind colours, generic lorem ipsum, a cursor that teleports.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+Card enters 0-0.9s, typing 0.9-2.4s, click at 3.1s, progress 3.4-4.4s, tabs at 4.4s and 5.4s, switch at 6.6s, slider 7.2-8.8s, alert at 8.8s, badge at 9.6s. Every event lands on a beat at 120 BPM.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file with React, exposing window.seek(t). Add the components with npx shadcn add (or copy their source), then:
+- Delete every transition-* and animate-* class from them.
+- Make every component controlled: value, checked, the active tab and the slider value are props computed from t. Render each frame with flushSync.
+- The cursor's target is measured from the real button's bounding box; its path is an ease-in-out from off-screen.
+- Measure the typed text width with canvas measureText so the caret sits exactly after the last letter.
+Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Radix components keep internal state. If they are not controlled from t, scrubbing backwards leaves them in the wrong state.
+- Some transitions hide inside the parts: the Progress indicator ships with transition-all and the Switch thumb with transition-transform. Miss one and that part lags behind t.
+- Tailwind's preflight reset can break the rest of the page; scope it or disable it.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me 4 stills (typing, click, tabs on month, alert) before the full render.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+</section>
+
+<!-- ============ 03 ICONS & LOGOS ============ -->
+<section class="sec s-cloud" id="c3" data-folio="03" data-toc="Icons and logos">
+  <div class="sh"><span class="num">03</span><div><h2>Icons and official logos</h2><p class="sub">Thousands of free symbols, and what we're allowed to do with them.</p></div></div>
+  <div class="body">
+    <p>Two kinds of symbols end up in almost every film. <b>Icons</b> are generic symbols: a dumbbell, a flame, a clock. <b>Logos</b> are company symbols: GitHub, React, Claude. Both have huge free libraries, and all of them are vector (SVG), so they stay sharp at any zoom.</p>
+  </div>
+
+  <article class="el" id="e-icons">
+    <div class="el-h"><span class="el-n">03.1</span><h3 class="el-t">Self-drawing icons</h3><div class="el-tags"><span>Lucide</span><span>lucide-react</span><span>SVG</span><span class="lic">ISC</span></div></div>
+    <div class="el-demo" data-demo="icons-draw"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>What you see</h4><p>Eight fitness icons, each drawing itself stroke by stroke, a quarter of a second after the one before, and at the end they all light up in orange. Try the stroke width slider: same icons, a completely different character.</p>
+        <h4>What Lucide is</h4><p>An open-source icon library with nearly 2,000 icons, under the ISC license (everything is allowed, commercial use included). Every icon is drawn with strokes of the same thickness on a 24×24 grid, so they all look like one family. <code>lucide-react</code> gives us each icon as a React component: <code>&lt;Dumbbell /&gt;</code>.</p></div>
+        <div><h4>How it works</h4><p>It's the same trick as the ring (01.4): we measure the length of each stroke (<code>getTotalLength</code>), turn it into a dashed stroke with a single dash of exactly that length, and slide that dash from "hidden" to "visible" based on t. An icon built from several strokes draws them one after another.</p>
+        <p>Shortcut: if we give each stroke <code>pathLength="1"</code>, the browser treats every stroke as if its length were 1, so there's nothing to measure.</p></div>
+      </div>
+      <div class="fit"><div class="y"><b>When to use</b>Feature lists, steps, "what you get". Self-drawing pulls the eye to the next item.</div><div class="n"><b>When not to</b>Mixing two icon libraries in the same film: different stroke weights and styles look sloppy.</div></div>
+      <div class="prompt"><h5>Full prompt</h5><div class="code"><span class="lbl">self-drawing icons · Lucide</span><button class="cp" type="button">Copy prompt</button><pre>&lt;inputs&gt;
+Ask me for the features to show (a short label each). If I skip them, use 4 fitness features: Strength, Calories, Heart rate, Timer.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 5-second clip, 1920x1080, 60fps. Four Lucide icons (Dumbbell, Flame, HeartPulse, Timer) in a row, left to right. Each icon draws itself stroke by stroke on its own beat, then its label rises out of a mask line under it. When all are drawn, they light up in orange #FF8F3A together. Icons navy #12163F, stroke width 2, on #EEF3FB. Labels in Inter 700.
+Banned: icons fading in, mixing icon libraries, filled icons.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM. Icon i starts drawing on beat i+1 and takes 1 beat. All light up on beat 7.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file with React and lucide-react, exposing window.seek(t); everything is computed from t, no CSS transitions.
+Give every path pathLength="1", set stroke-dasharray to 1, and animate stroke-dashoffset from 1 to 0 with an eased progress of t. Multi-path icons draw their paths in sequence. Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Without pathLength="1", paths of different lengths draw at different speeds.
+- lucide-react sets stroke on the svg element; set the dash styles on each child path, circle and line.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me a still at beat 2 and at beat 7 before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-logos">
+    <div class="el-h"><span class="el-n">03.2</span><h3 class="el-t">Official logos</h3><div class="el-tags"><span>Simple Icons</span><span>SVG</span><span class="lic">CC0 · trademarks apply</span></div></div>
+    <div class="el-demo" data-demo="logos"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>What you see</h4><p>A wall of 16 logos from the tools that built this page, popping in one after another in their official brand colors. Try unchecking "Official brand colors" and checking "Dark background". The one-color version, in black or white, is usually the only version brands allow besides their official color, which is why the demo switches to it and not to some other color.</p>
+        <h4>What Simple Icons is</h4><p>A collection of more than 3,400 brand logos, each one a clean SVG, together with the brand's official color code. The <code>simple-icons</code> package on npm gives us both the shape and the color of every logo, so Claude doesn't have to draw a logo from memory, and won't invent a shape that's "roughly" right.</p></div>
+        <div><h4>What's allowed and what isn't</h4><p>The files themselves are CC0, public domain. But a logo is a <b>trademark</b>, and that's a different law entirely. Simple Icons itself asks everyone to respect each company's brand guidelines. In practice:</p>
+        <ul><li>OK: showing a logo to say "works with" or "built with".</li><li>Not OK: changing it to an unofficial color, stretching it, cropping it or adding effects.</li><li>Not OK: implying that the company endorses us or is our partner.</li><li>The current official version of a logo lives on the company's Brand or Press page.</li></ul></div>
+      </div>
+      <div class="fit"><div class="y"><b>When to use</b>"Works with your tools", "built with", clients who agreed to appear.</div><div class="n"><b>When not to</b>Clients who haven't agreed, or any situation where the logo looks like an endorsement we never got.</div></div>
+      <div class="prompt"><h5>Full prompt</h5><div class="code"><span class="lbl">official logo wall · simple-icons</span><button class="cp" type="button">Copy prompt</button><pre>&lt;inputs&gt;
+Ask me which brands to show and confirm that I have the right to show each of them. If I skip it, use the tools this project was built with: Claude, React, Three.js, Tailwind CSS, shadcn/ui, FFmpeg, Node.js, GitHub.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 4.5-second "built with" clip, 1920x1080, 60fps. A grid of official logos pops in on the beat, one after another from the left, each in its official brand colour on white tiles over #EEF3FB. A title above in Anton, uppercase: "Built with". Logos keep their exact proportions and colours.
+Banned: recoloured logos, logos with glow or shadows, logos drawn from memory, distortion.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM, 16th-note stagger: a new logo every 0.125s, each with a short spring scale from 0.6 to 1.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file exposing window.seek(t); everything is computed from t, no CSS transitions.
+Import each logo from the simple-icons npm package (import { siReact } from 'simple-icons'), use its .path in a 24×24 viewBox and "#" + its .hex as the fill (.hex comes without the #). Do not redraw or modify any logo. Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Some brands (for example GitHub) have black logos; on a dark background, switch to the brand's official white version, never an invented colour.
+- simple-icons occasionally removes logos at a brand's request; if one is missing, ask me for the official file instead of approximating it.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+List the logos you will use and their hex colours, then show me the final frame before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+</section>
+
+<!-- ============ 04 TYPE ============ -->
+<section class="sec s-denim" id="c4" data-folio="04" data-toc="Kinetic typography">
+  <div class="sh"><span class="num">04</span><div><h2>Kinetic typography</h2><p class="sub">Text that moves with the music. Four techniques that replace almost every "fade".</p></div></div>
+  <div class="body">
+    <p><b>Kinetic typography</b> is text whose motion is part of the message: a word that lands hard feels important, a word that gets typed out feels like a conversation. In a launch video most of the screen is text, which makes this maybe the most important element in the catalog. The demo below runs four techniques back to back, two and a half seconds each.</p>
+  </div>
+  <article class="el" id="e-type">
+    <div class="el-h"><span class="el-n">04.1</span><h3 class="el-t">Four techniques for moving text</h3><div class="el-tags"><span>Canvas 2D</span><span>Anton</span><span>RTL</span></div></div>
+    <div class="el-demo" data-demo="type"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>SLAM: words that land</h4><p>Each word appears on its own beat, starts too big and shrinks to its size with a spring, like a rubber stamp. Made for headlines of three or four words at the peak of the music.</p>
+        <h4>MASK RISE: rising from a line</h4><p>The words rise out of an invisible line, as if they were waiting just below it. The "line" is a <b>mask</b>: a rectangle that shows only what's inside it, like a stencil. The text moves and the mask doesn't, so the words look like they're born from the line.</p></div>
+        <div><h4>POP TYPE: typing</h4><p>Letter after letter, each one pops a little as it's typed, with a blinking cursor. The pace is uneven, like a real person typing, and every keystroke lands on a <b>half beat or a quarter beat</b> (what musicians call an "eighth note" and a "sixteenth note"; at 120 BPM those are 0.25 and 0.125 seconds), so the typing "plays" along with the music.</p>
+        <h4>MARKER: highlighter</h4><p>A strip of color stretches behind the important word, in the reading direction (left to right in English, right to left in Hebrew). The simplest way to tell the viewer "this is the word".</p></div>
+      </div>
+      <div class="def"><b>Right-to-left languages (Hebrew, Arabic): three things to ask for</b>Reveal words from right to left, in reading order. Wrap numbers and English words in <code>unicode-bidi: isolate</code>. Why? The browser lays out Hebrew right to left, and English and numbers left to right. Neutral characters like +, % and the space take their direction from their neighbors, so sometimes they wander to the other side. This setting tells the browser to lay out the wrapped piece as one sealed unit, without mixing it into the direction of the sentence. And give condensed display fonts more size: Anton is condensed (so is Karantina, our Hebrew headline font), so a headline in it can be set about 1.25× larger than one in a wider font and still carry the same visual weight.</div>
+      <div class="fit"><div class="y"><b>When to use</b>In every launch video. SLAM for the peak, MASK RISE for sentences, POP TYPE for prompts and chats, MARKER for a key word.</div><div class="n"><b>When not to</b>More than two techniques in the same scene: the text starts competing for attention instead of telling a story.</div></div>
+      <div class="prompt"><h5>Full prompt</h5><div class="code"><span class="lbl">kinetic typography · English</span><button class="cp" type="button">Copy prompt</button><pre>&lt;inputs&gt;
+Ask me for the exact on-screen lines and which word is the key word. If I skip them, use: "BUILD. RENDER. SHIP." (slam), "Every word rises from a line" (mask rise), "Start morning workout" (typed), and mark "RENDER".
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 10-second kinetic typography clip, 1920x1080, 60fps, English, left to right. Four moments, each on its own colour spread with a hard wipe between them: SLAM (words land one per beat from 1.6× scale with a spring), MASK RISE (words rise out of an invisible line and leave through it), POP TYPE (letters type on with a slight pop and a blinking caret), MARKER (an orange marker swipe from left to right behind the key word).
+Type: Anton uppercase for headlines (it is condensed, so it can run about 1.25× the size you would give a wider font), Inter for small text. Colours: navy #12163F, orange #FF8F3A, gold #FFC74E, light #EEF3FB, denim #AFCBEF.
+Banned: fades, blur-ins, letter-by-letter scramble effects, text that moves after it lands.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM. Slam: one word per beat. Mask rise: words 0.12s apart. Typing: one keystroke per 16th note (0.125s), with 2 short pauses between words. Marker: swipes in over half a beat on the downbeat.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file exposing window.seek(t), drawing on a 2D canvas (or DOM) from t alone.
+Lay out each line once (measure words with measureText, left to right), then move and clip each word as a function of t. The mask is a clip rectangle; the word's y offset goes from below the line to 0 with a spring. Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Measure with the real font loaded (await document.fonts.ready), never with the fallback font.
+- If a line is in a right-to-left language (Hebrew, Arabic), set ctx.direction = 'rtl' and textAlign = 'right', and wrap numbers and English words with unicode-bidi: isolate (DOM) or draw them as separate runs (canvas), or they jump to the wrong side.
+- Never split a word letter by letter across lines.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me one still of each of the four moments before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+</section>
+
+<!-- ============ 05 3D ============ -->
+<section class="sec s-navy" id="c5" data-folio="05" data-toc="3D: three.js">
+  <div class="sh"><span class="num">05</span><div><h2>3D with three.js</h2><p class="sub">Phones, glass, particles, ocean. And what every word in the prompt means.</p></div></div>
+  <div class="body">
+    <p><b>three.js</b> is the most popular library for 3D on the web, free under the MIT license. It sits on top of WebGL (the browser's way of drawing with the graphics card) and spares us the thousands of lines of code WebGL demands. To understand a 3D prompt, it helps to think of a film set:</p>
+    <ul>
+      <li><b>Scene</b>: the stage, where we place everything.</li>
+      <li><b>Camera</b>: where we look from, and how wide the view is (wide like a wide-angle lens, or narrow like a telephoto, zoom-style lens).</li>
+      <li><b>Mesh</b> (an object): every object in the scene. It is built from two parts: <b>Geometry</b>, the shape itself, and <b>Material</b>, the surface: its color, how shiny it is, how rough it is, whether it is transparent. The graphics card can draw one thing very fast, triangles, so every shape, even a sphere, is broken down into lots of small triangles.</li>
+      <li><b>Light</b>, and the <b>Environment map</b>: a 360° image of the surroundings that shows up as reflections in shiny surfaces. Without it, metal and glass look gray and dead, because metal has almost no color of its own: what we see in it is whatever it reflects, and with no surroundings it reflects nothing.</li>
+      <li><b>Renderer</b> (the photographer): turns all of this into one 2D image, the frame.</li>
+    </ul>
+    <p>Two more terms keep coming up in the prompts. <b>PBR</b> (Physically Based Rendering) means materials that respond to light according to the laws of physics, so they look real under any lighting. We control them mostly with two numbers between 0 and 1: <code>metalness</code> (how metallic it is) and <code>roughness</code> (how rough it is: 0 is a mirror, 1 is chalk). <b>GLTF</b> is the standard file format for 3D models, "the JPEG of 3D": a model we built in a 3D program (for example Blender, which is free and appears at the end of this chapter) or downloaded from a site comes into three.js as a GLTF file. Drag any demo here to rotate it. That works only in the preview: in the film, the angle is computed from t.</p>
+  </div>
+
+  <article class="el" id="e-devices">
+    <div class="el-h"><span class="el-n">05.1</span><h3 class="el-t">Phone and laptop with live screens</h3><div class="el-tags"><span>three.js</span><span>CanvasTexture</span><span>PBR</span><span class="lic">MIT</span></div></div>
+    <div class="el-demo" data-demo="d3-devices"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>What you see</h4><p>A laptop lid opens, a phone rises beside it, and the camera slowly circles around them. The screens show live content: on the phone, a push-up counter fills up; on the laptop, code is being typed. Everything builds itself from simple shapes in code, with no model file at all.</p>
+        <h4>An honest answer about "iPhone" and "MacBook"</h4><p>These are <b>generic</b> devices inspired by a modern phone and laptop, not Apple models. Apple's device designs and its logo are legally protected. If we need a recognizable device, we use a GLTF model whose license allows that use, or the official device templates Apple publishes for marketers, following Apple's guidelines.</p></div>
+        <div><h4>How it works</h4><ul>
+          <li>Each device's body is a box with rounded corners in a metallic PBR material, and it reflects a virtual "studio room" (<code>RoomEnvironment</code>).</li>
+          <li><b>The live screen</b>: every frame, we draw the user interface on a regular 2D Canvas and turn it into a texture (<code>CanvasTexture</code>), a "sticker" stretched over the 3D screen. <code>needsUpdate = true</code> tells three.js to copy the new drawing to the graphics card. By default it does not copy, because copying an image to the graphics card every frame is expensive, and in most textures the image never changes.</li>
+          <li>The lid is a hinge: its rotation is computed from t with a spring. The camera moves on a circular path around the devices.</li></ul></div>
+      </div>
+      <div class="fit"><div class="y"><b>When to use</b>"It works on every device", showing an app inside a 3D world, a transition from a flat interface to a real product.</div><div class="n"><b>When not to</b>When the viewer needs to read what's on the screen: at a 3D angle, small text gets lost. Show the screen flat first, and only then put it into the device.</div></div>
+      <div class="prompt"><h5>Full prompt</h5><div class="code"><span class="lbl">3D phone + laptop with live screens · three.js</span><button class="cp" type="button">Copy prompt</button><pre>&lt;inputs&gt;
+Ask me what each screen should show. If I skip it: the phone shows a push-up counter ring filling to 12 reps with the title "Push-ups", the laptop shows code typing line by line.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 9-second 3D clip, 1920x1080, 60fps, three.js. A generic modern laptop opens its lid while a generic phone rises beside it; the camera orbits slowly around both. Both screens are live and animate in sync with the film.
+Devices: rounded aluminium-like bodies (PBR, metalness 0.8, roughness 0.3), black glass screens with a thin bezel, no brand logos. Background: the clear sky gradient #5EA9F2 → #93CBFF → #DDF0FF, a soft contact shadow under the devices. Accent colours on screen: #FFC74E, #FF8F3A, #F56B49.
+Banned: Apple logos or exact Apple product shapes, floating particles, lens flares, a camera that reverses direction.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM. Beats 0-3: lid opens on a spring. Beats 2-5: the phone rises. Beats 4-17: slow orbit, the counter ring fills on screen, the code types on the laptop at one line per beat.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file with three.js that exposes window.seek(t); every transform and every screen pixel is computed from t, no clocks.
+Build the devices from rounded boxes. For each screen, draw its UI on an offscreen 2D canvas every frame, wrap it in a CanvasTexture with colorSpace = SRGBColorSpace, and set needsUpdate = true after drawing. Use RoomEnvironment through PMREMGenerator for reflections and ACES tone mapping. The lid's rotation and the phone's height come from closed-form springs of t; the camera orbit angle is a smooth function of t.
+Capture with Playwright at 60fps (preserveDrawingBuffer on the renderer), assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Forgetting needsUpdate = true leaves the screen frozen on its first frame.
+- Screen text drawn on the canvas must be large; on a tilted 3D screen anything under about 28px becomes unreadable.
+- Never call renderer.setAnimationLoop; render once inside seek(t).
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me 3 stills (lid half open, phone up, mid orbit) before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-glass">
+    <div class="el-h"><span class="el-n">05.2</span><h3 class="el-t">Breathing glass orb</h3><div class="el-tags"><span>three.js</span><span>MeshPhysicalMaterial</span><span>shader</span></div></div>
+    <div class="el-demo" data-demo="d3-glass"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>What you see</h4><p>A glass orb that slowly changes shape, like a droplet, with a ring and small spheres circling it. Behind it sits the word YUV.AI, and the glass bends the text, exactly the way a glass of water distorts whatever is behind it.</p>
+        <h4>The material: real glass</h4><p><code>MeshPhysicalMaterial</code> is the advanced material in three.js. Three settings turn it into glass: <b>transmission</b> (how much light passes through it), <b>thickness</b> (how thick it is, because thick glass bends light more), and <b>ior</b>, the index of refraction: how much light bends when it enters the material. For glass it's about 1.5, for water 1.33.</p></div>
+        <div><h4>How it "breathes"</h4><p>Every point on the orb's surface is pushed outward or inward according to <b>noise</b>: a function that gives random but smooth values, so neighboring points get similar values, and the result looks organic rather than jittery. The calculation is done by a <b>shader</b>: a small program that runs on the graphics card, on all the points in parallel. We inject a few lines into the built-in three.js shader with <code>onBeforeCompile</code>, and pass t to it as a variable (<code>uTime</code>).</p></div>
+      </div>
+      <div class="fit"><div class="y"><b>When to use</b>A "premium" moment, a logo or product name behind glass, a transition between chapters.</div><div class="n"><b>When not to</b>On a bright, flat background: the glass has nothing to refract, and it looks like gray plastic.</div></div>
+      <div class="prompt"><h5>Full prompt</h5><div class="code"><span class="lbl">liquid glass orb · three.js</span><button class="cp" type="button">Copy prompt</button><pre>&lt;inputs&gt;
+Ask me for the word that sits behind the glass. If I skip it, use "YUV.AI".
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 12-second loopable 3D clip, 1920x1080, 60fps. A liquid glass orb slowly breathes (its surface swells and settles organically) in front of a large word set in Anton in the fire gradient #FFC74E → #FF8F3A → #F56B49, which it refracts. An orange torus ring tilts slowly behind it and five small glossy spheres in brand colours (#FFC74E, #12163F, #F56B49, #5EA9F2, #D74270) orbit it. Background: the sky gradient #2C78D2 → #93CBFF → #F4FBFF, one white key light from the upper right.
+Banned: rainbow chromatic aberration, bloom everywhere, particles, a glass that looks grey.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+One breath cycle every 4 beats at 120 BPM (2s). The orbiting spheres complete one orbit over the full 12s so the clip loops seamlessly.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file with three.js that exposes window.seek(t); every uniform and transform is computed from t.
+Material: MeshPhysicalMaterial with transmission 1, thickness 1.2, ior 1.45, roughness 0.05, an environment map from RoomEnvironment via PMREMGenerator. Displace vertices along their normals with 3D simplex noise injected through onBeforeCompile; the shader's uTime uniform is set from t every frame. Use a high-segment sphere (at least 128×128) so the displacement is smooth.
+Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Transmission needs an environment map and something behind the object, or the glass reads as grey.
+- After displacing vertices, recompute normals in the shader (or use a normal-from-noise approximation), or the lighting looks flat.
+- For a seamless loop, make every periodic motion an integer number of cycles over the clip's length.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me 2 stills (inhale and exhale) before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-particles">
+    <div class="el-h"><span class="el-n">05.3</span><h3 class="el-t">20,000 particles that morph</h3><div class="el-tags"><span>three.js</span><span>Points</span><span>GPU</span></div></div>
+    <div class="el-demo" data-demo="d3-particles"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>What you see</h4><p>Twenty thousand points moving between four shapes: a sphere, a knot, the word AI, and a galaxy. The same technique runs at the top of this page. Wait: aren't "particles" on zero's banned list? They are, because <b>aimless</b> particles drifting in the background are a cliché. Particles that turn into a word and tell us something are a technique.</p></div>
+        <div><h4>How it works</h4><ul>
+          <li><code>Points</code> is a three.js object that draws every point in a list as a dot on screen, all of them at once on the graphics card. 20,000 dots as regular page elements (the DOM) would choke the browser (see lab 0.6).</li>
+          <li>For each shape we precompute 20,000 target positions. The word is sampled from a drawing of it: we write it on a 2D Canvas and read which pixels got painted.</li>
+          <li>Each point's position = a blend between the previous shape and the next one, following the progress p with easing: <code>mix(A, B, ease(p))</code>. Every point gets a small delay of its own, so the transition looks like a swarm and not like a solid block.</li></ul></div>
+      </div>
+      <div class="fit"><div class="y"><b>When to use</b>An opening or a closing, "from chaos to order", a logo built from thousands of points.</div><div class="n"><b>When not to</b>As a moving background behind text: that's exactly the cliché, and it competes with reading.</div></div>
+      <div class="prompt"><h5>Full prompt</h5><div class="code"><span class="lbl">particle morph · three.js Points</span><button class="cp" type="button">Copy prompt</button><pre>&lt;inputs&gt;
+Ask me for the word or logo the particles should form. If I skip it, use "AI".
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+An 11-second 3D clip, 1920x1080, 60fps. 20,000 particles morph from a sphere into a torus knot, into a word, into a spiral galaxy, holding each shape for about 1.6s. Particles are small soft dots in #FFC74E, #FF8F3A, #F56B49 and a little #5DE4E9, additive blending on #0B0E2A. The camera drifts slowly.
+Banned: particles drifting randomly in the background, bloom halos around everything, a linear morph.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM. Each morph takes 3 beats (1.5s) and starts on a downbeat; each hold is just over 3 beats.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file with three.js that exposes window.seek(t); positions are computed from t every frame, no simulation state.
+THREE.Points with a fixed count of 20,000. Precompute a Float32Array of target positions per shape: sphere (Fibonacci sphere), torus knot (TorusKnotGeometry vertices, resampled), word (draw it on a 2D canvas, sample lit pixels, add a little depth jitter), galaxy (logarithmic spiral arms with noise). position = mix(A, B, easeInOut(progress)), with a small per-particle delay. Custom point shader for round soft dots.
+Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Every shape must have exactly the same particle count; resample, never truncate.
+- Seed the random jitter (a fixed seed), so frame 300 is identical on every render.
+- Additive blending with depthWrite on causes black squares; set depthWrite: false.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me one still of each shape before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-ocean">
+    <div class="el-h"><span class="el-n">05.4</span><h3 class="el-t">Ocean and sky: from day to sunset</h3><div class="el-tags"><span>three.js</span><span>Sky</span><span>Water</span></div></div>
+    <div class="el-demo" data-demo="d3-ocean"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>What you see</h4><p>A calm sea and a sky that moves from midday to sunset and back, in twelve seconds. This is the time-lapse from the YUV.AI MOTION launch film, where the devices float above the water.</p></div>
+        <div><h4>How it works</h4><ul>
+          <li><code>Sky</code> is a three.js addon that computes the color of the sky from the sun's position, using a physical model of how light scatters in the atmosphere. Why orange? Air scatters blue light far more than red light. When the sun is low, its light passes through much more air on the way to us, most of the blue scatters off to the sides, and what reaches us is mostly orange and red. We don't paint a sunset: we lower the sun.</li>
+          <li><code>Water</code> is an addon that draws the scene one more time, as if in a mirror under the surface of the water, and distorts that reflection with a wave pattern that moves according to t.</li>
+          <li>The time of day is a single number computed from t, and from it we derive the sun's height, the color of the light and the exposure (the overall brightness of the image).</li></ul></div>
+      </div>
+      <div class="fit"><div class="y"><b>When to use</b>"Time passing", atmosphere, a backdrop for a 3D product scene, an emotional ending.</div><div class="n"><b>When not to</b>A pure interface film: a whole world distracts from the app.</div></div>
+      <div class="prompt"><h5>Full prompt</h5><div class="code"><span class="lbl">ocean time-lapse · three.js Sky + Water</span><button class="cp" type="button">Copy prompt</button><pre>&lt;inputs&gt;
+Ask me whether something should float above the water (a product, a logo). If I skip it, keep the scene empty.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 12-second 3D clip, 1920x1080, 60fps. A calm open ocean under a physically based sky. Time of day goes from midday to golden hour to sunset and back to day, so the clip loops. The camera is low over the water and drifts forward slowly. Warm sunset tones should land near #FF8F3A and #F56B49, the day sky near #5EA9F2.
+Banned: lens flares, birds, a sun that jumps, choppy stormy waves.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM. The sun reaches its lowest point on beat 12 (6s), exactly mid-clip.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file with three.js and its Sky and Water addons, exposing window.seek(t).
+One number tod(t) from 0 (midday) to 1 (sunset) drives the sun's elevation, the Sky's turbidity and rayleigh, the directional light's colour and the renderer's exposure. The Water shader's time uniform is set from t every frame.
+Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- The Water addon advances its own time if you let it. Set material.uniforms.time.value from t every frame.
+- Update the sun direction on both the Sky and the Water, or the reflection points at a different sun.
+- Lower exposure at sunset, or the sky blows out to white.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me stills at midday, golden hour and sunset before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-carousel">
+    <div class="el-h"><span class="el-n">05.5</span><h3 class="el-t">Card carousel that snaps to the beat</h3><div class="el-tags"><span>three.js</span><span>sum of springs</span></div></div>
+    <div class="el-demo" data-demo="d3-carousel"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>What you see</h4><p>Six cards on a ring in 3D. The ring turns one step on every beat, overshoots a little and settles. This is the moment in the launch film where the click bursts into a carousel.</p></div>
+        <div><h4>How it works: a sum of springs</h4><p>The ring's angle is a <b>sum</b>: every beat has its own spring, which starts at that beat's time and adds one step (60°, because 360° divided by 6 cards is 60°). <code>angle = Σ step × spring(t − beat_i)</code>. The symbol Σ (sigma) means "add them all up": for every beat i, which starts at time beat_i, we add its spring. Each spring overshoots the target a little and comes back, which is why every step "lands". And since this is a sum of closed-form formulas, we can compute the angle at any moment, even if we jump straight to the middle.</p><p>Each card also rotates around its own axis so it always faces the camera. Otherwise the text on the cards at the back would read reversed, as in a mirror.</p></div>
+      </div>
+      <div class="fit"><div class="y"><b>When to use</b>Presenting categories, features or templates, where each one gets its own beat.</div><div class="n"><b>When not to</b>When the content of the cards has to be read closely: they go by too fast.</div></div>
+      <div class="prompt"><h5>Full prompt</h5><div class="code"><span class="lbl">3D card carousel on the beat · three.js</span><button class="cp" type="button">Copy prompt</button><pre>&lt;inputs&gt;
+Ask me for the card titles (6 to 8). If I skip them, use the six categories of this catalog: Charts, UI, Icons, Type, 3D, Effects.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 6.6-second 3D clip, 1920x1080, 60fps. Six cards stand on a ring in 3D, facing outward. The ring snaps one card forward on every beat with a small overshoot. The front card is slightly larger and fully lit; the others dim with distance. Cards: white with a 28px radius, a navy uppercase title in Anton and a fire-gradient icon chip; background the sky gradient #5EA9F2 → #93CBFF → #DDF0FF.
+Banned: continuous spinning, motion blur streaks, cards that show mirrored text.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM: a snap every 0.5s for 12 beats.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file with three.js exposing window.seek(t).
+Each card is a plane with a CanvasTexture drawn once. Ring rotation = sum over beats of step × spring(t − beatTime_i), with step = 2π / cardCount and this closed-form spring, ω = 14 and ζ = 0.6: spring(t) = 1 − e^(−ζωt)·(cos(ω_d·t) + (ζω/ω_d)·sin(ω_d·t)), ω_d = ω·√(1 − ζ²). Each card's own rotation counter-rotates so it always faces the camera.
+Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- If the cards face the ring's centre instead of the camera, the far ones read mirrored.
+- Use sRGB colour space on the textures, or the brand colours look washed out.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me stills at beats 1, 4 and 8 before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-eq">
+    <div class="el-h"><span class="el-n">05.6</span><h3 class="el-t">3D equalizer</h3><div class="el-tags"><span>three.js</span><span>InstancedMesh</span></div></div>
+    <div class="el-demo" data-demo="d3-eq"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>What you see</h4><p>A 20×20 grid of bars with a wave running through it, and every beat gives it a "kick" from the center outward. The color depends on height: low bars are blue, medium ones orange, tall ones gold. Here the wave comes from a formula; in a real film the heights come from the music itself.</p>
+        <h4>From the music, without breaking the clock</h4><p>A live audio analyzer in the browser runs on the wall clock (real time, not the film's t), so it doesn't work for frame-by-frame capture. Instead, we analyze the song <b>in advance</b>: for every frame we compute the <b>spectrum</b>, how much energy there is in each frequency range (bass, mids, highs), and store it in a table. During capture we just read the row for t.</p></div>
+        <div><h4>How it works: one shape, 400 instances</h4><p>Every separate object in three.js is a separate drawing instruction that the processor (CPU) sends to the graphics card (a <b>draw call</b>). Thousands of these every frame slow the processor down, even when the graphics card has capacity to spare. This matters mostly for the live preview (lab 0.6); the film comes out smooth either way. <code>InstancedMesh</code> sends <b>one instruction</b>: "draw this box 400 times, here are the position and color of each one". Same image, a fraction of the work.</p></div>
+      </div>
+      <div class="fit"><div class="y"><b>When to use</b>A music video, "the music is the clock", an energetic build-up before the drop.</div><div class="n"><b>When not to</b>A film without prominent music: an equalizer moving over silence looks disconnected.</div></div>
+      <div class="prompt"><h5>Full prompt</h5><div class="code"><span class="lbl">3D audio equalizer · InstancedMesh</span><button class="cp" type="button">Copy prompt</button><pre>&lt;inputs&gt;
+Ask me for the music track. If I skip it, use a royalty-free 120 BPM track with a clear kick (Mixkit, licensed for commercial use) and tell me which one.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 12-second 3D clip, 1920x1080, 60fps. A 20×20 grid of bars seen from a three-quarter angle above. Bar heights follow the music: bass in the centre, highs at the edges, and every kick sends a ring-shaped pulse from the centre outward. Colour by height from blue #2C78D2 through orange #FF8F3A to gold #FFC74E. Background #0B0E2A, a soft rim light.
+Banned: random heights not tied to the audio, bloom on everything, a camera that shakes.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+The track's own beat grid drives everything: measure the BPM and the kick times first.
+&lt;/structure&gt;
+
+&lt;build&gt;
+Analyse the track offline first (Python with librosa, or ffmpeg plus an FFT): for every frame at 60fps, store the energy of 20 frequency bands and the kick onsets in a JSON file.
+Then one HTML file with three.js exposing window.seek(t): one InstancedMesh of 400 boxes; for each frame, read row round(t × 60) of the JSON, set each instance's scale.y and colour with setMatrixAt and setColorAt, then set instanceMatrix.needsUpdate and instanceColor.needsUpdate. The pulse is a ring whose radius grows from each kick time.
+Capture with Playwright at 60fps and mux the same audio with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- A live Web Audio analyser runs on the wall clock. Precompute the spectrum, or picture and sound drift apart.
+- Scale boxes from their base, not their centre (translate the geometry up by half its height once).
+- Smooth the band energies over 2-3 frames, or the bars flicker.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me the detected BPM, the kick times and 2 stills before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+  <div class="body">
+    <h3>When you need more than this</h3>
+    <ul>
+      <li><b>React Three Fiber</b>: three.js in the form of React components (React is a popular library for building web interfaces). Useful when the scene is large and the project is already built in React. MIT. Version 9 is made for React 19.</li>
+      <li><b>Spline</b>: a visual 3D editor in the browser, no code. We design by hand and export to GLTF, three.js or React. There is a free plan.</li>
+      <li><b>Blender</b>: a full 3D program, free, under the GPL license: we may use it for any purpose, commercial included, and what we create with it is ours; the GPL terms apply only to someone who modifies the program itself and distributes it. We build custom models in it and export them as GLTF. A steep learning curve, results without limits.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 06 FX ============ -->
+<section class="sec s-cloud" id="c6" data-folio="06" data-toc="Effects and transitions">
+  <div class="sh"><span class="num">06</span><div><h2>Effects and transitions</h2><p class="sub">The "AI is thinking" neon, glass, an aurora glow, and transitions without a fade.</p></div></div>
+
+  <article class="el" id="e-neon">
+    <div class="el-h"><span class="el-n">06.1</span><h3 class="el-t">Neon edge: "the AI is thinking"</h3><div class="el-tags"><span>CSS</span><span>conic-gradient</span><span>mask</span></div></div>
+    <div class="el-demo" data-demo="fx-neon"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>What you see</h4><p>A text field with a colored edge spinning around it and a soft halo that pulses on every beat, while a request types itself inside. This has become the standard visual cue for the moment an AI is processing a request.</p></div>
+        <div><h4>How it works</h4><ul>
+          <li><b>conic-gradient</b> is a color gradient that sweeps around a point, like the hands of a clock: every angle gets a different color. Change the starting angle, and the colors rotate.</li>
+          <li><b>mask</b> cuts only a thin ring at the edge out of that gradient, so all that's left is a colored outline.</li>
+          <li>A second copy of the same gradient, blurred and placed behind, creates the halo. On every beat it briefly gets stronger.</li>
+          <li>The angle = t × 1.5 radians. A <b>radian</b> is a unit of angle, like a degree: a full turn is 2π, about 6.28 radians. At 1.5 radians per second we get a full turn about every 4.2 seconds, slow enough to feel like "thinking" rather than dizzying. On the page itself (the button at the top) the neon spins with a regular CSS animation, because nothing is being captured there. In the film, the angle comes from t.</li></ul></div>
+      </div>
+      <div class="fit"><div class="y"><b>When to use</b>A prompt field, the main action button, one central card. One element per screen.</div><div class="n"><b>When not to</b>On everything: neon everywhere cancels itself out and turns into noise.</div></div>
+      <div class="prompt"><h5>Full prompt</h5><div class="code"><span class="lbl">neon "AI is thinking" edge · CSS</span><button class="cp" type="button">Copy prompt</button><pre>&lt;inputs&gt;
+Ask me for the request that types into the field. If I skip it, use "Launch film for a fitness app".
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 6-second clip, 1920x1080, 60fps. A large white pill-shaped input field on the sky gradient #5EA9F2 → #93CBFF → #DDF0FF. Around it, an iridescent neon edge (a conic gradient of #5DE4E9, #4FA3FF, #8B6CFF, #FF66C4, #FF8F3A, #FFC74E) rotates slowly, with a soft blurred halo behind it that swells on every beat. The placeholder "What is the film about?" is replaced by the request typing in, with a blinking caret, and a round send button in the fire gradient with its arrow pointing right. Text in Inter, left to right.
+Banned: a glow that covers the text, neon on more than this one element, flicker.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM. The halo pulses on every beat. Typing starts on beat 2 at one letter per 16th note.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file exposing window.seek(t); every style is computed from t.
+The ring is a pseudo-element with background: conic-gradient(from var(--ang), …), masked to a 4px ring (-webkit-mask-composite: xor plus the standard mask-composite: exclude); a second copy behind it has filter: blur(22px). Set --ang = t × 1.5rad and the halo opacity from a beat-synced spring on every frame. Do not use a CSS keyframe animation.
+Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- A CSS @keyframes rotation runs on the wall clock and breaks the capture. Set the angle from t.
+- If you register --ang with @property and inherits: false, a value set on the element never reaches its ::before. Leave it unregistered (plain custom properties inherit) or register it with inherits: true.
+- Keep the mask on both -webkit-mask (with -webkit-mask-composite: xor) and mask (with mask-composite: exclude).
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me a still before typing and one mid-typing before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-glasscard">
+    <div class="el-h"><span class="el-n">06.2</span><h3 class="el-t">Glass card</h3><div class="el-tags"><span>CSS</span><span>backdrop-filter</span></div></div>
+    <div class="el-demo" data-demo="fx-glass"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>What you see</h4><p>A milky data card floating over moving blobs of color. The card itself is almost transparent; what gives it its look is the blur of whatever is behind it. Move the blur slider, and switch the glass off to see the difference.</p></div>
+        <div><h4>How it works</h4><p><code>backdrop-filter: blur()</code> blurs <b>what's behind</b> the element, not the element itself. <code>saturate()</code> boosts the colors of that blurred background, and that's what gives it the "liquid" feel. Add a thin, semi-transparent white border, and the glass seems to have thickness. The blobs move by the sin and cos of t.</p></div>
+      </div>
+      <div class="fit"><div class="y"><b>When to use</b>An info card over a colorful moving background, a notification over a photo, an interface in the "glass" style of modern operating systems.</div><div class="n"><b>When not to</b>Over a flat, solid background: there's nothing to blur, and the card just looks gray.</div></div>
+      <div class="prompt"><h5>Full prompt</h5><div class="code"><span class="lbl">frosted glass card · CSS backdrop-filter</span><button class="cp" type="button">Copy prompt</button><pre>&lt;inputs&gt;
+Ask me for the number and label on the card. If I skip them, use 268 "minutes this week" with a "+12%" chip.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 10-second loopable clip, 1080x1920, 60fps. Four large soft colour blobs (#FF8F3A, #5EA9F2, #FFC74E, #D74270) drift slowly on navy #12163F. A frosted glass card floats in the centre: background white at 16% opacity, a 1.5px white border at 40%, strong backdrop blur and saturation. On it, a big number in Inter 800, an uppercase label in Anton, and a small fire-gradient chip. The card springs in at the start.
+Banned: a glass card over a flat background, heavy drop shadows, noise textures on the card.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+The card springs in on beat 1 at 120 BPM; the blobs complete whole cycles over 10s so the clip loops.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file exposing window.seek(t); blob positions and the card's scale are computed from t, no CSS animations.
+The card uses backdrop-filter: blur(22px) saturate(1.6) (plus -webkit-backdrop-filter). Blob positions = sin/cos of t with different speeds, each completing an integer number of cycles in 10s.
+Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- backdrop-filter only shows when something moves behind the card; keep the blobs passing under it.
+- An ancestor with opacity below 1, filter, mask, clip-path, mix-blend-mode or will-change creates a new backdrop root and the card stops seeing the blobs; keep those off the card's ancestors.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me one still before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-aurora">
+    <div class="el-h"><span class="el-n">06.3</span><h3 class="el-t">Aurora background</h3><div class="el-tags"><span>Canvas 2D</span><span>blur</span><span>grain</span></div></div>
+    <div class="el-demo" data-demo="fx-aurora"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>What you see</h4><p>A background of huge, soft blobs of color drifting slowly, with a fine grain like film. Check "No blur" and the secret is out: these are five plain circles.</p>
+        <h4>How it works</h4><p>We draw five large circles in the brand colors, each moving along a path made of the sin and cos of t at its own speed, and blur them all with a very heavy blur (70 pixels). On top goes a faint layer of random noise.</p></div>
+        <div><h4>Why the grain matters</h4><p>A video stores each color channel (red, green, blue) in 8 bits, which means 256 levels. A subtle gradient, say from navy to a slightly lighter navy, uses maybe 20 of them. Across 1,000 pixels that's 20 steps, each 50 pixels wide, and the eye sees <b>stripes</b> (banding). The video file's compression makes it even worse. Subtle noise breaks up the stripes, because the eye averages it into one smooth tone. This technique is called <b>dithering</b>.</p></div>
+      </div>
+      <div class="fit"><div class="y"><b>When to use</b>A background for a headline or an end scene, a change of mood between chapters.</div><div class="n"><b>When not to</b>Behind small text or a busy interface: it lowers the contrast.</div></div>
+      <div class="prompt"><h5>Full prompt</h5><div class="code"><span class="lbl">aurora background with grain · Canvas</span><button class="cp" type="button">Copy prompt</button><pre>&lt;inputs&gt;
+Ask me for the headline that sits on top. If I skip it, use "FLY HIGH" in Anton.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 14-second loopable background clip, 1920x1080, 60fps. Five huge soft colour blobs (#5EA9F2, #FF8F3A, #FFC74E, #D74270, #93CBFF) drift slowly on navy #12163F and blend into an aurora, with fine film grain on top. The headline sits centred in white.
+Banned: hard edges, fast movement, a rainbow, grain so strong it looks dirty.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+No beat sync: the motion is slow and continuous. Every blob completes a whole number of cycles in 14s so the clip loops.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file exposing window.seek(t), drawing on a 2D canvas.
+Draw five large circles with ctx.filter = 'blur(70px)' at positions from sin/cos of t with different speeds. Overlay a tiled noise texture generated once from a seeded random function, at about 9% opacity.
+Capture with Playwright at 60fps. Encode with ffmpeg at a high bitrate (or -tune grain) so the compression keeps the grain.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Smooth gradients band after video compression. The grain hides it, but only if the encoder keeps it.
+- Generate the noise from a fixed seed so every frame uses the same pattern (a changing pattern looks like TV static).
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me one still with and one without grain before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-trans">
+    <div class="el-h"><span class="el-n">06.4</span><h3 class="el-t">Four transitions without a fade</h3><div class="el-tags"><span>Canvas 2D</span><span>flood</span><span>morph</span><span>wipe</span><span>iris</span></div></div>
+    <div class="el-demo" data-demo="transitions"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>Why no fade</h4><p>A <b>fade</b> (crossfade) is when one image slowly disappears and the next one appears underneath it. It's the first transition in every editing app, which is exactly why it looks like a "template". zero's rule: <b>every scene is born from an object that's already on screen.</b> That way the eye has something to follow instead of being cut off.</p>
+        <h4>FLOOD: fill the frame</h4><p>A button is pressed, and its color spreads out as a circle until it fills the whole screen. The final radius = the distance from the button to the farthest corner, so not a single sliver is left behind.</p>
+        <h4>MORPH: change shape</h4><p>A small pill widens, then grows taller and changes its corner rounding until it becomes a card. Width, height and corner radius each ride a spring of their own.</p></div>
+        <div><h4>WIPE: sweep across</h4><p>A new page enters from the right, led by a fire-gradient band. That band is what turns a plain wipe into something with energy.</p>
+        <h4>IRIS: close to a dot</h4><p>The screen closes into a shrinking circle until only a dot is left, and that dot becomes the dot in the YUV.AI logo. The radius shrinks <b>on a logarithmic scale</b>: in every equal stretch of time it shrinks by the same factor. In a 1920×1080 film it starts at 1,100 pixels, the distance from the center of the screen to a corner, so at first the circle covers everything, and it ends at 14, the size of the dot in the logo. Four equal steps: 1,100, 370, 125, 42, 14, each one 3 times smaller than the one before. Why not linear? A linear shrink removes the same number of pixels every frame: 18 pixels out of 1,100 are barely noticeable, but 18 out of 30 is more than half. So the circle hardly moves at first and then slams shut all at once, because the eye perceives changes in size as ratios, not as pixels.</p></div>
+      </div>
+      <div class="fit"><div class="y"><b>When to use</b>In every transition between scenes. Pick by the object on screen: a button floods, a pill becomes a card, a dot becomes a logo.</div><div class="n"><b>When not to</b>A transition that doesn't grow out of an object on screen looks like a cut, however polished it is.</div></div>
+      <div class="prompt"><h5>Full prompt</h5><div class="code"><span class="lbl">four transitions without a crossfade · Canvas</span><button class="cp" type="button">Copy prompt</button><pre>&lt;inputs&gt;
+Ask me for the scenes on each side of each transition. If I skip them, use simple title cards in my brand.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+An 11-second clip, 1920x1080, 60fps, showing four transitions in a row. FLOOD: a "Start" button is pressed and its fire gradient floods the frame as a growing circle. MORPH: a navy pill widens, then grows into a card with a progress bar. WIPE: a new page slides in from the right led by a fire-gradient band. IRIS: the frame closes into a shrinking circle that becomes the dot of the YUV.AI logo.
+Colours: navy #12163F, denim #AFCBEF, light #EEF3FB and #DDF0FF, fire #FFC74E → #FF8F3A → #F56B49. Titles in Anton, uppercase.
+Banned: crossfades, blur transitions, any transition that does not start from an object already on screen.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM. Each transition gets 2.8s; the main motion of each starts on a downbeat and takes about one beat.
+&lt;/structure&gt;
+
+&lt;build&gt;
+One HTML file exposing window.seek(t), drawing on a 2D canvas.
+Flood: radius = distance from the button to the farthest corner × 1.03 × easeOut(progress). Morph: width, height and corner radius each follow a sum of springs. Wipe: clip the new page to a rectangle whose edge follows an eased progress, and draw a fire band at the edge. Iris: radius interpolated in log space, exp(lerp(log(rStart), log(rEnd), easeInOut(p))).
+Capture with Playwright at 60fps, assemble with ffmpeg.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- A flood radius smaller than the farthest corner leaves a sliver of the old scene.
+- Linear iris shrinking crawls at the start and snaps shut at the end; use log space.
+- Give each layer an explicit z-order so the flood covers the old scene but not the label it came from.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me one still in the middle of each transition before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+</section>
+
+<!-- ============ 07 TOOLS ============ -->
+<section class="sec s-denim" id="c7" data-folio="07" data-toc="Tools map">
+  <div class="sh"><span class="num">07</span><div><h2>Tools map: what else is out there</h2><p class="sub">The catalog is built on HTML and seek(t). Here are the tools that do the same job differently, and when each one wins.</p></div></div>
+  <div class="body"><p>All license and pricing details were checked on October 17, 2026. Prices change, so before any commercial work it's worth checking again through the link in the sources.</p></div>
+  <div class="tbl"><table class="tools">
+    <tr><th>Tool</th><th>What it is</th><th>When to pick it</th><th>License and price</th></tr>
+    <tr><td>HTML + seek(t)<small>This page's method</small></td><td>One HTML file that Claude writes from scratch, with a function that draws any moment. Playwright captures, ffmpeg assembles.</td><td>One film under full control, without installing a <b>framework</b> (a ready-made structure for a whole project, with its own rules and commands). Every library in the catalog fits inside it.</td><td class="lic">Free</td></tr>
+    <tr><td>Remotion<small>remotion.dev</small></td><td>A framework where every video is a React component that receives the frame number. Renders to MP4, in the cloud too.</td><td>Lots of similar videos from one template (for example, a personal video for every customer), or a team that already works in React.</td><td class="lic">Free for individuals and companies of up to 3 employees; paid company license above that</td></tr>
+    <tr><td>HyperFrames<small>HeyGen · v0.8</small></td><td>An HTML file where every element has <code>data-start</code> and <code>data-duration</code>, plus <b>deterministic</b> capture to MP4: every frame always comes out the same, exactly like seek(t). Built for <b>AI agents</b> (AI that carries out actions on its own, like Claude Code), and it ships with <b>skills</b>: instruction files that teach an agent how to work with the tool.</td><td>When we want the seek(t) method with a ready-made tool that runs from terminal commands (init, preview, render). It's still before version 1.0, so things may still change.</td><td class="lic">Open source, Apache 2.0</td></tr>
+    <tr><td>GSAP<small>gsap.com</small></td><td>An animation library built on timelines. A timeline can be paused and jumped to any moment, which makes it a good fit for frame-by-frame capture.</td><td>Complex choreography of many elements. HyperFrames uses it by default.</td><td class="lic">Completely free, commercial use included, with all plugins. Webflow's license (not open source) only forbids using it to build a no-code animation tool that competes with Webflow</td></tr>
+    <tr><td>Motion Canvas<small>motioncanvas.io</small></td><td>A library in TypeScript (a version of JavaScript where every value is labeled with its type, so mistakes get caught early), plus an editor with a live preview, for vector animations timed to a voiceover.</td><td>Explainer videos with a voiceover, diagrams, code that changes on screen.</td><td class="lic">Open source, MIT</td></tr>
+    <tr><td>Lottie<small>lottie-web</small></td><td>An animation format based on JSON (a simple text format for storing data). An animator builds the animation in After Effects and exports it with the Bodymovin plugin, and it plays in the browser and in apps. It can jump to any frame (<code>goToAndStop</code>).</td><td>When there's a ready-made animation from a designer, or from the LottieFiles library, and we want to drop it into a film.</td><td class="lic">The player is open source (MIT); each animation has its own license</td></tr>
+    <tr><td>Rive<small>rive.app</small></td><td>An editor for interactive animations that react to the user, using a "state machine": a list of states, such as "idle", "hover" and "pressed", plus rules for when to move between them.</td><td>Animation inside an app or a website that reacts to clicks. Less so for a linear film.</td><td class="lic">The players (runtimes) are open source (MIT); exporting requires a paid plan, from $9 a month billed annually</td></tr>
+    <tr><td>Spline<small>spline.design</small></td><td>A visual 3D editor in the browser.</td><td>Designing a 3D scene by hand, then exporting it to GLTF or to code.</td><td class="lic">Free plan, plus paid plans</td></tr>
+    <tr><td>React Three Fiber<small>pmndrs</small></td><td>three.js as React components.</td><td>A large 3D scene inside a React project.</td><td class="lic">Open source, MIT</td></tr>
+  </table></div>
+  <div class="body">
+    <h3>How to choose, in four questions</h3>
+    <ol>
+      <li><b>One film or a hundred?</b> One: HTML and seek(t). A hundred from the same template: Remotion or HyperFrames.</li>
+      <li><b>Is there a ready-made animation from a designer?</b> Lottie fits into any of these approaches.</li>
+      <li><b>Does it live inside an app and react to the user?</b> Rive. At that point it's no longer a video question.</li>
+      <li><b>Need a custom 3D model?</b> Blender or Spline, export to GLTF, and bring it into three.js.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ 08 BUILDER ============ -->
+<section class="sec s-fire" id="c8" data-folio="08" data-toc="Prompt builder">
+  <div class="sh"><span class="num">08</span><div><h2>Prompt builder</h2><p class="sub">Pick a format, a length, branding and elements from the catalog, and get one complete prompt for the whole film.</p></div></div>
+  <div class="body">
+    <p>There's no AI here. The builder assembles the prompt from fixed parts, so it's easy to see exactly which sentence each choice adds: every element adds a line to each of the six blocks, for example how to build it in <code>&lt;build&gt;</code> and which bug to warn about in <code>&lt;gotchas&gt;</code>. The music tempo and the length are converted into a number of beats, and the elements are spread across the film between a four-beat opening and a four-beat ending, in story order: first the product, then the proof (charts and numbers), and finally the trust (logos). Transitions and the background don't get a beat range of their own, because they aren't scenes: they're woven through the whole film. Write field 1 in English, since it goes into the prompt word for word.</p>
+  </div>
+  <article class="el" id="e-builder">
+    <div class="el-h"><span class="el-n">08.1</span><h3 class="el-t">Your prompt</h3><div class="el-tags"><span>6 blocks</span><span>live</span></div></div>
+    <div class="el-demo" data-demo="prompt-builder"><div class="stage"></div></div>
+    <div class="el-body"><p>Next step: paste it into Claude Code (or any coding agent), answer the questions it asks in <code>&lt;inputs&gt;</code>, and approve the beat map and the stills before the full render. The whole process, from capture to music, is in the <a href="index.en.html#s14">pipeline chapter on the method page</a>. (A coding agent is an AI that writes and runs code by itself, on your own computer.)</p></div>
+  </article>
+</section>
+
+<!-- ============ 09 SOURCES ============ -->
+<section class="sec s-cloud" id="c9" data-folio="09" data-toc="Sources">
+  <div class="sh"><span class="num">09</span><div><h2>Sources</h2><p class="sub">All links were checked and live on October 17, 2026.</p></div></div>
+  <ol class="src">
+    <li><a href="https://github.com/recharts/recharts" target="_blank" rel="noopener">Recharts</a>: the charting library, MIT.</li>
+    <li><a href="https://ui.shadcn.com/docs" target="_blank" rel="noopener">shadcn/ui · Introduction</a>: "This is not a component library", and how to add components.</li>
+    <li><a href="https://www.radix-ui.com/primitives" target="_blank" rel="noopener">Radix Primitives</a>: unstyled components that handle behavior and accessibility.</li>
+    <li><a href="https://tailwindcss.com" target="_blank" rel="noopener">Tailwind CSS</a></li>
+    <li><a href="https://lucide.dev" target="_blank" rel="noopener">Lucide</a>: the icon library, ISC.</li>
+    <li><a href="https://simpleicons.org" target="_blank" rel="noopener">Simple Icons</a> and <a href="https://github.com/simple-icons/simple-icons/blob/develop/DISCLAIMER.md" target="_blank" rel="noopener">their legal disclaimer</a> about trademarks.</li>
+    <li><a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> and <a href="https://threejs.org/docs/pages/MeshPhysicalMaterial.html" target="_blank" rel="noopener">MeshPhysicalMaterial</a>.</li>
+    <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/font-variant-numeric" target="_blank" rel="noopener">MDN · font-variant-numeric</a> (tabular-nums).</li>
+    <li><a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/stroke-dashoffset" target="_blank" rel="noopener">MDN · stroke-dashoffset</a></li>
+    <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/backdrop-filter" target="_blank" rel="noopener">MDN · backdrop-filter</a></li>
+    <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/gradient/conic-gradient" target="_blank" rel="noopener">MDN · conic-gradient()</a></li>
+    <li><a href="https://playwright.dev" target="_blank" rel="noopener">Playwright</a> and <a href="https://ffmpeg.org" target="_blank" rel="noopener">FFmpeg</a></li>
+    <li><a href="https://github.com/remotion-dev/remotion/blob/main/LICENSE.md" target="_blank" rel="noopener">Remotion · LICENSE</a>: free for individuals and companies of up to 3 employees.</li>
+    <li><a href="https://github.com/heygen-com/hyperframes" target="_blank" rel="noopener">HyperFrames (HeyGen)</a>, Apache 2.0, and <a href="https://yuv.ai/blog/hyperframes-heygen" target="_blank" rel="noopener">my review on yuv.ai</a>.</li>
+    <li><a href="https://gsap.com/pricing/" target="_blank" rel="noopener">GSAP · Pricing</a>: completely free, plugins included, and <a href="https://gsap.com/community/standard-license/" target="_blank" rel="noopener">the standard license</a>: commercial use is allowed, a no-code animation tool that competes with Webflow is not.</li>
+    <li><a href="https://github.com/motion-canvas/motion-canvas" target="_blank" rel="noopener">Motion Canvas</a>, MIT.</li>
+    <li><a href="https://github.com/airbnb/lottie-web" target="_blank" rel="noopener">lottie-web</a>, MIT, and <a href="https://en.wikipedia.org/wiki/Lottie_(file_format)" target="_blank" rel="noopener">Lottie on Wikipedia</a> (the Bodymovin plugin dates from 2015, Airbnb's libraries from 2017).</li>
+    <li><a href="https://rive.app/blog/rive-s-new-9-mo-plan" target="_blank" rel="noopener">Rive · the new $9/mo plan</a> (October 20, 2025): the runtimes are MIT, exporting needs a paid plan.</li>
+    <li><a href="https://spline.design" target="_blank" rel="noopener">Spline</a></li>
+    <li><a href="https://github.com/pmndrs/react-three-fiber" target="_blank" rel="noopener">React Three Fiber</a>, MIT.</li>
+    <li><a href="https://github.com/chartjs/Chart.js" target="_blank" rel="noopener">Chart.js</a>, <a href="https://github.com/apache/echarts" target="_blank" rel="noopener">Apache ECharts</a>, <a href="https://github.com/d3/d3" target="_blank" rel="noopener">D3</a></li>
+    <li><a href="index.en.html#s19" >Method page sources</a>: zero's original article and prompts (<span class="ltr">@twoclipping</span>).</li>
+  </ol>
+</section>
+
+<footer>
+  <div class="sig">Yuval Avidani</div>
+  <p class="bio">AI segment host on Channel 12 News (Israel's leading TV news channel), 2× GitHub Star, AWS Gen AI Superstar, founder of YUV.AI. Building, teaching and shipping AI that works.</p>
+  <div class="blogs">
+    <a href="https://yuv.ai/blog" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><div><b>The blog</b><span>Guides, tool reviews and deep dives, in English and Hebrew.</span><small>yuv.ai/blog</small></div></a>
+    <a href="https://news.yuv.ai" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8M15 18h-5M10 6h8v4h-8Z"/></svg><div><b>The newsroom</b><span>The YUV.AI newsroom: what is new in AI, in Hebrew.</span><small>news.yuv.ai</small></div></a>
+    <a href="index.en.html"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><div><b>The method page</b><span>How Claude makes launch films in code, broken down crumb by crumb.</span><small>motion-in-code</small></div></a>
+  </div>
+  <nav class="links" aria-label="Links">
+    <a href="https://yuv.ai" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm6.9 6h-2.9a15.7 15.7 0 0 0-1.4-3.6A8 8 0 0 1 18.9 8ZM12 4.1c.8 1.1 1.5 2.4 1.9 3.9h-3.8c.4-1.5 1.1-2.8 1.9-3.9ZM4.3 14a8 8 0 0 1 0-4h3.3a16.5 16.5 0 0 0 0 4H4.3Zm.8 2h2.9c.3 1.3.8 2.5 1.4 3.6A8 8 0 0 1 5.1 16Zm2.9-8H5.1a8 8 0 0 1 4.3-3.6C8.8 5.5 8.3 6.7 8 8Zm4 11.9c-.8-1.1-1.5-2.4-1.9-3.9h3.8c-.4 1.5-1.1 2.8-1.9 3.9Zm2.3-5.9H9.7a14.7 14.7 0 0 1 0-4h4.6a14.7 14.7 0 0 1 0 4Zm.3 5.6c.6-1.1 1.1-2.3 1.4-3.6h2.9a8 8 0 0 1-4.3 3.6Zm1.8-5.6a16.5 16.5 0 0 0 0-4h3.3a8 8 0 0 1 0 4h-3.3Z"/></svg><span>yuv.ai</span></a>
+    <a href="https://linktr.ee/yuvai" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m13.73635 5.85251 4.00467-4.11665 2.3248 2.3808-4.20064 4.00466h5.9085v3.30473h-5.9365l4.22865 4.10766-2.3248 2.3338L12.0005 12.099l-5.74052 5.76852-2.3248-2.3248 4.22864-4.10766h-5.9375V8.12132h5.9085L3.93417 4.11666l2.3248-2.3808 4.00468 4.11665V0h3.4727zm-3.4727 10.30614h3.4727V24h-3.4727z"/></svg><span>Linktree</span></a>
+    <a href="https://x.com/yuvalav" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.234 10.162 22.977 0h-2.072l-7.591 8.824L7.251 0H.258l9.168 13.343L.258 24H2.33l8.016-9.318L16.749 24h6.993zm-2.837 3.299-.929-1.329L3.076 1.56h3.182l5.965 8.532.929 1.329 7.754 11.09h-3.182z"/></svg><span>@yuvalav</span></a>
+    <a href="https://instagram.com/yuval_770" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"/></svg><span>Instagram</span></a>
+    <a href="https://www.tiktok.com/@yuval.ai" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg><span>TikTok</span></a>
+    <a href="https://youtube.com/@yuv-ai" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg><span>YouTube</span></a>
+    <a href="https://github.com/hoodini" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg><span>GitHub</span></a>
+    <a href="https://www.linkedin.com/in/yuval-avidani-87081474/" target="_blank" rel="noopener"><span class="tx" aria-hidden="true">in</span><span>LinkedIn</span></a>
+    <a href="https://facebook.com/yuval.avidani" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"/></svg><span>Facebook</span></a>
+  </nav>
+  <p class="credit">Every demo on this page runs in the browser from open-source code: React, Recharts, shadcn/ui, Radix, Lucide, Simple Icons and three.js, each under its own license. The logos belong to their owners and are shown to name the tools this page was built with. The method and the original prompts belong to zero (<a href="https://x.com/twoclipping" target="_blank" rel="noopener" class="ltr">@twoclipping</a>).</p>
+</footer>
+</main>
+<button id="toTop" type="button" aria-label="Back to top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+<script>
+/* the element index in "how to read" is built from the cards themselves, so it never drifts */
+(function () {
+  var idx = document.getElementById('idx'); if (!idx) return;
+  document.querySelectorAll('article.el[id^="e-"]').forEach(function (a) {
+    var n = a.querySelector('.el-n'), t = a.querySelector('.el-h h3'), tags = a.querySelectorAll('.el-tags span');
+    if (!n || !t || /LAB|08\./.test(n.textContent)) return;
+    var l = document.createElement('a'); l.href = '#' + a.id;
+    l.innerHTML = '<span>' + n.textContent + '</span><b>' + t.textContent + '</b><small>' + [].slice.call(tags, 0, 2).map(function (s) { return s.textContent; }).join(' · ') + '</small>';
+    idx.appendChild(l);
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,3 +1,4 @@
+import { EN, T, DIR } from './ui/i18n.js';
 import { makeTimebar, makeLoop } from './ui/timebar.js';
 
 const loaders = {
@@ -64,8 +65,8 @@ document.querySelectorAll('.prompt').forEach(box => {
   const b = box.querySelector('.cp'); if (!b) return;
   b.addEventListener('click', async () => {
     const txt = box.querySelector('pre').innerText;
-    try { await navigator.clipboard.writeText(txt); b.textContent = 'הועתק ✓'; } catch { b.textContent = 'סמנו והעתיקו'; }
-    setTimeout(() => (b.textContent = 'העתק פרומפט'), 1600);
+    try { await navigator.clipboard.writeText(txt); b.textContent = T('הועתק ✓', 'Copied ✓'); } catch { b.textContent = T('סמנו והעתיקו', 'Select and copy'); }
+    setTimeout(() => (b.textContent = T('העתק פרומפט', 'Copy prompt')), 1600);
   });
 });
 const toc = document.getElementById('toc'), tocBtn = document.getElementById('tocBtn');
