@@ -25,7 +25,7 @@ SIZE_ONLY = {'.hero-top .deck': 'T', '.tldr li': 'B', '.tr': 'B', '.src li': 'B'
              'body': 'B', '.legend div': 'B', '.step>.sub': 'T', '.el-h h3': 'T', '.el-cols h4': 'T', '.el-cols p': 'B',
              '.el-cols ul': 'B', '.fit>div': 'B', '.el .def b:first-child': 'T', '.ctrl-row .btn': 'T',
              '.is-failed .stage::after': 'B', '.layers-btn': 'B', '.vec-grid figcaption': 'B', '.cost-note': 'B',
-             '.clk-note': 'B', '.ui-steps li': 'B', '.tools td': 'B', '.tools td:first-child': 'T', '.bar .home': 'T', '.navbtn': 'T', '.bar .pages a': 'T'}
+             '.clk-note': 'B', '.ui-steps li': 'B', '.tools td': 'B', '.tools td:first-child': 'T', '.bar .home': 'T', '.navbtn': 'T', '.bar .pages a': 'T', '.pb-acts .btn': 'T', '.pb-hint': 'B', '.pb-warn p': 'B', '.gls-no': 'B'}
 
 def scale(expr, k):
     # scale px / vw / rem numbers; leave em and % alone (they follow the parent, already scaled)

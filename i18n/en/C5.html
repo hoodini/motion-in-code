@@ -1,0 +1,77 @@
+<!-- ============ 09 TOOLS ============ -->
+<section class="sec s-denim" id="c7" data-folio="09" data-toc="Tools map">
+  <div class="sh"><span class="num">09</span><div><h2>Tools map: what else is out there</h2><p class="sub">The catalog is built on HTML and seek(t). Here are the tools that do the same job differently, and when each one wins.</p></div></div>
+  <div class="body"><p>All license and pricing details were checked on October 17, 2026. Prices change, so before any commercial work it's worth checking again through the link in the sources.</p></div>
+  <div class="tbl"><table class="tools">
+    <tr><th>Tool</th><th>What it is</th><th>When to pick it</th><th>License and price</th></tr>
+    <tr><td>HTML + seek(t)<small>This page's method</small></td><td>One HTML file that Claude writes from scratch, with a function that draws any moment. Playwright captures, ffmpeg assembles.</td><td>One film under full control, without installing a <b>framework</b> (a ready-made structure for a whole project, with its own rules and commands). Every library in the catalog fits inside it.</td><td class="lic">Free</td></tr>
+    <tr><td>Remotion<small>remotion.dev</small></td><td>A framework where every video is a React component that receives the frame number. Renders to MP4, in the cloud too.</td><td>Lots of similar videos from one template (for example, a personal video for every customer), or a team that already works in React.</td><td class="lic">Free for individuals and companies of up to 3 employees; paid company license above that</td></tr>
+    <tr><td>HyperFrames<small>HeyGen · v0.8</small></td><td>An HTML file where every element has <code>data-start</code> and <code>data-duration</code>, plus <b>deterministic</b> capture to MP4: every frame always comes out the same, exactly like seek(t). Built for <b>AI agents</b> (AI that carries out actions on its own, like Claude Code), and it ships with <b>skills</b>: instruction files that teach an agent how to work with the tool.</td><td>When we want the seek(t) method with a ready-made tool that runs from terminal commands (init, preview, render). It's still before version 1.0, so things may still change.</td><td class="lic">Open source, Apache 2.0</td></tr>
+    <tr><td>GSAP<small>gsap.com</small></td><td>An animation library built on timelines. A timeline can be paused and jumped to any moment, which makes it a good fit for frame-by-frame capture.</td><td>Complex choreography of many elements. HyperFrames uses it by default.</td><td class="lic">Completely free, commercial use included, with all plugins. Webflow's license (not open source) only forbids using it to build a no-code animation tool that competes with Webflow</td></tr>
+    <tr><td>Motion Canvas<small>motioncanvas.io</small></td><td>A library in TypeScript (a version of JavaScript where every value is labeled with its type, so mistakes get caught early), plus an editor with a live preview, for vector animations timed to a voiceover.</td><td>Explainer videos with a voiceover, diagrams, code that changes on screen.</td><td class="lic">Open source, MIT</td></tr>
+    <tr><td>Lottie<small>lottie-web</small></td><td>An animation format based on JSON (a simple text format for storing data). An animator builds the animation in After Effects and exports it with the Bodymovin plugin, and it plays in the browser and in apps. It can jump to any frame (<code>goToAndStop</code>).</td><td>When there's a ready-made animation from a designer, or from the LottieFiles library, and we want to drop it into a film.</td><td class="lic">The player is open source (MIT); each animation has its own license</td></tr>
+    <tr><td>Rive<small>rive.app</small></td><td>An editor for interactive animations that react to the user, using a "state machine": a list of states, such as "idle", "hover" and "pressed", plus rules for when to move between them.</td><td>Animation inside an app or a website that reacts to clicks. Less so for a linear film.</td><td class="lic">The players (runtimes) are open source (MIT); exporting requires a paid plan, from $9 a month billed annually</td></tr>
+    <tr><td>Spline<small>spline.design</small></td><td>A visual 3D editor in the browser.</td><td>Designing a 3D scene by hand, then exporting it to GLTF or to code.</td><td class="lic">Free plan, plus paid plans</td></tr>
+    <tr><td>React Three Fiber<small>pmndrs</small></td><td>three.js as React components.</td><td>A large 3D scene inside a React project.</td><td class="lic">Open source, MIT</td></tr>
+  </table></div>
+  <div class="body">
+    <h3>How to choose, in four questions</h3>
+    <ol>
+      <li><b>One film or a hundred?</b> One: HTML and seek(t). A hundred from the same template: Remotion or HyperFrames.</li>
+      <li><b>Is there a ready-made animation from a designer?</b> Lottie fits into any of these approaches.</li>
+      <li><b>Does it live inside an app and react to the user?</b> Rive. At that point it's no longer a video question.</li>
+      <li><b>Need a custom 3D model?</b> Blender or Spline, export to GLTF, and bring it into three.js.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ 10 BUILDER ============ -->
+<section class="sec s-fire" id="c8" data-folio="10" data-toc="Prompt builder">
+  <div class="sh"><span class="num">10</span><div><h2>Prompt builder</h2><p class="sub">Start from a preset, lay the scenes out on the beat grid, and get one complete prompt for the whole film. Save and share it with a link.</p></div></div>
+  <div class="body">
+    <p>There's no AI here. The builder assembles the prompt from fixed parts, so it's easy to see exactly which sentence each choice adds. It follows the six blocks:</p>
+    <ol>
+      <li><b>Start from a preset</b>: an app launch, zero-style food ordering, a physical product or a data film. Each preset fills every field, and everything stays editable.</li>
+      <li><b>The story, format, tempo and branding</b> go into <code>&lt;direction&gt;</code>. The sentence about the film goes into the prompt word for word.</li>
+      <li><b>The elements</b>: each catalog element adds a line to every block: what to see, how to build it in <code>&lt;build&gt;</code>, and which bug to warn about in <code>&lt;gotchas&gt;</code>. The builder also sums up which engines the film needs (Canvas, three.js, WebGPU) and adds the WebGPU flags when they're needed.</li>
+      <li><b>The scenes</b> are <code>&lt;structure&gt;</code>: each scene has a name, a number of beats, the on-screen text, an element, and how it is born from the one before. We mark the scene where the drop lands, and the film's length is the sum of the beats. Moving the length slider stretches all the scenes together.</li>
+      <li><b>How things become each other</b>: the motion verbs and camera moves from the <a href="dictionary.html">interface dictionary</a>, <b>one signature trick</b>, and the <b>banned list</b>.</li>
+      <li><b>Saving</b>: the builder remembers what we built in this browser, "Copy a link" stores every choice inside the address so we can come back to it or send it to someone, and "Download as a file" saves the prompt as text.</li>
+    </ol>
+  </div>
+  <article class="el" id="e-builder">
+    <div class="el-h"><span class="el-n">10.1</span><h3 class="el-t">Your prompt</h3><div class="el-tags"><span>6 blocks</span><span>live</span></div></div>
+    <div class="el-demo" data-demo="prompt-builder"><div class="stage"></div></div>
+    <div class="el-body"><p>Next step: paste it into Claude Code (or any coding agent), answer the questions it asks in <code>&lt;inputs&gt;</code>, and approve the beat map and the stills before the full render. The whole process, from capture to music, is in the <a href="index.html#s14">pipeline chapter on the method page</a>. (A coding agent is an AI that writes and runs code by itself, on your own computer.)</p></div>
+  </article>
+</section>
+
+<!-- ============ 11 SOURCES ============ -->
+<section class="sec s-cloud" id="c9" data-folio="11" data-toc="Sources">
+  <div class="sh"><span class="num">11</span><div><h2>Sources</h2><p class="sub">All links were checked and live on October 17, 2026.</p></div></div>
+  <ol class="src">
+    <li><a href="https://github.com/recharts/recharts" target="_blank" rel="noopener">Recharts</a>: the charting library, MIT.</li>
+    <li><a href="https://ui.shadcn.com/docs" target="_blank" rel="noopener">shadcn/ui · Introduction</a>: "This is not a component library", and how to add components.</li>
+    <li><a href="https://www.radix-ui.com/primitives" target="_blank" rel="noopener">Radix Primitives</a>: unstyled components that handle behavior and accessibility.</li>
+    <li><a href="https://tailwindcss.com" target="_blank" rel="noopener">Tailwind CSS</a></li>
+    <li><a href="https://lucide.dev" target="_blank" rel="noopener">Lucide</a>: the icon library, ISC.</li>
+    <li><a href="https://simpleicons.org" target="_blank" rel="noopener">Simple Icons</a> and <a href="https://github.com/simple-icons/simple-icons/blob/develop/DISCLAIMER.md" target="_blank" rel="noopener">their legal disclaimer</a> about trademarks.</li>
+    <li><a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> and <a href="https://threejs.org/docs/pages/MeshPhysicalMaterial.html" target="_blank" rel="noopener">MeshPhysicalMaterial</a>.</li>
+    <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/font-variant-numeric" target="_blank" rel="noopener">MDN · font-variant-numeric</a> (tabular-nums).</li>
+    <li><a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/stroke-dashoffset" target="_blank" rel="noopener">MDN · stroke-dashoffset</a></li>
+    <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/backdrop-filter" target="_blank" rel="noopener">MDN · backdrop-filter</a></li>
+    <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/gradient/conic-gradient" target="_blank" rel="noopener">MDN · conic-gradient()</a></li>
+    <li><a href="https://playwright.dev" target="_blank" rel="noopener">Playwright</a> and <a href="https://ffmpeg.org" target="_blank" rel="noopener">FFmpeg</a></li>
+    <li><a href="https://github.com/remotion-dev/remotion/blob/main/LICENSE.md" target="_blank" rel="noopener">Remotion · LICENSE</a>: free for individuals and companies of up to 3 employees.</li>
+    <li><a href="https://github.com/heygen-com/hyperframes" target="_blank" rel="noopener">HyperFrames (HeyGen)</a>, Apache 2.0, and <a href="https://yuv.ai/blog/hyperframes-heygen" target="_blank" rel="noopener">my review on yuv.ai</a>.</li>
+    <li><a href="https://gsap.com/pricing/" target="_blank" rel="noopener">GSAP · Pricing</a>: completely free, plugins included, and <a href="https://gsap.com/community/standard-license/" target="_blank" rel="noopener">the standard license</a>: commercial use is allowed, a no-code animation tool that competes with Webflow is not.</li>
+    <li><a href="https://github.com/motion-canvas/motion-canvas" target="_blank" rel="noopener">Motion Canvas</a>, MIT.</li>
+    <li><a href="https://github.com/airbnb/lottie-web" target="_blank" rel="noopener">lottie-web</a>, MIT, and <a href="https://en.wikipedia.org/wiki/Lottie_(file_format)" target="_blank" rel="noopener">Lottie on Wikipedia</a> (the Bodymovin plugin dates from 2015, Airbnb's libraries from 2017).</li>
+    <li><a href="https://rive.app/blog/rive-s-new-9-mo-plan" target="_blank" rel="noopener">Rive · the new $9/mo plan</a> (October 20, 2025): the runtimes are MIT, exporting needs a paid plan.</li>
+    <li><a href="https://spline.design" target="_blank" rel="noopener">Spline</a></li>
+    <li><a href="https://github.com/pmndrs/react-three-fiber" target="_blank" rel="noopener">React Three Fiber</a>, MIT.</li>
+    <li><a href="https://github.com/chartjs/Chart.js" target="_blank" rel="noopener">Chart.js</a>, <a href="https://github.com/apache/echarts" target="_blank" rel="noopener">Apache ECharts</a>, <a href="https://github.com/d3/d3" target="_blank" rel="noopener">D3</a></li>
+    <li><a href="index.html#s19" >Method page sources</a>: zero's original article and prompts (<span class="ltr">@twoclipping</span>).</li>
+  </ol>
+</section>
+

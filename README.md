@@ -14,7 +14,7 @@ No After Effects and no timeline editor. Every frame of these films is a pure fu
 This repo holds four things:
 
 - **The page** ([Hebrew](https://news.yuv.ai/motion) · [English](https://yuv.ai/motion)): a deep dive into the method, in 19 chapters with 16 live labs.
-- **The catalog** ([Hebrew](https://news.yuv.ai/motion/catalog) · [English](https://yuv.ai/motion/catalog)): 18 live building blocks you can ask Claude for, each explained from zero with a full prompt, plus a prompt builder.
+- **The catalog** ([Hebrew](https://news.yuv.ai/motion/catalog) · [English](https://yuv.ai/motion/catalog)): 24 live building blocks you can ask Claude for, each explained from zero with a full prompt, plus a prompt builder.
 - **The dictionary** ([Hebrew](https://news.yuv.ai/motion/dictionary) · [English](https://yuv.ai/motion/dictionary)): 33 live interface components, motion verbs and camera rules from the prompts, each with the name we write in a prompt and a sentence to copy.
 - **The template**: the six-block prompt skeleton, with a pre-send checklist, at the end of chapter 15 ([Hebrew](https://news.yuv.ai/motion#template) · [English](https://yuv.ai/motion#template)).
 - **[The films](#-the-films)**: three finished films made with the method, each in 9:16 and 16:9.
@@ -68,9 +68,11 @@ The first version worked technically and still looked anemic. The second changed
 | 03 · Icons & logos | Self-drawing **Lucide** icons and official logos from **Simple Icons**, with the trademark rules |
 | 04 · Kinetic type | Slam, mask rise, pop typing and marker, with the Hebrew RTL details |
 | 05 · 3D | **three.js** phone and laptop with live screens, a liquid glass orb, 20,000-particle morphs, an ocean time-lapse, a beat-snapping carousel, an instanced equalizer |
-| 06 · Effects | The neon "AI is thinking" edge, frosted glass, an aurora with grain, four transitions without a crossfade |
-| 07 · Tools map | Remotion, HyperFrames, GSAP, Motion Canvas, Lottie, Rive, Spline and React Three Fiber, with licences checked |
-| 08 · Prompt builder | Pick elements, format, length and brand, and get one complete prompt for the whole film |
+| 06 · Engines | A raw **WebGL2** fragment shader (sunset, sea, marble, liquid gradient, paper grain) and 200,000 particles on **WebGPU** through three.js `WebGPURenderer` + TSL, with the headless-capture flags we tested |
+| 07 · Effects | The neon "AI is thinking" edge, frosted glass, an aurora with grain, four transitions without a crossfade |
+| 08 · Real world | A delivery **map** with a courier riding the route by arc length, a **photo** with Ken Burns and a knob-driven relight, six **PBR materials** with generated textures, and a real **glTF** product lit by a CC0 **HDRI** with a live label |
+| 09 · Tools map | Remotion, HyperFrames, GSAP, Motion Canvas, Lottie, Rive, Spline and React Three Fiber, with licences checked |
+| 10 · Prompt builder | Start from a preset, lay out the scenes on the beat grid, pick motion verbs, one signature trick and the banned list, and get the whole six-block prompt; save it as a link or a file |
 
 Every demo is a pure function of time with a scrubber under it, so the same code can be captured frame by frame into a video. The catalog source is in [`catalog-src/`](catalog-src/):
 

@@ -25,6 +25,12 @@ const loaders = {
   'fx-glass': () => import('./demos/fx-glass.js'),
   'fx-aurora': () => import('./demos/fx-aurora.js'),
   'transitions': () => import('./demos/transitions.js'),
+  'gl-shader': () => import('./demos/gl-shader.js'),
+  'gpu-particles': () => import('./demos/gpu-particles.js'),
+  'map-route': () => import('./demos/map-route.js'),
+  'photo-relight': () => import('./demos/photo-relight.js'),
+  'd3-materials': () => import('./demos/d3-materials.js'),
+  'd3-model': () => import('./demos/d3-model.js'),
   'prompt-builder': () => import('./demos/prompt-builder.js')
 };
 const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -59,6 +65,8 @@ const seen = new IntersectionObserver(es => es.forEach(e => {
   if (e.isIntersecting && !reduce && !p.userPaused) p.play(); else if (!e.isIntersecting) p.pause();
 }), { threshold: 0.15 });
 document.querySelectorAll('[data-demo]').forEach(el => { near.observe(el); seen.observe(el); });
+// a shared builder link (#pb=…): bring the builder into view so it boots and reads the hash
+if (/^#pb=/.test(location.hash)) { const b = document.getElementById('e-builder'); if (b) setTimeout(() => b.scrollIntoView({ block: 'start' }), 200); }
 
 /* ---------- page chrome: copy buttons, TOC, progress, back to top ---------- */
 document.querySelectorAll('.prompt').forEach(box => {

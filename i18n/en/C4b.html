@@ -1,0 +1,200 @@
+<!-- ============ 08 REAL WORLD ============ -->
+<section class="sec s-sky" id="c11" data-folio="08" data-toc="The real world: maps, photos, materials">
+  <div class="sh"><span class="num">08</span><div><h2>The real world: maps, photos and materials</h2><p class="sub">What makes a code film feel shot, not computer-made.</p></div></div>
+  <div class="body">
+    <p>When everything is flat vector shapes, the eye recognises a computer. Good product films bring in pieces of the real world: a map with a courier riding it, a real photo, materials that reflect light like real ones, and a 3D model of a real product. The four elements here do exactly that, and all of them are still a function of t.</p>
+    <p>Real-world material comes with a licence, so here are three terms worth knowing:</p>
+    <ul>
+      <li><b>CC0</b>: a full waiver of copyright. We may use, change and sell, even without credit. Poly Haven (HDRI environments, textures and models) and Khronos (sample models) publish much of their material this way. Logos and trademarks inside such an asset are usually not covered by the waiver.</li>
+      <li><b>The Pexels licence</b>: photos and videos are free to use, commercially too and without credit. It is not allowed to show identifiable people in a bad light, to suggest that someone in the photo endorses the product, or to sell the photo as it is.</li>
+      <li><b>OpenStreetMap</b>: a free map of the world. Anyone using its data or map tiles must show a credit and say the data is under the ODbL licence. A stylised map drawn in code, like the demo below, needs nothing.</li>
+    </ul>
+  </div>
+
+  <article class="el" id="e-map">
+    <div class="el-h"><span class="el-n">08.1</span><h3 class="el-t">Map and route: a courier on the way</h3><div class="el-tags"><span>Canvas 2D</span><span>arc length</span></div></div>
+    <div class="el-demo" data-demo="map-route"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>What you see</h4><p>A stylised map, a route that draws itself from the restaurant to home, a courier who rides it while the camera follows, an arrival clock counting down, and a pin that turns into the brand mark. This is the moment from zero's food film and print film.</p></div>
+        <div><h4>How it works</h4><ul>
+          <li>The map is drawn once into a hidden canvas, and every frame only the "camera" moves over it: moving and scaling the same image. That is very cheap.</li>
+          <li>The courier moves by <b>arc length</b>: we measure the length of each segment of the route and move it by distance, not by segment number. That way it travels at the same speed even when one segment is long and the next is short.</li>
+          <li>The part we have already travelled is painted in the fire gradient, and what remains stays dashed. Both are drawn from the same function of distance.</li>
+          <li>The zoom moves in <b>log space</b>: every moment adds the same percentage, not the same amount, so the eye feels an even motion.</li>
+          <li>The pin does not vanish: its head grows into a circle with a check. The new scene is born from an object already on screen.</li></ul></div>
+      </div>
+      <div class="fit"><div class="y"><b>When to use</b>Deliveries, rides, "where is my order", a user's journey.</div><div class="n"><b>When not to</b>When the real geography matters, like an address or a real route. Then we need a real map, with its credit.</div></div>
+      <div class="prompt"><h5>Full prompt</h5><div class="code"><span class="lbl">delivery map · Canvas 2D, arc length</span><button class="cp" type="button">Copy prompt</button><pre>&lt;inputs&gt;
+Ask me for: the start and end of the route (names only, like "the restaurant" and "home"), my brand mark, and whether the map must show a real place. If it must be real, ask for the area and use OpenStreetMap data with its attribution on screen; otherwise draw a stylised map.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 10-second delivery scene, 1920x1080, 60fps. A stylised 2D city map in my palette: light streets on a pale ground, a strip of sea, a few parks, a handful of street names. A route draws itself from the start pin to the destination pin, a courier chip rides it while the camera follows, an ETA chip counts down, and on arrival the destination pin's head grows into my brand mark with a check. One continuous take, no cuts.
+Banned: satellite imagery, 3D buildings, a camera that zooms in and out more than once, a courier that moves at uneven speed.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM. Beats 0-2: the map and both pins pop in. Beats 2-5: the route draws itself. Beats 5-7: the camera zooms in on the courier. Beats 7-16: the ride, with the camera following. Beats 16-18: the camera pulls back to the destination. Beats 18-20: the pin becomes the brand mark.
+&lt;/structure&gt;
+
+&lt;build&gt;
+Canvas 2D. Draw the static map once into an offscreen canvas at 2x, then every frame only translate and scale it (that is the camera).
+Move the courier by arc length: precompute each segment's length and place it at distance s(t) = eased(t) x total length, with its heading from the current segment.
+Draw the travelled part of the route in the accent gradient and the rest dashed, both from the same arc-length function.
+Interpolate the zoom in log space. Pins and chips pop on closed-form springs evaluated at t.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Moving by segment index instead of arc length makes the courier speed up on short segments.
+- Make the map larger than the widest camera view, or its edge shows when the camera pulls back.
+- Real map tiles need their attribution on screen and the tile provider's usage policy.
+- Hebrew street names: set ctx.direction = 'rtl' before fillText.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me stills of the overview, mid-ride and the arrival before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-photo">
+    <div class="el-h"><span class="el-n">08.2</span><h3 class="el-t">A real photo: Ken Burns and a relight</h3><div class="el-tags"><span>Canvas 2D</span><span>wipe</span><span>2 shots</span></div></div>
+    <div class="el-demo" data-demo="photo-relight"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>What you see</h4><p>A photo card that lands on a spring, with a slow camera push inwards. Then a slider appears, the cursor drags it, and the photo moves from midday to golden hour following the knob. Try dragging the knob yourself.</p></div>
+        <div><h4>How it works</h4><ul>
+          <li>The <b>Ken Burns effect</b> is a slow zoom and pan over a still photo, named after the documentary filmmaker who used it a lot. We start slightly above zoom 1 so the pan never shows the edge of the photo.</li>
+          <li>The change is not a fade: there are two aligned photos of the same place, and the second is revealed from left to right up to the knob, with a lit edge. It is a wipe the viewer controls.</li>
+          <li>For this to work the two photos must line up pixel for pixel: shoot from a tripod, or export two versions of the same image. Here the two "photos" are two renders of our sea scene from the same camera.</li>
+          <li>The knob grows while it is held, a small piece of feedback that says "got it".</li></ul></div>
+      </div>
+      <div class="fit"><div class="y"><b>When to use</b>Before and after, day and night, a product in two colours, colour grades.</div><div class="n"><b>When not to</b>When there are no two aligned photos. A wipe between photos that don't match looks like a mistake.</div></div>
+      <div class="prompt"><h5>Full prompt</h5><div class="code"><span class="lbl">photo relight · Ken Burns + wipe</span><button class="cp" type="button">Copy prompt</button><pre>&lt;inputs&gt;
+Ask me for two aligned photos of the same scene in two states (day and golden hour, before and after, two product colours), shot from a tripod or exported as two versions of one image. If I don't have them, stop and tell me: this effect needs aligned shots.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 10-second scene, 1920x1080, 60fps. The first photo lands in a rounded card (radius 28, a soft navy shadow) on a spring and gets a slow Ken Burns push. Then a glass slider grows out of the card's bottom edge, a cursor drags its knob with two small pauses, and the second photo is revealed by a wipe that follows the knob, with a lit leading edge. Labels for the two states sit on the card.
+Banned: crossfading the two photos, brightness or filter "developing", a knob that moves at constant speed.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM. Beats 0-6: the card and the Ken Burns push. Beat 6: the slider appears. Beats 8-14: the drag, pausing on beats 10 and 11. Beats 14-20: hold on the second state while the push continues.
+&lt;/structure&gt;
+
+&lt;build&gt;
+Canvas 2D. Draw each photo to cover the card (scale = max(cardW / imgW, cardH / imgH) x zoom), clipped to a rounded rect.
+Ken Burns: zoom from 1.07 to 1.2 in log space plus a small pan, all functions of t; starting above 1 means the pan never shows an edge.
+The wipe: clip the second photo to x &lt; knob position, and draw a 3px white edge with a soft accent glow just before it.
+The knob position is an eased function of t with two pauses; the knob grows while it is held.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- If the two photos are not aligned pixel for pixel, the wipe exposes the mismatch. Align them first.
+- Decode the images before the first seek() (await img.decode()), or the first frames are empty.
+- Use photos you are licensed to use; every stock site has its own licence.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me stills at beats 4, 11 and 18 before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-materials">
+    <div class="el-h"><span class="el-n">08.3</span><h3 class="el-t">Materials and textures: the same sphere six times</h3><div class="el-tags"><span>three.js</span><span>PBR</span><span>normal map</span></div></div>
+    <div class="el-demo" data-demo="d3-materials"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>What you see</h4><p>Six identical spheres in the same light: chrome, brushed metal, glass, glazed ceramic, velvet and marble. Only a few numbers and one texture change between them, and the corner says which.</p></div>
+        <div><h4>How it works</h4><ul>
+          <li><b>PBR</b> materials compute light by the laws of physics. The two main numbers: <code>metalness</code> (0 plastic, 1 metal) and <code>roughness</code> (0 mirror, 1 chalk).</li>
+          <li><code>transmission</code> makes a material see-through like glass, and <code>ior</code>, the index of refraction (1.45 for glass), sets how much it bends what is behind it. That is why there are stripes behind the spheres: with nothing behind, there is nothing to bend.</li>
+          <li><code>clearcoat</code> adds a clear lacquer layer over the colour, as on ceramics or car paint. <code>sheen</code> adds a soft shine at the edges, as on fabric.</li>
+          <li>A <b>texture</b> is an image wrapped around the object. <code>map</code> sets the colour (the marble veins). <code>normalMap</code> "lies" to the light about which way each pixel faces, so a smooth surface looks brushed or woven without adding a single triangle. Every texture here is generated in code from noise, with no files.</li>
+          <li>Real textures, like wood, concrete and fabric, are free to download from Poly Haven under CC0.</li></ul></div>
+      </div>
+      <div class="fit"><div class="y"><b>When to use</b>A physical product, packaging, a brand's "material", switching between finishes.</div><div class="n"><b>When not to</b>A flat interface film. Shiny materials pull the eye away from the screen.</div></div>
+      <div class="prompt"><h5>Full prompt</h5><div class="code"><span class="lbl">materials · three.js PBR</span><button class="cp" type="button">Copy prompt</button><pre>&lt;inputs&gt;
+Ask me which finishes my product comes in (for example aluminium, glass, matte ceramic, fabric) and my brand colours. If I skip it, show chrome, brushed metal, glass, glazed ceramic, velvet and marble.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 12-second material showcase, 1920x1080, 60fps, in three.js. Identical spheres in a row on a pale floor, lit by one studio environment, with a striped backdrop so transparent materials have something to bend. Every 2 seconds the camera glides to the next sphere, it lifts on a spring, and a label shows the material's name and its key PBR numbers.
+Banned: different lighting per material, coloured lights, bloom, orbiting the camera around the row.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM. One material per 4 beats; the lift lands on the first beat of each group.
+&lt;/structure&gt;
+
+&lt;build&gt;
+three.js WebGLRenderer, ACES tone mapping, sRGB output, RoomEnvironment through PMREMGenerator for reflections.
+One MeshPhysicalMaterial per finish: chrome (metalness 1, roughness 0.05), brushed metal (metalness 1, roughness 0.35, a stretched-noise normalMap), glass (transmission 1, ior 1.45, thickness 0.8), glazed ceramic (roughness 0.4, clearcoat 1), velvet (roughness 0.9, sheen 1), marble (a generated colour map, roughness 0.18).
+Generate the textures in code: value noise → height field → normal map on a canvas, used as a CanvasTexture with RepeatWrapping.
+The camera's x and the lift are functions of t (an eased glide and a closed-form spring).
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Metal without an environment map renders almost black: metal shows what it reflects.
+- Transmission needs something behind the object, or glass reads as grey plastic.
+- Colour textures need colorSpace = SRGBColorSpace; normal maps must stay linear.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me one still per material before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-model">
+    <div class="el-h"><span class="el-n">08.4</span><h3 class="el-t">A real model and HDRI light: a bottle on a turntable</h3><div class="el-tags"><span>three.js</span><span>glTF</span><span>HDRI</span><span>CC0</span></div></div>
+    <div class="el-demo" data-demo="d3-model"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>What you see</h4><p>A real bottle from a glTF file turns a quarter turn at a time. In the first half it is lit by a studio, in the second by a real 360° photo of a sunset in Venice, and the reflections move across it. Its label is redrawn from t, and the second label wipes across the first. The buttons also let us pick the light.</p></div>
+        <div><h4>How it works</h4><ul>
+          <li><b>glTF</b> is the standard file format for 3D models: shape, materials and textures in one file (<code>.glb</code>). We download a model, build it in Blender, or get it from the client, and three.js's <code>GLTFLoader</code> loads it.</li>
+          <li>An <b>HDRI</b> is a 360° panoramic photo saved with the full range of brightness, including the sun itself, which is far brighter than everything else. Used as the environment, the light on the product comes from the photo and its reflections are real. Rotating the environment with t (<code>environmentRotation</code>) moves the reflections across the product.</li>
+          <li>The model was prepared for the web: the textures were resized to 1024 pixels and converted to WebP with the glTF-Transform tool, and the file went from 9 megabytes to 230 kilobytes.</li>
+          <li>The label is drawn on a canvas over the original colour texture and updated every frame. That is how we put our brand on a product without touching the model.</li>
+          <li>The model (Khronos's Water Bottle) and the environment (Poly Haven's Venice Sunset) are CC0. A model of another company's real product, like an iPhone, needs a licence.</li></ul></div>
+      </div>
+      <div class="fit"><div class="y"><b>When to use</b>A product packshot, packaging, the launch of a physical product.</div><div class="n"><b>When not to</b>When there is no model of the product. A generic device or a real photo beats a model that imitates a product.</div></div>
+      <div class="prompt"><h5>Full prompt</h5><div class="code"><span class="lbl">packshot · glTF + HDRI</span><button class="cp" type="button">Copy prompt</button><pre>&lt;inputs&gt;
+Ask me for my product as a glTF/GLB model (from my designer, from Blender, or a model whose licence allows this use), my label artwork or brand name, and an HDRI environment. If I have no model, ask whether to use a generic shape instead; never imitate someone else's real product. If I skip the HDRI, use a CC0 one from Poly Haven.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 12-second packshot, 1920x1080, 60fps, in three.js. The product stands on a soft contact shadow and turns a quarter turn on every third beat, settling with a slight overshoot. The first half is lit by a clean studio environment on a light gradient; the second half by the HDRI, shown blurred behind the product, with the environment slowly rotating so reflections sweep across the surface. Mid-film, a new label wipes across the old one. The camera pushes in slowly, once.
+Banned: spinning at constant speed, a lighting change that is not on a beat, floating particles, lens flares.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM. Quarter turns on beats 3, 6, 9, 12, 16 and 20. Beat 12: the light changes and the label wipe starts. The push-in runs from beat 0 to beat 22.
+&lt;/structure&gt;
+
+&lt;build&gt;
+three.js WebGLRenderer, ACES tone mapping. Load the model with GLTFLoader and the HDRI with RGBELoader; pre-filter both environments once with PMREMGenerator (fromScene(new RoomEnvironment()) and fromEquirectangular(hdr)).
+Normalise the model: centre it, stand it on y = 0, scale it to a fixed height.
+The label: draw the model's base colour image onto a canvas, paint the label artwork over its label area (find it in the UV layout), and use the canvas as a CanvasTexture with flipY = false and SRGBColorSpace; redraw it every frame so the wipe is a function of t.
+Rotation is a sum of springs keyed on the beats; scene.environmentRotation.y and scene.backgroundRotation.y are functions of t.
+Optimise the model for the web first: gltf-transform resize --width 1024 --height 1024, then gltf-transform webp.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- glTF textures use flipY = false. A CanvasTexture defaults to flipY = true, so the label comes out upside down unless you set it.
+- A label wider than about a third of the circumference disappears around the back. Keep words short, or stack them.
+- CC0 model licences usually exclude logos and trademarks. Paint out any brand mark that isn't yours.
+- Await both loaders before the first seek(), or the first frames render an empty scene.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me stills at beats 4, 12 and 20 before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+</section>
+

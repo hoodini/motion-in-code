@@ -89,8 +89,8 @@ p.rep('<meta property="og:description" content="השיטה של @twoclipping, מ
 p.rep('</style>\n</head>', '</style>\n<link rel="stylesheet" href="catalog/en.css">\n</head>')
 p.header_en()
 p.rep(DICT_CARD_HE, DICT_CARD_EN)
-p.rep('<b>קטלוג המושן</b><span>18 אלמנטים חיים עם הסבר מאפס ופרומפט מלא לכל אחד.</span>',
-      '<b>The motion catalog</b><span>18 live elements, each explained from zero, with a full prompt.</span>')
+p.rep('<b>קטלוג המושן</b><span>24 אלמנטים חיים עם הסבר מאפס ופרומפט מלא לכל אחד.</span>',
+      '<b>The motion catalog</b><span>24 live elements, each explained from zero, with a full prompt.</span>')
 p.rep('<p class="credit">כל התוכן והפרומפטים המקוריים שייכים ל-zero (<a href="https://x.com/twoclipping" target="_blank" rel="noopener" class="ltr">@twoclipping</a>). העמוד הזה הוא ניתוח ותרגום לצורכי לימוד. כל המעבדות מחושבות בזמן אמת בדפדפן — אין כאן אף מספר מזויף.</p>',
       '<p class="credit">The original method and prompts belong to zero (<a href="https://x.com/twoclipping" target="_blank" rel="noopener" class="ltr">@twoclipping</a>). This page is an analysis for learning purposes. Every lab is computed live in the browser: there is not a single fake number here.</p>')
 
@@ -211,14 +211,14 @@ p.finish('index.en.html')
 
 # ================================================================ catalog.en.html
 c = Page('catalog.html')
-c.main(['C1', 'C2', 'C3', 'C3b', 'C4'])
+c.main(['C1', 'C2', 'C3', 'C3b', 'C3c', 'C4', 'C4b', 'C5'])
 for a, b in FOOT: c.rep(a, b)
 c.rep('<title>קטלוג המושן · YUV.AI</title>', '<title>Motion Catalog · YUV.AI</title>')
-c.rep('<meta name="description" content="קטלוג חי של אבני בניין לסרטוני מושן עם AI: גרפים של Recharts, ממשק shadcn/ui, אייקונים ולוגואים רשמיים, טיפוגרפיה קינטית, תלת-ממד ב-three.js ואפקטים. כל אלמנט עם הדגמה חיה, הסבר מאפס ופרומפט מלא.">',
-      '<meta name="description" content="A live catalog of building blocks for AI motion films: Recharts charts, shadcn/ui interfaces, official icons and logos, kinetic typography, three.js 3D and effects. Every element comes with a live demo, an explanation from zero and a full prompt.">')
+c.rep('<meta name="description" content="קטלוג חי של אבני בניין לסרטוני מושן עם AI: גרפים של Recharts, ממשק shadcn/ui, אייקונים ולוגואים רשמיים, טיפוגרפיה קינטית, תלת-ממד ב-three.js, שיידרים ו-WebGPU, מפות, תמונות וחומרים, ואפקטים. כל אלמנט עם הדגמה חיה, הסבר מאפס ופרומפט מלא.">',
+      '<meta name="description" content="A live catalog of building blocks for AI motion films: Recharts charts, shadcn/ui interfaces, official icons and logos, kinetic typography, three.js 3D, shaders and WebGPU, maps, photos and materials, and effects. Every element comes with a live demo, an explanation from zero and a full prompt.">')
 c.rep('<meta property="og:title" content="קטלוג המושן: מה אפשר לבקש מ-Claude">', '<meta property="og:title" content="The Motion Catalog: what we can ask Claude for">')
-c.rep('<meta property="og:description" content="18 אלמנטים חיים, 9 מושגי יסוד, 18 פרומפטים מלאים ובונה פרומפטים. בלי ידע קודם. YUV.AI">',
-      '<meta property="og:description" content="18 live elements, 9 foundations, 18 full prompts and a prompt builder. No prior knowledge needed. YUV.AI">')
+c.rep('<meta property="og:description" content="24 אלמנטים חיים, 9 מושגי יסוד, 24 פרומפטים מלאים ובונה פרומפטים. בלי ידע קודם. YUV.AI">',
+      '<meta property="og:description" content="24 live elements, 9 foundations, 24 full prompts and a prompt builder. No prior knowledge needed. YUV.AI">')
 c.rep('<link rel="stylesheet" href="catalog/catalog.css">', '<link rel="stylesheet" href="catalog/catalog.css">\n<link rel="stylesheet" href="catalog/en.css">')
 c.header_en()
 c.rep(DICT_CARD_HE, DICT_CARD_EN)
@@ -240,7 +240,7 @@ d.sub(r'<meta property="og:description" content="[^"]*">', '<meta property="og:d
 d.rep('<link rel="stylesheet" href="catalog/site.css">', '<link rel="stylesheet" href="catalog/site.css">\n<link rel="stylesheet" href="catalog/en.css">')
 d.rep('<b>עמוד השיטה</b><span>איך Claude מייצר סרטוני השקה בקוד, מפורק לפירורים.</span>',
       '<b>The method page</b><span>How Claude makes launch films in code, broken down crumb by crumb.</span>')
-d.rep('<b>קטלוג המושן</b><span>18 אלמנטים חיים, כל אחד עם הסבר מאפס ופרומפט מלא.</span>',
-      '<b>The motion catalog</b><span>18 live elements, each explained from zero, with a full prompt.</span>')
+d.rep('<b>קטלוג המושן</b><span>24 אלמנטים חיים, כל אחד עם הסבר מאפס ופרומפט מלא.</span>',
+      '<b>The motion catalog</b><span>24 live elements, each explained from zero, with a full prompt.</span>')
 d.sub(r'<p class="credit">.*?</p>', '<p class="credit">The components on this page are drawn in code, and their motion is computed from a spring formula, just like in the films. The names and catalogs mentioned here belong to their owners. The original method and prompts belong to zero (<a href="https://x.com/twoclipping" target="_blank" rel="noopener" class="ltr">@twoclipping</a>).</p>')
 d.finish('dictionary.en.html')

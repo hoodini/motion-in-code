@@ -1,0 +1,114 @@
+<!-- ============ 06 ENGINES ============ -->
+<section class="sec s-denim" id="c10" data-folio="06" data-toc="Engines: WebGL and WebGPU">
+  <div class="sh"><span class="num">06</span><div><h2>Under the hood: WebGL, WebGPU and shaders</h2><p class="sub">Who actually paints the pixels, and why it matters when we capture a film.</p></div></div>
+  <div class="body">
+    <p>In the previous chapter three.js did the work for us. Now we go one layer down, to two questions: who actually draws, and in which language we talk to it.</p>
+    <ul>
+      <li><b>Graphics card</b> (GPU): a processor made of thousands of small cores that do the same operation on lots of data at once. The regular processor (CPU) is a few expert chefs; the graphics card is a thousand cooks who each chop one cucumber. Drawing an image is exactly that kind of work: millions of pixels, and the same calculation for each one.</li>
+      <li><b>WebGL</b>: the browser's long-standing way to talk to the graphics card, since 2011 (and version 2 since 2017). It works in almost every browser and device, and three.js uses it by default.</li>
+      <li><b>WebGPU</b>: the new way. Faster when there are many objects, and it can also do <b>general computing</b> (compute): using the graphics card not only for drawing but for any calculation that repeats, like a simulation of hundreds of thousands of particles. According to Google (November 2025) it is available in Chrome and Edge (on Windows, macOS, ChromeOS and Android), in Safari 26, and in Firefox on Windows and on Macs with ARM chips. On Linux it is still on its way, and that matters to us, because render machines usually run Linux.</li>
+      <li><b>Shader</b>: a small program that runs on the graphics card. A <b>fragment shader</b> runs once for every pixel in every frame and returns a colour. A <b>vertex shader</b> runs once for every point of a shape and decides where it appears on screen. In WebGL shaders are written in GLSL, in WebGPU in WGSL.</li>
+      <li><b>TSL</b> (Three Shading Language): three.js's shader language. We write it as ordinary JavaScript, and it turns into WGSL or GLSL by itself, depending on what the browser supports.</li>
+    </ul>
+    <p>Why does this matter for a film? Because a shader is exactly a function of time: <code>colour = f(pixel, t)</code>. It is the same idea as <code>seek(t)</code>, except the graphics card runs it on a million pixels at once. A sunset, a sea, marble and film grain are a few lines of code, with no image file at all.</p>
+    <div class="warn"><b>The video-render trap</b>When Playwright captures the film, it runs the browser <b>headless</b>: with no window, usually on a server. In that mode Chrome turns the graphics card off by default. WebGL keeps working through SwiftShader, software that imitates a graphics card on the regular processor: slower, but it works and comes out the same every time. WebGPU needs special flags, and on some servers drivers too. We tested it: with the flags <code dir="ltr" class="flags">--enable-unsafe-webgpu --enable-features=Vulkan --use-vulkan=swiftshader --use-webgpu-adapter=swiftshader</code> the WebGPU demo below runs even without a graphics card. Without the flags, three.js falls back to WebGL 2 by itself.</div>
+    <h3>How to choose an engine, in four lines</h3>
+    <ol>
+      <li><b>Interface, buttons and text</b>: HTML and CSS. The browser already draws them very well.</li>
+      <li><b>Illustrations, charts and 2D motion</b>: Canvas 2D, a drawing surface we paint on with commands.</li>
+      <li><b>3D, materials and shaders</b>: three.js with WebGLRenderer. The safe choice for rendering.</li>
+      <li><b>Hundreds of thousands of particles or a simulation</b>: three.js with WebGPURenderer, which falls back to WebGL 2 by itself when there is no WebGPU.</li>
+    </ol>
+  </div>
+
+  <article class="el" id="e-shader">
+    <div class="el-h"><span class="el-n">06.1</span><h3 class="el-t">Shader: a colour for every pixel</h3><div class="el-tags"><span>WebGL 2</span><span>GLSL</span><span>no library</span></div></div>
+    <div class="el-demo" data-demo="gl-shader"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>What you see</h4><p>Five worlds drawn without a single image and without a library: a sunset, a sea, marble, a liquid gradient and paper with grain. Each one is a single function a few lines long. Open "The code that paints every pixel" to see it, and pick a world with the buttons.</p></div>
+        <div><h4>How it works</h4><ul>
+          <li>The canvas is covered by one triangle bigger than the screen. The graphics card runs the shader once for every pixel the triangle covers, which means the whole canvas, all in parallel.</li>
+          <li>Every pixel gets its position (<code>p</code>) and the time (<code>t</code>) and returns a colour. There is no memory between frames, so any frame can be computed on its own, exactly like <code>seek(t)</code>.</li>
+          <li>Marble and paper are made of <b>noise</b>: a function that returns random numbers that change gradually, like a landscape of hills rather than TV static. We add a few layers of noise at different sizes (fbm) and bend one noise with another (domain warping), and marble veins appear.</li>
+          <li>The grain in the gradient and the paper is not decoration: a smooth gradient breaks into colour "steps" after video compression (banding), and fine noise hides it.</li></ul></div>
+      </div>
+      <div class="fit"><div class="y"><b>When to use</b>Backgrounds, skies, water, textures and atmosphere, with no heavy files and full quality at any resolution.</div><div class="n"><b>When not to</b>An object with a defined shape (a phone, a bottle). There, three.js with a model is better.</div></div>
+      <div class="prompt"><h5>Full prompt</h5><div class="code"><span class="lbl">background · raw WebGL2 fragment shader</span><button class="cp" type="button">Copy prompt</button><pre>&lt;inputs&gt;
+Ask me which look I want behind the film (sunset sky, sea, marble, a liquid brand gradient, paper with grain) and my brand colours. If I skip it, use a liquid gradient in my brand colours.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A full-frame animated background drawn by a single fragment shader, 1920x1080, 60fps, under the rest of the film. It moves slowly and continuously and never competes with the text on top of it. Colours come only from my palette. Fine film grain on top so gradients never band after compression.
+Banned: image files for the background, video loops, a background that moves faster than the foreground, visible banding.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+The background runs for the whole film. Its slowest motion completes one cycle over the full length, so the first and last frames match.
+&lt;/structure&gt;
+
+&lt;build&gt;
+Raw WebGL2 (no library): one triangle that covers the canvas, and a GLSL fragment shader with uniforms u_t (seconds), u_res and u_aspect. color = f(gl_FragCoord, u_t) with no state between frames, so seek(t) can render any frame in any order.
+Build textures from value noise and fbm (4 to 5 octaves); use domain warping for marble-like veins; add grain as hash(pixel + floor(t * 24)) at about 3% amplitude.
+Set u_t from seek(t) every frame; create the context with preserveDrawingBuffer: true so Playwright can capture the canvas.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- smoothstep(edge0, edge1, x) with edge0 &gt; edge1 is undefined in GLSL. Write 1.0 - smoothstep(a, b, x) instead.
+- Waves near the horizon get so dense that they flicker (aliasing). Fade their amplitude to zero near the horizon.
+- Headless Chrome has no GPU by default; WebGL still runs through SwiftShader, only slower. Keep the shader cheap (loops of 5 steps at most).
+- Use highp precision, or noise turns blocky on some mobile GPUs.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me 3 stills of the background (start, middle, end) under a sample headline before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-gpu">
+    <div class="el-h"><span class="el-n">06.2</span><h3 class="el-t">WebGPU: two hundred thousand particles</h3><div class="el-tags"><span>three.js</span><span>WebGPURenderer</span><span>TSL</span></div></div>
+    <div class="el-demo" data-demo="gpu-particles"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>What you see</h4><p>200,000 particles that move from a sphere to a galaxy to a wave. The corner shows what your browser is actually running: WebGPU, or WebGL 2 when it has no WebGPU.</p></div>
+        <div><h4>How it works</h4><ul>
+          <li>three.js comes in two versions: <code>three</code> with WebGLRenderer, and <code>three/webgpu</code> with WebGPURenderer. The second tries WebGPU and, if it is missing, falls back to WebGL 2 by itself. That takes a moment, so we wait for <code>await renderer.init()</code> before the first frame.</li>
+          <li>All the particles are copies of the same small square (<b>instancing</b>): the graphics card gets one shape and a number of copies, and draws them all in one command.</li>
+          <li>Each particle's position is computed on the graphics card, in TSL: from the particle's index we derive three fixed random numbers, from those three shapes, and one number that comes from t decides how far we are from one shape to the next. Each particle starts a little after its neighbour, which turns the morph into a wave.</li>
+          <li>WebGPU's great strength is general computing (compute), such as a simulation in which every frame is built from the previous one. In a film we prefer a pure function of t, so we can jump to any frame, which is why everything here is recomputed every frame directly from t.</li></ul></div>
+      </div>
+      <div class="fit"><div class="y"><b>When to use</b>A "wow" moment of sheer quantity, morphing between shapes, a logo built from particles.</div><div class="n"><b>When not to</b>Particles as decoration on a black background. That is exactly the "template" zero bans.</div></div>
+      <div class="prompt"><h5>Full prompt</h5><div class="code"><span class="lbl">particles · three.js WebGPURenderer + TSL</span><button class="cp" type="button">Copy prompt</button><pre>&lt;inputs&gt;
+Ask me for the word or logo the particles should end on, if any. If I skip it, morph sphere → galaxy → wave.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 12-second particle scene, 1920x1080, 60fps: 200,000 soft particles on deep navy that morph between three shapes, each particle starting slightly after its neighbour so the morph ripples. Colours: the phoenix fire gradient and the clear sky blues, additive, never pure white.
+Banned: random jitter that changes every frame, particles that pop in or out, a wall of white from over-bright additive blending.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM. Beats 0-6: the first shape, turning slowly. Beats 6-10: the morph to the second. Beats 10-16: hold and turn. Beats 16-20: the morph to the third. Beats 20-24: hold.
+&lt;/structure&gt;
+
+&lt;build&gt;
+three.js WebGPURenderer from 'three/webgpu' (it falls back to WebGL 2 by itself); await renderer.init() before the first seek(t).
+One instanced sprite mesh with SpriteNodeMaterial and mesh.count = 200000. Positions are computed in TSL from instanceIndex: three fixed hashes per particle, three target shapes, and one uniform morph value that seek(t) sets every frame. No compute pass and no state between frames, so any frame can be rendered in any order.
+Alpha is a soft disc from uv(); colour mixes fire and sky by a per-particle hash.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- WebGPURenderer does not support ShaderMaterial or onBeforeCompile; write custom shading in TSL.
+- Headless Chrome has no WebGPU by default. Launch it with --enable-unsafe-webgpu --enable-features=Vulkan --use-vulkan=swiftshader --use-webgpu-adapter=swiftshader, or let it fall back to WebGL 2, and log which backend actually ran.
+- Additive blending of 200,000 particles blows out to white. Keep each particle's colour around 25% brightness.
+- Import everything in this file from 'three/webgpu'; mixing it with 'three' loads two copies of the library.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me one still per shape and tell me which backend the render used.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+</section>
+

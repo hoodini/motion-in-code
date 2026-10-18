@@ -33,4 +33,6 @@ const idx = fs.readFileSync(path.resolve(here, '../index.html'), 'utf8');
 const css = idx.slice(idx.indexOf('<style>') + 7, idx.indexOf('</style>'));
 fs.writeFileSync(path.join(out, 'site.css'), css);
 fs.copyFileSync(path.join(here, 'src/catalog.css'), path.join(out, 'catalog.css'));
+// static assets the demos load at runtime (models, HDRIs, photos): catalog/static/, next to the chunks
+fs.cpSync(path.join(here, 'static'), path.join(out, 'static'), { recursive: true });
 console.log(`site.css ${(css.length / 1024).toFixed(0)} KB · catalog.css copied`);

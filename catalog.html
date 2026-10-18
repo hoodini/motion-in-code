@@ -14,9 +14,9 @@
 <script>if (/github\.io$/.test(location.hostname)) location.replace('https://news.yuv.ai/motion/catalog' + location.search + location.hash);</script>
 <!-- /motion:head -->
 <title>קטלוג המושן · YUV.AI</title>
-<meta name="description" content="קטלוג חי של אבני בניין לסרטוני מושן עם AI: גרפים של Recharts, ממשק shadcn/ui, אייקונים ולוגואים רשמיים, טיפוגרפיה קינטית, תלת-ממד ב-three.js ואפקטים. כל אלמנט עם הדגמה חיה, הסבר מאפס ופרומפט מלא.">
+<meta name="description" content="קטלוג חי של אבני בניין לסרטוני מושן עם AI: גרפים של Recharts, ממשק shadcn/ui, אייקונים ולוגואים רשמיים, טיפוגרפיה קינטית, תלת-ממד ב-three.js, שיידרים ו-WebGPU, מפות, תמונות וחומרים, ואפקטים. כל אלמנט עם הדגמה חיה, הסבר מאפס ופרומפט מלא.">
 <meta property="og:title" content="קטלוג המושן: מה אפשר לבקש מ-Claude">
-<meta property="og:description" content="18 אלמנטים חיים, 9 מושגי יסוד, 18 פרומפטים מלאים ובונה פרומפטים. בלי ידע קודם. YUV.AI">
+<meta property="og:description" content="24 אלמנטים חיים, 9 מושגי יסוד, 24 פרומפטים מלאים ובונה פרומפטים. בלי ידע קודם. YUV.AI">
 <meta property="og:image" content="https://hoodini.github.io/motion-in-code/media/readme/social-preview.jpg">
 <meta property="og:image:width" content="1280"><meta property="og:image:height" content="640">
 <meta name="twitter:card" content="summary_large_image">
@@ -53,7 +53,7 @@
     <div class="cat-stage" data-demo="hero-particles" data-variant="hero" data-notb><div class="stage"></div><span class="hint">גררו כדי לסובב</span></div>
   </div>
   <p class="lead"><b>סרטון מושן</b> (motion graphics) הוא סרטון שבו הכל מצויר ומונפש ולא מצולם: טקסט, גרפים, אייקונים וצורות. בדרך כלל עושים אותו בתוכנה After Effects של Adobe; כאן כותבים אותו כקוד. כל מה שזז בעמוד הזה הוא קוד שרץ עכשיו בדפדפן שלכם. אין כאן אף קובץ וידאו. כל אלמנט הוא משהו שאפשר לבקש מ-Claude לשלב בסרטון, וליד כל אחד יש שלושה דברים: <b>הדגמה חיה</b> שאפשר לגרור בה את הזמן, <b>הסבר מאפס</b> (מה זה, איך זה עובד מתחת למכסה, מתי כן ומתי לא), ו<b>פרומפט מלא</b> להעתקה. לא צריך רקע ב-After Effects או בתכנות: כל מונח מוסבר במקום שבו הוא מופיע לראשונה. בעמוד הזה <b>אלמנט</b> הוא אבן בניין שלמה שאפשר להכניס לסרטון, כמו גרף או טלפון תלת-ממדי.</p>
-  <div class="stats"><span><b>18</b>אלמנטים חיים</span><span><b>9</b>מושגי יסוד</span><span><b>18</b>פרומפטים מלאים</span><span><b>1</b>בונה פרומפטים</span></div>
+  <div class="stats"><span><b>24</b>אלמנטים חיים</span><span><b>9</b>מושגי יסוד</span><span><b>24</b>פרומפטים מלאים</span><span><b>1</b>בונה פרומפטים</span></div>
 </section>
 
 <!-- ============ HOW TO READ ============ -->
@@ -111,7 +111,7 @@
       <li><b>Apache 2.0</b>: דומה, ומוסיף הגנה מפני תביעות פטנטים.</li>
       <li><b>CC0</b>: נחלת הכלל. אין שום תנאי.</li>
     </ul>
-    <div class="warn"><b>רישיון קוד הוא לא רישיון לסימן מסחרי</b>קובץ הלוגו (בפורמט SVG, שנכיר ב-0.5) יכול להיות חופשי לגמרי, והלוגו עצמו עדיין <b>סימן מסחרי</b>: שם או סמל שהחוק שומר לחברה, כדי שאף אחד לא יציג את עצמו כאילו הוא החברה או פועל מטעמה. מותר להראות לוגו כדי לציין שמוצר עובד עם השירות שלה, אבל אסור לרמוז שהחברה ממליצה עליכם, ורוב החברות אוסרות בהנחיות המותג שלהן לעוות את הלוגו או לצבוע אותו מחדש. ויש כלים שחינמיים רק עד גודל מסוים: Remotion, כלי ליצירת סרטונים מקוד שנכיר בפרק 07, חינמי ליחידים ולחברות של עד שלושה עובדים. לפני עבודה מסחרית, בדקו.</div>
+    <div class="warn"><b>רישיון קוד הוא לא רישיון לסימן מסחרי</b>קובץ הלוגו (בפורמט SVG, שנכיר ב-0.5) יכול להיות חופשי לגמרי, והלוגו עצמו עדיין <b>סימן מסחרי</b>: שם או סמל שהחוק שומר לחברה, כדי שאף אחד לא יציג את עצמו כאילו הוא החברה או פועל מטעמה. מותר להראות לוגו כדי לציין שמוצר עובד עם השירות שלה, אבל אסור לרמוז שהחברה ממליצה עליכם, ורוב החברות אוסרות בהנחיות המותג שלהן לעוות את הלוגו או לצבוע אותו מחדש. ויש כלים שחינמיים רק עד גודל מסוים: Remotion, כלי ליצירת סרטונים מקוד שנכיר בפרק 09, חינמי ליחידים ולחברות של עד שלושה עובדים. לפני עבודה מסחרית, בדקו.</div>
   </div>
 
   <div class="step"><span class="k">0.4</span><h3>רכיב ו-React</h3><p class="sub">אבני לגו עם הגדרות, ולמה הן מושלמות לווידאו.</p></div>
@@ -865,12 +865,126 @@ Show me the detected BPM, the kick times and 2 stills before rendering.
   </div>
 </section>
 
-<!-- ============ 06 FX ============ -->
-<section class="sec s-cloud" id="c6" data-folio="06" data-toc="אפקטים ומעברים">
-  <div class="sh"><span class="num">06</span><div><h2>אפקטים ומעברים</h2><p class="sub">הניאון של "AI חושב", זכוכית, זוהר, ומעברים בלי פייד.</p></div></div>
+<!-- ============ 06 ENGINES ============ -->
+<section class="sec s-denim" id="c10" data-folio="06" data-toc="מנועים: WebGL ו-WebGPU">
+  <div class="sh"><span class="num">06</span><div><h2>מתחת למכסה: WebGL, ‏WebGPU ושיידרים</h2><p class="sub">מי באמת מצייר את הפיקסלים, ולמה זה משנה כשמצלמים סרטון.</p></div></div>
+  <div class="body">
+    <p>בפרק הקודם three.js עשתה בשבילנו את העבודה. עכשיו יורדים שכבה אחת למטה, לשתי שאלות: מי מצייר בפועל, ובאיזו שפה מדברים איתו.</p>
+    <ul>
+      <li><b>כרטיס מסך</b> (GPU): מעבד שבנוי מאלפי ליבות קטנות שעושות את אותה פעולה על הרבה נתונים בבת אחת. המעבד הרגיל (CPU) הוא כמה שפים מומחים; כרטיס המסך הוא אלף טבחים שכל אחד מהם חותך מלפפון אחד. ציור של תמונה הוא בדיוק עבודה כזו: מיליוני פיקסלים, ואותו חישוב לכל אחד.</li>
+      <li><b>WebGL</b>: הדרך הוותיקה של הדפדפן לדבר עם כרטיס המסך, מ-2011 (וגרסה 2 שלה מ-2017). עובדת כמעט בכל דפדפן ומכשיר, ו-three.js משתמשת בה כברירת מחדל.</li>
+      <li><b>WebGPU</b>: הדרך החדשה. מהירה יותר כשיש הרבה אובייקטים, ויודעת לעשות גם <b>חישוב כללי</b> (compute): להשתמש בכרטיס המסך לא רק לציור אלא לכל חישוב שחוזר על עצמו, כמו סימולציה של מאות אלפי חלקיקים. לפי Google (נובמבר 2025) היא זמינה ב-Chrome וב-Edge (ב-Windows, ב-macOS, ב-ChromeOS ובאנדרואיד), ב-Safari 26, וב-Firefox ב-Windows ובמק עם שבב ARM. בלינוקס היא עדיין בדרך, וזה חשוב לנו, כי מחשבי רינדור הם בדרך כלל לינוקס.</li>
+      <li><b>שיידר</b> (shader): תוכנית קטנה שרצה על כרטיס המסך. <b>שיידר פיקסלים</b> (fragment shader) רץ פעם אחת לכל פיקסל בכל פריים ומחזיר צבע. <b>שיידר קודקודים</b> (vertex shader) רץ פעם אחת לכל נקודה של צורה ומחליט איפה היא תופיע על המסך. ב-WebGL כותבים שיידרים בשפה GLSL, וב-WebGPU בשפה WGSL.</li>
+      <li><b>TSL</b> (Three Shading Language): שפת השיידרים של three.js. כותבים אותה כ-JavaScript רגיל, והיא הופכת לבד ל-WGSL או ל-GLSL, לפי מה שהדפדפן תומך בו.</li>
+    </ul>
+    <p>למה זה מעניין בסרטון? כי שיידר הוא בדיוק פונקציה של זמן: הצבע של כל פיקסל נגזר מהמיקום שלו ומהזמן, <code dir="ltr">color = f(pixel, t)</code>. זה אותו רעיון כמו <code>seek(t)</code>, רק שכרטיס המסך מריץ אותו על מיליון פיקסלים בבת אחת. שקיעה, ים, שיש וגרעין של פילם הם כמה שורות קוד, בלי אף קובץ תמונה.</p>
+    <div class="warn"><b>המלכודת של רינדור סרטון</b>כש-Playwright מצלם את הסרטון, הוא מריץ את הדפדפן במצב <b>headless</b>: בלי חלון, בדרך כלל על שרת. במצב הזה Chrome מכבה את כרטיס המסך כברירת מחדל. WebGL ממשיך לעבוד דרך SwiftShader, תוכנה שמחקה כרטיס מסך על המעבד הרגיל: איטי יותר, אבל עובד ויוצא אותו דבר בכל פעם. WebGPU דורש דגלים מיוחדים, ובחלק מהשרתים גם דרייברים. בדקנו: עם הדגלים <code dir="ltr" class="flags">--enable-unsafe-webgpu --enable-features=Vulkan --use-vulkan=swiftshader --use-webgpu-adapter=swiftshader</code> ההדגמה של WebGPU למטה רצה גם בלי כרטיס מסך. בלי הדגלים, three.js עוברת לבד ל-WebGL 2.</div>
+    <h3>איך בוחרים מנוע, בארבע שורות</h3>
+    <ol>
+      <li><b>ממשק, כפתורים וטקסט</b>: HTML ו-CSS. הדפדפן כבר יודע לצייר אותם מצוין.</li>
+      <li><b>איורים, גרפים ותנועה דו-ממדית</b>: Canvas 2D, משטח ציור שמציירים עליו בפקודות.</li>
+      <li><b>תלת-ממד, חומרים ושיידרים</b>: three.js עם WebGLRenderer. הבחירה הבטוחה לרינדור.</li>
+      <li><b>מאות אלפי חלקיקים או סימולציה</b>: three.js עם WebGPURenderer, שעוברת לבד ל-WebGL 2 כשאין WebGPU.</li>
+    </ol>
+  </div>
+
+  <article class="el" id="e-shader">
+    <div class="el-h"><span class="el-n">06.1</span><h3 class="el-t">שיידר: צבע לכל פיקסל</h3><div class="el-tags"><span>WebGL 2</span><span>GLSL</span><span>בלי ספרייה</span></div></div>
+    <div class="el-demo" data-demo="gl-shader"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>מה רואים</h4><p>חמישה עולמות שמצוירים בלי אף תמונה ובלי אף ספרייה: שקיעה, ים, שיש, גרדיאנט נוזלי ונייר עם גרעין. כל אחד מהם הוא פונקציה אחת של כמה שורות. פתחו את "הקוד שמצייר כל פיקסל" כדי לראות אותה, ובחרו עולם בכפתורים.</p></div>
+        <div><h4>איך זה עובד</h4><ul>
+          <li>הקנבס מכוסה במשולש אחד גדול מהמסך. כרטיס המסך מריץ את השיידר פעם אחת לכל פיקסל שהמשולש מכסה, כלומר על כל הקנבס, ובמקביל.</li>
+          <li>כל פיקסל מקבל את המיקום שלו (<code>p</code>) ואת הזמן (<code>t</code>), ומחזיר צבע. אין זיכרון בין פריימים, ולכן אפשר לחשב כל פריים לבד, בדיוק כמו <code>seek(t)</code>.</li>
+          <li>שיש ונייר עשויים מ<b>רעש</b> (noise): פונקציה שמחזירה מספרים אקראיים שמשתנים בהדרגה, כמו נוף של גבעות ולא כמו שלג בטלוויזיה. מחברים כמה שכבות רעש בגדלים שונים (fbm), ומעקמים רעש אחד בעזרת רעש אחר (domain warping), ומקבלים עורקים של שיש.</li>
+          <li>הגרעין בגרדיאנט ובנייר הוא לא קישוט: גרדיאנט חלק נשבר ל"מדרגות" של צבע אחרי דחיסת וידאו (banding), ורעש עדין מסתיר את זה.</li></ul></div>
+      </div>
+      <div class="fit"><div class="y"><b>מתי כן</b>רקעים, שמיים, מים, טקסטורות ואווירה, בלי קבצים כבדים ובאיכות מלאה בכל רזולוציה.</div><div class="n"><b>מתי לא</b>אובייקט עם צורה מוגדרת (טלפון, בקבוק). שם עדיף three.js עם מודל.</div></div>
+      <div class="prompt"><h5>פרומפט מלא</h5><div class="code"><span class="lbl">background · raw WebGL2 fragment shader</span><button class="cp" type="button">העתק פרומפט</button><pre>&lt;inputs&gt;
+Ask me which look I want behind the film (sunset sky, sea, marble, a liquid brand gradient, paper with grain) and my brand colours. If I skip it, use a liquid gradient in my brand colours.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A full-frame animated background drawn by a single fragment shader, 1920x1080, 60fps, under the rest of the film. It moves slowly and continuously and never competes with the text on top of it. Colours come only from my palette. Fine film grain on top so gradients never band after compression.
+Banned: image files for the background, video loops, a background that moves faster than the foreground, visible banding.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+The background runs for the whole film. Its slowest motion completes one cycle over the full length, so the first and last frames match.
+&lt;/structure&gt;
+
+&lt;build&gt;
+Raw WebGL2 (no library): one triangle that covers the canvas, and a GLSL fragment shader with uniforms u_t (seconds), u_res and u_aspect. color = f(gl_FragCoord, u_t) with no state between frames, so seek(t) can render any frame in any order.
+Build textures from value noise and fbm (4 to 5 octaves); use domain warping for marble-like veins; add grain as hash(pixel + floor(t * 24)) at about 3% amplitude.
+Set u_t from seek(t) every frame; create the context with preserveDrawingBuffer: true so Playwright can capture the canvas.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- smoothstep(edge0, edge1, x) with edge0 &gt; edge1 is undefined in GLSL. Write 1.0 - smoothstep(a, b, x) instead.
+- Waves near the horizon get so dense that they flicker (aliasing). Fade their amplitude to zero near the horizon.
+- Headless Chrome has no GPU by default; WebGL still runs through SwiftShader, only slower. Keep the shader cheap (loops of 5 steps at most).
+- Use highp precision, or noise turns blocky on some mobile GPUs.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me 3 stills of the background (start, middle, end) under a sample headline before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-gpu">
+    <div class="el-h"><span class="el-n">06.2</span><h3 class="el-t">WebGPU: מאתיים אלף חלקיקים</h3><div class="el-tags"><span>three.js</span><span>WebGPURenderer</span><span>TSL</span></div></div>
+    <div class="el-demo" data-demo="gpu-particles"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>מה רואים</h4><p>200,000 חלקיקים שעוברים מכדור לגלקסיה ולגל. בפינה כתוב מה הדפדפן שלכם מריץ בפועל: WebGPU, או WebGL 2 כשאין בו WebGPU.</p></div>
+        <div><h4>איך זה עובד</h4><ul>
+          <li>ל-three.js יש שתי גרסאות: <code>three</code> עם WebGLRenderer, ו-<code>three/webgpu</code> עם WebGPURenderer. השנייה מנסה WebGPU, ואם אין, עוברת לבד ל-WebGL 2. בשביל זה היא צריכה רגע כדי להתחיל, ולכן מחכים ל-<code>await renderer.init()</code> לפני הפריים הראשון.</li>
+          <li>כל החלקיקים הם עותקים של אותו ריבוע קטן (<b>instancing</b>): כרטיס המסך מקבל צורה אחת ומספר עותקים, ומצייר את כולם בפקודה אחת.</li>
+          <li>המיקום של כל חלקיק מחושב על כרטיס המסך, בקוד TSL: מהמספר הסידורי של החלקיק נגזרים שלושה מספרים אקראיים קבועים, מהם שלוש צורות, ומספר אחד שמגיע מ-t קובע כמה עברנו מצורה לצורה. כל חלקיק מתחיל קצת אחרי השכן שלו, וזה מה שהופך את המעבר לגל.</li>
+          <li>הכוח הגדול של WebGPU הוא חישוב כללי (compute), למשל סימולציה שבה כל פריים נבנה מהקודם. בסרטון אנחנו מעדיפים פונקציה טהורה של t, כדי שאפשר יהיה לקפוץ לכל פריים, ולכן כאן הכל מחושב מחדש בכל פריים ישירות מ-t.</li></ul></div>
+      </div>
+      <div class="fit"><div class="y"><b>מתי כן</b>רגע "וואו" של כמות, מעבר בין צורות, לוגו שנבנה מחלקיקים.</div><div class="n"><b>מתי לא</b>חלקיקים כקישוט על רקע שחור. זו בדיוק "התבנית" ש-zero אוסר.</div></div>
+      <div class="prompt"><h5>פרומפט מלא</h5><div class="code"><span class="lbl">particles · three.js WebGPURenderer + TSL</span><button class="cp" type="button">העתק פרומפט</button><pre>&lt;inputs&gt;
+Ask me for the word or logo the particles should end on, if any. If I skip it, morph sphere → galaxy → wave.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 12-second particle scene, 1920x1080, 60fps: 200,000 soft particles on deep navy that morph between three shapes, each particle starting slightly after its neighbour so the morph ripples. Colours: the phoenix fire gradient and the clear sky blues, additive, never pure white.
+Banned: random jitter that changes every frame, particles that pop in or out, a wall of white from over-bright additive blending.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM. Beats 0-6: the first shape, turning slowly. Beats 6-10: the morph to the second. Beats 10-16: hold and turn. Beats 16-20: the morph to the third. Beats 20-24: hold.
+&lt;/structure&gt;
+
+&lt;build&gt;
+three.js WebGPURenderer from 'three/webgpu' (it falls back to WebGL 2 by itself); await renderer.init() before the first seek(t).
+One instanced sprite mesh with SpriteNodeMaterial and mesh.count = 200000. Positions are computed in TSL from instanceIndex: three fixed hashes per particle, three target shapes, and one uniform morph value that seek(t) sets every frame. No compute pass and no state between frames, so any frame can be rendered in any order.
+Alpha is a soft disc from uv(); colour mixes fire and sky by a per-particle hash.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- WebGPURenderer does not support ShaderMaterial or onBeforeCompile; write custom shading in TSL.
+- Headless Chrome has no WebGPU by default. Launch it with --enable-unsafe-webgpu --enable-features=Vulkan --use-vulkan=swiftshader --use-webgpu-adapter=swiftshader, or let it fall back to WebGL 2, and log which backend actually ran.
+- Additive blending of 200,000 particles blows out to white. Keep each particle's colour around 25% brightness.
+- Import everything in this file from 'three/webgpu'; mixing it with 'three' loads two copies of the library.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me one still per shape and tell me which backend the render used.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+</section>
+
+<!-- ============ 07 FX ============ -->
+<section class="sec s-cloud" id="c6" data-folio="07" data-toc="אפקטים ומעברים">
+  <div class="sh"><span class="num">07</span><div><h2>אפקטים ומעברים</h2><p class="sub">הניאון של "AI חושב", זכוכית, זוהר, ומעברים בלי פייד.</p></div></div>
 
   <article class="el" id="e-neon">
-    <div class="el-h"><span class="el-n">06.1</span><h3 class="el-t">קצה ניאון: "ה-AI חושב"</h3><div class="el-tags"><span>CSS</span><span>conic-gradient</span><span>mask</span></div></div>
+    <div class="el-h"><span class="el-n">07.1</span><h3 class="el-t">קצה ניאון: "ה-AI חושב"</h3><div class="el-tags"><span>CSS</span><span>conic-gradient</span><span>mask</span></div></div>
     <div class="el-demo" data-demo="fx-neon"><div class="stage"></div><div class="tb-host"></div></div>
     <div class="el-body">
       <div class="el-cols">
@@ -914,7 +1028,7 @@ Show me a still before typing and one mid-typing before rendering.
   </article>
 
   <article class="el" id="e-glasscard">
-    <div class="el-h"><span class="el-n">06.2</span><h3 class="el-t">כרטיס זכוכית</h3><div class="el-tags"><span>CSS</span><span>backdrop-filter</span></div></div>
+    <div class="el-h"><span class="el-n">07.2</span><h3 class="el-t">כרטיס זכוכית</h3><div class="el-tags"><span>CSS</span><span>backdrop-filter</span></div></div>
     <div class="el-demo" data-demo="fx-glass"><div class="stage"></div><div class="tb-host"></div></div>
     <div class="el-body">
       <div class="el-cols">
@@ -953,7 +1067,7 @@ Show me one still before rendering.
   </article>
 
   <article class="el" id="e-aurora">
-    <div class="el-h"><span class="el-n">06.3</span><h3 class="el-t">רקע זוהר צפוני</h3><div class="el-tags"><span>Canvas 2D</span><span>blur</span><span>grain</span></div></div>
+    <div class="el-h"><span class="el-n">07.3</span><h3 class="el-t">רקע זוהר צפוני</h3><div class="el-tags"><span>Canvas 2D</span><span>blur</span><span>grain</span></div></div>
     <div class="el-demo" data-demo="fx-aurora"><div class="stage"></div><div class="tb-host"></div></div>
     <div class="el-body">
       <div class="el-cols">
@@ -993,7 +1107,7 @@ Show me one still with and one without grain before rendering.
   </article>
 
   <article class="el" id="e-trans">
-    <div class="el-h"><span class="el-n">06.4</span><h3 class="el-t">ארבעה מעברים בלי פייד</h3><div class="el-tags"><span>Canvas 2D</span><span>flood</span><span>morph</span><span>wipe</span><span>iris</span></div></div>
+    <div class="el-h"><span class="el-n">07.4</span><h3 class="el-t">ארבעה מעברים בלי פייד</h3><div class="el-tags"><span>Canvas 2D</span><span>flood</span><span>morph</span><span>wipe</span><span>iris</span></div></div>
     <div class="el-demo" data-demo="transitions"><div class="stage"></div><div class="tb-host"></div></div>
     <div class="el-body">
       <div class="el-cols">
@@ -1037,9 +1151,209 @@ Show me one still in the middle of each transition before rendering.
   </article>
 </section>
 
-<!-- ============ 07 TOOLS ============ -->
-<section class="sec s-denim" id="c7" data-folio="07" data-toc="מפת הכלים">
-  <div class="sh"><span class="num">07</span><div><h2>מפת הכלים: מה עוד קיים</h2><p class="sub">הקטלוג בנוי על HTML ו-seek(t). הנה הכלים שעושים את אותה עבודה אחרת, ומתי כל אחד מנצח.</p></div></div>
+<!-- ============ 08 REAL WORLD ============ -->
+<section class="sec s-sky" id="c11" data-folio="08" data-toc="עולם אמיתי: מפות, תמונות, חומרים">
+  <div class="sh"><span class="num">08</span><div><h2>עולם אמיתי: מפות, תמונות וחומרים</h2><p class="sub">מה שגורם לסרטון קוד להרגיש מצולם, ולא מחשבי.</p></div></div>
+  <div class="body">
+    <p>כשהכל וקטורי ושטוח, העין מזהה מחשב. סרטוני המוצר הטובים מכניסים פיסות של עולם אמיתי: מפה שבה שליח נוסע, תמונה אמיתית, חומרים שמחזירים אור כמו בעולם, ומודל תלת-ממדי של מוצר אמיתי. ארבעת האלמנטים כאן עושים את זה, וכולם עדיין פונקציה של t.</p>
+    <p>חומרים מהעולם האמיתי מגיעים עם רישיון, אז שלושה מושגים שכדאי להכיר:</p>
+    <ul>
+      <li><b>CC0</b>: ויתור מלא על זכויות יוצרים. מותר להשתמש, לשנות ולמכור, גם בלי קרדיט. Poly Haven (סביבות HDRI, טקסטורות ומודלים) ו-Khronos (מודלים לדוגמה) מפרסמים כך חלק גדול מהנכסים שלהם. לוגואים וסימנים מסחריים שמופיעים בתוך נכס כזה בדרך כלל לא כלולים בוויתור.</li>
+      <li><b>הרישיון של Pexels</b>: מותר להשתמש בתמונות ובסרטונים בחינם, גם מסחרית ובלי קרדיט. אסור להציג אנשים מזוהים באור שלילי, אסור לרמוז שמישהו בתמונה ממליץ על המוצר, ואסור למכור את התמונה כמו שהיא.</li>
+      <li><b>OpenStreetMap</b>: מפה חופשית של העולם. מי שמשתמש בנתונים או באריחי המפה שלה חייב להציג קרדיט ולציין שהנתונים ברישיון ODbL. מפה מסוגננת שמציירים בקוד, כמו בהדגמה למטה, לא מחייבת כלום.</li>
+    </ul>
+  </div>
+
+  <article class="el" id="e-map">
+    <div class="el-h"><span class="el-n">08.1</span><h3 class="el-t">מפה ומסלול: שליח בדרך</h3><div class="el-tags"><span>Canvas 2D</span><span>arc length</span></div></div>
+    <div class="el-demo" data-demo="map-route"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>מה רואים</h4><p>מפה מסוגננת, מסלול שמצייר את עצמו מהמסעדה הביתה, שליח שנוסע עליו כשהמצלמה עוקבת, שעון הגעה שיורד, וסיכה שהופכת לסימן המותג. זה הרגע מסרט האוכל ומסרט ההדפסות של zero.</p></div>
+        <div><h4>איך זה עובד</h4><ul>
+          <li>המפה מצוירת פעם אחת לקנבס נסתר, ובכל פריים רק "המצלמה" זזה מעליה: הזזה והגדלה של אותה תמונה. זה זול מאוד.</li>
+          <li>השליח זז לפי <b>אורך קשת</b> (arc length): מודדים את האורך של כל קטע במסלול ומזיזים אותו לפי מרחק, לא לפי מספר הקטע. כך הוא נוסע באותה מהירות גם כשקטע אחד ארוך והבא קצר.</li>
+          <li>החלק שכבר נסענו בו נצבע בגרדיאנט האש, ומה שנשאר נשאר מקווקו. שניהם מצוירים מאותה פונקציה של מרחק.</li>
+          <li>הזום עובר ב<b>מרחב לוגריתמי</b>: כל רגע מוסיף את אותו אחוז, ולא את אותו מספר, ולכן העין מרגישה תנועה אחידה.</li>
+          <li>הסיכה לא נעלמת: הראש שלה גדל והופך לעיגול עם וי. הסצנה החדשה נולדת מאובייקט שכבר על המסך.</li></ul></div>
+      </div>
+      <div class="fit"><div class="y"><b>מתי כן</b>משלוחים, נסיעות, "איפה ההזמנה שלי", המסע של משתמש.</div><div class="n"><b>מתי לא</b>כשהגיאוגרפיה האמיתית חשובה, כמו כתובת או מסלול אמיתי. אז צריך מפה אמיתית עם הקרדיט שלה.</div></div>
+      <div class="prompt"><h5>פרומפט מלא</h5><div class="code"><span class="lbl">delivery map · Canvas 2D, arc length</span><button class="cp" type="button">העתק פרומפט</button><pre>&lt;inputs&gt;
+Ask me for: the start and end of the route (names only, like "the restaurant" and "home"), my brand mark, and whether the map must show a real place. If it must be real, ask for the area and use OpenStreetMap data with its attribution on screen; otherwise draw a stylised map.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 10-second delivery scene, 1920x1080, 60fps. A stylised 2D city map in my palette: light streets on a pale ground, a strip of sea, a few parks, a handful of street names. A route draws itself from the start pin to the destination pin, a courier chip rides it while the camera follows, an ETA chip counts down, and on arrival the destination pin's head grows into my brand mark with a check. One continuous take, no cuts.
+Banned: satellite imagery, 3D buildings, a camera that zooms in and out more than once, a courier that moves at uneven speed.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM. Beats 0-2: the map and both pins pop in. Beats 2-5: the route draws itself. Beats 5-7: the camera zooms in on the courier. Beats 7-16: the ride, with the camera following. Beats 16-18: the camera pulls back to the destination. Beats 18-20: the pin becomes the brand mark.
+&lt;/structure&gt;
+
+&lt;build&gt;
+Canvas 2D. Draw the static map once into an offscreen canvas at 2x, then every frame only translate and scale it (that is the camera).
+Move the courier by arc length: precompute each segment's length and place it at distance s(t) = eased(t) x total length, with its heading from the current segment.
+Draw the travelled part of the route in the accent gradient and the rest dashed, both from the same arc-length function.
+Interpolate the zoom in log space. Pins and chips pop on closed-form springs evaluated at t.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Moving by segment index instead of arc length makes the courier speed up on short segments.
+- Make the map larger than the widest camera view, or its edge shows when the camera pulls back.
+- Real map tiles need their attribution on screen and the tile provider's usage policy.
+- Hebrew street names: set ctx.direction = 'rtl' before fillText.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me stills of the overview, mid-ride and the arrival before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-photo">
+    <div class="el-h"><span class="el-n">08.2</span><h3 class="el-t">תמונה אמיתית: קן ברנס והחלפת תאורה</h3><div class="el-tags"><span>Canvas 2D</span><span>wipe</span><span>2 shots</span></div></div>
+    <div class="el-demo" data-demo="photo-relight"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>מה רואים</h4><p>כרטיס תמונה שנכנס בקפיץ, עם תנועת מצלמה איטית פנימה. אחר כך מופיע סליידר, הסמן גורר אותו, והתמונה עוברת מצהריים לשעת הזהב לפי המיקום של הידית. נסו לגרור את הידית בעצמכם.</p></div>
+        <div><h4>איך זה עובד</h4><ul>
+          <li><b>אפקט קן ברנס</b> הוא תנועה איטית של זום והזזה על תמונה סטטית, על שם הבמאי התיעודי שהשתמש בו הרבה. מתחילים מזום קצת מעל 1, כדי שההזזה לא תחשוף את קצה התמונה.</li>
+          <li>ההחלפה היא לא פייד: יש שתי תמונות מיושרות של אותו מקום, והשנייה נחשפת משמאל לימין עד הידית, עם קצה מואר. זה מגב (wipe) שהמשתמש שולט בו.</li>
+          <li>כדי שזה יעבוד, שתי התמונות חייבות להיות מיושרות פיקסל לפיקסל: מצלמים מחצובה, או מייצאים שתי גרסאות של אותה תמונה. כאן שתי ה"תמונות" הן שני רינדורים של סצנת הים שלנו, מאותה מצלמה.</li>
+          <li>הידית גדלה כשמחזיקים אותה, משוב קטן שאומר "תפסת".</li></ul></div>
+      </div>
+      <div class="fit"><div class="y"><b>מתי כן</b>לפני ואחרי, יום ולילה, מוצר בשני צבעים, ערכות צבע.</div><div class="n"><b>מתי לא</b>כשאין שתי תמונות מיושרות. מגב בין תמונות שלא מתאימות נראה כמו טעות.</div></div>
+      <div class="prompt"><h5>פרומפט מלא</h5><div class="code"><span class="lbl">photo relight · Ken Burns + wipe</span><button class="cp" type="button">העתק פרומפט</button><pre>&lt;inputs&gt;
+Ask me for two aligned photos of the same scene in two states (day and golden hour, before and after, two product colours), shot from a tripod or exported as two versions of one image. If I don't have them, stop and tell me: this effect needs aligned shots.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 10-second scene, 1920x1080, 60fps. The first photo lands in a rounded card (radius 28, a soft navy shadow) on a spring and gets a slow Ken Burns push. Then a glass slider grows out of the card's bottom edge, a cursor drags its knob with two small pauses, and the second photo is revealed by a wipe that follows the knob, with a lit leading edge. Labels for the two states sit on the card.
+Banned: crossfading the two photos, brightness or filter "developing", a knob that moves at constant speed.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM. Beats 0-6: the card and the Ken Burns push. Beat 6: the slider appears. Beats 8-14: the drag, pausing on beats 10 and 11. Beats 14-20: hold on the second state while the push continues.
+&lt;/structure&gt;
+
+&lt;build&gt;
+Canvas 2D. Draw each photo to cover the card (scale = max(cardW / imgW, cardH / imgH) x zoom), clipped to a rounded rect.
+Ken Burns: zoom from 1.07 to 1.2 in log space plus a small pan, all functions of t; starting above 1 means the pan never shows an edge.
+The wipe: clip the second photo to x &lt; knob position, and draw a 3px white edge with a soft accent glow just before it.
+The knob position is an eased function of t with two pauses; the knob grows while it is held.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- If the two photos are not aligned pixel for pixel, the wipe exposes the mismatch. Align them first.
+- Decode the images before the first seek() (await img.decode()), or the first frames are empty.
+- Use photos you are licensed to use; every stock site has its own licence.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me stills at beats 4, 11 and 18 before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-materials">
+    <div class="el-h"><span class="el-n">08.3</span><h3 class="el-t">חומרים וטקסטורות: שש פעמים אותו כדור</h3><div class="el-tags"><span>three.js</span><span>PBR</span><span>normal map</span></div></div>
+    <div class="el-demo" data-demo="d3-materials"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>מה רואים</h4><p>שישה כדורים זהים באותה תאורה: כרום, מתכת מוברשת, זכוכית, קרמיקה מבריקה, קטיפה ושיש. רק כמה מספרים וטקסטורה אחת משתנים ביניהם, וכתוב בפינה אילו.</p></div>
+        <div><h4>איך זה עובד</h4><ul>
+          <li><b>PBR</b> הם חומרים שמחשבים אור לפי חוקי הפיזיקה. שני המספרים הראשיים: <code>metalness</code> (0 פלסטיק, 1 מתכת) ו-<code>roughness</code> (0 מראה, 1 גיר).</li>
+          <li><code>transmission</code> הופך חומר לשקוף כמו זכוכית, ו-<code>ior</code>, מקדם השבירה (1.45 לזכוכית), קובע כמה הוא מעקם את מה שמאחוריו. לכן שמנו פסים מאחורי הכדורים: בלי משהו מאחור, אין מה לעקם.</li>
+          <li><code>clearcoat</code> מוסיף שכבת לכה שקופה מעל הצבע, כמו בקרמיקה או בצבע של מכונית. <code>sheen</code> מוסיף ברק רך בקצוות, כמו בבד.</li>
+          <li><b>טקסטורה</b> היא תמונה שעוטפת את הגוף. <code>map</code> קובעת את הצבע (העורקים בשיש). <code>normalMap</code> "משקרת" לאור לגבי הכיוון של כל פיקסל, ולכן משטח חלק נראה מוברש או ארוג בלי להוסיף אף משולש. כל הטקסטורות כאן נוצרות בקוד מרעש, בלי קבצים.</li>
+          <li>טקסטורות אמיתיות, כמו עץ, בטון ובד, מורידים בחינם מ-Poly Haven, ברישיון CC0.</li></ul></div>
+      </div>
+      <div class="fit"><div class="y"><b>מתי כן</b>מוצר פיזי, אריזה, "החומר" של מותג, מעבר בין גימורים.</div><div class="n"><b>מתי לא</b>סרטון ממשק שטוח. חומרים מבריקים מושכים את העין מהמסך.</div></div>
+      <div class="prompt"><h5>פרומפט מלא</h5><div class="code"><span class="lbl">materials · three.js PBR</span><button class="cp" type="button">העתק פרומפט</button><pre>&lt;inputs&gt;
+Ask me which finishes my product comes in (for example aluminium, glass, matte ceramic, fabric) and my brand colours. If I skip it, show chrome, brushed metal, glass, glazed ceramic, velvet and marble.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 12-second material showcase, 1920x1080, 60fps, in three.js. Identical spheres in a row on a pale floor, lit by one studio environment, with a striped backdrop so transparent materials have something to bend. Every 2 seconds the camera glides to the next sphere, it lifts on a spring, and a label shows the material's name and its key PBR numbers.
+Banned: different lighting per material, coloured lights, bloom, orbiting the camera around the row.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM. One material per 4 beats; the lift lands on the first beat of each group.
+&lt;/structure&gt;
+
+&lt;build&gt;
+three.js WebGLRenderer, ACES tone mapping, sRGB output, RoomEnvironment through PMREMGenerator for reflections.
+One MeshPhysicalMaterial per finish: chrome (metalness 1, roughness 0.05), brushed metal (metalness 1, roughness 0.35, a stretched-noise normalMap), glass (transmission 1, ior 1.45, thickness 0.8), glazed ceramic (roughness 0.4, clearcoat 1), velvet (roughness 0.9, sheen 1), marble (a generated colour map, roughness 0.18).
+Generate the textures in code: value noise → height field → normal map on a canvas, used as a CanvasTexture with RepeatWrapping.
+The camera's x and the lift are functions of t (an eased glide and a closed-form spring).
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- Metal without an environment map renders almost black: metal shows what it reflects.
+- Transmission needs something behind the object, or glass reads as grey plastic.
+- Colour textures need colorSpace = SRGBColorSpace; normal maps must stay linear.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me one still per material before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+
+  <article class="el" id="e-model">
+    <div class="el-h"><span class="el-n">08.4</span><h3 class="el-t">מודל אמיתי ותאורת HDRI: בקבוק על פטיפון</h3><div class="el-tags"><span>three.js</span><span>glTF</span><span>HDRI</span><span>CC0</span></div></div>
+    <div class="el-demo" data-demo="d3-model"><div class="stage"></div><div class="tb-host"></div></div>
+    <div class="el-body">
+      <div class="el-cols">
+        <div><h4>מה רואים</h4><p>בקבוק אמיתי מקובץ glTF מסתובב רבע סיבוב בכל פעם. בחצי הראשון הוא מואר בסטודיו, ובחצי השני בתמונת 360° אמיתית של שקיעה בוונציה, וההשתקפויות זזות עליו. התווית שלו מצוירת מחדש מ-t, והתווית השנייה מוחקת את הראשונה במגב. אפשר גם לבחור תאורה בכפתורים.</p></div>
+        <div><h4>איך זה עובד</h4><ul>
+          <li><b>glTF</b> הוא פורמט הקובץ הסטנדרטי למודלים תלת-ממדיים: צורה, חומרים וטקסטורות בקובץ אחד (<code>.glb</code>). מורידים מודל, בונים אותו ב-Blender, או מקבלים אותו מהלקוח, ו-<code>GLTFLoader</code> של three.js טוען אותו.</li>
+          <li><b>HDRI</b> היא תמונה פנורמית של 360° שנשמרת עם טווח הבהירות המלא, כולל השמש עצמה, שבהירה הרבה יותר מכל השאר. כשמשתמשים בה כסביבה, האור על המוצר מגיע מהתמונה וההשתקפויות שלו אמיתיות. סיבוב הסביבה לפי t (<code>environmentRotation</code>) מזיז את ההשתקפויות על המוצר.</li>
+          <li>המודל עבר הכנה לרשת: הטקסטורות הוקטנו ל-1024 פיקסלים ועברו לפורמט WebP בעזרת הכלי glTF-Transform, והקובץ ירד מ-9 מגה-בייט ל-230 קילו-בייט.</li>
+          <li>את התווית מציירים על קנבס מעל טקסטורת הצבע המקורית ומעדכנים בכל פריים. כך שמים את המותג שלנו על מוצר בלי לגעת במודל.</li>
+          <li>המודל (Water Bottle של Khronos) והסביבה (Venice Sunset של Poly Haven) ברישיון CC0. מודל של מוצר אמיתי של חברה אחרת, כמו אייפון, דורש רישיון לשימוש.</li></ul></div>
+      </div>
+      <div class="fit"><div class="y"><b>מתי כן</b>צילום מוצר (packshot), אריזה, השקה של מוצר פיזי.</div><div class="n"><b>מתי לא</b>כשאין מודל של המוצר. עדיף מכשיר כללי או תמונה אמיתית מאשר מודל שמחקה מוצר.</div></div>
+      <div class="prompt"><h5>פרומפט מלא</h5><div class="code"><span class="lbl">packshot · glTF + HDRI</span><button class="cp" type="button">העתק פרומפט</button><pre>&lt;inputs&gt;
+Ask me for my product as a glTF/GLB model (from my designer, from Blender, or a model whose licence allows this use), my label artwork or brand name, and an HDRI environment. If I have no model, ask whether to use a generic shape instead; never imitate someone else's real product. If I skip the HDRI, use a CC0 one from Poly Haven.
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A 12-second packshot, 1920x1080, 60fps, in three.js. The product stands on a soft contact shadow and turns a quarter turn on every third beat, settling with a slight overshoot. The first half is lit by a clean studio environment on a light gradient; the second half by the HDRI, shown blurred behind the product, with the environment slowly rotating so reflections sweep across the surface. Mid-film, a new label wipes across the old one. The camera pushes in slowly, once.
+Banned: spinning at constant speed, a lighting change that is not on a beat, floating particles, lens flares.
+&lt;/direction&gt;
+
+&lt;structure&gt;
+120 BPM. Quarter turns on beats 3, 6, 9, 12, 16 and 20. Beat 12: the light changes and the label wipe starts. The push-in runs from beat 0 to beat 22.
+&lt;/structure&gt;
+
+&lt;build&gt;
+three.js WebGLRenderer, ACES tone mapping. Load the model with GLTFLoader and the HDRI with RGBELoader; pre-filter both environments once with PMREMGenerator (fromScene(new RoomEnvironment()) and fromEquirectangular(hdr)).
+Normalise the model: centre it, stand it on y = 0, scale it to a fixed height.
+The label: draw the model's base colour image onto a canvas, paint the label artwork over its label area (find it in the UV layout), and use the canvas as a CanvasTexture with flipY = false and SRGBColorSpace; redraw it every frame so the wipe is a function of t.
+Rotation is a sum of springs keyed on the beats; scene.environmentRotation.y and scene.backgroundRotation.y are functions of t.
+Optimise the model for the web first: gltf-transform resize --width 1024 --height 1024, then gltf-transform webp.
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+- glTF textures use flipY = false. A CanvasTexture defaults to flipY = true, so the label comes out upside down unless you set it.
+- A label wider than about a third of the circumference disappears around the back. Keep words short, or stack them.
+- CC0 model licences usually exclude logos and trademarks. Paint out any brand mark that isn't yours.
+- Await both loaders before the first seek(), or the first frames render an empty scene.
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Show me stills at beats 4, 12 and 20 before rendering.
+&lt;/start&gt;</pre></div></div>
+    </div>
+  </article>
+</section>
+
+<!-- ============ 09 TOOLS ============ -->
+<section class="sec s-denim" id="c7" data-folio="09" data-toc="מפת הכלים">
+  <div class="sh"><span class="num">09</span><div><h2>מפת הכלים: מה עוד קיים</h2><p class="sub">הקטלוג בנוי על HTML ו-seek(t). הנה הכלים שעושים את אותה עבודה אחרת, ומתי כל אחד מנצח.</p></div></div>
   <div class="body"><p>כל המידע על רישיונות ומחירים נבדק ב-17.10.2026, ומחירים משתנים, אז לפני עבודה מסחרית כדאי לבדוק שוב בקישור שבמקורות.</p></div>
   <div class="tbl"><table class="tools">
     <tr><th>כלי</th><th>מה זה</th><th>מתי לבחור בו</th><th>רישיון ומחיר</th></tr>
@@ -1064,22 +1378,30 @@ Show me one still in the middle of each transition before rendering.
   </div>
 </section>
 
-<!-- ============ 08 BUILDER ============ -->
-<section class="sec s-fire" id="c8" data-folio="08" data-toc="בונה הפרומפטים">
-  <div class="sh"><span class="num">08</span><div><h2>בונה הפרומפטים</h2><p class="sub">בחרו פורמט, אורך, מיתוג ואלמנטים מהקטלוג, וקבלו פרומפט אחד שלם לסרט כולו.</p></div></div>
+<!-- ============ 10 BUILDER ============ -->
+<section class="sec s-fire" id="c8" data-folio="10" data-toc="בונה הפרומפטים">
+  <div class="sh"><span class="num">10</span><div><h2>בונה הפרומפטים</h2><p class="sub">מתחילים מתבנית, בונים את הסצנות על רשת הביטים, ומקבלים פרומפט אחד שלם לסרט כולו. אפשר לשמור ולשתף בקישור.</p></div></div>
   <div class="body">
-    <p>אין כאן AI. הבונה מרכיב את הפרומפט מחלקים קבועים, כך שאפשר לראות בדיוק איזה משפט כל בחירה מוסיפה: כל אלמנט מוסיף שורה לכל אחד מששת הבלוקים, למשל איך לבנות אותו ב-<code>&lt;build&gt;</code> ואיזה באג להזהיר מפניו ב-<code>&lt;gotchas&gt;</code>. קצב המוזיקה והאורך מחושבים למספר ביטים, והאלמנטים מתפזרים לאורך הסרט בין פתיחה של ארבעה ביטים לסיום של ארבעה, בסדר של סיפור: קודם המוצר, אחר כך ההוכחה (גרפים ומספרים), ובסוף האמון (לוגואים). מעברים ורקע לא מקבלים טווח ביטים משלהם, כי הם לא סצנה: הם נשזרים לאורך כל הסרט. את המשפט בשדה 1 כתבו באנגלית; הוא נכנס לפרומפט כמו שהוא.</p>
+    <p>אין כאן AI. הבונה מרכיב את הפרומפט מחלקים קבועים, כך שאפשר לראות בדיוק איזה משפט כל בחירה מוסיפה. הוא בנוי בסדר של ששת הבלוקים:</p>
+    <ol>
+      <li><b>מתחילים מתבנית</b>: השקת אפליקציה, הזמנת אוכל בסגנון של zero, מוצר פיזי או סרטון נתונים. כל תבנית ממלאת את כל השדות, והכל נשאר פתוח לשינוי.</li>
+      <li><b>הסיפור, הפורמט, הקצב והמיתוג</b> נכנסים ל-<code>&lt;direction&gt;</code>. את המשפט על הסרטון כתבו באנגלית; הוא נכנס לפרומפט כמו שהוא.</li>
+      <li><b>האלמנטים</b>: כל אלמנט מהקטלוג מוסיף שורה לכל בלוק: מה לראות, איך לבנות אותו ב-<code>&lt;build&gt;</code>, ואיזה באג להזהיר מפניו ב-<code>&lt;gotchas&gt;</code>. הבונה גם מסכם אילו מנועים הסרט צריך (Canvas, ‏three.js, ‏WebGPU) ומוסיף את הדגלים של WebGPU כשצריך.</li>
+      <li><b>הסצנות</b> הן <code>&lt;structure&gt;</code>: לכל סצנה יש שם, מספר ביטים, הטקסט שעל המסך, אלמנט, ואיך היא נולדת מהקודמת. מסמנים באיזו סצנה נוחת הדרופ, והאורך של הסרט מחושב מסכום הביטים. כשמזיזים את סרגל האורך, כל הסצנות נמתחות יחד.</li>
+      <li><b>איך דברים הופכים זה לזה</b>: פעלי התנועה והמצלמה מ<a href="dictionary.html">מילון הממשק</a>, <b>טריק חתימה אחד</b>, ו<b>רשימת האסור</b>.</li>
+      <li><b>שמירה</b>: הבונה זוכר את מה שבניתם בדפדפן הזה, "העתק קישור" שומר את כל הבחירות בתוך הכתובת כדי לחזור אליהן או לשלוח לאחרים, ו"הורד כקובץ" שומר את הפרומפט כטקסט.</li>
+    </ol>
   </div>
   <article class="el" id="e-builder">
-    <div class="el-h"><span class="el-n">08.1</span><h3 class="el-t">הפרומפט שלכם</h3><div class="el-tags"><span>6 blocks</span><span>live</span></div></div>
+    <div class="el-h"><span class="el-n">10.1</span><h3 class="el-t">הפרומפט שלכם</h3><div class="el-tags"><span>6 blocks</span><span>live</span></div></div>
     <div class="el-demo" data-demo="prompt-builder"><div class="stage"></div></div>
     <div class="el-body"><p>הצעד הבא: הדביקו ב-Claude Code (או בכל סוכן קוד), ענו על השאלות שהוא שואל ב-<code>&lt;inputs&gt;</code>, ואשרו את מפת הביטים והסטילס לפני הרינדור המלא. את התהליך המלא, מצילום ועד מוזיקה, תמצאו ב<a href="index.html#s14">פרק הצנרת בעמוד השיטה</a>. (סוכן קוד הוא AI שכותב ומריץ קוד בעצמו על המחשב שלכם.)</p></div>
   </article>
 </section>
 
-<!-- ============ 09 SOURCES ============ -->
-<section class="sec s-cloud" id="c9" data-folio="09" data-toc="מקורות">
-  <div class="sh"><span class="num">09</span><div><h2>מקורות</h2><p class="sub">כל הקישורים נבדקו כחיים ב-17.10.2026.</p></div></div>
+<!-- ============ 11 SOURCES ============ -->
+<section class="sec s-cloud" id="c9" data-folio="11" data-toc="מקורות">
+  <div class="sh"><span class="num">11</span><div><h2>מקורות</h2><p class="sub">כל הקישורים נבדקו כחיים ב-17.10.2026.</p></div></div>
   <ol class="src">
     <li><a href="https://github.com/recharts/recharts" target="_blank" rel="noopener">Recharts</a>: ספריית הגרפים, MIT.</li>
     <li><a href="https://ui.shadcn.com/docs" target="_blank" rel="noopener">shadcn/ui · Introduction</a>: "This is not a component library", ואיך מוסיפים רכיבים.</li>

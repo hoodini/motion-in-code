@@ -95,8 +95,8 @@ R = [
  ('<span>ספרייה של יותר מ-600 אלף מסכים מאפליקציות ואתרים אמיתיים, כולל זרימות ואנימציות. יש הרשמה חינמית ומסלולים בתשלום. טוב כדי לראות איך מוצר אמיתי עושה משהו.</span>',
   '<span>A library of more than 600,000 screens from real apps and websites, including flows and animations. There is a free sign-up and there are paid plans. Useful for seeing how a real product does something.</span>'),
  ('<b dir="rtl" style="direction:rtl;text-align:right">קטלוג המושן</b>', '<b>The motion catalog</b>'),
- ('<span>18 אבני בניין לסרטי מושן בקוד, כל אחת עם הדגמה חיה, הסבר מאפס ופרומפט מלא, ובסוף בונה פרומפטים שמרכיב סרט שלם.</span>',
-  '<span>18 building blocks for motion films in code, each with a live demo, an explanation from zero and a full prompt, plus a prompt builder that assembles a whole film.</span>'),
+ ('<span>24 אבני בניין לסרטי מושן בקוד, כל אחת עם הדגמה חיה, הסבר מאפס ופרומפט מלא, ובסוף בונה פרומפטים שמרכיב סרט שלם.</span>',
+  '<span>24 building blocks for motion films in code, each with a live demo, an explanation from zero and a full prompt, plus a prompt builder that assembles a whole film.</span>'),
 ]
 for x, y in R:
     if s.count(x) != 1:

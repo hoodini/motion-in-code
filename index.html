@@ -333,6 +333,8 @@ footer .blogs small{display:block;font:500 13px/1.4 var(--mono);color:var(--yuv-
   .bar .lang{padding:7px 9px;font-size:12px}
 }
 @media (max-width:359px){.bar .home{display:none}}
+@media (max-width:370px){.bar .wrap{gap:4px!important}.bar .pages a{padding:6px 5px!important}.bar .brand{font-size:19px}}
+@media (max-width:420px){.bar .wrap{gap:6px}.bar .brand{font-size:21px}.bar .pages a{padding:6px 7px!important}.bar .lang{padding:6px 8px!important}.bar .navbtn{padding:6px 7px!important}}
 @media (max-width:600px){.bar .pages a{font-size:17px;padding:6px 9px}.lang .ll,.navbtn .tl{display:none}.lang .ls{display:inline}.navbtn .ti{display:block}.bar .navbtn{padding:6px 8px}.bar .brand small{display:none}}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.neon::before,.neon::after{animation:none}#toTop{transition:none}}
 </style>
@@ -940,7 +942,7 @@ Ask me for the inputs, then show me the beat map and 4 stills ([opening], [drop]
   <h3>הפרומפט שלנו — בשלד של zero, מותאם לעברית, RTL והמותג</h3>
   <div class="code"><span class="lbl">YUV.AI motion prompt · paste into Claude Code (Opus 5.5, effort xhigh)</span><button class="cp">העתק</button><pre id="yuvPrompt"></pre></div>
   <div class="ex"><b>הצעד הבא שהייתי עושה</b>להפוך את זה לסקיל קבוע (<code>yuv-motion</code>) כך שלא צריך להדביק כלום — ולפני שבונים מאפס, לבחון את <a href="https://github.com/howseen-ai/claude-motion-design" target="_blank" rel="noopener">howseen-ai/claude-motion-design</a>: סקיל קוד-פתוח (MIT) שבנוי על אותם עקרונות, כולל render.py, סריקת pops וזיהוי דרופ, שנבנה בהשראה ישירה מהפרומפטים של zero. אפשר לקחת ממנו את המנוע ולשים מעליו את השכבה שלנו (עברית, RTL, מותג, מצלמה על ה-4090).</div>
-  <div class="why"><b>רוצים לראות מה עוד אפשר לבקש?</b>בנינו <a href="catalog.html">קטלוג חי של 18 אלמנטים</a>: גרפים של Recharts, ממשק shadcn/ui, אייקונים ולוגואים רשמיים, טיפוגרפיה קינטית, תלת-ממד ב-three.js ואפקטים. כל אחד עם הדגמה שאפשר לגרור בה את הזמן, הסבר מאפס ופרומפט מלא להעתקה, ובסוף בונה פרומפטים שמרכיב סרט שלם.</div>
+  <div class="why"><b>רוצים לראות מה עוד אפשר לבקש?</b>בנינו <a href="catalog.html">קטלוג חי של 24 אלמנטים</a>: גרפים של Recharts, ממשק shadcn/ui, אייקונים ולוגואים רשמיים, טיפוגרפיה קינטית, תלת-ממד ב-three.js, שיידרים ו-WebGPU, מפות, תמונות וחומרים, ואפקטים. כל אחד עם הדגמה שאפשר לגרור בה את הזמן, הסבר מאפס ופרומפט מלא להעתקה, ובסוף בונה פרומפטים שמרכיב סרט שלם.</div>
 </section>
 
 <!-- ============ 19 SOURCES ============ -->
@@ -955,7 +957,7 @@ Ask me for the inputs, then show me the beat map and 4 stills ([opening], [drop]
   <div class="blogs">
     <a href="https://yuv.ai/blog" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><div><b>הבלוג</b><span>מדריכים, סקירות כלים ופירוקים לעומק, בעברית ובאנגלית.</span><small>yuv.ai/blog</small></div></a>
     <a href="https://news.yuv.ai" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8M15 18h-5M10 6h8v4h-8Z"/></svg><div><b>חדר החדשות</b><span>חדר החדשות של YUV.AI: מה חדש בעולם ה-AI, בעברית.</span><small>news.yuv.ai</small></div></a>
-    <a href="catalog.html"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><div><b>קטלוג המושן</b><span>18 אלמנטים חיים עם הסבר מאפס ופרומפט מלא לכל אחד.</span><small>catalog.html</small></div></a>
+    <a href="catalog.html"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><div><b>קטלוג המושן</b><span>24 אלמנטים חיים עם הסבר מאפס ופרומפט מלא לכל אחד.</span><small>catalog.html</small></div></a>
     <a href="dictionary.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5V5a2 2 0 0 1 2-2h13v16H6.5A2.5 2.5 0 0 0 4 21.5Z"/><path d="M8 7h7M8 11h5"/></svg><div><b>מילון הממשק</b><span>כל רכיב, תנועה ומצלמה מהפרומפטים, חי, עם השם שכותבים בפרומפט.</span><small>dictionary.html</small></div></a>
   </div>
   <nav class="links" aria-label="קישורים">
