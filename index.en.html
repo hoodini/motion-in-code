@@ -108,6 +108,10 @@ main{display:block}
 h1,h2,h3,h4{color:inherit;text-wrap:balance}
 h2{font:700 clamp(56px,8.6vw,132px)/.92 var(--heD);letter-spacing:.005em;margin:0 0 18px;max-width:1000px}
 h3{font:700 clamp(36px,3.8vw,54px)/1 var(--heD);margin:clamp(44px,5vw,68px) 0 12px;max-width:900px}
+h3[id]{scroll-margin-top:84px}
+.why ul{margin:10px 0 0}
+.why li{margin:10px 0}
+html[lang] .why li b:first-child{display:inline;font:inherit;font-weight:800;margin:0}
 h4{font:700 34px/1.15 var(--heD);margin:20px 0 6px}
 .sub{color:var(--muted);font:400 clamp(27px,2.4vw,33px)/1.45 var(--he);margin:0;max-width:900px}
 p{margin:12px 0}
@@ -295,7 +299,7 @@ footer{--link:var(--yuv-gold);--link-h:#fff}
 }
 .hcta2{display:inline-flex;align-items:center;gap:10px;margin-inline-start:14px;color:var(--yuv-navy);font:700 clamp(21px,1.8vw,25px)/1 var(--heD);text-decoration:none;border-bottom:3px solid var(--yuv-orange);padding-bottom:4px}
 .hcta2:hover{color:var(--orange-t)}
-footer .blogs{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin:28px 0 6px;max-width:900px}
+footer .blogs{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin:28px 0 6px;max-width:1180px}
 footer .blogs a{display:flex;gap:16px;align-items:flex-start;padding:18px 22px;border-radius:var(--r);background:rgba(255,255,255,.07);color:#fff;text-decoration:none;box-shadow:inset 0 0 0 1.5px rgba(255,143,58,.28)}
 footer .blogs a:hover{background:rgba(255,143,58,.14);color:#fff}
 footer .blogs svg{flex:none;width:30px;height:30px;fill:none;stroke:var(--yuv-orange);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;margin-top:2px}
@@ -306,6 +310,12 @@ footer .blogs small{display:block;font:500 13px/1.4 var(--mono);color:var(--yuv-
 .bar .home{margin-inline-start:auto;color:#fff;text-decoration:none;font:700 21px/1 var(--he);border-radius:999px;padding:8px 16px;background:rgba(255,255,255,.08)}
 .bar .home:hover{color:var(--yuv-gold);background:rgba(255,255,255,.14)}
 .bar .home+.navbtn,.bar .lang+.navbtn{margin-inline-start:0}
+/* the three motion pages, as a segmented switch in the top bar */
+.bar .pages{margin-inline-start:auto;display:flex;gap:2px;background:rgba(255,255,255,.08);border-radius:999px;padding:3px}
+.bar .pages a{color:#fff;text-decoration:none;font:700 20px/1 var(--he);padding:7px 14px;border-radius:999px;white-space:nowrap}
+.bar .pages a:hover{color:var(--yuv-gold)}
+.bar .pages a[aria-current="page"]{background:#fff;color:var(--yuv-navy)}
+.lang .ls,.navbtn .ti{display:none}
 #toTop{position:fixed;bottom:22px;inset-inline-end:22px;z-index:60;width:58px;height:58px;border:0;border-radius:999px;background:var(--yuv-navy);color:var(--yuv-gold);display:grid;place-items:center;cursor:pointer;box-shadow:var(--sh),inset 0 0 0 2px rgba(255,199,78,.6);opacity:0;transform:translateY(16px) scale(.9);pointer-events:none;transition:opacity .2s,transform .2s}
 #toTop.show{opacity:1;transform:none;pointer-events:auto}
 #toTop svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
@@ -323,6 +333,7 @@ footer .blogs small{display:block;font:500 13px/1.4 var(--mono);color:var(--yuv-
   .bar .lang{padding:7px 9px;font-size:12px}
 }
 @media (max-width:359px){.bar .home{display:none}}
+@media (max-width:600px){.bar .pages a{font-size:17px;padding:6px 9px}.lang .ll,.navbtn .tl{display:none}.lang .ls{display:inline}.navbtn .ti{display:block}.bar .navbtn{padding:6px 8px}.bar .brand small{display:none}}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.neon::before,.neon::after{animation:none}#toTop{transition:none}}
 </style>
 <link rel="stylesheet" href="catalog/en.css">
@@ -330,9 +341,9 @@ footer .blogs small{display:block;font:500 13px/1.4 var(--mono);color:var(--yuv-
 <body>
 <header class="bar"><div class="wrap">
   <div class="brand"><span>YUV<b>.</b>AI</span><small>MOTION IN CODE</small></div>
-  <a class="home" href="catalog.en.html">Element catalog</a>
-  <a class="lang" href="index.html" hreflang="he" lang="he">עברית</a>
-  <button class="navbtn" id="tocBtn" aria-expanded="false" aria-controls="toc">Contents</button>
+  <nav class="pages" aria-label="Motion pages"><a href="index.en.html" aria-current="page">Method</a><a href="catalog.en.html">Catalog</a><a href="dictionary.en.html">Dictionary</a></nav>
+  <a class="lang" href="index.html" hreflang="he" lang="he"><span class="ll">עברית</span><span class="ls">עב</span></a>
+  <button class="navbtn" id="tocBtn" aria-expanded="false" aria-controls="toc" aria-label="Contents"><span class="tl">Contents</span><svg class="ti" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg></button>
 </div><div class="prog" id="prog"></div></header>
 <nav class="toc" id="toc" aria-label="Contents"></nav>
 
@@ -775,6 +786,54 @@ await browser.close();</pre></div>
   <div class="blocks" id="anBlocks"></div>
   <div class="card anat" id="anBody"></div>
   <div class="why"><b>The principle that ties all six blocks together</b>When we don't tell a language model exactly what we want, it gives us the <b>average</b> of what it saw in training. In motion design, the average is exactly "the template": dark background, glow, particles, fade. The prompt from zero doesn't add "creativity". It <b>deletes the average options</b> (the banned list), <b>sets the numbers</b> (colors, BPM, seconds, sizes), <b>passes on engineering knowledge</b> (build), <b>saves us the bugs he has already hit</b> (gotchas), and <b>brings a human into the loop cheaply</b> (start). It's a prompt written like a director's technical spec, not like a request.</div>
+  <h3 id="template">The template: our own prompt in six blocks</h3>
+  <p>This is the skeleton of zero's three prompts, with square brackets where his content was. We fill every [bracket] with an exact number or sentence, delete the brackets and paste it into Claude Code. Everything outside the brackets is knowledge that already worked in all three films (closed-form springs, a log-space camera zoom, 8 subframes), so it's best left as it is.</p>
+  <div class="code"><span class="lbl">template · fill the [brackets] · paste into Claude Code</span><button class="cp">Copy</button><pre>&lt;inputs&gt;
+Ask me for: [my product and the one thing a user does in it], [6 to 12 photos, screenshots or product shots], a royalty-free song around [BPM] BPM with a clear drop (Mixkit, free for commercial use), and [my brand mark or wordmark for the end card]. If I skip any, use these defaults: [default story], [default photo source], [default song].
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A [length] second [product launch / explainer / teaser] film, [1920x1080 / 1080x1920 / 1440x1440] at 60fps, 2D only, one continuous take. Every scene is made out of the previous one: nothing fades, blurs or cuts. Objects change shape instead: [3 or 4 motion verbs from the dictionary, e.g. text rises out of a mask line, a button grows into a page, a color floods out of one object and shrinks back into another]. The camera makes one move per scene on eased keyframes and never zooms in and out back to back.
+Look: [canvas color #hex], [UI color #hex], [one accent #hex], [optional second accent #hex]. [One signature trick, e.g. an iridescent glow around the composer, liquid glass over the photos]. [UI font] for UI, [display font] for [the headline / the wordmark].
+Banned: crossfades, blur-ins, 3D, particles, glows, holds longer than 1s, camera moves that reverse direction, anything that looks like a template, [what the average film of this genre always does].
+&lt;/direction&gt;
+
+&lt;structure&gt;
+[BPM] BPM, [N] beats ([length]s). The song starts [K] beats before its drop.
+Beats [0-a], [scene name]: [what is on screen, what the cursor does, the exact on-screen text in quotes].
+Beat [a], [event]: [X] grows into [Y], [how, in numbers: size, seconds, colors].
+Beats [a-b], [scene name]: [...]
+Beat [drop], the drop: [the biggest change in the film, landing exactly on the drop].
+Beats [b-c], [scene name]: [...]
+Beats [c-end], outro: [the last object] becomes [the brand mark], and [the wordmark] [is revealed how]. [Optional: last frame = first frame.]
+&lt;/structure&gt;
+
+&lt;build&gt;
+1. One HTML file, [width]x[height]. Every style is computed from time inside seek(t): no CSS transitions, no timers, no state between frames.
+2. The camera is one transform on a container, keyed [time, zoom, x, y] with eased segments and zoom interpolated in log space.
+3. Springs are closed-form step responses. A value with many targets is the sum of one spring per change, so it stays a pure function of time.
+4. Every handoff between scenes is a shared element: [which object carries what into the next scene].
+5. [How to build the signature trick, in engineering terms.]
+6. Sound: a downloaded SFX for every event (Mixkit), never synthesized: [typing, pops, the drop impact, a whoosh, a click, a success tone...]. Place each by its measured peak and loudnorm to -14 LUFS.
+7. Render with Playwright: 8 subframes per frame blended with ffmpeg tmix, 60fps. Check one frame per beat, then scan the whole video for single-frame pops (frame-difference spikes 3x their neighbours).
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+4 subframes leave ghost copies on fast moves, so use 8 and slow the move down. A flood must clear the farthest corner and take about 0.35s, or it reads as a flash. Set z-index on every layer. Never let the camera chase a wrapping text cursor: fixed lines only. Declare every variable before the first seek() runs. [Any bug we hit last time.]
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Ask me for the inputs, then show me the beat map and 4 stills ([opening], [drop], [middle], [outro]) before you write the full film.
+&lt;/start&gt;</pre></div>
+  <div class="why"><b>Before we send it: six checks</b><ul>
+    <li><b>Numbers instead of adjectives.</b> Not "fast" but 0.35 seconds, not "a warm background" but #f5f5f2. An adjective leaves the choice to the model, and it will pick the average.</li>
+    <li><b>A banned list that fits the genre.</b> What does the average film of this kind always do? That is what we ban, explicitly.</li>
+    <li><b>Every scene written as X grows into Y.</b> A scene that starts from nothing means a transition is missing, and that is where the model will put a fade.</li>
+    <li><b>The drop on a specific beat.</b> We write which beat, and what the biggest change on it is.</li>
+    <li><b>One signature trick.</b> One thing people remember, like the glow around the composer or the liquid glass. Not three.</li>
+    <li><b>A stills gate at the end.</b> A beat map and 4 stills before the full film, because a fix at that stage costs a minute, not a whole render.</li>
+  </ul></div>
+  <p>The names for the brackets (composer, morph, flood, push in) come from the <a href="dictionary.en.html">interface dictionary</a>, where every component and motion is shown live. And if we'd rather assemble the prompt from ready-made building blocks, there is a <a href="catalog.en.html#c8">prompt builder in the catalog</a>.</p>
 </section>
 
 <!-- ============ 16 FLYOVER ============ -->
@@ -853,6 +912,7 @@ await browser.close();</pre></div>
     <a href="https://yuv.ai/blog" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><div><b>The blog</b><span>Guides, tool reviews and deep dives, in English and Hebrew.</span><small>yuv.ai/blog</small></div></a>
     <a href="https://news.yuv.ai" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8M15 18h-5M10 6h8v4h-8Z"/></svg><div><b>The newsroom</b><span>The YUV.AI newsroom: what is new in AI, in Hebrew.</span><small>news.yuv.ai</small></div></a>
     <a href="catalog.en.html"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><div><b>The motion catalog</b><span>18 live elements, each explained from zero, with a full prompt.</span><small>catalog.html</small></div></a>
+    <a href="dictionary.en.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5V5a2 2 0 0 1 2-2h13v16H6.5A2.5 2.5 0 0 0 4 21.5Z"/><path d="M8 7h7M8 11h5"/></svg><div><b>The interface dictionary</b><span>Every component, motion and camera rule from the prompts, live, with the name we write in the prompt.</span><small>dictionary.html</small></div></a>
   </div>
   <nav class="links" aria-label="Links">
     <a href="https://yuv.ai" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm6.9 6h-2.9a15.7 15.7 0 0 0-1.4-3.6A8 8 0 0 1 18.9 8ZM12 4.1c.8 1.1 1.5 2.4 1.9 3.9h-3.8c.4-1.5 1.1-2.8 1.9-3.9ZM4.3 14a8 8 0 0 1 0-4h3.3a16.5 16.5 0 0 0 0 4H4.3Zm.8 2h2.9c.3 1.3.8 2.5 1.4 3.6A8 8 0 0 1 5.1 16Zm2.9-8H5.1a8 8 0 0 1 4.3-3.6C8.8 5.5 8.3 6.7 8 8Zm4 11.9c-.8-1.1-1.5-2.4-1.9-3.9h3.8c-.4 1.5-1.1 2.8-1.9 3.9Zm2.3-5.9H9.7a14.7 14.7 0 0 1 0-4h4.6a14.7 14.7 0 0 1 0 4Zm.3 5.6c.6-1.1 1.1-2.3 1.4-3.6h2.9a8 8 0 0 1-4.3 3.6Zm1.8-5.6a16.5 16.5 0 0 0 0-4h3.3a8 8 0 0 1 0 4h-3.3Z"/></svg><span>yuv.ai</span></a>

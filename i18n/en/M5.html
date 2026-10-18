@@ -3,6 +3,54 @@
   <div class="blocks" id="anBlocks"></div>
   <div class="card anat" id="anBody"></div>
   <div class="why"><b>The principle that ties all six blocks together</b>When we don't tell a language model exactly what we want, it gives us the <b>average</b> of what it saw in training. In motion design, the average is exactly "the template": dark background, glow, particles, fade. The prompt from zero doesn't add "creativity". It <b>deletes the average options</b> (the banned list), <b>sets the numbers</b> (colors, BPM, seconds, sizes), <b>passes on engineering knowledge</b> (build), <b>saves us the bugs he has already hit</b> (gotchas), and <b>brings a human into the loop cheaply</b> (start). It's a prompt written like a director's technical spec, not like a request.</div>
+  <h3 id="template">The template: our own prompt in six blocks</h3>
+  <p>This is the skeleton of zero's three prompts, with square brackets where his content was. We fill every [bracket] with an exact number or sentence, delete the brackets and paste it into Claude Code. Everything outside the brackets is knowledge that already worked in all three films (closed-form springs, a log-space camera zoom, 8 subframes), so it's best left as it is.</p>
+  <div class="code"><span class="lbl">template · fill the [brackets] · paste into Claude Code</span><button class="cp">Copy</button><pre>&lt;inputs&gt;
+Ask me for: [my product and the one thing a user does in it], [6 to 12 photos, screenshots or product shots], a royalty-free song around [BPM] BPM with a clear drop (Mixkit, free for commercial use), and [my brand mark or wordmark for the end card]. If I skip any, use these defaults: [default story], [default photo source], [default song].
+&lt;/inputs&gt;
+
+&lt;direction&gt;
+A [length] second [product launch / explainer / teaser] film, [1920x1080 / 1080x1920 / 1440x1440] at 60fps, 2D only, one continuous take. Every scene is made out of the previous one: nothing fades, blurs or cuts. Objects change shape instead: [3 or 4 motion verbs from the dictionary, e.g. text rises out of a mask line, a button grows into a page, a color floods out of one object and shrinks back into another]. The camera makes one move per scene on eased keyframes and never zooms in and out back to back.
+Look: [canvas color #hex], [UI color #hex], [one accent #hex], [optional second accent #hex]. [One signature trick, e.g. an iridescent glow around the composer, liquid glass over the photos]. [UI font] for UI, [display font] for [the headline / the wordmark].
+Banned: crossfades, blur-ins, 3D, particles, glows, holds longer than 1s, camera moves that reverse direction, anything that looks like a template, [what the average film of this genre always does].
+&lt;/direction&gt;
+
+&lt;structure&gt;
+[BPM] BPM, [N] beats ([length]s). The song starts [K] beats before its drop.
+Beats [0-a], [scene name]: [what is on screen, what the cursor does, the exact on-screen text in quotes].
+Beat [a], [event]: [X] grows into [Y], [how, in numbers: size, seconds, colors].
+Beats [a-b], [scene name]: [...]
+Beat [drop], the drop: [the biggest change in the film, landing exactly on the drop].
+Beats [b-c], [scene name]: [...]
+Beats [c-end], outro: [the last object] becomes [the brand mark], and [the wordmark] [is revealed how]. [Optional: last frame = first frame.]
+&lt;/structure&gt;
+
+&lt;build&gt;
+1. One HTML file, [width]x[height]. Every style is computed from time inside seek(t): no CSS transitions, no timers, no state between frames.
+2. The camera is one transform on a container, keyed [time, zoom, x, y] with eased segments and zoom interpolated in log space.
+3. Springs are closed-form step responses. A value with many targets is the sum of one spring per change, so it stays a pure function of time.
+4. Every handoff between scenes is a shared element: [which object carries what into the next scene].
+5. [How to build the signature trick, in engineering terms.]
+6. Sound: a downloaded SFX for every event (Mixkit), never synthesized: [typing, pops, the drop impact, a whoosh, a click, a success tone...]. Place each by its measured peak and loudnorm to -14 LUFS.
+7. Render with Playwright: 8 subframes per frame blended with ffmpeg tmix, 60fps. Check one frame per beat, then scan the whole video for single-frame pops (frame-difference spikes 3x their neighbours).
+&lt;/build&gt;
+
+&lt;gotchas&gt;
+4 subframes leave ghost copies on fast moves, so use 8 and slow the move down. A flood must clear the farthest corner and take about 0.35s, or it reads as a flash. Set z-index on every layer. Never let the camera chase a wrapping text cursor: fixed lines only. Declare every variable before the first seek() runs. [Any bug we hit last time.]
+&lt;/gotchas&gt;
+
+&lt;start&gt;
+Ask me for the inputs, then show me the beat map and 4 stills ([opening], [drop], [middle], [outro]) before you write the full film.
+&lt;/start&gt;</pre></div>
+  <div class="why"><b>Before we send it: six checks</b><ul>
+    <li><b>Numbers instead of adjectives.</b> Not "fast" but 0.35 seconds, not "a warm background" but #f5f5f2. An adjective leaves the choice to the model, and it will pick the average.</li>
+    <li><b>A banned list that fits the genre.</b> What does the average film of this kind always do? That is what we ban, explicitly.</li>
+    <li><b>Every scene written as X grows into Y.</b> A scene that starts from nothing means a transition is missing, and that is where the model will put a fade.</li>
+    <li><b>The drop on a specific beat.</b> We write which beat, and what the biggest change on it is.</li>
+    <li><b>One signature trick.</b> One thing people remember, like the glow around the composer or the liquid glass. Not three.</li>
+    <li><b>A stills gate at the end.</b> A beat map and 4 stills before the full film, because a fix at that stage costs a minute, not a whole render.</li>
+  </ul></div>
+  <p>The names for the brackets (composer, morph, flood, push in) come from the <a href="dictionary.html">interface dictionary</a>, where every component and motion is shown live. And if we'd rather assemble the prompt from ready-made building blocks, there is a <a href="catalog.html#c8">prompt builder in the catalog</a>.</p>
 </section>
 
 <!-- ============ 16 FLYOVER ============ -->

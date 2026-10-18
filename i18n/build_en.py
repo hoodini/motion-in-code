@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-"""Assemble the English edition: index.en.html and catalog.en.html.
+"""Assemble the English edition: index.en.html, catalog.en.html and dictionary.en.html.
 
 The Hebrew pages stay the source of truth for structure, CSS and code. This script copies each one,
 swaps the main content for the translated slices in i18n/en/, translates the head, header, footer and
 the strings that live inside the page scripts, and links the English pages to each other.
-Run it after any change to the Hebrew pages:  python3 i18n/gen_en_css.py && python3 i18n/build_en.py
+Run it after any change to the Hebrew pages:
+  python3 i18n/gen_en_css.py && python3 i18n/gen_dictionary_en.py && python3 i18n/build_en.py
+(gen_dictionary_en.py rebuilds i18n/en/D1.html from dictionary.html, which is edited directly.)
 """
 import re, sys, pathlib
 
@@ -29,6 +31,13 @@ class Page:
             sys.exit(f'{self.name}: regex expected {count}x, found {n}x: {pattern[:110]!r}')
         self.s = s
 
+    def header_en(self):
+        # the three-page switch and the language switch in the top bar
+        self.sub(r'<nav class="pages" aria-label="עמודי המושן">(.*?)</nav>', lambda m: '<nav class="pages" aria-label="Motion pages">' +
+                 m.group(1).replace('>השיטה<', '>Method<').replace('>הקטלוג<', '>Catalog<').replace('>המילון<', '>Dictionary<') + '</nav>')
+        self.sub(r'<a class="lang" href="(\w+)\.en\.html" hreflang="en" lang="en"><span class="ll">English</span><span class="ls">EN</span></a>',
+                 r'<a class="lang" href="\1.html" hreflang="he" lang="he"><span class="ll">עברית</span><span class="ls">עב</span></a>')
+
     def main(self, slices):
         a, b = self.s.index(HERO), self.s.index('<footer>')
         self.s = self.s[:a] + ''.join((EN / f'{k}.html').read_text() for k in slices) + self.s[b:]
@@ -37,7 +46,8 @@ class Page:
         # English pages link to each other; the language switch points back to the Hebrew page
         self.s = re.sub(r'href="catalog\.html', 'href="catalog.en.html', self.s)
         self.s = re.sub(r'href="index\.html', 'href="index.en.html', self.s)
-        self.s = re.sub(r'<a class="lang" href="(index|catalog)\.en\.html"', r'<a class="lang" href="\1.html"', self.s)
+        self.s = re.sub(r'href="dictionary\.html', 'href="dictionary.en.html', self.s)
+        self.s = re.sub(r'<a class="lang" href="(index|catalog|dictionary)\.en\.html"', r'<a class="lang" href="\1.html"', self.s)
         self.s = self.s.replace('‏', '').replace('‎', '')
         left = [m.group(0) for m in re.finditer(r'[^\n]{0,40}[֐-׿][^\n]{0,40}', self.s)
                 if 'class="lang"' not in m.group(0) and 'fonts.load' not in m.group(0)]
@@ -57,11 +67,14 @@ FOOT = [
      '<b>The newsroom</b><span>The YUV.AI newsroom: what is new in AI, in Hebrew.</span>'),
     ('<nav class="links" aria-label="קישורים">', '<nav class="links" aria-label="Links">'),
     ('<button id="toTop" type="button" aria-label="חזרה לראש העמוד">', '<button id="toTop" type="button" aria-label="Back to top">'),
-    ('<button class="navbtn" id="tocBtn" aria-expanded="false" aria-controls="toc">תוכן עניינים</button>',
-     '<button class="navbtn" id="tocBtn" aria-expanded="false" aria-controls="toc">Contents</button>'),
+    ('<button class="navbtn" id="tocBtn" aria-expanded="false" aria-controls="toc" aria-label="תוכן עניינים"><span class="tl">תוכן עניינים</span>',
+     '<button class="navbtn" id="tocBtn" aria-expanded="false" aria-controls="toc" aria-label="Contents"><span class="tl">Contents</span>'),
     ('<nav class="toc" id="toc" aria-label="תוכן עניינים"></nav>', '<nav class="toc" id="toc" aria-label="Contents"></nav>'),
     ('<html lang="he" dir="rtl">', '<html lang="en" dir="ltr">'),
 ]
+
+DICT_CARD_HE = '<b>מילון הממשק</b><span>כל רכיב, תנועה ומצלמה מהפרומפטים, חי, עם השם שכותבים בפרומפט.</span>'
+DICT_CARD_EN = '<b>The interface dictionary</b><span>Every component, motion and camera rule from the prompts, live, with the name we write in the prompt.</span>'
 
 # ================================================================ index.en.html (the method page)
 p = Page('index.html')
@@ -74,8 +87,8 @@ p.rep('<meta property="og:title" content="Motion in Code — איך Claude מי�
 p.rep('<meta property="og:description" content="השיטה של @twoclipping, מפורקת לפירורים עם מעבדות אינטראקטיביות. YUV.AI">',
       '<meta property="og:description" content="The @twoclipping method, broken down crumb by crumb, with interactive labs. YUV.AI">')
 p.rep('</style>\n</head>', '</style>\n<link rel="stylesheet" href="catalog/en.css">\n</head>')
-p.rep('<a class="home" href="catalog.html">קטלוג האלמנטים</a>\n  <a class="lang" href="index.en.html" hreflang="en" lang="en">English</a>',
-      '<a class="home" href="catalog.html">Element catalog</a>\n  <a class="lang" href="index.html" hreflang="he" lang="he">עברית</a>')
+p.header_en()
+p.rep(DICT_CARD_HE, DICT_CARD_EN)
 p.rep('<b>קטלוג המושן</b><span>18 אלמנטים חיים עם הסבר מאפס ופרומפט מלא לכל אחד.</span>',
       '<b>The motion catalog</b><span>18 live elements, each explained from zero, with a full prompt.</span>')
 p.rep('<p class="credit">כל התוכן והפרומפטים המקוריים שייכים ל-zero (<a href="https://x.com/twoclipping" target="_blank" rel="noopener" class="ltr">@twoclipping</a>). העמוד הזה הוא ניתוח ותרגום לצורכי לימוד. כל המעבדות מחושבות בזמן אמת בדפדפן — אין כאן אף מספר מזויף.</p>',
@@ -207,10 +220,27 @@ c.rep('<meta property="og:title" content="קטלוג המושן: מה אפשר �
 c.rep('<meta property="og:description" content="18 אלמנטים חיים, 9 מושגי יסוד, 18 פרומפטים מלאים ובונה פרומפטים. בלי ידע קודם. YUV.AI">',
       '<meta property="og:description" content="18 live elements, 9 foundations, 18 full prompts and a prompt builder. No prior knowledge needed. YUV.AI">')
 c.rep('<link rel="stylesheet" href="catalog/catalog.css">', '<link rel="stylesheet" href="catalog/catalog.css">\n<link rel="stylesheet" href="catalog/en.css">')
-c.rep('<a class="home" href="index.html">לעמוד השיטה</a>\n  <a class="lang" href="catalog.en.html" hreflang="en" lang="en">English</a>',
-      '<a class="home" href="index.html">The method</a>\n  <a class="lang" href="catalog.html" hreflang="he" lang="he">עברית</a>')
+c.header_en()
+c.rep(DICT_CARD_HE, DICT_CARD_EN)
 c.rep('<b>עמוד השיטה</b><span>איך Claude מייצר סרטוני השקה בקוד, מפורק לפירורים.</span>',
       '<b>The method page</b><span>How Claude makes launch films in code, broken down crumb by crumb.</span>')
 c.rep('<p class="credit">כל ההדגמות בעמוד הזה רצות בדפדפן שלכם מקוד פתוח: React, Recharts, shadcn/ui, Radix, Lucide, Simple Icons ו-three.js, כל אחת לפי הרישיון שלה. הלוגואים שייכים לבעליהם ומוצגים כדי לציין את הכלים שבהם נבנה העמוד. השיטה והפרומפטים המקוריים שייכים ל-zero (<a href="https://x.com/twoclipping" target="_blank" rel="noopener" class="ltr">@twoclipping</a>).</p>',
       '<p class="credit">Every demo on this page runs in the browser from open-source code: React, Recharts, shadcn/ui, Radix, Lucide, Simple Icons and three.js, each under its own license. The logos belong to their owners and are shown to name the tools this page was built with. The method and the original prompts belong to zero (<a href="https://x.com/twoclipping" target="_blank" rel="noopener" class="ltr">@twoclipping</a>).</p>')
 c.finish('catalog.en.html')
+
+# ================================================================ dictionary.en.html
+d = Page('dictionary.html')
+d.main(['D1'])
+for a, b in FOOT: d.rep(a, b)
+d.header_en()
+d.rep('<title>מילון הממשק · YUV.AI</title>', '<title>Interface Dictionary · YUV.AI</title>')
+d.sub(r'<meta name="description" content="[^"]*">', '<meta name="description" content="A live dictionary of interface components, motion verbs and camera moves from the prompts for motion films made with Claude: touch every one, with the name to write in the prompt and a ready-to-copy sentence.">')
+d.sub(r'<meta property="og:title" content="[^"]*">', '<meta property="og:title" content="The interface dictionary: what to call it in a prompt">')
+d.sub(r'<meta property="og:description" content="[^"]*">', '<meta property="og:description" content="18 interface components, 12 motion verbs and 3 camera rules, live, with the name we write in the prompt. YUV.AI">')
+d.rep('<link rel="stylesheet" href="catalog/site.css">', '<link rel="stylesheet" href="catalog/site.css">\n<link rel="stylesheet" href="catalog/en.css">')
+d.rep('<b>עמוד השיטה</b><span>איך Claude מייצר סרטוני השקה בקוד, מפורק לפירורים.</span>',
+      '<b>The method page</b><span>How Claude makes launch films in code, broken down crumb by crumb.</span>')
+d.rep('<b>קטלוג המושן</b><span>18 אלמנטים חיים, כל אחד עם הסבר מאפס ופרומפט מלא.</span>',
+      '<b>The motion catalog</b><span>18 live elements, each explained from zero, with a full prompt.</span>')
+d.sub(r'<p class="credit">.*?</p>', '<p class="credit">The components on this page are drawn in code, and their motion is computed from a spring formula, just like in the films. The names and catalogs mentioned here belong to their owners. The original method and prompts belong to zero (<a href="https://x.com/twoclipping" target="_blank" rel="noopener" class="ltr">@twoclipping</a>).</p>')
+d.finish('dictionary.en.html')

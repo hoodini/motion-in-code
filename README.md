@@ -15,6 +15,8 @@ This repo holds four things:
 
 - **The page** ([Hebrew](https://news.yuv.ai/motion) · [English](https://yuv.ai/motion)): a deep dive into the method, in 19 chapters with 16 live labs.
 - **The catalog** ([Hebrew](https://news.yuv.ai/motion/catalog) · [English](https://yuv.ai/motion/catalog)): 18 live building blocks you can ask Claude for, each explained from zero with a full prompt, plus a prompt builder.
+- **The dictionary** ([Hebrew](https://news.yuv.ai/motion/dictionary) · [English](https://yuv.ai/motion/dictionary)): 33 live interface components, motion verbs and camera rules from the prompts, each with the name we write in a prompt and a sentence to copy.
+- **The template**: the six-block prompt skeleton, with a pre-send checklist, at the end of chapter 15 ([Hebrew](https://news.yuv.ai/motion#template) · [English](https://yuv.ai/motion#template)).
 - **[The films](#-the-films)**: three finished films made with the method, each in 9:16 and 16:9.
 - **[The kit](#-the-kit)**: the open code behind the films.
 
