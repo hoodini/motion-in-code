@@ -21,13 +21,15 @@ import { clamp, lerp, inv, out3, in3, io3, logLerp, spring, sk, clock, rgba, mix
 import { card, press, cursor, clickRing, neonRing, slamWords, popType, SPECTRUM } from '../../src/ui.js';
 import LOGO_URL from '../../brand/logo-384.png';
 import PHOTO_URL from './photo-day.jpg';
+import IMP from './impulses.json';     // camera punches [t, strength], written by mix.py from the same cue list as the SFX
+import CAP from './captions.json';     // narration words with their spoken times, written by vo_prep.py
 
-const clk = clock(120), { B } = clk;
-/* narration holds: [original beat, beats inserted, music bar]. The film was choreographed on 208 beats; the narration (28 lines, Omer,
-   ElevenLabs v4) needs ~38 s more. Every event at or after an insertion point moves later by that many beats, so the scene holds
-   (springs settle, neon, particles and the HUD keep running on the real clock) while the voice finishes. Insertions are whole bars,
-   so the beat grid never breaks; the music is extended by repeating the bar(s) before the given music bar (mix.py reads this line). */
-const HOLDS = [[11, 4, 16], [23.3, 4, 24], [26, 4, 28], [29, 4, 32], [30.8, 4, 36], [51.5, 4, 56], [65.9, 4, 68], [77, 4, 80], [95.2, 4, 96], [116, 4, 116], [125, 8, 132], [134.5, 4, 136], [143.6, 4, 142], [161.5, 4, 164], [175, 4, 176], [183, 4, 184], [197, 4, 200], [204, 4, 204]];
+const BPM = 150;                      // v3 (Gen Z edit): the whole choreography runs on a 150 BPM clock, 25% faster than v2
+const clk = clock(BPM), { B } = clk;
+/* narration holds: [original beat, beats inserted, music bar]. Every event at or after an insertion point moves later by that
+   many beats, so the scene holds (ambient motion keeps running on the real clock) while the voice finishes. Whole bars only.
+   Computed by plan_holds.py from the measured narration and written here. */
+const HOLDS = [];
 const bt = k => (k + HOLDS.reduce((a, [p, n]) => a + (k >= p ? n : 0), 0)) * B;
 const NB = 208 + HOLDS.reduce((a, h) => a + h[1], 0), DUR = bt(208);
 const NAVY = BRAND.navy, NAVY2 = BRAND.navy2, W = '#FFFFFF', FIRE = BRAND.fire, DENIM = BRAND.denim, CLOUD = BRAND.cloud, ORANGE = BRAND.orange, GOLD = BRAND.gold, CORAL = BRAND.coral;
@@ -53,7 +55,7 @@ const PAL = {
   M: { bg: ORANGE, grad: FIRE, hd: NAVY, ink: NAVY, sub: rgba(NAVY, 0.75), card: W, num: 'rgba(0,0,0,.09)', numMode: 'fill', band: NAVY }
 };
 const SEC = [
-  { t: 0, p: 'D' }, { t: bt(8) + 0.36, p: 'M' },
+  { t: 0, p: 'M' },
   { t: bt(12), p: 'D', wipe: 'r', num: '01' }, { t: bt(24), p: 'C', wipe: 'b', num: '02' },
   { t: bt(48), p: 'K', wipe: 'r', num: '03' }, { t: bt(61.2), p: 'D', num: '04' },
   { t: bt(80), p: 'C', wipe: 'b', num: '05' }, { t: bt(104), p: 'D', wipe: 'r', num: '06' },
@@ -129,53 +131,85 @@ let LOGO = null, PHOTO = null;
 const loadImg = src => new Promise(r => { const i = new Image(); i.onload = () => r(i); i.src = src; });
 
 /* ===================== A · hook (b0–12) ===================== */
-const Q_TEXT = 'איך עושים סרטון בקוד?';
-const Q_TIMES = Array.from(Q_TEXT).map((_, i) => 0.55 + i * 0.125);
+/* ===================== A · hook (b0–12): payoff first ===================== */
+// b0–4: eight of the film's best moments, one per eighth note, each drawn by the film itself at its own time (seek(t) is pure,
+// so any moment can be shown anywhere); a zoom punch, a tilt and a flash on every cut. b4: hard cut to the fire page and the claim.
+const SHOT = B / 2, MONT_END = bt(4);
+const SHOTS = [53.6, 135.0, 56.5, 31.6, 128.0, 141.5, 161.8, 199.8];   // source beats: flood, galaxy, iris, spring, shader, map, builder, phoenix
+function montage(t) {
+  if (t >= MONT_END) return null;
+  const k = Math.min(SHOTS.length - 1, Math.floor(t / SHOT)), u = t - k * SHOT;
+  const e = out3(clamp(u / SHOT));
+  return { src: bt(SHOTS[k]) + u, z: lerp(k % 2 ? 0.16 : 0.12, 0, e), rot: (k % 2 ? -1 : 1) * 0.022 * (1 - e), k, u };
+}
 function hook(x, t, L) {
-  if (t > bt(12.5)) return;
-  const cx = L.W / 2, cy = L.H / 2, BW = isV(L) ? 940 : 1100, BH = 132;
-  // the prompt box pops in, types, gets clicked, collapses into its send button, which floods the frame
-  const s = clamp(spring(t - 0.02, 14, 0.6), 0, 1.1);
-  const col = io3(inv(bt(6.3), bt(7.4), t));                       // collapse to a circle
-  const bw = lerp(BW, BH, col), sendX = cx - BW / 2 + BH / 2 + 4;
-  const bcx = lerp(cx, cx, col);
-  const pr = press(t, bt(6), bt(6.25), 0.94);
-  if (t < bt(8) + 0.5) {
-    x.save(); x.translate(bcx, cy); x.scale(s * pr, s * pr); x.translate(-bcx, -cy);
-    neonFast(x, bcx, cy, bw, BH, BH / 2, t * 1.7, { power: 1 + 0.35 * beatPulse(t) });
-    card(x, bcx, cy, bw, BH, BH / 2, { fill: W, depth: 0.6 });
-    x.save(); rrc(x, bcx, cy, bw, BH, BH / 2); x.clip();
-    const sq = 1 - col;
-    if (sq > 0.02) {
-      x.save(); x.translate(bcx + bw / 2 - 56, 0); x.scale(sq, 1); x.translate(-(bcx + bw / 2 - 56), 0);
-      if (t < Q_TIMES[0]) { x.font = FT.text(44); x.direction = 'rtl'; x.textAlign = 'right'; x.fillStyle = rgba(NAVY, 0.4); x.fillText('שאלו את Claude…', bcx + bw / 2 - 56, cy + 16); }
-      popType(x, t, Q_TEXT, bcx + bw / 2 - 56, cy + 17, FT.textB, 50, NAVY, Q_TIMES);
-      x.restore();
+  if (t < MONT_END || t > bt(12.5)) return;
+  const v = isV(L), cx = L.W / 2, cy = L.H / 2;
+  const s1 = v ? 230 : 280, y1 = cy + (v ? 30 : 60);
+  slamWords(x, t, ['אפס', 'עריכה.'], cx, y1, s1, FT.he, NAVY, [bt(4.2), bt(4.7)], bt(6.6), { marker: { i: 1, paint: NAVY }, colors: [NAVY, W], maxW: L.W - (v ? 200 : 360) });
+  const ts = v ? 250 : 300;
+  slamWords(x, t, ['סרטון', '=', 'קוד.'], cx, y1, ts, FT.he, NAVY, [bt(7), bt(7.5), bt(8)], bt(11.6), { maxW: L.W - (v ? 160 : 360) });
+  if (t > bt(9) && t < bt(11.9)) {
+    const s2 = pop(t, bt(9), 18, 0.55) * gone(t, bt(11.6));
+    x.save(); x.font = FT.en(v ? 40 : 44); x.letterSpacing = '6px'; x.textAlign = 'center'; x.direction = 'ltr'; x.fillStyle = NAVY;
+    x.translate(cx, y1 + (v ? 120 : 130)); x.scale(s2, s2); x.fillText('MOTION IN CODE · END TO END', 0, 0); x.restore();
+  }
+}
+
+/* ===================== the edit layer: camera punches, flashes, captions, progress ===================== */
+const IMPS = IMP.slice().sort((a, b) => a[0] - b[0]);
+function camAt(t) {
+  let z = 0, sx = 0, sy = 0, rot = 0, lo = 0, hi = IMPS.length;
+  while (lo < hi) { const m = (lo + hi) >> 1; if (IMPS[m][0] < t - 0.8) lo = m + 1; else hi = m; }
+  for (let i = lo; i < IMPS.length && IMPS[i][0] <= t; i++) {
+    const [p, st] = IMPS[i], u = t - p;
+    z += (st >= 3 ? 0.075 : st >= 2 ? 0.045 : 0.022) * Math.exp(-u / 0.16);
+    if (st >= 2) {
+      const A = (st >= 3 ? 14 : 8) * Math.exp(-u / 0.11);
+      sx += A * Math.sin(u * 119.4 + p * 7); sy += A * Math.cos(u * 144.5 + p * 3);
+      rot += (st >= 3 ? 0.012 : 0.006) * Math.exp(-u / 0.12) * Math.sin(u * 69.1 + p);
     }
-    // the send button (left end in a Hebrew UI): it is the circle that stays
-    const bx = lerp(sendX, bcx, col), br = lerp(BH / 2 - 14, BH / 2, col);
-    circle(x, bx, cy, br); x.fillStyle = firePaint(x, bx - br, cy - br, bx + br, cy + br); x.fill();
-    x.save(); x.translate(bx, cy); x.lineCap = 'round'; x.lineJoin = 'round'; x.lineWidth = 7; x.strokeStyle = NAVY; x.beginPath(); x.moveTo(15, 0); x.lineTo(-15, 0); x.moveTo(-2, -13); x.lineTo(-15, 0); x.lineTo(-2, 13); x.stroke(); x.restore();
-    x.restore(); x.restore();
   }
-  // cursor: arrives, clicks send on beat 6
-  if (t > bt(3.6) && t < bt(7.2)) {
-    const a = io3(inv(bt(3.6), bt(5.6), t)), tx = sendX + 6, ty = cy + 8;
-    const X = lerp(isV(L) ? 160 : 420, tx, a), Y = lerp(isV(L) ? 1500 : 980, ty, a) + Math.sin(a * Math.PI) * -60;
-    clickRing(x, tx, ty, t, bt(6), PINK, 80);
-    cursor(x, X, Y, (isV(L) ? 1.25 : 1.1) * press(t, bt(6), bt(6.2), 0.85), NAVY, W);
-  }
-  // flood: the circle grows past the farthest corner in 0.35 s
-  const fl = out3(inv(bt(8), bt(8) + 0.36, t));
-  if (fl > 0 && t < bt(8) + 0.4) { circle(x, cx, cy, BH / 2 + (coverR(L.W, L.H, cx, cy) - BH / 2) * fl); x.fillStyle = firePaint(x, 0, 0, L.W, L.H); x.fill(); }
-  // the title on the fire page
-  const ts = isV(L) ? 250 : 300, y1 = cy + (isV(L) ? 40 : 60);
-  slamWords(x, t, ['סרטון', '=', 'קוד.'], cx, y1, ts, FT.he, NAVY, [bt(8.5), bt(9), bt(9.5)], bt(11.6), {});
-  if (t > bt(10) && t < bt(11.9)) {
-    const s2 = pop(t, bt(10), 18, 0.55) * gone(t, bt(11.6));
-    x.save(); x.font = FT.en(isV(L) ? 40 : 44); x.letterSpacing = '6px'; x.textAlign = 'center'; x.direction = 'ltr'; x.fillStyle = NAVY;
-    x.translate(cx, y1 + (isV(L) ? 120 : 130)); x.scale(s2, s2); x.fillText('MOTION IN CODE · END TO END', 0, 0); x.restore();
-  }
+  return { z, sx, sy, rot };
+}
+function camApply(x, L, c) {
+  const md = Math.min(L.W, L.H), cover = 2 * Math.max(Math.abs(c.sx), Math.abs(c.sy)) / md + Math.abs(c.rot) * Math.max(L.W, L.H) / md;
+  const k = 1 + c.z + cover;
+  x.translate(L.W / 2 + c.sx, L.H / 2 + c.sy); x.rotate(c.rot); x.scale(k, k); x.translate(-L.W / 2, -L.H / 2);
+}
+// white flash frames: montage cuts, the title cut, every chapter downbeat, the two floods
+const FLASH = [...SHOTS.map((_, i) => i * SHOT).slice(1), MONT_END, ...SEC.filter(e => e.num).map(e => e.t), bt(53), bt(192)];
+function flash(x, t, L) {
+  let a = 0; for (const p of FLASH) { const u = t - p; if (u >= 0 && u < 0.14) a = Math.max(a, 0.55 * Math.exp(-u / 0.032)); }
+  if (a > 0.01) { x.save(); x.fillStyle = rgba(W, a); x.fillRect(0, 0, L.W, L.H); x.restore(); }
+}
+// a progress bar on the top edge, filling from the right (Hebrew reads right to left)
+function progress(x, t, L) {
+  const h = isV(L) ? 8 : 6, u = clamp(t / DUR);
+  x.save(); x.fillStyle = 'rgba(255,255,255,.28)'; x.fillRect(0, 0, L.W, h);
+  x.fillStyle = gradPaint(x, L.W, 0, 0, 0, PC); x.fillRect(L.W * (1 - u), 0, L.W * u, h); x.restore();
+}
+// kinetic captions: two to four words at a time, each word pops in when it is spoken, the spoken word is gold
+const CHUNKS = (CAP.chunks || []).map(c => ({ ...c, end: c.end }));
+function captions(x, t, L) {
+  let c = null; for (const ch of CHUNKS) { if (t >= ch.t0 - 0.02 && t < ch.end) { c = ch; break; } }
+  if (!c) return;
+  const v = isV(L), size = v ? 68 : 58, y = v ? 1748 : 1004;
+  x.save(); x.font = FT.textB(size); x.direction = 'rtl'; x.textAlign = 'left'; x.lineJoin = 'round';
+  const ws = c.words.map(o => x.measureText(o.w).width), gap = size * 0.3, total = ws.reduce((a, b) => a + b, 0) + gap * (ws.length - 1);
+  let pos = L.W / 2 + total / 2;
+  const fade = 1 - in3(inv(c.end - 0.1, c.end, t));
+  c.words.forEach((o, i) => {
+    const xl = pos - ws[i]; pos -= ws[i] + gap;
+    if (t < o.t0 - 0.03) return;
+    const s = clamp(spring(t - o.t0 + 0.03, 24, 0.5), 0, 1.2), cur = t < o.t1 + 0.05 && (i === c.words.length - 1 || t < c.words[i + 1].t0);
+    const sc = (0.55 + 0.45 * s) * (cur ? 1.06 : 1) * fade; if (sc <= 0.01) return;
+    x.save(); x.translate(xl + ws[i] / 2, y - size * 0.35); x.scale(sc, sc); x.translate(-(xl + ws[i] / 2), -(y - size * 0.35));
+    x.lineWidth = size * 0.17; x.strokeStyle = NAVY; x.strokeText(o.w, xl, y);
+    x.shadowColor = 'rgba(5,8,30,.45)'; x.shadowBlur = 14; x.shadowOffsetY = 5;
+    x.fillStyle = cur ? GOLD : W; x.fillText(o.w, xl, y); x.restore();
+  });
+  x.restore();
 }
 
 /* ===================== 01 · frames (b12–24) ===================== */
@@ -877,11 +911,16 @@ function hud(x, t, L) {
   x.restore();
 }
 
-function draw(x, t, L) {
+function scene(x, t, L) {
   spreads.background(x, t, L);
   hook(x, t, L); frames(x, t, L); shapes(x, t, L); morph(x, t, L); beat(x, t, L); prompt(x, t, L);
   words(x, t, L); engines(x, t, L); realWorld(x, t, L); builder(x, t, L); renderCh(x, t, L); finale(x, t, L);
-  hud(x, t, L);
+}
+function draw(x, t, L) {
+  const m = montage(t), c = m ? { z: m.z, sx: 0, sy: 0, rot: m.rot } : camAt(t);
+  x.save(); camApply(x, L, c); scene(x, m ? m.src : t, L); x.restore();
+  if (!m) hud(x, t, L);
+  flash(x, t, L); captions(x, t, L); progress(x, t, L);
 }
 
 mountFilm({ layouts: LAYOUTS, draw, dur: DUR, clk: { ...clk, bt }, init: async () => { [LOGO, PHOTO] = await Promise.all([loadImg(LOGO_URL), loadImg(PHOTO_URL)]); } });
