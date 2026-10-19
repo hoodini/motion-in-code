@@ -11,17 +11,27 @@
    08 real world: a delivery map · breakdown: "now we build it ourselves"
    09 builder: presets → scenes → prompt → copy link
    10 render: film.html → Playwright → ffmpeg → MP4, motion blur from subframes, sound on the beat
-   end: "you write the direction, Claude writes the code" · logo
-   208 beats @ 120 BPM ("From Here" by Tanner Helland, CC BY 4.0). Everything is drawn in code.
+   end: "we write the direction, Claude writes the code" · logo on navy in the wordmark colours
+   colours: Phoenix Day pages + the wordmark pair (pink = action, cyan = code/system), fire for the phoenix punches
+   208 choreographed beats + 76 narration-hold beats = 284 beats, 142 s @ 120 BPM ("From Here" by Tanner Helland, CC BY 4.0).
+   Narration: Omer (ElevenLabs eleven_v4), 28 lines. Everything is drawn in code.
    ===================================================================== */
 import { clamp, lerp, inv, out3, in3, io3, logLerp, spring, sk, clock, rgba, mix, BRAND, FT, rr, rrc, circle, coverR, riseWords, gradPaint, makeSpreads, mountFilm, rnd } from '../../src/core.js';
 import { card, press, cursor, clickRing, neonRing, slamWords, popType, SPECTRUM } from '../../src/ui.js';
 import LOGO_URL from '../../brand/logo-384.png';
 import PHOTO_URL from './photo-day.jpg';
 
-const clk = clock(120), { B, bt } = clk;
-const NB = 208, DUR = NB * B;
+const clk = clock(120), { B } = clk;
+/* narration holds: [original beat, beats inserted, music bar]. The film was choreographed on 208 beats; the narration (28 lines, Omer,
+   ElevenLabs v4) needs ~38 s more. Every event at or after an insertion point moves later by that many beats, so the scene holds
+   (springs settle, neon, particles and the HUD keep running on the real clock) while the voice finishes. Insertions are whole bars,
+   so the beat grid never breaks; the music is extended by repeating the bar(s) before the given music bar (mix.py reads this line). */
+const HOLDS = [[11, 4, 16], [23.3, 4, 24], [26, 4, 28], [29, 4, 32], [30.8, 4, 36], [51.5, 4, 56], [65.9, 4, 68], [77, 4, 80], [95.2, 4, 96], [116, 4, 116], [125, 8, 132], [134.5, 4, 136], [143.6, 4, 142], [161.5, 4, 164], [175, 4, 176], [183, 4, 184], [197, 4, 200], [204, 4, 204]];
+const bt = k => (k + HOLDS.reduce((a, [p, n]) => a + (k >= p ? n : 0), 0)) * B;
+const NB = 208 + HOLDS.reduce((a, h) => a + h[1], 0), DUR = bt(208);
 const NAVY = BRAND.navy, NAVY2 = BRAND.navy2, W = '#FFFFFF', FIRE = BRAND.fire, DENIM = BRAND.denim, CLOUD = BRAND.cloud, ORANGE = BRAND.orange, GOLD = BRAND.gold, CORAL = BRAND.coral;
+// the wordmark pair from the logo: pink = action (clicks, playheads, the thing that moves), cyan = code / system (readouts, on navy)
+const PINK = BRAND.pink, CYAN = BRAND.cyan, PC = [BRAND.pink, BRAND.cyan];
 const SKY = ['#5EA9F2', '#93CBFF', '#DDF0FF'], GREEN = '#34C759', OFF = '#C9D3E6';
 const beatPulse = t => Math.exp(-((((t % B) + B) % B) / B) * 5);
 const win = (t, a, b) => t >= bt(a) && t < bt(b);
@@ -37,8 +47,8 @@ const isV = L => L.name === 'v';
 /* ---------- pages (colour spreads, one per chapter) ---------- */
 const PAL = {
   D: { bg: SKY[1], grad: SKY, hd: NAVY, ink: NAVY, sub: rgba(NAVY, 0.72), card: W, num: 'rgba(0,0,0,.09)', numMode: 'fill', band: W },
-  C: { bg: DENIM, hd: NAVY, ink: NAVY, sub: rgba(NAVY, 0.72), card: W, num: mix(DENIM, NAVY, 0.12), numMode: 'fill', band: ORANGE },
-  K: { bg: NAVY, hd: W, ink: W, sub: rgba(W, 0.72), card: NAVY2, num: rgba(ORANGE, 0.42), numMode: 'stroke', band: ORANGE },
+  C: { bg: DENIM, hd: NAVY, ink: NAVY, sub: rgba(NAVY, 0.72), card: W, num: mix(DENIM, NAVY, 0.12), numMode: 'fill', band: PINK },
+  K: { bg: NAVY, hd: W, ink: W, sub: rgba(W, 0.72), card: NAVY2, num: rgba(CYAN, 0.38), numMode: 'stroke', band: PINK },
   M: { bg: ORANGE, grad: FIRE, hd: NAVY, ink: NAVY, sub: rgba(NAVY, 0.75), card: W, num: 'rgba(0,0,0,.09)', numMode: 'fill', band: NAVY }
 };
 const SEC = [
@@ -48,11 +58,12 @@ const SEC = [
   { t: bt(80), p: 'C', wipe: 'b', num: '05' }, { t: bt(104), p: 'D', wipe: 'r', num: '06' },
   { t: bt(120), p: 'K', wipe: 'b', num: '07' }, { t: bt(136), p: 'D', wipe: 'r', num: '08' },
   { t: bt(152), p: 'C', wipe: 'r', num: '09' }, { t: bt(168), p: 'K', wipe: 'b', num: '10' },
-  { t: bt(192) + 0.36, p: 'M' }, { t: bt(198), p: 'D', wipe: 'r' }
+  { t: bt(192) + 0.36, p: 'M' }, { t: bt(198), p: 'K', wipe: 'r' }
 ];
 const spreads = makeSpreads(SEC, PAL);
 const ink = t => spreads.palTr('ink', t), sub = t => spreads.palTr('sub', t);
 const firePaint = (x, X0, Y0, X1, Y1) => gradPaint(x, X0, Y0, X1, Y1, FIRE);
+const pcPaint = (x, X0, Y0, X1, Y1) => gradPaint(x, X0, Y0, X1, Y1, PC);
 
 /* ---------- type helpers ---------- */
 // one headline line: words slam in (two per beat by default), RTL, anchored to the right column (16:9) or the top (9:16)
@@ -65,12 +76,12 @@ function head(x, t, L, line, words, t0, tOut, opt = {}) {
   slamWords(x, t, words, cx ?? 0, y, size, FT.he, opt.color || ink(t), times, tOut, o);
 }
 const markP = x => gradPaint(x, 0, 0, 1920, 0, FIRE);
-// a small kicker: Anton on a fire pill, pops on a spring
+// a small kicker: Anton on a pink pill (the wordmark colour), pops on a spring
 function kick(x, t, L, t0, text, tOut) {
   const s = clamp(spring(t - t0, 18, 0.55), 0, 1.1) * (tOut == null ? 1 : 1 - in3(inv(tOut, tOut + 0.2, t))); if (s <= 0.01) return;
   x.save(); x.font = FT.en(30); x.letterSpacing = '4px'; const w = x.measureText(text).width + 44, h = 52;
   const cx = isV(L) ? L.W / 2 : L.right - w / 2, cy = L.kY;
-  x.translate(cx, cy); x.scale(s, s); rrc(x, 0, 0, w, h, h / 2); x.fillStyle = firePaint(x, -w / 2, 0, w / 2, 0); x.fill();
+  x.translate(cx, cy); x.scale(s, s); rrc(x, 0, 0, w, h, h / 2); x.fillStyle = PINK; x.fill();
   x.fillStyle = NAVY; x.textAlign = 'center'; x.direction = 'ltr'; x.fillText(text, 2, 11); x.restore();
 }
 // running text (Assistant), pops in with a small rise. align: 'right' | 'center' | 'left'
@@ -149,7 +160,7 @@ function hook(x, t, L) {
   if (t > bt(3.6) && t < bt(7.2)) {
     const a = io3(inv(bt(3.6), bt(5.6), t)), tx = sendX + 6, ty = cy + 8;
     const X = lerp(isV(L) ? 160 : 420, tx, a), Y = lerp(isV(L) ? 1500 : 980, ty, a) + Math.sin(a * Math.PI) * -60;
-    clickRing(x, tx, ty, t, bt(6), ORANGE, 80);
+    clickRing(x, tx, ty, t, bt(6), PINK, 80);
     cursor(x, X, Y, (isV(L) ? 1.25 : 1.1) * press(t, bt(6), bt(6.2), 0.85), NAVY, W);
   }
   // flood: the circle grows past the farthest corner in 0.35 s
@@ -184,7 +195,7 @@ function frames(x, t, L) {
     const fx = sx + total / 2 - fw / 2 - i * (fw + gap);       // RTL: frame 1 on the right
     const playing = t > bt(16) && t < bt(18) && Math.floor((t - bt(16)) * 6) % n === i;
     x.save(); x.translate(fx, sy); x.scale(s, s);
-    card(x, 0, 0, fw, fh, 16, { fill: W, depth: 0.35, stroke: playing ? ORANGE : null, strokeW: 6 });
+    card(x, 0, 0, fw, fh, 16, { fill: W, depth: 0.35, stroke: playing ? PINK : null, strokeW: 6 });
     const u = i / (n - 1); circle(x, -fw / 2 + 24 + (fw - 48) * (1 - u), 6, 13); x.fillStyle = NAVY; x.fill();
     mono(x, String(i + 1), -fw / 2 + 10, fh / 2 - 10, 18, rgba(NAVY, 0.5));
     x.restore();
@@ -204,7 +215,7 @@ function frames(x, t, L) {
     const ty = PH / 2 - 40, tx0 = -PW / 2 + 60, tx1 = PW / 2 - 60;
     rrc(x, 0, ty, tx1 - tx0, 10, 5); x.fillStyle = rgba(NAVY, 0.15); x.fill();
     const hx = tx1 - (tx1 - tx0) * u;
-    rr(x, hx, ty - 5, tx1 - hx, 10, 5); x.fillStyle = firePaint(x, tx0, 0, tx1, 0); x.fill();
+    rr(x, hx, ty - 5, tx1 - hx, 10, 5); x.fillStyle = PINK; x.fill();
     circle(x, hx, ty, 15); x.fillStyle = NAVY; x.fill();
     mono(x, `t = ${(u * 2).toFixed(2)}s`, -PW / 2 + 40, -PH / 2 + 52, 28, NAVY, 'left', true);
     mono(x, '60 fps', PW / 2 - 40, -PH / 2 + 52, 28, ORANGE, 'right', true);
@@ -215,7 +226,7 @@ function frames(x, t, L) {
   const cs = pop(t, bt(22.5), 18, 0.55) * gone(t, bt(23.6));
   if (cs > 0.01) {
     const X = v ? L.W / 2 : L.right - 250, Y = v ? L.hy + 300 : L.hy + 330;
-    pill(x, X, Y, 'seek(t) → frame', cs, { font: FT.monoB, size: 34, fill: NAVY, color: GOLD });
+    pill(x, X, Y, 'seek(t) → frame', cs, { font: FT.monoB, size: 34, fill: NAVY, color: CYAN });
   }
   if (!v) cap(x, t, bt(16.5), 'בקולנוע 24, ברשת 60.', L.right, L.hy + 420, { size: 40, tOut: bt(19.6), color: sub(t) });
   cap(x, t, bt(23), 'אפשר לקפוץ לכל רגע, בכל סדר.', v ? L.W / 2 : L.right, v ? L.hy + 390 : L.hy + 430, { align: v ? 'center' : 'right', size: 40, tOut: bt(23.7), color: sub(t) });
@@ -246,14 +257,15 @@ function shapes(x, t, L) {
   if (cs > 0.01) {
     x.save(); x.translate(cdx, cdy); x.scale(cs, cs); card(x, 0, 0, CW, CH, 32, { fill: NAVY, depth: 0.7 });
     ['#F56B49', '#FFC74E', '#5DE4E9'].forEach((c, i) => { circle(x, -CW / 2 + 36 + i * 26, -CH / 2 + 30, 7); x.fillStyle = c; x.fill(); });
+    if (t < LINES[0][1] && Math.floor(t / (B / 2)) % 2 === 0) { rr(x, -CW / 2 + 40, -CH / 2 + 66, 16, 34, 3); x.fillStyle = CYAN; x.fill(); }   // a caret blinks on the beat until the code types
     LINES.forEach(([s, t0], i) => {
       const n = clamp(Math.floor((t - t0) / 0.035) + 1, 0, s.length); if (n <= 0) return;
-      mono(x, s.slice(0, n), -CW / 2 + 40, -CH / 2 + 92 + i * 52, v ? 31 : 32, i === 2 ? GOLD : '#E7ECFA');
+      mono(x, s.slice(0, n), -CW / 2 + 40, -CH / 2 + 92 + i * 52, v ? 31 : 32, i === 2 ? CYAN : '#E7ECFA');
     });
     x.restore();
   }
   // easing labels
-  const lab = (t0, text, good, tOut) => { const s = pop(t, t0, 18, 0.55) * gone(t, tOut); if (s > 0.01) pill(x, tcx, tcy - (v ? 220 : 200), text, s, { size: 36, fill: good ? NAVY : W, color: good ? GOLD : CORAL, stroke: good ? null : CORAL }); };
+  const lab = (t0, text, good, tOut) => { const s = pop(t, t0, 18, 0.55) * gone(t, tOut); if (s > 0.01) pill(x, tcx, tcy - (v ? 220 : 200), text, s, { size: 36, fill: good ? NAVY : W, color: good ? CYAN : CORAL, stroke: good ? null : CORAL }); };
   lab(bt(29), 'לינארי: רובוטי ✕', false, bt(30.8));
   lab(bt(31), 'קפיץ: חי ✓', true, bt(35.6));
   const fs = pop(t, bt(32.5), 18, 0.55) * gone(t, bt(35.6));
@@ -292,8 +304,8 @@ function shapes(x, t, L) {
     x.save(); x.globalAlpha = 1; x.translate(0, 0);
     const a1 = pop(t, bt(40), 18, 0.55) * k, a2 = pop(t, bt(41), 18, 0.55) * k, a3 = clamp((t - bt(42)) / 1.6), a4 = pop(t, bt(43), 18, 0.55) * k;
     if (a1 > 0.01) { x.save(); x.translate(R, cy - 60); x.scale(a1, a1); x.font = FT.he(64); x.direction = 'rtl'; x.textAlign = 'right'; x.fillStyle = W; x.fillText('סרטון בהכנה', 0, 0); x.restore(); }
-    if (a2 > 0.01) { const bw = (w - 340) * a2; rr(x, R - bw, cy + 10, bw, 22, 11); x.fillStyle = rgba(W, 0.15); x.fill(); rr(x, R - bw * a3, cy + 10, bw * a3, 22, 11); x.fillStyle = firePaint(x, R - bw, 0, R, 0); x.fill(); }
-    if (a4 > 0.01) { x.save(); x.translate(R - 50, cy + 90); x.scale(a4, a4); mono(x, `frame ${String(Math.floor(clamp((t - bt(42)) / 1.6) * 720)).padStart(4, '0')}/0720`, 0, 0, 30, GOLD, 'right', true); x.restore(); }
+    if (a2 > 0.01) { const bw = (w - 340) * a2; rr(x, R - bw, cy + 10, bw, 22, 11); x.fillStyle = rgba(W, 0.15); x.fill(); rr(x, R - bw * a3, cy + 10, bw * a3, 22, 11); x.fillStyle = pcPaint(x, R - bw, 0, R, 0); x.fill(); }
+    if (a4 > 0.01) { x.save(); x.translate(R - 50, cy + 90); x.scale(a4, a4); mono(x, `frame ${String(Math.floor(clamp((t - bt(42)) / 1.6) * 720)).padStart(4, '0')}/0720`, 0, 0, 30, CYAN, 'right', true); x.restore(); }
     x.restore();
   }
   // the button label when it has become a button
@@ -328,11 +340,11 @@ function morph(x, t, L) {
     card(x, 0, 0, CW, CH, 40, { fill: NAVY2, depth: 0.6 });
     const ph = ((t - bt(50)) % 2) / 2;
     if (!good) { x.save(); x.globalAlpha = 0.15 + 0.85 * Math.abs(Math.cos(ph * Math.PI)); rrc(x, 0, -20, 150, 150, 26); x.fillStyle = W; x.fill(); x.restore(); }
-    else { const u = io3(Math.abs(Math.sin(ph * Math.PI))); rrc(x, 0, -20, lerp(150, 300, u), lerp(150, 110, u), lerp(26, 55, u)); x.fillStyle = firePaint(x, -150, 0, 150, 0); x.fill(); }
-    x.font = FT.he(56); x.direction = 'rtl'; x.textAlign = 'center'; x.fillStyle = good ? GOLD : CORAL; x.fillText(name + (good ? ' ✓' : ' ✕'), 0, CH / 2 - 40);
+    else { const u = io3(Math.abs(Math.sin(ph * Math.PI))); rrc(x, 0, -20, lerp(150, 300, u), lerp(150, 110, u), lerp(26, 55, u)); x.fillStyle = PINK; x.fill(); }
+    x.font = FT.he(56); x.direction = 'rtl'; x.textAlign = 'center'; x.fillStyle = good ? CYAN : CORAL; x.fillText(name + (good ? ' ✓' : ' ✕'), 0, CH / 2 - 40);
     x.restore();
   });
-  // the button from chapter 02 is pressed and floods the frame with fire, which later contracts into a dot
+  // the button from chapter 02 is pressed and floods the frame with pink, which later contracts into a dot
   const bx = v ? 540 : 640, by = v ? 1180 : 600;
   const bs = t < bt(52.2) ? 0 : 1;
   const fl = out3(inv(bt(53), bt(53) + 0.36, t)), ct = io3(inv(bt(55), bt(55) + 0.36, t));
@@ -340,8 +352,8 @@ function morph(x, t, L) {
   if (t > bt(52.2) && t < bt(56.2)) {
     const R = fl < 1 ? R0 + (RMAX - R0) * fl : lerp(RMAX, 30, ct);
     if (fl <= 0) { const pr = press(t, bt(53) - 0.12, bt(53) + 0.02, 0.9); card(x, bx, by, 300 * pr, 110 * pr, 55, { fill: NAVY2, depth: 0.5 }); neonFast(x, bx, by, 300 * pr, 110 * pr, 55, t * 2, { power: 0.8 }); x.save(); x.font = FT.he(54); x.direction = 'rtl'; x.textAlign = 'center'; x.fillStyle = W; x.fillText('לחצו', bx, by + 19); x.restore(); }
-    else { circle(x, bx, by, R); x.fillStyle = firePaint(x, 0, 0, L.W, L.H); x.fill(); }
-    if (t > bt(52.4) && t < bt(53.3)) { const a = io3(inv(bt(52.4), bt(52.95), t)); cursor(x, lerp(bx - 260, bx + 10, a), lerp(by + 240, by + 14, a), (v ? 1.2 : 1.05) * press(t, bt(53) - 0.12, bt(53) + 0.05, 0.85), NAVY, W); clickRing(x, bx + 10, by + 14, t, bt(53), GOLD, 90); }
+    else { circle(x, bx, by, R); x.fillStyle = PINK; x.fill(); }
+    if (t > bt(52.4) && t < bt(53.3)) { const a = io3(inv(bt(52.4), bt(52.95), t)); cursor(x, lerp(bx - 260, bx + 10, a), lerp(by + 240, by + 14, a), (v ? 1.2 : 1.05) * press(t, bt(53) - 0.12, bt(53) + 0.05, 0.85), NAVY, W); clickRing(x, bx + 10, by + 14, t, bt(53), PINK, 90); }
     // label on the fire
     slamWords(x, t, ['הצפה'], bx, by - (v ? 40 : 30), v ? 210 : 230, FT.he, NAVY, [bt(53.5)], bt(54.7), {});
     slamWords(x, t, ['flood'], bx, by + (v ? 130 : 130), v ? 90 : 96, FT.en, NAVY, [bt(54)], bt(54.7), { ltr: true });
@@ -360,7 +372,7 @@ function morph(x, t, L) {
     if (ir < 1) { x.save(); rrc(x, pcx, pcy, PW, PH, 40); x.clip(); x.beginPath(); x.rect(pcx - PW, pcy - PH, PW * 2, PH * 2); hexPath(x, pcx, pcy, Rap, t * 0.6 + (1 - ir) * 1.2); x.fillStyle = NAVY2; x.fill('evenodd'); x.restore(); }
     x.restore();
     const ls = pop(t, bt(57), 18, 0.55) * gone(t, bt(59.6));
-    if (ls > 0.01) pill(x, pcx, pcy + PH / 2 + (v ? 80 : 70), 'צמצם · iris', ls, { size: 38, fill: NAVY2, color: GOLD });
+    if (ls > 0.01) pill(x, pcx, pcy + PH / 2 + (v ? 80 : 70), 'צמצם · iris', ls, { size: 38, fill: NAVY2, color: CYAN });
   }
   // push: a new day page pushes in from the left (RTL) and pushes the photo out to the right
   if (t > bt(60) && t < bt(61.3)) {
@@ -396,7 +408,7 @@ function beat(x, t, L) {
     rrc(x, (X0 + X1) / 2, Y + 60, X1 - X0, 8, 4); x.fillStyle = rgba(NAVY, 0.15); x.fill();
     for (let b = b0; b <= b0 + nb; b++) {
       const pulse = t >= bt(b) ? Math.exp(-(t - bt(b)) * 6) : 0;
-      rrc(x, px(b), Y + 60, 6, 40 + 30 * pulse, 3); x.fillStyle = b % 4 === 0 ? ORANGE : NAVY; x.fill();
+      rrc(x, px(b), Y + 60, 6, 40 + 30 * pulse, 3); x.fillStyle = b % 4 === 0 ? PINK : NAVY; x.fill();
       if (b < b0 + nb) mono(x, String(b), px(b), Y + 120, 22, rgba(NAVY, 0.55), 'center');
     }
     // events: one block lands on every beat the playhead reaches (b68–74)
@@ -405,8 +417,8 @@ function beat(x, t, L) {
       const yy = Y - 10 - (1 - clamp(s, 0, 1)) * 140; rrc(x, px(b), yy, 54 * clamp(s, 0, 1.2), 54 * clamp(s, 0, 1.2), 14); x.fillStyle = firePaint(x, px(b) - 27, 0, px(b) + 27, 0); x.fill();
     }
     const ph = clamp((t - bt(b0)) / (nb * B));
-    const hx = X0 + (X1 - X0) * ph; rrc(x, hx, Y + 20, 5, 170, 2.5); x.fillStyle = CORAL; x.fill(); circle(x, hx, Y - 66, 10); x.fill();
-    pill(x, X0 + 110, Y - (v ? 170 : 150), '120 BPM', pop(t, bt(66), 18, 0.55), { font: FT.monoB, size: 30, fill: NAVY, color: GOLD });
+    const hx = X0 + (X1 - X0) * ph; rrc(x, hx, Y + 20, 5, 170, 2.5); x.fillStyle = PINK; x.fill(); circle(x, hx, Y - 66, 10 + 5 * beatPulse(t)); x.fill();
+    pill(x, X0 + 110, Y - (v ? 170 : 150), '120 BPM', pop(t, bt(66), 18, 0.55), { font: FT.monoB, size: 30, fill: NAVY, color: CYAN });
     mono(x, 'beat = 0.5s', X1 - 10, Y - (v ? 160 : 140), 28, NAVY, 'right', true);
     x.restore();
     cap(x, t, bt(68.5), 'משהו קורה על כל ביט.', v ? L.W / 2 : L.right, v ? 1500 : 640, { align: v ? 'center' : 'right', size: 42, tOut: bt(71.6) });
@@ -427,8 +439,8 @@ function beat(x, t, L) {
       x.moveTo(X, -a); x.lineTo(X, a);
     }
     x.lineWidth = 3; x.strokeStyle = NAVY; x.stroke();
-    rrc(x, beatX, 0, 6, HH - 80, 3); x.fillStyle = ORANGE; x.fill();
-    mono(x, 'beat', beatX, -HH / 2 + 44, 26, ORANGE, 'center', true);
+    rrc(x, beatX, 0, 6 + 4 * beatPulse(t), HH - 80, 3); x.fillStyle = PINK; x.fill();
+    mono(x, 'beat', beatX, -HH / 2 + 44, 26, NAVY, 'center', true);
     const ar = clamp((t - bt(75)) / 0.4);
     if (ar > 0) { x.save(); x.strokeStyle = CORAL; x.lineWidth = 4; x.beginPath(); x.moveTo(startX, HH / 2 - 60); x.lineTo(lerp(startX, beatX, ar), HH / 2 - 60); x.stroke(); x.restore(); mono(x, 'file start', startX - 8, HH / 2 - 76, 24, CORAL, 'right', true); mono(x, 'peak', beatX + 14, -HH / 2 + 84, 26, NAVY, 'left', true); }
     x.restore();
@@ -470,7 +482,7 @@ function prompt(x, t, L) {
     const y = (v ? 760 : 330) + i * (v ? 230 : 210), ax = v ? 790 : 960, nx = v ? 330 : 360;
     const aw = pill(x, ax, y, adj, s, { size: 46, fill: W, color: NAVY, padX: 36 });
     const st = clamp((t - t0 - 0.4) / 0.25); if (st > 0) { x.save(); x.strokeStyle = CORAL; x.lineWidth = 7; x.lineCap = 'round'; x.beginPath(); x.moveTo(ax + aw / 2 * s - 18, y); x.lineTo(ax + aw / 2 * s - 18 - (aw * s - 36) * st, y); x.stroke(); x.restore(); }
-    const ns = pop(t, t0 + 0.55, 18, 0.5) * swOut; if (ns > 0.01) { pill(x, nx, y, num, ns, { size: 40, font: FT.monoB, fill: NAVY, color: GOLD, padX: 30 }); x.save(); x.font = FT.en(56); x.fillStyle = ink(t); x.textAlign = 'center'; x.fillText('←', (ax + nx) / 2 + (v ? 40 : 60), y + 20); x.restore(); }
+    const ns = pop(t, t0 + 0.55, 18, 0.5) * swOut; if (ns > 0.01) { pill(x, nx, y, num, ns, { size: 40, font: FT.monoB, fill: NAVY, color: CYAN, padX: 30 }); x.save(); x.font = FT.en(56); x.fillStyle = ink(t); x.textAlign = 'center'; x.fillText('←', (ax + nx) / 2 + (v ? 40 : 60), y + 20); x.restore(); }
   });
   // the banned list
   const BAN = ['קרוספייד', 'כניסה מטושטשת', 'חלקיקים על שחור', 'עצירה ארוכה'];
@@ -486,7 +498,7 @@ function prompt(x, t, L) {
   cap(x, t, bt(100), 'מוחקים את הממוצע, ומה שנשאר הוא הסגנון שלנו.', v ? L.W / 2 : L.right, v ? 1560 : 640, { align: v ? 'center' : 'right', size: v ? 38 : 40, tOut: bt(103.6) });
   // the collapsed banned chips become a question-mark chip (the dictionary asks: what is it called?)
   const qs = coll > 0.9 ? pop(t, bt(103), 18, 0.55) * gone(t, bt(104.2)) : 0;
-  if (qs > 0.01) pill(x, v ? 540 : 640, v ? 1180 : 600, '?', qs, { size: 90, font: FT.he, fill: NAVY, color: GOLD, padX: 50 });
+  if (qs > 0.01) pill(x, v ? 540 : 640, v ? 1180 : 600, '?', qs, { size: 90, font: FT.he, fill: NAVY, color: PINK, padX: 50 });
 }
 
 /* ===================== 06 · words: the interface dictionary (b104–120) ===================== */
@@ -499,7 +511,7 @@ function miniIcon(x, i, cx, cy, s, t) {
   else if (i === 2) { rrc(x, 0, 18 - 30 * u, 92, 30, 15); x.fill(); }
   else if (i === 3) { rrc(x, 0, 0, lerp(46, 96, u), lerp(20, 34, u), 17); x.fill(); }
   else if (i === 4) { rrc(x, 0, 0, lerp(40, 90, u), lerp(40, 30, u), lerp(8, 15, u)); x.fillStyle = firePaint(x, -45, 0, 45, 0); x.fill(); }
-  else if (i === 5) { circle(x, 0, 0, 6 + 26 * u); x.fillStyle = firePaint(x, -30, 0, 30, 0); x.fill(); }
+  else if (i === 5) { circle(x, 0, 0, 6 + 26 * u); x.fillStyle = PINK; x.fill(); }
   else if (i === 6) { hexPath(x, 0, 0, 30, u * 1.2); x.stroke(); hexPath(x, 0, 0, 8 + 16 * u, u * 1.2); x.fill(); }
   else { rrc(x, 0, 0, lerp(30, 80, u), lerp(22, 44, u), 6); x.stroke(); }
   x.restore();
@@ -528,10 +540,10 @@ function words(x, t, L) {
       x.font = FT.textB(32); x.direction = 'rtl'; x.textAlign = 'right'; x.fillStyle = rgba(NAVY, 0.7); x.fillText(he, CW / 2 - 30, 44);
       x.restore();
     }
-    if (toDots > 0) { const d = clamp(toDots); circle(x, lerp(X, L.W / 2, d * 0.2), Y, 8 * d); x.fillStyle = GOLD; x.fill(); }
+    if (toDots > 0) { const d = clamp(toDots); circle(x, lerp(X, L.W / 2, d * 0.2), Y, 8 * d); x.fillStyle = PINK; x.fill(); }
   });
   const us = pop(t, bt(115), 18, 0.55) * gone(t, bt(119.6));
-  if (us > 0.01) pill(x, v ? 540 : L.right - 330, v ? 1640 : L.hy + 330, 'news.yuv.ai/motion/dictionary', us, { font: FT.monoB, size: v ? 30 : 30, fill: NAVY, color: GOLD });
+  if (us > 0.01) pill(x, v ? 540 : L.right - 330, v ? 1640 : L.hy + 330, 'news.yuv.ai/motion/dictionary', us, { font: FT.monoB, size: v ? 30 : 30, fill: NAVY, color: CYAN });
   cap(x, t, bt(108), 'כל רכיב: השם באנגלית, הסבר, ומשפט להעתקה.', v ? L.W / 2 : L.right, v ? 1560 : 560, { align: v ? 'center' : 'right', size: v ? 36 : 38, tOut: bt(111.8), color: sub(t) });
 }
 
@@ -547,11 +559,11 @@ function engines(x, t, L) {
   // CPU (a few big cores) vs GPU (hundreds of tiny ones)
   const dA = io3(inv(bt(125.6), bt(126.4), t));
   const cpuS = pop(t, bt(122.5), 14, 0.6) * (1 - dA), gpuS = pop(t, bt(123), 14, 0.6);
-  const c1 = v ? [540, 760] : [1040, 600], c2 = v ? [540, 1300] : [430, 600];
-  const CW = v ? 900 : 560, CH = v ? 420 : 500;
+  const c1 = v ? [540, 760] : [860, 650], c2 = v ? [540, 1300] : [320, 650];   // 16:9: clear of the headline column (x ≥ 1150), held longer now
+  const CW = v ? 900 : 480, CH = v ? 420 : 460;
   if (cpuS > 0.01) {
     x.save(); x.translate(c1[0], c1[1]); x.scale(cpuS, cpuS); card(x, 0, 0, CW, CH, 40, { fill: NAVY2, depth: 0.6 });
-    for (let i = 0; i < 8; i++) { const col = i % 4, row = Math.floor(i / 4), on = Math.floor(t / (B / 2)) % 8 === i; rrc(x, (col - 1.5) * (v ? 150 : 110), -40 + (row - 0.5) * (v ? 130 : 120), v ? 120 : 90, v ? 100 : 90, 18); x.fillStyle = on ? ORANGE : rgba(W, 0.18); x.fill(); }
+    for (let i = 0; i < 8; i++) { const col = i % 4, row = Math.floor(i / 4), on = Math.floor(t / (B / 2)) % 8 === i; rrc(x, (col - 1.5) * (v ? 150 : 110), -40 + (row - 0.5) * (v ? 130 : 120), v ? 120 : 90, v ? 100 : 90, 18); x.fillStyle = on ? CYAN : rgba(W, 0.18); x.fill(); }
     x.font = FT.he(54); x.direction = 'rtl'; x.textAlign = 'center'; x.fillStyle = W; x.fillText('CPU · כמה שפים', 0, CH / 2 - 44); x.restore();
   }
   // the GPU card grows into the shader canvas
@@ -566,7 +578,7 @@ function engines(x, t, L) {
       const sunY = lerp(0.25, 0.85, clamp((t - bt(126.5)) / 3)), wave = (t - bt(123)) * 9;
       for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
         let col;
-        if (dA < 0.5) { const on = ((i + j + Math.floor(wave)) % 12) === 0; col = on ? ORANGE : rgba(W, 0.16); }
+        if (dA < 0.5) { const on = ((i + j + Math.floor(wave)) % 12) === 0; col = on ? PINK : rgba(W, 0.16); }
         else {   // the shader: colour = f(pixel, t): a sky gradient and a sun that sets
           const u = (i + 0.5) / nx, vv = (j + 0.5) / ny, set = clamp(sunY), d = Math.hypot((u - 0.5) * 1.8, vv - sunY);
           const top = mix('#2C78D2', '#3A2470', set), low = mix('#93CBFF', '#FF8F3A', set);
@@ -583,15 +595,15 @@ function engines(x, t, L) {
     if (ls > 0.01) pill(x, v ? 540 : 640, (v ? 1150 : 600) + (v ? 460 : 380), 'color = f(pixel, t)', ls, { font: FT.monoB, size: 36, fill: W, color: NAVY });
     cap(x, t, bt(127.5), 'שיידר: תוכנית קטנה שרצה על כל פיקסל.', v ? L.W / 2 : L.right, v ? 1730 : 640, { align: v ? 'center' : 'right', size: v ? 36 : 40, tOut: bt(129.6) });
   }
-  cap(x, t, bt(123.5), 'כרטיס מסך: אלפי ליבות קטנות, במקביל.', v ? L.W / 2 : L.right, v ? 1640 : 640, { align: v ? 'center' : 'right', size: v ? 36 : 40, tOut: bt(125.6) });
+  cap(x, t, bt(123.5), 'כרטיס מסך: אלפי ליבות קטנות, במקביל.', v ? L.W / 2 : L.right, v ? 1640 : 580, { align: v ? 'center' : 'right', size: v ? 36 : 40, tOut: bt(125.6) });
   // the four engines
   const ENG = [['HTML / CSS', 'ממשק וטקסט'], ['Canvas 2D', 'תנועה דו-ממדית'], ['WebGL', 'תלת-ממד ושיידרים'], ['WebGPU', 'מאות אלפי חלקיקים']];
   const toP = io3(inv(bt(133), bt(133.8), t));
   ENG.forEach(([en, he], i) => {
     const s = pop(t, bt(130.5) + i * B / 2, 16, 0.56) * (1 - toP); if (s <= 0.01) return;
     const X = v ? 540 : 640, Y = (v ? 760 : 300) + i * (v ? 190 : 150), CW2 = v ? 940 : 900, CH2 = v ? 150 : 120;
-    x.save(); x.translate(X, Y); x.scale(s, s); card(x, 0, 0, CW2, CH2, CH2 / 2, { fill: i === 3 ? firePaint(x, -CW2 / 2, 0, CW2 / 2, 0) : NAVY2, depth: 0.5 });
-    x.font = FT.en(v ? 50 : 46); x.direction = 'ltr'; x.textAlign = 'left'; x.fillStyle = i === 3 ? NAVY : GOLD; x.fillText(en, -CW2 / 2 + 46, 16);
+    x.save(); x.translate(X, Y); x.scale(s, s); card(x, 0, 0, CW2, CH2, CH2 / 2, { fill: i === 3 ? pcPaint(x, -CW2 / 2, 0, CW2 / 2, 0) : NAVY2, depth: 0.5 });
+    x.font = FT.en(v ? 50 : 46); x.direction = 'ltr'; x.textAlign = 'left'; x.fillStyle = i === 3 ? NAVY : CYAN; x.fillText(en, -CW2 / 2 + 46, 16);
     x.font = FT.textB(v ? 40 : 38); x.direction = 'rtl'; x.textAlign = 'right'; x.fillStyle = i === 3 ? NAVY : W; x.fillText(he, CW2 / 2 - 46, 14);
     x.restore();
   });
@@ -608,11 +620,11 @@ function engines(x, t, L) {
       const gi = clamp(g * 1.3 - r3 * 0.3);
       let X = cx + lerp(ax, bx, gi) * born, Y = cy + lerp(ay, by, gi) * born;
       if (toLine > 0) { const lx = cx - Rr * 1.4 + r1 * Rr * 2.8; X = lerp(X, lx, clamp(toLine * 1.4 - r3 * 0.4)); Y = lerp(Y, cy, clamp(toLine * 1.4 - r3 * 0.4)); }
-      x.fillStyle = r3 > 0.5 ? (r1 > 0.5 ? GOLD : ORANGE) : (r2 > 0.5 ? '#93CBFF' : W);
+      x.fillStyle = r3 > 0.66 ? PINK : r3 > 0.33 ? CYAN : (r2 > 0.55 ? GOLD : W);
       x.fillRect(X - 1.6, Y - 1.6, 3.2, 3.2);
     }
     const ls = pop(t, bt(134), 18, 0.55) * gone(t, bt(135.6));
-    if (ls > 0.01) { pill(x, cx, cy + Rr + (v ? 110 : 50), 'חלקיקים על WebGPU', ls, { size: 34, fill: NAVY2, color: W }); pill(x, cx, cy - Rr - (v ? 90 : 40), '200,000', ls, { font: FT.monoB, size: 34, fill: GOLD, color: NAVY }); }
+    if (ls > 0.01) { pill(x, cx, cy + Rr + (v ? 110 : 50), 'חלקיקים על WebGPU', ls, { size: 34, fill: NAVY2, color: W }); pill(x, cx, cy - Rr - (v ? 90 : 40), '200,000', ls, { font: FT.monoB, size: 34, fill: CYAN, color: NAVY }); }
   }
 }
 
@@ -644,7 +656,7 @@ function realWorld(x, t, L) {
     const [, , P, seg, tot] = routeAt(0, MW, MH);
     const part = (a, b) => { x.beginPath(); let d = 0, st = false; for (let i = 0; i < seg.length; i++) { const e = d + seg[i]; if (e >= a * tot && d <= b * tot) { const u0 = clamp((a * tot - d) / seg[i]), u1 = clamp((b * tot - d) / seg[i]); const p0 = [lerp(P[i][0], P[i + 1][0], u0), lerp(P[i][1], P[i + 1][1], u0)], p1 = [lerp(P[i][0], P[i + 1][0], u1), lerp(P[i][1], P[i + 1][1], u1)]; if (!st) { x.moveTo(...p0); st = true; } x.lineTo(...p1); } d = e; } };
     x.lineJoin = 'round'; x.strokeStyle = NAVY; x.lineWidth = 8; x.setLineDash([2, 16]); part(ride, drawn); x.stroke(); x.setLineDash([]);
-    if (ride > 0) { x.strokeStyle = firePaint(x, 0, 0, MW, MH); x.lineWidth = 11; part(0, ride); x.stroke(); }
+    if (ride > 0) { x.strokeStyle = PINK; x.lineWidth = 11; part(0, ride); x.stroke(); }
     const [cxr, cyr] = routeAt(ride, MW, MH);
     const pinPop = pop(t, bt(137), 16, 0.5);
     const pinHead = (X, Y, col, s) => { x.save(); x.translate(X, Y); x.scale(s, s); x.fillStyle = col; x.beginPath(); x.moveTo(0, 0); x.bezierCurveTo(-6, -14, -20, -22, -20, -40); x.arc(0, -40, 20, Math.PI, 0); x.bezierCurveTo(20, -22, 6, -14, 0, 0); x.fill(); circle(x, 0, -40, 8); x.fillStyle = W; x.fill(); x.restore(); };
@@ -654,7 +666,7 @@ function realWorld(x, t, L) {
     if (t > bt(139) && t < bt(142.8)) { x.save(); x.translate(cxr, cyr); rrc(x, 0, 0, 40, 30, 15); x.fillStyle = NAVY; x.fill(); x.restore(); }
     x.restore();
     const eta = Math.max(0, Math.ceil(12 * (1 - ride)));
-    if (t > bt(139)) pill(x, mx, my - MH / 2 + 60, ride >= 1 ? 'הגיע ✓' : `עוד ${eta} דק׳`, pop(t, bt(139), 16, 0.55), { size: 36, fill: ride >= 1 ? ORANGE : NAVY, color: ride >= 1 ? NAVY : W });
+    if (t > bt(139)) pill(x, mx, my - MH / 2 + 60, ride >= 1 ? 'הגיע ✓' : `עוד ${eta} דק׳`, pop(t, bt(139), 16, 0.55), { size: 36, fill: ride >= 1 ? PINK : NAVY, color: ride >= 1 ? NAVY : W });
     x.restore();
   }
   // the destination becomes the fire disc that carries the breakdown
@@ -703,7 +715,7 @@ function builder(x, t, L) {
   PRE.forEach((p, i) => {
     const s = pop(t, bt(152.6) + i * 0.12, 18, 0.55); const on = t > bt(153.5) && i === 0;
     x.save(); x.font = FT.textB(30); const w = x.measureText(p).width + 50; x.restore();
-    pill(x, px - w / 2, fy, p, s, { size: 30, fill: on ? ORANGE : CLOUD, color: NAVY, padX: 25, shadow: false });
+    pill(x, px - w / 2, fy, p, s, { size: 30, fill: on ? PINK : CLOUD, color: NAVY, padX: 25, shadow: false });
     px -= w + 14;
   });
   const ELS = ['ניאון', 'ממשק', 'מונים', 'טלפון', 'מעברים'];
@@ -723,7 +735,7 @@ function builder(x, t, L) {
     const x0 = gx1 - gw * acc / tot, w = gw * b / tot * out3(s);
     rr(x, x0 - w, y - 24, w - 6, 48, 14); x.fillStyle = i === 3 ? firePaint(x, x0 - w, 0, x0, 0) : rgba(NAVY, 0.85); x.fill();
     mono(x, n, x0 - 14, y + 9, 24, i === 3 ? NAVY : W, 'right', true);
-    if (i === 3 && t > bt(159.5)) { const ds = pop(t, bt(159.5), 18, 0.5); pill(x, x0 - w / 2, y - 52, 'DROP', ds, { font: FT.monoB, size: 20, fill: NAVY, color: GOLD, padX: 12, shadow: false }); }
+    if (i === 3 && t > bt(159.5)) { const ds = pop(t, bt(159.5), 18, 0.5); pill(x, x0 - w / 2, y - 52, 'DROP', ds, { font: FT.monoB, size: 20, fill: NAVY, color: CYAN, padX: 12, shadow: false }); }
   });
   // output: the prompt pours in, line by line
   const ox = v ? cx - CW / 2 + 50 : cx - CW / 2 + 50, oy = v ? cy + 40 : cy - CH / 2 + 130, OW = v ? CW - 100 : CW / 2 - 60, OH = v ? 560 : CH - 180;
@@ -733,21 +745,21 @@ function builder(x, t, L) {
     const tag = /^<\/?[a-z]+>$/.test(ln);
     x.save(); x.font = FT.mono(v ? 25 : 24); x.direction = /[֐-׿]/.test(ln) ? 'rtl' : 'ltr';
     if (x.direction === 'rtl') { x.direction = 'ltr'; }
-    x.textAlign = 'left'; x.fillStyle = tag ? GOLD : '#E7ECFA'; x.fillText(ln.slice(0, n), ox + 30, oy + 52 + i * (v ? 44 : 50)); x.restore();
+    x.textAlign = 'left'; x.fillStyle = tag ? CYAN : '#E7ECFA'; x.fillText(ln.slice(0, n), ox + 30, oy + 52 + i * (v ? 44 : 50)); x.restore();
   });
   // copy link → toast
   const bxl = ox + OW - 170, byl = oy + OH + (v ? 70 : 0) - (v ? 0 : 0);
   if (!v) { /* button sits under the scenes */ }
   const btnX = v ? cx : fx - 170, btnY = v ? oy + OH + 68 : gy + 5 * 66 + 60;
   pill(x, btnX, btnY, 'העתק קישור', pop(t, bt(158), 18, 0.55), { size: 32, fill: NAVY, color: W, padX: 30 });
-  if (t > bt(162.6) && t < bt(164.6)) { const a = io3(inv(bt(162.6), bt(163.8), t)); cursor(x, lerp(btnX - 300, btnX + 10, a), lerp(btnY + 260, btnY + 12, a), (v ? 1.3 : 1.1) * press(t, bt(164) - 0.1, bt(164) + 0.05, 0.85), NAVY, W); clickRing(x, btnX + 10, btnY + 12, t, bt(164), ORANGE, 80); }
+  if (t > bt(162.6) && t < bt(164.6)) { const a = io3(inv(bt(162.6), bt(163.8), t)); cursor(x, lerp(btnX - 300, btnX + 10, a), lerp(btnY + 260, btnY + 12, a), (v ? 1.3 : 1.1) * press(t, bt(164) - 0.1, bt(164) + 0.05, 0.85), NAVY, W); clickRing(x, btnX + 10, btnY + 12, t, bt(164), PINK, 80); }
   const ts = pop(t, bt(164.2), 18, 0.5) * gone(t, bt(166.4));
-  if (ts > 0.01) pill(x, btnX, btnY - (v ? 100 : 96), 'הועתק ✓', ts, { size: 34, fill: ORANGE, color: NAVY });
+  if (ts > 0.01) pill(x, btnX, btnY - (v ? 100 : 96), 'הועתק ✓', ts, { size: 34, fill: PINK, color: NAVY });
   // stats
   pill(x, v ? cx : ox + OW / 2, v ? oy - 50 : oy + OH + 60, '32 ביטים · 16 שניות · 960 פריימים', pop(t, bt(163), 18, 0.55), { size: 34, fill: CLOUD, color: NAVY, shadow: false });
   x.restore();
   // the window ends as a file: film.html
-  if (shrink > 0.85) pill(x, cx, cy, 'film.html', pop(t, bt(167.4), 18, 0.55) * gone(t, bt(168.4)), { font: FT.monoB, size: 44, fill: NAVY, color: GOLD });
+  if (shrink > 0.85) pill(x, cx, cy, 'film.html', pop(t, bt(167.4), 18, 0.55) * gone(t, bt(168.4)), { font: FT.monoB, size: 44, fill: NAVY, color: CYAN });
 }
 
 /* ===================== 10 · render (b168–192) ===================== */
@@ -770,17 +782,17 @@ function renderCh(x, t, L) {
     const s = pop(t, bt(170) + i * B, 16, 0.55) * (1 - comp); if (s <= 0.01) return;
     const [X, Y] = pos(i), NW = v ? 420 : 250, NH = v ? 250 : 230;
     x.save(); x.translate(X, Y); x.scale(s, s); card(x, 0, 0, NW, NH, 36, { fill: i === 3 ? firePaint(x, -NW / 2, 0, NW / 2, 0) : NAVY2, depth: 0.6 });
-    x.font = FT.en(v ? 50 : 40); x.direction = 'ltr'; x.textAlign = 'center'; x.fillStyle = i === 3 ? NAVY : GOLD; x.fillText(en, 0, -10);
+    x.font = FT.en(v ? 50 : 40); x.direction = 'ltr'; x.textAlign = 'center'; x.fillStyle = i === 3 ? NAVY : CYAN; x.fillText(en, 0, -10);
     x.font = (i === 0 || i === 3 ? FT.monoB : FT.textB)(v ? 32 : 28); x.direction = /[֐-׿]/.test(he) ? 'rtl' : 'ltr'; x.fillStyle = i === 3 ? NAVY : W; x.fillText(he, 0, 48);
     x.restore();
-    if (i > 0) { const [X0, Y0] = pos(i - 1), c = clamp((t - bt(170) - i * B + 0.2) / 0.3) * (1 - comp); if (c > 0) { x.save(); x.strokeStyle = GOLD; x.lineWidth = 6; x.setLineDash([3, 14]); x.lineCap = 'round'; x.beginPath(); x.moveTo(X0, Y0); x.lineTo(lerp(X0, X, c), lerp(Y0, Y, c)); x.stroke(); x.restore(); } }
+    if (i > 0) { const [X0, Y0] = pos(i - 1), c = clamp((t - bt(170) - i * B + 0.2) / 0.3) * (1 - comp); if (c > 0) { x.save(); x.strokeStyle = CYAN; x.lineWidth = 6; x.setLineDash([3, 14]); x.lineCap = 'round'; x.beginPath(); x.moveTo(X0, Y0); x.lineTo(lerp(X0, X, c), lerp(Y0, Y, c)); x.stroke(); x.restore(); } }
   });
   if (t > bt(173) && comp < 1) {
     const seg = ((t - bt(173)) * 1.6) % 3, i = Math.floor(seg), u = io3(seg - i), [X0, Y0] = pos(i), [X1, Y1] = pos(i + 1);
     rrc(x, lerp(X0, X1, u), lerp(Y0, Y1, u), 46 * (1 - comp), 32 * (1 - comp), 6); x.fillStyle = W; x.fill();
   }
   const fc = pop(t, bt(172), 18, 0.55) * (1 - comp);
-  if (fc > 0.01) pill(x, v ? 540 : 640, v ? 1420 : 820, `frame ${String(Math.floor(t * 60)).padStart(4, '0')} / ${String(NB * 30).padStart(4, '0')}`, fc, { font: FT.monoB, size: 36, fill: NAVY2, color: GOLD });
+  if (fc > 0.01) pill(x, v ? 540 : 640, v ? 1420 : 820, `frame ${String(Math.floor(t * 60)).padStart(4, '0')} / ${String(NB * 30).padStart(4, '0')}`, fc, { font: FT.monoB, size: 36, fill: NAVY2, color: CYAN });
   // motion blur: one sample per frame (it jumps) vs six samples blended (it flows)
   const mb = pop(t, bt(176.5), 14, 0.62) * gone(t, bt(183.8), 0.3);
   if (mb > 0.01) {
@@ -791,7 +803,7 @@ function renderCh(x, t, L) {
       const ph = ((t * 0.9) % 1), xp = u => -CW / 2 + 90 + (CW - 180) * io3(Math.abs(Math.sin(u * Math.PI)));
       if (row === 0) { const q = Math.floor(ph * 12) / 12; circle(x, xp(q), -10, 40); x.fillStyle = W; x.fill(); }
       else { for (let s = 0; s < 6; s++) { circle(x, xp(ph - (s / 6) * 0.06), -10, 40); x.fillStyle = rgba('#FFFFFF', 0.28); x.fill(); } circle(x, xp(ph), -10, 40); x.fillStyle = rgba('#FFFFFF', 0.4); x.fill(); }
-      x.font = FT.textB(v ? 36 : 34); x.direction = 'rtl'; x.textAlign = 'right'; x.fillStyle = row ? GOLD : CORAL;
+      x.font = FT.textB(v ? 36 : 34); x.direction = 'rtl'; x.textAlign = 'right'; x.fillStyle = row ? CYAN : CORAL;
       x.fillText(row ? '6 צילומים בכל פריים: זורם ✓' : 'צילום אחד בכל פריים: קופץ ✕', CW / 2 - 40, CH / 2 - 30);
       x.restore();
     });
@@ -803,10 +815,10 @@ function renderCh(x, t, L) {
     x.save(); x.translate(cx, cy); x.scale(au, au); card(x, 0, 0, CW, CH, 40, { fill: toMp4 > 0.5 ? firePaint(x, -CW / 2, 0, CW / 2, 0) : NAVY2, depth: 0.6 });
     if (toMp4 < 0.6) {
       const k = 1 - toMp4 / 0.6;
-      x.save(); x.beginPath(); for (let i = 0; i <= 220; i++) { const X = -CW / 2 + 50 + (CW - 100) * i / 220, a = (40 + 70 * Math.abs(Math.sin(i * 0.31) * Math.sin(i * 0.07 + t))) * k; x.moveTo(X, -a); x.lineTo(X, a); } x.lineWidth = 3; x.strokeStyle = '#93CBFF'; x.stroke(); x.restore();
-      for (let b = 0; b < 8; b++) { const X = -CW / 2 + 50 + (CW - 100) * b / 8, pl = Math.exp(-(((t - bt(b % 8)) % (4 * B) + 4 * B) % (4 * B)) * 2); rrc(x, X, 0, 5, (CH - 140) * k, 2.5); x.fillStyle = rgba(ORANGE, 0.85); x.fill(); }
+      x.save(); x.beginPath(); for (let i = 0; i <= 220; i++) { const X = -CW / 2 + 50 + (CW - 100) * i / 220, a = (40 + 70 * Math.abs(Math.sin(i * 0.31) * Math.sin(i * 0.07 + t))) * k; x.moveTo(X, -a); x.lineTo(X, a); } x.lineWidth = 3; x.strokeStyle = CYAN; x.stroke(); x.restore();
+      for (let b = 0; b < 8; b++) { const X = -CW / 2 + 50 + (CW - 100) * b / 8, pl = Math.exp(-(((t - bt(b % 8)) % (4 * B) + 4 * B) % (4 * B)) * 2); rrc(x, X, 0, 5, (CH - 140) * k, 2.5); x.fillStyle = rgba(PINK, 0.9); x.fill(); }
       pill(x, -CW / 2 + 170, -CH / 2 + 50, '−14 LUFS', pop(t, bt(185.5), 18, 0.55) * k, { font: FT.monoB, size: 28, fill: W, color: NAVY, shadow: false });
-      pill(x, CW / 2 - 190, -CH / 2 + 50, 'SFX על הביט', pop(t, bt(186), 18, 0.55) * k, { size: 32, fill: GOLD, color: NAVY, shadow: false });
+      pill(x, CW / 2 - 190, -CH / 2 + 50, 'SFX על הביט', pop(t, bt(186), 18, 0.55) * k, { size: 32, fill: PINK, color: NAVY, shadow: false });
     } else {
       // the MP4 tile with a play button, clicked on beat 191
       const pr = press(t, bt(191) - 0.1, bt(191) + 0.05, 0.9);
@@ -814,7 +826,7 @@ function renderCh(x, t, L) {
       mono(x, 'film.mp4', 0, CH / 2 - 26, 26, NAVY, 'center', true);
     }
     x.restore();
-    if (t > bt(189.6) && t < bt(191.4)) { const a = io3(inv(bt(189.6), bt(190.8), t)); cursor(x, lerp(cx + 300, cx + 8, a), lerp(cy + 300, cy + 10, a), (v ? 1.3 : 1.1) * press(t, bt(191) - 0.1, bt(191) + 0.05, 0.85), NAVY, W); clickRing(x, cx + 8, cy + 10, t, bt(191), GOLD, 90); }
+    if (t > bt(189.6) && t < bt(191.4)) { const a = io3(inv(bt(189.6), bt(190.8), t)); cursor(x, lerp(cx + 300, cx + 8, a), lerp(cy + 300, cy + 10, a), (v ? 1.3 : 1.1) * press(t, bt(191) - 0.1, bt(191) + 0.05, 0.85), NAVY, W); clickRing(x, cx + 8, cy + 10, t, bt(191), PINK, 90); }
   }
   // the play button floods the frame with fire into the finale
   const fl = out3(inv(bt(192), bt(192) + 0.36, t));
@@ -826,35 +838,40 @@ function finale(x, t, L) {
   if (t < bt(192.3)) return;
   const v = isV(L), cx = L.W / 2;
   const size = v ? 170 : 190, y1 = v ? 820 : 450;
-  slamWords(x, t, ['אתם', 'כותבים'], cx, y1, size, FT.he, NAVY, [bt(192.5), bt(193)], bt(197.6), {});
+  slamWords(x, t, ['אנחנו', 'כותבים'], cx, y1, size, FT.he, NAVY, [bt(192.5), bt(193)], bt(197.6), {});
   slamWords(x, t, ['את', 'הבימוי.'], cx, y1 + size, size, FT.he, NAVY, [bt(193.5), bt(194)], bt(197.6), { marker: { i: 1, paint: NAVY }, colors: [NAVY, W] });
   slamWords(x, t, ['Claude', 'כותב'], cx, y1 + size * 2.15, size * 0.62, FT.he, NAVY, [bt(195), bt(195.5)], bt(197.6), {});
   slamWords(x, t, ['את', 'הקוד.'], cx, y1 + size * 2.8, size * 0.62, FT.he, NAVY, [bt(196), bt(196.5)], bt(197.6), {});
   if (t < bt(198)) return;
-  // end card on the day sky
+  // end card on navy (Phoenix Night): the phoenix, YUV.AI in pink, LET'S FLY HIGH in cyan, exactly like the logo
   const ly = v ? 640 : 330, ls = v ? 300 : 250;
   const s = clamp(spring(t - bt(198.4), 12, 0.6), 0, 1.1);
   if (LOGO && s > 0.01) {
     neonFast(x, cx, ly, ls * 1.25 * s, ls * 1.25 * s, ls * 0.625 * s, t * 1.2, { power: 0.9 + 0.3 * beatPulse(t) });
-    circle(x, cx, ly, ls * 0.62 * s); x.fillStyle = W; x.fill();
+    circle(x, cx, ly, ls * 0.62 * s); x.fillStyle = NAVY2; x.fill();
     x.drawImage(LOGO, cx - ls * 0.5 * s, ly - ls * 0.5 * s, ls * s, ls * s);
   }
   const wy = ly + ls * 0.62 + (v ? 150 : 130);
-  slamWords(x, t, ['YUV.AI'], cx, wy, v ? 150 : 130, FT.en, NAVY, [bt(199)], null, { ltr: true });
+  slamWords(x, t, ['YUV.AI'], cx, wy, v ? 150 : 130, FT.en, PINK, [bt(199)], null, { ltr: true });
   const tg = pop(t, bt(199.5), 18, 0.55);
-  if (tg > 0.01) { x.save(); x.font = FT.en(v ? 40 : 36); x.letterSpacing = '8px'; x.textAlign = 'center'; x.direction = 'ltr'; x.fillStyle = NAVY; x.translate(cx, wy + (v ? 70 : 64)); x.scale(tg, tg); x.fillText("LET'S FLY HIGH", 0, 0); x.restore(); }
-  pill(x, cx, wy + (v ? 190 : 160), 'news.yuv.ai/motion', pop(t, bt(200.5), 18, 0.55), { font: FT.monoB, size: v ? 40 : 36, fill: NAVY, color: GOLD });
+  if (tg > 0.01) { x.save(); x.font = FT.en(v ? 40 : 36); x.letterSpacing = '8px'; x.textAlign = 'center'; x.direction = 'ltr'; x.fillStyle = CYAN; x.translate(cx, wy + (v ? 70 : 64)); x.scale(tg, tg); x.fillText("LET'S FLY HIGH", 0, 0); x.restore(); }
+  pill(x, cx, wy + (v ? 190 : 160), 'news.yuv.ai/motion', pop(t, bt(200.5), 18, 0.55), { font: FT.monoB, size: v ? 40 : 36, fill: NAVY2, color: CYAN, stroke: rgba(CYAN, 0.55) });
   cap(x, t, bt(201.5), 'השיטה · קטלוג של 24 אלמנטים · מילון · בונה פרומפטים', cx, wy + (v ? 300 : 250), { align: 'center', size: v ? 36 : 36 });
-  cap(x, t, bt(202.5), 'יובל אבידני · 100% קוד', cx, wy + (v ? 370 : 310), { align: 'center', size: v ? 34 : 32, color: rgba(NAVY, 0.75) });
-  if (t > bt(202.5)) mono(x, 'Music: "From Here" by Tanner Helland · CC BY 4.0', cx, L.H - (v ? 120 : 84), v ? 22 : 20, rgba(NAVY, 0.6), 'center');
+  cap(x, t, bt(202.5), 'יובל אבידני · 100% קוד', cx, wy + (v ? 370 : 310), { align: 'center', size: v ? 34 : 32, color: rgba(W, 0.72) });
+  if (t > bt(202.5)) mono(x, 'Music: "From Here" by Tanner Helland · CC BY 4.0', cx, L.H - (v ? 120 : 84), v ? 22 : 20, rgba(W, 0.55), 'center');
 }
 
 /* ===================== chrome: HUD (a film about code shows its own clock) + watermark ===================== */
 function hud(x, t, L) {
   if (t < bt(10)) return;
-  x.save(); x.font = FT.mono(L.name === 'h' ? 24 : 26); x.direction = 'ltr'; x.textAlign = 'left'; x.fillStyle = rgba(ink(t) === W ? '#FFFFFF' : NAVY, 0.62);
-  x.fillText(`seek(${t.toFixed(3)})  ·  beat ${Math.min(NB, Math.floor(t / B))}/${NB}`, L.name === 'h' ? 40 : 44, L.hudY);
-  x.textAlign = 'right'; x.font = FT.en(L.name === 'h' ? 24 : 26); x.letterSpacing = '3px'; x.fillText("LET'S FLY HIGH · YUV.AI", L.W - (L.name === 'h' ? 40 : 44), L.hudY);
+  const night = ink(t) === W, h = L.name === 'h', pad = h ? 40 : 44;
+  x.save(); x.font = FT.mono(h ? 24 : 26); x.direction = 'ltr'; x.textAlign = 'left'; x.fillStyle = night ? rgba(CYAN, 0.8) : rgba(NAVY, 0.62);
+  x.fillText(`seek(${t.toFixed(3)})  ·  beat ${Math.min(NB, Math.floor(t / B))}/${NB}`, pad, L.hudY);
+  // the watermark: on navy it wears the logo's own colours (LET'S FLY HIGH cyan, YUV.AI pink); on light pages navy, for contrast
+  x.textAlign = 'right'; x.font = FT.en(h ? 24 : 26); x.letterSpacing = '3px';
+  const yuv = 'YUV.AI', fly = "LET'S FLY HIGH · ", wy = x.measureText(yuv).width;
+  x.fillStyle = night ? PINK : rgba(NAVY, 0.62); x.fillText(yuv, L.W - pad, L.hudY);
+  x.fillStyle = night ? rgba(CYAN, 0.9) : rgba(NAVY, 0.62); x.fillText(fly, L.W - pad - wy, L.hudY);
   x.restore();
 }
 
@@ -865,4 +882,4 @@ function draw(x, t, L) {
   hud(x, t, L);
 }
 
-mountFilm({ layouts: LAYOUTS, draw, dur: DUR, clk, init: async () => { [LOGO, PHOTO] = await Promise.all([loadImg(LOGO_URL), loadImg(PHOTO_URL)]); } });
+mountFilm({ layouts: LAYOUTS, draw, dur: DUR, clk: { ...clk, bt }, init: async () => { [LOGO, PHOTO] = await Promise.all([loadImg(LOGO_URL), loadImg(PHOTO_URL)]); } });
