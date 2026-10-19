@@ -12,7 +12,8 @@
    09 builder: presets → scenes → prompt → copy link
    10 render: film.html → Playwright → ffmpeg → MP4, motion blur from subframes, sound on the beat
    end: "we write the direction, Claude writes the code" · logo on navy in the wordmark colours
-   colours: Phoenix Day pages + the wordmark pair (pink = action, cyan = code/system), fire for the phoenix punches
+   colours: Phoenix Day pages; gold = the key word (marker on light, text on navy), pink = action, cyan = code/system,
+   fire only for the punches (hook flood, finale page, MP4 tile, the check disc)
    208 choreographed beats + 76 narration-hold beats = 284 beats, 142 s @ 120 BPM ("From Here" by Tanner Helland, CC BY 4.0).
    Narration: Omer (ElevenLabs eleven_v4), 28 lines. Everything is drawn in code.
    ===================================================================== */
@@ -75,7 +76,8 @@ function head(x, t, L, line, words, t0, tOut, opt = {}) {
   if (cx == null) o.right = L.right;
   slamWords(x, t, words, cx ?? 0, y, size, FT.he, opt.color || ink(t), times, tOut, o);
 }
-const markP = x => gradPaint(x, 0, 0, 1920, 0, FIRE);
+// the key-word marker is the phoenix gold, flat: lighter than pink, so the two never fight; navy on gold reads ~11:1
+const markP = x => GOLD;
 // a small kicker: Anton on a pink pill (the wordmark colour), pops on a spring
 function kick(x, t, L, t0, text, tOut) {
   const s = clamp(spring(t - t0, 18, 0.55), 0, 1.1) * (tOut == null ? 1 : 1 - in3(inv(tOut, tOut + 0.2, t))); if (s <= 0.01) return;
@@ -685,7 +687,7 @@ function realWorld(x, t, L) {
   });
   // breakdown (quiet): slow rise, one thing per beat
   riseWords(x, t, ['ועכשיו:'], v ? 540 : 960, v ? 650 : 330, v ? 150 : 150, FT.he, NAVY, [bt(145.5)], bt(151.6), {});
-  riseWords(x, t, ['בונים', 'לבד.'], v ? 540 : 960, v ? 1460 : 900, v ? 150 : 150, FT.he, NAVY, [bt(147), bt(147.5)], bt(151.6), { marker: { i: 0, t: bt(148), color: gradPaint(x, 0, 0, 1920, 0, FIRE) } });
+  riseWords(x, t, ['בונים', 'לבד.'], v ? 540 : 960, v ? 1460 : 900, v ? 150 : 150, FT.he, NAVY, [bt(147), bt(147.5)], bt(151.6), { marker: { i: 0, t: bt(148), color: GOLD } });
   ['השקה', 'אוכל', 'מוצר', 'נתונים'].forEach((c, i) => {
     const s = pop(t, bt(148) + i * B, 14, 0.7) * gone(t, bt(151.8)); if (s <= 0.01) return;
     const a = -Math.PI / 2 + (i - 1.5) * 0.75 + Math.PI, R = v ? 260 : 250;
