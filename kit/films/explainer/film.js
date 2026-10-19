@@ -29,7 +29,7 @@ const clk = clock(BPM), { B } = clk;
 /* narration holds: [original beat, beats inserted, music bar]. Every event at or after an insertion point moves later by that
    many beats, so the scene holds (ambient motion keeps running on the real clock) while the voice finishes. Whole bars only.
    Computed by plan_holds.py from the measured narration and written here. */
-const HOLDS = [];
+const HOLDS = [[23.3, 4, 23], [26, 4, 26], [28.5, 4, 28], [30.8, 4, 31], [51.5, 8, 52], [65.9, 4, 66], [77, 4, 77], [95.2, 4, 95], [125, 8, 125], [134.5, 4, 134], [143.6, 4, 144], [161.5, 4, 162], [175, 4, 175], [183, 4, 183], [204, 4, 204]];
 const bt = k => (k + HOLDS.reduce((a, [p, n]) => a + (k >= p ? n : 0), 0)) * B;
 const NB = 208 + HOLDS.reduce((a, h) => a + h[1], 0), DUR = bt(208);
 const NAVY = BRAND.navy, NAVY2 = BRAND.navy2, W = '#FFFFFF', FIRE = BRAND.fire, DENIM = BRAND.denim, CLOUD = BRAND.cloud, ORANGE = BRAND.orange, GOLD = BRAND.gold, CORAL = BRAND.coral;
@@ -194,7 +194,7 @@ const CHUNKS = (CAP.chunks || []).map(c => ({ ...c, end: c.end }));
 function captions(x, t, L) {
   let c = null; for (const ch of CHUNKS) { if (t >= ch.t0 - 0.02 && t < ch.end) { c = ch; break; } }
   if (!c) return;
-  const v = isV(L), size = v ? 68 : 58, y = v ? 1748 : 1004;
+  const v = isV(L), size = v ? 68 : 58, y = v ? 1795 : 1016;
   x.save(); x.font = FT.textB(size); x.direction = 'rtl'; x.textAlign = 'left'; x.lineJoin = 'round';
   const ws = c.words.map(o => x.measureText(o.w).width), gap = size * 0.3, total = ws.reduce((a, b) => a + b, 0) + gap * (ws.length - 1);
   let pos = L.W / 2 + total / 2;
@@ -734,7 +734,7 @@ const PROMPT_LINES = ['<inputs>', 'Ask me for: a song around 120 BPM…', '</inp
 function builder(x, t, L) {
   if (!win(t, 151.6, 168.6)) return;
   const v = isV(L);
-  const cx = L.W / 2, cy = v ? 1010 : 560, CW = v ? 1000 : 1720, CH = v ? 1500 : 860;
+  const cx = L.W / 2, cy = v ? 1010 : 560, CW = v ? 1000 : 1720, CH = v ? 1440 : 820;   // clear of the captions
   const open = clamp(spring(t - bt(152), 11, 0.7), 0, 1.04), shrink = io3(inv(bt(166.6), bt(167.6), t));
   if (open <= 0.01) return;
   const k = open * (1 - shrink * 0.92);
