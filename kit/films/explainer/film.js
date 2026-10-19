@@ -14,7 +14,7 @@
    end: "we write the direction, Claude writes the code" · logo on navy in the wordmark colours
    colours: Phoenix Day pages; gold = the key word (marker on light, text on navy), pink = action, cyan = code/system,
    fire only for the punches (hook flood, finale page, MP4 tile, the check disc)
-   208 choreographed beats + 76 narration-hold beats = 284 beats, 142 s @ 120 BPM ("From Here" by Tanner Helland, CC BY 4.0).
+   v3 (Gen Z edit): 208 choreographed beats + narration holds on a 150 BPM clock; music composed for this cut with ElevenLabs Music.
    Narration: Omer (ElevenLabs eleven_v4), 28 lines. Everything is drawn in code.
    ===================================================================== */
 import { clamp, lerp, inv, out3, in3, io3, logLerp, spring, sk, clock, rgba, mix, BRAND, FT, rr, rrc, circle, coverR, riseWords, gradPaint, makeSpreads, mountFilm, rnd } from '../../src/core.js';
@@ -894,7 +894,6 @@ function finale(x, t, L) {
   pill(x, cx, wy + (v ? 190 : 160), 'news.yuv.ai/motion', pop(t, bt(200.5), 18, 0.55), { font: FT.monoB, size: v ? 40 : 36, fill: NAVY2, color: CYAN, stroke: rgba(CYAN, 0.55) });
   cap(x, t, bt(201.5), 'השיטה · קטלוג של 24 אלמנטים · מילון · בונה פרומפטים', cx, wy + (v ? 300 : 250), { align: 'center', size: v ? 36 : 36 });
   cap(x, t, bt(202.5), 'יובל אבידני · 100% קוד', cx, wy + (v ? 370 : 310), { align: 'center', size: v ? 34 : 32, color: rgba(W, 0.72) });
-  if (t > bt(202.5)) mono(x, 'Music: "From Here" by Tanner Helland · CC BY 4.0', cx, L.H - (v ? 120 : 84), v ? 22 : 20, rgba(W, 0.55), 'center');
 }
 
 /* ===================== chrome: HUD (a film about code shows its own clock) + watermark ===================== */
