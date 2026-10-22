@@ -19,10 +19,11 @@ import argparse, re, shutil, sys, pathlib
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 PAGES = 'https://hoodini.github.io/motion-in-code'
-KINDS = ('index', 'catalog', 'dictionary')
+KINDS = ('index', 'catalog', 'dictionary', 'films')
+HAS_EN = ('index', 'catalog', 'dictionary')   # films (the gallery) is Hebrew-only for now: no English page, no hreflang to one
 HOST = {'he': 'https://news.yuv.ai', 'en': 'https://yuv.ai'}
-URL = {(lang, kind): HOST[lang] + '/motion' + ('' if kind == 'index' else '/' + kind) for lang in HOST for kind in KINDS}
-SRC = {(lang, kind): kind + ('' if lang == 'he' else '.en') + '.html' for lang in HOST for kind in KINDS}
+URL = {(lang, kind): HOST[lang] + '/motion' + ('' if kind == 'index' else '/' + kind) for lang in HOST for kind in KINDS if lang == 'he' or kind in HAS_EN}
+SRC = {(lang, kind): kind + ('' if lang == 'he' else '.en') + '.html' for (lang, kind) in URL}
 GA_YUV = 'G-PB2NQPQ242'          # yuv.ai's GA4 property (components/google-analytics.tsx in yuv-ai-portfolio)
 HEAD_RE = re.compile(r'\n?<!-- motion:head -->.*?<!-- /motion:head -->', re.S)
 
@@ -30,12 +31,13 @@ HEAD_RE = re.compile(r'\n?<!-- motion:head -->.*?<!-- /motion:head -->', re.S)
 def head_block(lang, kind, mode):
     other = 'en' if lang == 'he' else 'he'
     me = URL[(lang, kind)]
-    lines = [
-        '<!-- motion:head -->',
-        f'<link rel="canonical" href="{me}">',
+    lines = ['<!-- motion:head -->', f'<link rel="canonical" href="{me}">']
+    if kind in HAS_EN:
+        lines += [
         f'<link rel="alternate" hreflang="he" href="{URL[("he", kind)]}">',
         f'<link rel="alternate" hreflang="en" href="{URL[("en", kind)]}">',
-        f'<link rel="alternate" hreflang="x-default" href="{URL[("en", kind)]}">',
+        f'<link rel="alternate" hreflang="x-default" href="{URL[("en", kind)]}">']
+    lines += [
         f'<meta property="og:url" content="{me}">',
         f'<meta property="og:type" content="article"><meta property="og:site_name" content="YUV.AI">',
         f'<meta property="og:locale" content="{"he_IL" if lang == "he" else "en_US"}"><meta property="og:locale:alternate" content="{"en_US" if lang == "he" else "he_IL"}">',
@@ -63,6 +65,7 @@ def rewrite(html, lang, kind):
     html = re.sub(r'<a class="lang" href="(index|catalog|dictionary)(?:\.en)?\.html"', lambda m: f'<a class="lang" href="{URL[(other, m.group(1))]}"', html)
     html = re.sub(r'href="catalog(?:\.en)?\.html', 'href="/motion/catalog', html)
     html = re.sub(r'href="dictionary(?:\.en)?\.html', 'href="/motion/dictionary', html)
+    html = re.sub(r'href="films\.html', 'href="/motion/films', html)
     html = re.sub(r'href="index(?:\.en)?\.html', 'href="/motion', html)
     html = re.sub(r'(src|href|poster)="media/', rf'\1="{PAGES}/media/', html)
     html = re.sub(r'(src|href)="catalog/', r'\1="/motion/assets/', html)
@@ -84,10 +87,12 @@ def publish(repo, lang, mode):
     repo = pathlib.Path(repo).resolve()
     out = repo / 'public' / 'motion'
     if out.exists(): shutil.rmtree(out)
-    for d in KINDS[1:]: (out / d).mkdir(parents=True)
+    for d in KINDS[1:]:
+        if (lang, d) in SRC: (out / d).mkdir(parents=True)
     assets = out / 'assets'
     shutil.copytree(ROOT / 'catalog', assets, ignore=shutil.ignore_patterns('*.map'))
     for kind in KINDS:
+        if (lang, kind) not in SRC: continue
         html = (ROOT / SRC[(lang, kind)]).read_text()
         html = rewrite(with_head(html, head_block(lang, kind, mode)), lang, kind)
         (out / ('index.html' if kind == 'index' else kind + '/index.html')).write_text(html)

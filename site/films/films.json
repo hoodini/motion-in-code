@@ -1,0 +1,740 @@
+{
+ "sections": [
+  {
+   "id": "launch",
+   "num": "01",
+   "surface": "s-cloud",
+   "title": "סרטי השקה ומותג",
+   "sub": "100% קוד, בלי צילום אחד: כל פריים מצויר בדפדפן ומרונדר לווידאו.",
+   "films": [
+    "ep14",
+    "ep13",
+    "ep09",
+    "ep08",
+    "ep08b",
+    "ep07",
+    "skill",
+    "showoff",
+    "cinematic"
+   ]
+  },
+  {
+   "id": "explain",
+   "num": "02",
+   "surface": "s-denim",
+   "title": "סרטי הסבר",
+   "sub": "נושא אחד, מוסבר מאפס, עם גרפיקה שמדגימה כל רעיון. רובם עם קריינות.",
+   "films": [
+    "ep15",
+    "grokclaude",
+    "ep05",
+    "anatomy",
+    "blueprint",
+    "wabot",
+    "ep02",
+    "ep01",
+    "nn",
+    "neural"
+   ]
+  },
+  {
+   "id": "tanya",
+   "num": "03",
+   "surface": "s-navy",
+   "title": "תניא וחסידות",
+   "torah": true,
+   "sub": "ספר התניא ותולדות חב״ד, בחמישה סרטים ובחמישה סגנונות שונים.",
+   "films": [
+    "ep11",
+    "ep12",
+    "ep10",
+    "tanya4",
+    "ep03"
+   ]
+  },
+  {
+   "id": "footage",
+   "num": "04",
+   "surface": "s-cloud",
+   "title": "עריכה על צילום",
+   "sub": "הצילום שלי, והגרפיקה מעליו בקוד: כתוביות מילה אחרי מילה, טקסט שעובר מאחוריי ואובייקטים בתלת־ממד.",
+   "films": [
+    "grokbot",
+    "ep06",
+    "copilot",
+    "claudedesk"
+   ]
+  }
+ ],
+ "films": {
+  "ep15": {
+   "title": "סרטון = קוד",
+   "date": "2026-10-19",
+   "dur": 110.4,
+   "lang": "he",
+   "loop": "h",
+   "desc": "כל השיטה בסרט אחד: פריימים, קפיצים, מורף, ביט ורינדור, עם קריינות ומוזיקה שנכתבה למבנה של הסרט.",
+   "tech": [
+    "seek(t)",
+    "ElevenLabs"
+   ],
+   "v": [
+    [
+     "h",
+     "16:9"
+    ],
+    [
+     "v",
+     "9:16"
+    ]
+   ]
+  },
+  "ep14": {
+   "title": "כל קול קובע",
+   "date": "2026-10-18",
+   "dur": 15.0,
+   "lang": "he",
+   "loop": "h",
+   "desc": "15 שניות שקוראות לצאת להצביע בבחירות לכנסת ה-26: פתק אחד נכנס לקלפי, והמסך מוצף בתכלת.",
+   "tech": [
+    "seek(t)",
+    "DOM"
+   ],
+   "v": [
+    [
+     "h",
+     "16:9"
+    ],
+    [
+     "v",
+     "9:16"
+    ]
+   ]
+  },
+  "ep13": {
+   "title": "MEET YUVAL",
+   "date": "2026-10-17",
+   "dur": 46.0,
+   "lang": "en+he",
+   "loop": "h",
+   "desc": "סרט מותג עליי, באנגלית ובעברית: 92 ביטים, תשע סצנות, ולולאה שנסגרת בדיוק על הלוגו.",
+   "tech": [
+    "seek(t)",
+    "Canvas"
+   ],
+   "v": [
+    [
+     "h",
+     "English · 16:9"
+    ],
+    [
+     "v",
+     "English · 9:16"
+    ],
+    [
+     "hhe",
+     "עברית · 16:9"
+    ],
+    [
+     "vhe",
+     "עברית · 9:16"
+    ]
+   ]
+  },
+  "ep11": {
+   "title": "תניא · קו אחד",
+   "date": "2026-10-16",
+   "dur": 67.5,
+   "lang": "he",
+   "loop": "h",
+   "desc": "נקודה אחת זוהרת מציירת את אדמו״ר הזקן, וממשיכה בלי להתנתק לספר, לציר זמן, לגלובוס ול-770.",
+   "tech": [
+    "seek(t)",
+    "Canvas"
+   ],
+   "v": [
+    [
+     "h",
+     "16:9"
+    ],
+    [
+     "v",
+     "9:16"
+    ]
+   ]
+  },
+  "ep12": {
+   "title": "שבעה דורות. אור אחד.",
+   "date": "2026-10-16",
+   "dur": 36.0,
+   "lang": "he",
+   "loop": "s",
+   "desc": "קו זהב אחד שעובר בין שבעת נשיאי חב״ד, מ-1745 ועד 770, עם תמונות ממקורות פתוחים.",
+   "tech": [
+    "seek(t)",
+    "WebGL2"
+   ],
+   "v": [
+    [
+     "s",
+     "1:1"
+    ],
+    [
+     "v",
+     "9:16"
+    ]
+   ]
+  },
+  "ep10": {
+   "title": "תניא: הספר",
+   "date": "2026-10-15",
+   "dur": 53.7,
+   "lang": "he",
+   "loop": "h",
+   "desc": "ספר תלת־ממדי שנפתח על הדרופ, ושמונה רעיונות מהתניא, כל אחד עם הציטוט והפרק שלו.",
+   "tech": [
+    "seek(t)",
+    "three.js"
+   ],
+   "v": [
+    [
+     "h",
+     "16:9"
+    ],
+    [
+     "v",
+     "9:16"
+    ]
+   ]
+  },
+  "ep09": {
+   "title": "קצב",
+   "date": "2026-10-15",
+   "dur": 40.1,
+   "lang": "he",
+   "loop": "h",
+   "desc": "סרט מוצר לאפליקציית כושר בדיונית: הבעיה, סיור במסכים, מתאמנים שמצוירים בקוד, והוכחה.",
+   "tech": [
+    "seek(t)",
+    "three.js"
+   ],
+   "v": [
+    [
+     "h",
+     "16:9"
+    ],
+    [
+     "v",
+     "9:16"
+    ]
+   ]
+  },
+  "ep08": {
+   "title": "YUV.AI MOTION",
+   "date": "2026-10-15",
+   "dur": 32.7,
+   "lang": "he",
+   "loop": "h",
+   "desc": "סרט ההשקה של קיט המושן: תיבת פרומפט זוהרת, קרוסלה בתלת־ממד, וטלפון ולפטופ מעל הים בשקיעה.",
+   "tech": [
+    "seek(t)",
+    "three.js"
+   ],
+   "v": [
+    [
+     "h",
+     "16:9"
+    ],
+    [
+     "v",
+     "9:16"
+    ]
+   ]
+  },
+  "ep08b": {
+   "title": "דמו של הקיט",
+   "date": "2026-10-15",
+   "dur": 15.7,
+   "lang": "he",
+   "loop": "h",
+   "desc": "15 שניות מפרומפט לסרט: מקלידים נושא, לוחצים, וטלפון עולה מעל הים.",
+   "tech": [
+    "seek(t)",
+    "three.js"
+   ],
+   "v": [
+    [
+     "h",
+     "16:9"
+    ],
+    [
+     "v",
+     "9:16"
+    ]
+   ]
+  },
+  "ep07": {
+   "title": "מושן בקוד",
+   "date": "2026-10-15",
+   "dur": 26.7,
+   "lang": "he",
+   "loop": "h",
+   "desc": "הסרט הראשון שעשיתי בשיטה של zero: נקודה אחת, seek(t), ושבעה כללים, כל אחד מודגם בתנועה שלו.",
+   "tech": [
+    "seek(t)",
+    "Canvas"
+   ],
+   "v": [
+    [
+     "h",
+     "16:9"
+    ],
+    [
+     "v",
+     "9:16"
+    ]
+   ]
+  },
+  "ep06": {
+   "title": "טיזר: הקורס על מודלים מקומיים",
+   "date": "2026-10-15",
+   "dur": 180.0,
+   "lang": "he",
+   "loop": "h",
+   "desc": "בכל פריים אני גזור מהרקע, כך שמילים ענקיות ואובייקטים בתלת־ממד עוברים מאחוריי ולא מסתירים את הפנים.",
+   "tech": [
+    "three.js",
+    "Whisper"
+   ],
+   "v": [
+    [
+     "h",
+     "16:9"
+    ],
+    [
+     "v",
+     "9:16"
+    ]
+   ]
+  },
+  "ep05": {
+   "title": "גרוק בוט: מטלגרם לסטוריז",
+   "date": "2026-10-14",
+   "dur": 108.0,
+   "lang": "he",
+   "loop": "h",
+   "desc": "האוטומציה שגרוק בוט בנה לי, שבה כל פוסט בערוץ הטלגרם הופך לסטורי באינסטגרם, בשש מערכות בתלת־ממד.",
+   "tech": [
+    "Remotion",
+    "three.js"
+   ],
+   "v": [
+    [
+     "h",
+     "16:9"
+    ],
+    [
+     "v",
+     "9:16"
+    ]
+   ]
+  },
+  "ep03": {
+   "title": "תניא: שתי הנפשות",
+   "date": "2026-10-10",
+   "dur": 317.0,
+   "lang": "he",
+   "loop": "h",
+   "desc": "פרק שלם על שתי הנפשות, בעריכת מגזין: 70 עמודים ממוספרים, מרקר ליים, מפת גוף ועיר קטנה.",
+   "tech": [
+    "GSAP",
+    "ElevenLabs"
+   ],
+   "v": [
+    [
+     "h",
+     "16:9"
+    ],
+    [
+     "v",
+     "9:16"
+    ]
+   ]
+  },
+  "ep02": {
+   "title": "Pi vs OMP",
+   "date": "2026-10-07",
+   "dur": 93.5,
+   "lang": "en",
+   "loop": "h",
+   "desc": "שני harnesses לסוכני קוד, ראש בראש: 4 כלים מול 31, השיטה Hashline, ובנצ'מרק על אותו מודל.",
+   "tech": [
+    "GSAP",
+    "ElevenLabs"
+   ],
+   "v": [
+    [
+     "h",
+     "16:9"
+    ]
+   ]
+  },
+  "ep01": {
+   "title": "Scaling AI Agents",
+   "date": "2026-10-07",
+   "dur": 106.7,
+   "lang": "en",
+   "loop": "h",
+   "desc": "סוכן שעובד יפה למשתמש אחד, ומה נשבר כשעשרת אלפים מגיעים יחד: sessions, זיכרון, כלים ועלויות.",
+   "tech": [
+    "GSAP",
+    "ElevenLabs"
+   ],
+   "v": [
+    [
+     "h",
+     "16:9"
+    ]
+   ]
+  },
+  "wabot": {
+   "title": "בוט AI רשמי לוואטסאפ",
+   "date": "2026-10-12",
+   "dur": 174.9,
+   "lang": "he",
+   "loop": "h",
+   "desc": "מקצה לקצה על ה-API הרשמי של Meta: הקמה, טוקן קבוע, webhook, חלון 24 השעות, עלויות ומדיניות.",
+   "tech": [
+    "three.js",
+    "Gemini TTS"
+   ],
+   "v": [
+    [
+     "h",
+     "16:9"
+    ]
+   ]
+  },
+  "grokbot": {
+   "title": "גרוק בוט: 6 אוטומציות",
+   "date": "2026-10-20",
+   "dur": 181.8,
+   "lang": "he",
+   "loop": "v",
+   "desc": "סלפי של שלוש דקות מהספה הפך לריל: כתוביות מילה אחרי מילה, טקסט מאחוריי וכרטיסים עם הוכחות מהאפליקציה.",
+   "tech": [
+    "HyperFrames"
+   ],
+   "v": [
+    [
+     "v",
+     "9:16"
+    ]
+   ]
+  },
+  "tanya4": {
+   "title": "התניא בשתי דקות",
+   "date": "2026-10-11",
+   "dur": 128.0,
+   "lang": "he",
+   "loop": "h",
+   "desc": "גרסת פסטל בתלת־ממד: מאזניים, שני מלכים שנלחמים על עיר קטנה, והבינוני.",
+   "tech": [],
+   "v": [
+    [
+     "h",
+     "16:9"
+    ]
+   ]
+  },
+  "anatomy": {
+   "title": "ANATOMY//AGENT",
+   "date": "2026-10-13",
+   "dur": 192.2,
+   "lang": "he",
+   "loop": "h",
+   "desc": "לקוחה אחת כותבת שהטיסה בוטלה, ארבעה 'סוכנים' מקבלים את ההודעה, ורק אחד מהם באמת סוכן.",
+   "tech": [
+    "three.js",
+    "Gemini TTS"
+   ],
+   "v": [
+    [
+     "h",
+     "16:9"
+    ]
+   ]
+  },
+  "blueprint": {
+   "title": "BLUEPRINT//AI",
+   "date": "2026-10-12",
+   "dur": 155.2,
+   "lang": "he",
+   "loop": "h",
+   "desc": "עשר החלטות שעושים לפני שורת הקוד הראשונה בפרויקט AI: משימה, סוכן או תהליך, מודל, RAG, זיכרון ואבטחה.",
+   "tech": [
+    "three.js",
+    "Gemini TTS"
+   ],
+   "v": [
+    [
+     "h",
+     "16:9"
+    ]
+   ]
+  },
+  "grokclaude": {
+   "title": "GROK × CLAUDE",
+   "date": "2026-10-20",
+   "dur": 123.3,
+   "lang": "he",
+   "loop": "h",
+   "desc": "הסיפור של העריכה עצמה: איך Claude Code תמלל, גזר אותי מהרקע, ומילא סרטון סלפי בהוכחות אמיתיות.",
+   "tech": [
+    "three.js",
+    "Gemini TTS"
+   ],
+   "v": [
+    [
+     "h",
+     "16:9"
+    ]
+   ]
+  },
+  "neural": {
+   "title": "How AI Learns",
+   "date": "2026-06-09",
+   "dur": 37.5,
+   "lang": "en",
+   "loop": "h",
+   "silent": true,
+   "desc": "רשת נוירונים מול המוח האנושי ב-37 שניות: מה מתעדכן באימון, ומה קורה כשהאימון נגמר.",
+   "tech": [
+    "HyperFrames",
+    "Manim"
+   ],
+   "v": [
+    [
+     "h",
+     "16:9"
+    ]
+   ]
+  },
+  "nn": {
+   "title": "איך מכונה לומדת לחשוב?",
+   "date": "2026-06-10",
+   "dur": 67.5,
+   "lang": "he",
+   "loop": "h",
+   "desc": "נוירון מלאכותי אחד, אלפים בשכבות, ואימון שבו כל טעות מכווננת את המשקלים.",
+   "tech": [
+    "HyperFrames",
+    "Lottie"
+   ],
+   "v": [
+    [
+     "h",
+     "16:9"
+    ]
+   ]
+  },
+  "skill": {
+   "title": "VIDEO DIRECTOR",
+   "date": "2026-06-09",
+   "dur": 27.5,
+   "lang": "en",
+   "loop": "h",
+   "silent": true,
+   "desc": "סרט ההשקה של הסקיל שלי לבימוי וידאו: סוכן אחד שהופך רעיון לסרט עם HyperFrames,‏ Lottie ו-Manim.",
+   "tech": [
+    "HyperFrames"
+   ],
+   "v": [
+    [
+     "h",
+     "16:9"
+    ]
+   ]
+  },
+  "showoff": {
+   "title": "ONE PROMPT",
+   "date": "2026-06-09",
+   "dur": 31.5,
+   "lang": "en",
+   "loop": "h",
+   "silent": true,
+   "desc": "פרומפט אחד בטרמינל, והסוכן בונה סרט: צבעי הפניקס, HTML שמתרנדר לווידאו, ושלושה מנועים בפריים אחד.",
+   "tech": [
+    "HyperFrames"
+   ],
+   "v": [
+    [
+     "h",
+     "16:9"
+    ]
+   ]
+  },
+  "cinematic": {
+   "title": "WHAT IF ONE AGENT",
+   "date": "2026-06-09",
+   "dur": 40.0,
+   "lang": "en",
+   "loop": "h",
+   "silent": true,
+   "desc": "טיזר על השאלה מה קורה כשסוכן אחד בונה את כל הסרט, מהמותג ועד הפריים האחרון.",
+   "tech": [
+    "HyperFrames"
+   ],
+   "v": [
+    [
+     "h",
+     "16:9"
+    ]
+   ]
+  },
+  "news": {
+   "title": "ה-AI יעשה לכם סדר בקבוצות",
+   "date": "2026-06-10",
+   "dur": 31.3,
+   "lang": "he",
+   "loop": "h",
+   "n12": true,
+   "desc": "קטע מהפינה שלי בחדשות 12 על סיכום קבוצות וואטסאפ, ערוך מחדש עם כתוביות, גרפיקה וסגיר של YUV.AI.",
+   "tech": [
+    "HyperFrames",
+    "Whisper"
+   ],
+   "v": [
+    [
+     "h",
+     "16:9"
+    ],
+    [
+     "v",
+     "9:16"
+    ]
+   ]
+  },
+  "claudedesk": {
+   "title": "Video Scrubbing עם Claude Desktop",
+   "date": "2026-05-27",
+   "dur": 177.1,
+   "lang": "he",
+   "loop": "h",
+   "desc": "איך בניתי ב-Claude Desktop אתר שבו דמות עוקבת אחרי העכבר, בטכניקה שנקראת Video Scrubbing.",
+   "tech": [
+    "HyperFrames",
+    "Whisper"
+   ],
+   "v": [
+    [
+     "h",
+     "16:9"
+    ],
+    [
+     "v",
+     "9:16"
+    ]
+   ]
+  },
+  "copilot": {
+   "title": "GitHub Copilot app",
+   "date": "2026-06-02",
+   "dur": 865.1,
+   "lang": "en",
+   "loop": "h",
+   "desc": "סיור מלא באפליקציית הדסקטופ של GitHub Copilot, עם כתוביות ופתיח שנבנו בקוד.",
+   "tech": [
+    "HyperFrames",
+    "Whisper"
+   ],
+   "v": [
+    [
+     "h",
+     "16:9"
+    ],
+    [
+     "v",
+     "9:16"
+    ]
+   ]
+  },
+  "yuvalclip": {
+   "title": "לו״ז לחופש הגדול עם Claude",
+   "date": "2026-07-15",
+   "dur": 143.6,
+   "lang": "he",
+   "loop": "h",
+   "n12": true,
+   "desc": "הפינה שלי בחדשות 12: פרומפט אחד שבונה לילדים מערכת שעות לכל החופש, ערוך עם כתוביות וכרטיס הפרומפט.",
+   "tech": [
+    "HyperFrames",
+    "Whisper"
+   ],
+   "v": [
+    [
+     "h",
+     "16:9"
+    ],
+    [
+     "v",
+     "9:16"
+    ]
+   ]
+  }
+ },
+ "credits": [
+  {
+   "what": "\"From Here\" מאת Tanner Helland (tannerhelland.com)",
+   "where": "MEET YUVAL, כל קול קובע",
+   "license": "CC BY 4.0",
+   "url": "https://github.com/tannerhelland/free-music"
+  },
+  {
+   "what": "Lozna. Лёзна (2009) · Kazimier Lachnovič",
+   "where": "שבעה דורות",
+   "license": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Lozna._%D0%9B%D1%91%D0%B7%D0%BD%D0%B0_(2009).jpg"
+  },
+  {
+   "what": "Frierdiger Rebbe · Barry Gurary (JEM)",
+   "where": "שבעה דורות",
+   "license": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Frierdiger_Rebbe.tif"
+  },
+  {
+   "what": "770 Eastern Parkway entrance · ArnoldReinhold",
+   "where": "שבעה דורות",
+   "license": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:770_Eastern_Parkway_entrance.jpg"
+  },
+  {
+   "what": "התוועדות · דברי הרב",
+   "where": "שבעה דורות",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:%D7%94%D7%AA%D7%95%D7%95%D7%A2%D7%93%D7%95%D7%AA.jpg"
+  },
+  {
+   "what": "Int'l Conf of Chabad-Lubavitch Emissaries 2023, Group Photo 09 · Chabad.org",
+   "where": "שבעה דורות",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Int%27l_Conf_of_Chabad-Lubavitch_Emissaries_2023_-_Group_Photo_09.jpg"
+  },
+  {
+   "what": "Hanukiah at the Brandenburg Gate in Berlin in 2016 · Chabad Lubavitch",
+   "where": "שבעה דורות",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Hanukiah_at_the_Brandenburg_Gate_in_Berlin_in_2016.jpg"
+  },
+  {
+   "what": "Tanya tlv · Shalom Books",
+   "where": "שבעה דורות",
+   "license": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Tanya_tlv.jpg"
+  }
+ ],
+ "held": {
+  "news": "קטע מחדשות 12: מחכה לאישור זכויות מהערוץ",
+  "yuvalclip": "קטע מחדשות 12: מחכה לאישור זכויות מהערוץ"
+ }
+}

@@ -34,7 +34,8 @@ class Page:
     def header_en(self):
         # the three-page switch and the language switch in the top bar
         self.sub(r'<nav class="pages" aria-label="עמודי המושן">(.*?)</nav>', lambda m: '<nav class="pages" aria-label="Motion pages">' +
-                 m.group(1).replace('>השיטה<', '>Method<').replace('>הקטלוג<', '>Catalog<').replace('>המילון<', '>Dictionary<') + '</nav>')
+                 m.group(1).replace('>השיטה<', '>Method<').replace('>הקטלוג<', '>Catalog<').replace('>המילון<', '>Dictionary<')
+                 .replace('<a href="films.html">הסרטים</a>', '') + '</nav>')   # the films gallery is Hebrew-only for now
         self.sub(r'<a class="lang" href="(\w+)\.en\.html" hreflang="en" lang="en"><span class="ll">English</span><span class="ls">EN</span></a>',
                  r'<a class="lang" href="\1.html" hreflang="he" lang="he"><span class="ll">עברית</span><span class="ls">עב</span></a>')
 
