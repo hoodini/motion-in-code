@@ -45,16 +45,33 @@ export const BRAND = {
   wing: ['#F56B49', '#D74270', '#7B3FA8'],          // phoenix mid wing
   spectrum: ['#FFC74E', '#FF8F3A', '#F56B49', '#D74270', '#97429A', '#603689', '#5EA1C1']
 };
+/* Phoenix Ink (v3), Yuval's one design system. This is a code mirror of tokens/phoenix-ink.json in the private repo
+   hoodini/yuv-design-system (SKILL.md is the source). Change the design system first, then this. */
+export const INK = {
+  paper: '#FFFFFF', cloud: '#F7F6FB', line: '#ECEAF4',
+  ink: '#1C1A4B', ink2: '#4A4870', muted: '#6B6990',
+  pink: '#FF2EA0', pinkDeep: '#C8106F', pinkWash: '#FFF0F7', pinkSoft: '#FF8FCC',
+  gold: ['#FFD66E', '#F4B030'], goldFlat: '#FFD66E',            // marker (vertical gradient) and gold text on night
+  night: '#0E0D2A', night2: '#14123A', night3: '#1C1A4B', onNight2: '#CFCDEB', onNight3: '#A9A6CF',
+  violet: '#8B6CFF', cyan: '#5DE4E9', orange: '#FF8F3A',
+  glow: ['#FF2EA0', '#FF8F3A', '#FFC74E', '#8B6CFF', '#5DE4E9', '#FF2EA0'],   // the CTA ring
+  sky: { top: '#0A0922', bottom: '#15133C', pink: 'rgba(255,46,160,.17)', violet: 'rgba(139,108,255,.16)', orange: 'rgba(255,143,58,.20)' }
+};
 export const THEMES = {
-  /* A — default. navy base, phoenix-fire accent page (gradient), light-denim page */
+  /* Phoenix Ink: the default. night act pages, cloud content pages, a pink punch page; key words on the gold marker */
+  phoenixInk: { K: INK.night2, M: INK.pink, C: INK.cloud, marker: INK.gold,
+    pages: { K: { hd: '#FFFFFF', sb: INK.onNight2, chip: INK.pink, band: INK.pink, num: INK.pink },
+             C: { hd: INK.ink, sb: INK.ink2, chip: INK.pink, band: INK.pink },
+             M: { hd: '#FFFFFF', sb: '#FFFFFF', chip: INK.night2, band: INK.goldFlat } } },
+  /* retired (Phoenix Day/Night, v2): kept so older films still rebuild unchanged */
   phoenix:  { K: BRAND.navy, M: BRAND.orange, C: BRAND.denim, pages: { M: { grad: BRAND.fire, hd: BRAND.navy, sb: BRAND.navy, band: '#FFFFFF' }, K: { sb: BRAND.gold, chip: BRAND.orange, band: BRAND.orange, num: BRAND.orange }, C: { band: BRAND.orange } } },
   /* B — navy base, full wing spectrum page, wordmark pink + cyan */
   spectrum: { K: BRAND.navy, M: BRAND.pink, C: BRAND.cyan, pages: { M: { grad: BRAND.wing, hd: '#FFFFFF', sb: '#FFFFFF', band: BRAND.gold }, K: { sb: BRAND.cyan, chip: BRAND.raspberry, band: BRAND.coral, num: BRAND.raspberry } } },
   /* legacy, kept for comparison only */
   ink:    { K: '#0B0B10', M: '#FF2EA0', C: '#16D6E8' }
 };
-export function makeTheme(name = 'phoenix') {
-  const T = THEMES[name] || THEMES.phoenix, W = '#FFFFFF';
+export function makeTheme(name = 'phoenixInk') {
+  const T = THEMES[name] || THEMES.phoenixInk, W = '#FFFFFF';
   const on = bg => (lum(bg) > 0.45 ? T.K : W);
   const PAL = {
     K: { bg: T.K, hd: W, sb: T.C, chip: T.M, band: T.M, num: T.M, numMode: 'stroke' },
@@ -63,7 +80,7 @@ export function makeTheme(name = 'phoenix') {
   };
   for (const k in (T.pages || {})) Object.assign(PAL[k], T.pages[k]);
   if (PAL.M.grad) PAL.M.bg = PAL.M.grad[1];
-  return { name, K: T.K, M: T.M, C: T.C, W, on, PAL };
+  return { name, K: T.K, M: T.M, C: T.C, W, on, PAL, marker: T.marker || [T.M, T.M] };
 }
 
 /* ---------- type ----------
@@ -113,13 +130,35 @@ export function riseWords(x, t, words, cxp, y, size, fontFn, color, tIns, tOut, 
       if (opt.marker && opt.marker.i === i) {
         const m = opt.marker, mw = (ws[i] + size * 0.24) * out3(inv(m.t, m.t + 0.32, t));
         // the marker grows in reading direction: from the right edge in RTL, from the left edge in LTR
-        if (mw > 0) { x.fillStyle = m.color; x.fillRect(opt.ltr ? xr - size * 0.12 : xr + ws[i] + size * 0.12 - mw, y + dy - size * 0.78, mw, size * 0.92); }
+        if (mw > 0) { x.fillStyle = markerPaint(x, m.color, y + dy - size * 0.78, size * 0.92); x.fillRect(opt.ltr ? xr - size * 0.12 : xr + ws[i] + size * 0.12 - mw, y + dy - size * 0.78, mw, size * 0.92); }
       }
       x.fillStyle = opt.colors ? opt.colors[i] : color; x.textAlign = 'left'; x.fillText(w, xr, y + dy);
     }
     pos += opt.ltr ? ws[i] + gap : -(ws[i] + gap);
   });
   x.restore();
+}
+
+/* ---------- Phoenix Ink helpers ---------- */
+/** marker paint: a flat colour, or [top, bottom] stops (the Phoenix Ink gold) as a vertical gradient over the block */
+export function markerPaint(x, paint, top, h) {
+  if (!Array.isArray(paint)) return paint;
+  const g = x.createLinearGradient(0, top, 0, top + h); paint.forEach((c, j) => g.addColorStop(j / (paint.length - 1), c)); return g;
+}
+/** the Phoenix Ink night sky: indigo base, pink / violet / orange glows, seeded stars that twinkle slowly.
+ *  side = 'left' | 'right': where the glow (and the phoenix) sits. Pure function of t. */
+export function nightSky(x, W, H, t = 0, { side = 'left', stars = 90, twinkle = 1 } = {}) {
+  const S = INK.sky, sx = side === 'left' ? 0.26 : 0.74;
+  const base = x.createLinearGradient(0, 0, 0, H); base.addColorStop(0, S.top); base.addColorStop(1, S.bottom);
+  x.fillStyle = base; x.fillRect(0, 0, W, H);
+  const glow = (cx, cy, r, c) => { const g = x.createRadialGradient(cx, cy, 0, cx, cy, r); g.addColorStop(0, c); g.addColorStop(1, 'rgba(0,0,0,0)'); x.fillStyle = g; x.fillRect(0, 0, W, H); };
+  glow(W * sx, H * 0.48, Math.max(W, H) * 0.42, S.pink);
+  glow(W * (side === 'left' ? 0.2 : 0.8), H * 0.3, Math.max(W, H) * 0.36, S.violet);
+  glow(W * 0.5, H * 1.18, Math.max(W, H) * 0.62, S.orange);
+  for (let i = 0; i < stars; i++) {
+    const px = rnd(i) * W, py = rnd(i + 99) * H, r = 0.6 + rnd(i + 7) * 0.9, a = 0.35 + 0.35 * (0.5 + 0.5 * Math.sin(t * 1.3 * twinkle + i * 2.1));
+    x.fillStyle = `rgba(255,255,255,${a.toFixed(3)})`; x.beginPath(); x.arc(px, py, r * (H / 1080), 0, Math.PI * 2); x.fill();
+  }
 }
 
 /* ---------- colour spreads: a magazine page per bar, wiped in on the downbeat ----------

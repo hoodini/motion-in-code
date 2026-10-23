@@ -3,7 +3,7 @@
    cards with real radius and depth · an input box that types · a cursor
    that clicks · a button that becomes something else · counters.
    ===================================================================== */
-import { clamp, lerp, inv, out3, in3, spring, sk, rr, rrc, circle, rgba, gradPaint } from './core.js';
+import { clamp, lerp, inv, out3, in3, spring, sk, rr, rrc, circle, rgba, gradPaint, markerPaint } from './core.js';
 
 /** a premium card: generous radius, layered shadow (contact + ambient), optional top rim light */
 export function card(x, cx, cy, w, h, r, { fill = '#FFFFFF', shadow = 'rgba(5,8,30,.55)', depth = 1, rim = null, stroke = null, strokeW = 2 } = {}) {
@@ -53,10 +53,12 @@ export function bars(x, t, X, Y, W, H, values, times, paint, gap = 0.28, r = 14)
 export { rgba };
 
 /* ===================== neon + kinetic type (v2) ===================== */
-export const SPECTRUM = ['#5DE4E9', '#4FA3FF', '#8B6CFF', '#FF66C4', '#FF8F3A', '#FFC74E', '#5DE4E9'];
+export const SPECTRUM = ['#5DE4E9', '#4FA3FF', '#8B6CFF', '#FF66C4', '#FF8F3A', '#FFC74E', '#5DE4E9'];   // retired v2 order
+/** Phoenix Ink glow (the CTA ring on yuv.ai): the default for neon rings and chips */
+export const GLOW = ['#FF2EA0', '#FF8F3A', '#FFC74E', '#8B6CFF', '#5DE4E9', '#FF2EA0'];
 /** a glowing neon edge around a rounded rect: rotating conic gradient, blurred halo + crisp line.
  *  angle rotates the colours; power scales the halo (pulse it on beats). */
-export function neonRing(x, cx, cy, w, h, r, angle, { lw = 4, glow = 22, stops = SPECTRUM, power = 1 } = {}) {
+export function neonRing(x, cx, cy, w, h, r, angle, { lw = 4, glow = 22, stops = GLOW, power = 1 } = {}) {
   if (w <= 1 || h <= 1) return;
   const g = x.createConicGradient(angle, cx, cy); stops.forEach((c, i) => g.addColorStop(i / (stops.length - 1), c));
   x.save(); x.strokeStyle = g;
@@ -83,7 +85,7 @@ export function slamWords(x, t, words, cx, y, size, fontFn, color, times, tOut, 
       const sc = (1 + (from - 1) * (1 - s)) * (1 - out), dy = (1 - s) * size * 0.32 + out * size * 0.2, rot = (1 - s) * (opt.rot ?? -0.05);
       if (sc > 0.001) {
         x.save(); x.translate(xl + ws[i] / 2, y - size * 0.34 + dy); x.rotate(rot); x.scale(sc, sc); x.translate(-(xl + ws[i] / 2), -(y - size * 0.34));
-        if (opt.marker && opt.marker.i === i) { const m = spring(t - ti - 0.05, 16, 0.6); x.fillStyle = opt.marker.paint; rr(x, xl - size * 0.14, y - size * 0.8, (ws[i] + size * 0.28) * clamp(m, 0, 1.2), size * 0.98, size * 0.16); x.fill(); }
+        if (opt.marker && opt.marker.i === i) { const m = spring(t - ti - 0.05, 16, 0.6); x.fillStyle = markerPaint(x, opt.marker.paint, y - size * 0.8, size * 0.98); rr(x, xl - size * 0.14, y - size * 0.8, (ws[i] + size * 0.28) * clamp(m, 0, 1.2), size * 0.98, size * 0.16); x.fill(); }
         x.fillStyle = opt.colors ? opt.colors[i] : color; x.textAlign = 'left'; x.fillText(w, xl, y);
         x.restore();
       }
@@ -108,7 +110,7 @@ export function popType(x, t, text, xr, y, fontFn, size, color, times, opt = {})
   x.restore(); return caret;
 }
 /** a pill chip with a neon edge that pops in on a spring */
-export function neonChip(x, t, t0, cx, cy, text, { size = 30, fontFn, fill = '#FFFFFF', ink = '#12163F', angle = 0, padX = 30 } = {}) {
+export function neonChip(x, t, t0, cx, cy, text, { size = 30, fontFn, fill = '#FFFFFF', ink = '#1C1A4B', angle = 0, padX = 30 } = {}) {
   const s = spring(t - t0, 18, 0.5); if (s <= 0.001) return;
   x.save(); x.font = fontFn(size); const tw = x.measureText(text).width, w = tw + padX * 2, h = size * 1.9;
   x.translate(cx, cy); x.scale(s, s);
