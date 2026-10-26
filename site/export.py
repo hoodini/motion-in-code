@@ -71,7 +71,7 @@ def rewrite(html, lang, kind):
     html = re.sub(r'(src|href)="catalog/', r'\1="/motion/assets/', html)
     host = URL[(lang, 'index')].replace('https://', '')
     html = html.replace('<small>catalog.html</small>', f'<small>{host}/catalog</small>').replace('<small>dictionary.html</small>', f'<small>{host}/dictionary</small>').replace('<small>motion-in-code</small>', f'<small>{host}</small>')
-    left = re.findall(r'(?:src|href|poster)="(?!https?://|#|/|data:|mailto:|\$\{)[^"]*"', html)
+    left = re.findall(r'(?:src|href|poster)="(?!https?://|#|\?|/|data:|mailto:|\$\{)[^"]*"', html)
     if left: sys.exit(f'{lang}/{kind}: unrewritten relative refs: {left[:5]}')
     return html
 

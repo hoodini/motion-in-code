@@ -1,2 +1,6 @@
 .notes/
 node_modules/
+
+# held until rights are confirmed (N12)
+media/films/news.*
+media/films/yuvalclip.*
