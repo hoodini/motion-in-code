@@ -1,32 +1,58 @@
 <!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8">
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Karantina:wght@700&family=Assistant:wght@700&display=swap" rel="stylesheet">
+<!-- Share image for /motion/films (1200x630), Phoenix Ink. ?cover = the text-free newsroom cover (the site overlays its own title).
+     Render: python3 shot.py http://localhost:8765/site/films/og.html out.png 1200 630  (served from the repo root) -->
+<link href="https://fonts.googleapis.com/css2?family=Karantina:wght@700&family=Assistant:wght@600;700&family=JetBrains+Mono:wght@600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box}html,body{margin:0;width:1200px;height:630px;overflow:hidden}
-body{background:linear-gradient(180deg,#5EA9F2 0%,#93CBFF 45%,#DDF0FF 100%);font-family:Assistant,sans-serif;position:relative}
-.wall{position:absolute;left:-60px;top:-40px;width:760px;height:720px;display:grid;grid-template-columns:repeat(3,240px);gap:14px;transform:rotate(-8deg);transform-origin:center}
-.wall img{width:240px;aspect-ratio:16/9;object-fit:cover;border-radius:16px;border:5px solid #12163F;box-shadow:0 14px 30px -10px rgba(5,8,30,.5);display:block}
-.txt{position:absolute;right:56px;top:70px;width:560px;text-align:right;color:#12163F}
-.kick{display:inline-block;font:400 24px/1 Anton;letter-spacing:3px;background:#12163F;color:#FFC74E;padding:10px 20px 8px;border-radius:999px;direction:ltr}
-h1{font:700 150px/.86 Karantina;margin:26px 0 18px}
-h1 .hl{background:linear-gradient(135deg,#FFC74E,#FF8F3A 50%,#F56B49);padding:.05em .12em 0;border-radius:.1em;display:inline-block;line-height:.86}
-.deck{font:700 34px/1.2 Karantina;margin:0 0 22px}
-.st{display:flex;gap:10px;justify-content:flex-start}
-.st div{background:rgba(255,255,255,.88);border-radius:16px;padding:8px 16px 6px;box-shadow:0 6px 18px -6px rgba(5,8,30,.38)}
-.st b{display:block;font:400 40px/1 Anton;direction:ltr;text-align:right}.st span{font:700 18px/1.2 Karantina;color:#3B4472}
-.wm{position:absolute;right:56px;bottom:34px;font:400 30px/1 Anton;color:#12163F;direction:ltr}.wm i{color:#FF8F3A;font-style:normal}
+body{position:relative;font-family:Assistant,sans-serif;color:#fff;background:
+ radial-gradient(48% 70% at 22% 50%,rgba(255,46,160,.20),transparent 70%),
+ radial-gradient(40% 55% at 16% 22%,rgba(139,108,255,.18),transparent 70%),
+ radial-gradient(110% 60% at 50% 120%,rgba(255,143,58,.24),transparent 62%),
+ linear-gradient(180deg,#0A0922 0%,#15133C 100%)}
+body::after{content:"";position:absolute;inset:0;opacity:.55;pointer-events:none;background-image:
+ radial-gradient(1.2px 1.2px at 8% 14%,#fff,transparent),radial-gradient(1px 1px at 18% 72%,#fff,transparent),radial-gradient(1.4px 1.4px at 31% 22%,#fff,transparent),
+ radial-gradient(1px 1px at 44% 9%,#fff,transparent),radial-gradient(1.2px 1.2px at 57% 64%,#fff,transparent),radial-gradient(1px 1px at 66% 18%,#fff,transparent),
+ radial-gradient(1.3px 1.3px at 78% 41%,#fff,transparent),radial-gradient(1px 1px at 88% 12%,#fff,transparent),radial-gradient(1.2px 1.2px at 94% 70%,#fff,transparent),
+ radial-gradient(1px 1px at 4% 52%,#fff,transparent),radial-gradient(1px 1px at 51% 38%,#fff,transparent),radial-gradient(1.1px 1.1px at 72% 86%,#fff,transparent)}
+.wall{position:absolute;left:-70px;top:-70px;width:700px;display:grid;grid-template-columns:repeat(3,212px);gap:16px;transform:rotate(-9deg);transform-origin:center}
+.wall img{width:212px;aspect-ratio:16/9;object-fit:cover;border-radius:18px;display:block;box-shadow:0 0 0 1px rgba(255,255,255,.12),0 22px 46px rgba(5,4,20,.6)}
+.wall img:nth-child(3n+2){transform:translateY(46px)}
+.fade{position:absolute;inset:0;background:linear-gradient(270deg,#0E0D2A 30%,rgba(14,13,42,.55) 58%,transparent 80%)}
+.txt{position:absolute;right:60px;top:74px;width:560px;display:grid;justify-items:start;gap:18px}
+.kick{font:600 15px/1 'JetBrains Mono',monospace;letter-spacing:.22em;color:#A9A6CF;direction:ltr}
+h1{margin:0;font:700 132px/.98 Karantina,sans-serif;text-shadow:0 2px 30px rgba(11,10,36,.6)}
+.mk{background:linear-gradient(180deg,#FFD66E,#F4B030);color:#1C1A4B;border-radius:.12em;padding:0 .12em}
+.sub{font:700 32px/1.3 Assistant,sans-serif;margin:0}
+.st{display:flex;gap:10px}
+.st div{display:flex;align-items:baseline;gap:9px;padding:6px 16px 4px;border-radius:999px;background:rgba(255,255,255,.07);box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
+.st b{font:700 38px/1 Karantina,sans-serif;color:#FFD66E}
+.st span{font:600 17px/1 Assistant,sans-serif;color:#CFCDEB}
+.wm{position:absolute;right:60px;bottom:36px;height:58px}
+.cover .txt,.cover .wm{display:none}
+.cover .fade{background:linear-gradient(270deg,#0E0D2A 22%,rgba(14,13,42,.35) 46%,transparent 66%)}
+.cover .wall{left:-40px;top:-110px;width:980px;grid-template-columns:repeat(4,226px)}
+.cover .wall img{width:226px;transform:none!important}
+.cover .wall img:nth-child(4n+2),.cover .wall img:nth-child(4n+4){transform:translateY(54px)!important}
+.cover .phx{display:block}
+.phx{display:none;position:absolute;right:120px;top:50%;width:230px;height:230px;margin-top:-115px;filter:drop-shadow(0 0 40px rgba(255,46,160,.45))}
 </style></head><body>
-<div class="wall">
- <img src="../../media/films/anatomy.jpg"><img src="../../media/films/ep09.jpg"><img src="../../media/films/ep03.jpg">
- <img src="../../media/films/ep05.jpg"><img src="../../media/films/ep11.jpg"><img src="../../media/films/wabot.jpg">
- <img src="../../media/films/ep07.jpg"><img src="../../media/films/blueprint.jpg"><img src="../../media/films/ep08.jpg">
- <img src="../../media/films/tanya4.jpg"><img src="../../media/films/grokclaude.jpg"><img src="../../media/films/ep01.jpg">
- <img src="../../media/films/ep10.jpg"><img src="../../media/films/skill.jpg"><img src="../../media/films/ep06.jpg">
-</div>
+<div class="wall" id="wall"></div>
+<div class="fade"></div>
+<img class="phx" src="../../media/films/brand/phoenix-mark.png" alt="">
 <div class="txt">
- <span class="kick">YUV.AI · MOTION FILMS</span>
- <h1>כל <span class="hl">הסרטים</span>.</h1>
- <p class="deck">שיצרתי עם Claude, בגלריה אחת</p>
- <div class="st"><div><b>28</b><span>סרטים</span></div><div><b>58</b><span>דקות</span></div><div><b>0</b><span>After Effects</span></div></div>
+  <span class="kick">YUV.AI · MOTION FILMS</span>
+  <h1>כל <span class="mk">הסרטים</span></h1>
+  <p class="sub">שיצרתי עם Claude. הכל בקוד.</p>
+  <div class="st"><div><b id="n">28</b><span>סרטים</span></div><div><b id="m">59</b><span>דקות</span></div><div><b>0</b><span>After Effects</span></div></div>
 </div>
-<div class="wm">YUV<i>.</i>AI</div>
+<img class="wm" src="../../media/films/brand/wordmark.png" alt="">
+<script>
+var ids = ['wabot','ep16','anatomy','ep09','tanya4','ep10','blueprint','ep11','grokclaude','ep08','ep03','ep05','nn','claudedesk','ep06','ep07'];
+var q = new URLSearchParams(location.search);
+if (q.has('cover')) document.body.classList.add('cover');
+if (q.get('n')) document.getElementById('n').textContent = q.get('n');
+if (q.get('m')) document.getElementById('m').textContent = q.get('m');
+var w = document.getElementById('wall');
+ids.forEach(function (id) { var i = new Image(); i.src = '../../media/films/' + id + '.jpg'; i.alt = ''; w.appendChild(i); });
+</script>
 </body></html>
