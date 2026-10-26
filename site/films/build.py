@@ -18,6 +18,9 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 HERE = pathlib.Path(__file__).resolve().parent
 D = json.loads((HERE / 'films.json').read_text(encoding='utf-8'))
 F = D['films']
+# a film shows up once its loop is in media/films (EP13-15 wait for their files); the list in films.json stays complete
+PENDING = [f for s in D['sections'] for f in s['films'] if not (ROOT / 'media' / 'films' / f'{f}.mp4').exists()]
+for s in D['sections']: s['films'] = [f for f in s['films'] if f not in PENDING]
 ORDER = [f for s in D['sections'] for f in s['films']]
 FULL = ROOT / 'media' / 'films' / 'full'
 FEATURED = 'wabot'                       # the editor's pick under the hero
@@ -78,6 +81,7 @@ NEW_FROM = (datetime.date.fromisoformat(LATEST) - datetime.timedelta(days=6)).is
 TORAH = {fid for s in D['sections'] if s.get('torah') for fid in s['films']}
 N = len(ORDER)
 TOTAL_MIN = round(sum(F[i]['dur'] for i in ORDER) / 60)
+SHORTEST = round(min(F[i]['dur'] for i in ORDER)); LONGEST = round(max(F[i]['dur'] for i in ORDER) / 60)
 
 PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.6-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z"/></svg>'
 
@@ -493,7 +497,7 @@ PAGE = f'''<!doctype html>
       <div class="hero-text">
         <span class="kick">YUV.AI · MOTION FILMS</span>
         <h1 class="hero-h">כל <span class="mk">הסרטים</span> שיצרתי עם Claude</h1>
-        <p class="hero-sub">מסרט של 15 שניות ועד סיור של 14 דקות. כל הגרפיקה נכתבה כקוד.</p>
+        <p class="hero-sub">מסרט של {SHORTEST} שניות ועד סיור של {LONGEST} דקות. כל הגרפיקה נכתבה כקוד.</p>
         <ul class="stats">
           <li><b>{N}</b><span>סרטים</span></li>
           <li><b>{TOTAL_MIN}</b><span>דקות</span></li>
@@ -568,4 +572,4 @@ PAGE = f'''<!doctype html>
 
 (ROOT / 'films.html').write_text(PAGE, encoding='utf-8')
 missing = [fid for fid in ORDER if fid not in HAS_FULL]
-print(f'films.html: {N} films, {TOTAL_MIN} min, {len(HAS_FULL)} with a full copy; waiting: {" ".join(missing) or "none"}')
+print(f'films.html: {N} films, {TOTAL_MIN} min, {len(HAS_FULL)} with a full copy; no full copy: {" ".join(missing) or "none"}; hidden (no loop yet): {" ".join(PENDING) or "none"}')
