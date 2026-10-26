@@ -5,6 +5,7 @@
  * What it measures, so the dashboards can answer "how many came, and how many actually read":
  *   page view · every section a reader reached (section_view) · scroll depth · engaged time (only while the tab is visible)
  *   · clicks and outbound links · every prompt copy (prompt_copy, with the prompt's id)
+ *   · every film opened on the films page (film_play, with the film's id and version)
  * No cookies, no fingerprinting, no third-party calls here (GA is loaded only where the site already uses it). */
 (function () {
   'use strict';
@@ -50,6 +51,7 @@
       click: function (e, el, href, out) { return { type: out ? 'outbound' : 'click', path: path, href: href || undefined, elementText: label(el) || undefined,
         x: +(e.pageX / Math.max(document.documentElement.scrollWidth, 1)).toFixed(4), y: +(e.pageY / Math.max(document.documentElement.scrollHeight, 1)).toFixed(4) }; },
       copy: function (id, text) { return { type: 'custom', path: path, elementText: text, meta: { name: 'prompt_copy', id: id, lang: lang } }; },
+      film: function (id, ver) { return { type: 'custom', path: path, elementText: id, meta: { name: 'film_play', id: id, version: ver, lang: lang } }; },
       exit: function () { return { type: 'scroll', path: path, scrollPct: maxScroll, durationMs: engagedMs(), meta: { name: 'read', lang: lang } }; },
       send: function (evs, beacon) {
         var body = JSON.stringify({ vid: vid, sid: sid(), consent: store('localStorage', 'yuv_consent') === 'granted', ua: navigator.userAgent, ref: document.referrer, utm: utm(), events: evs });
@@ -81,6 +83,7 @@
           data: { target: info, href: href || undefined, text: label(el) || undefined, outbound: out || undefined } };
       },
       copy: function (id, text) { return { eventType: 'prompt_copy', page: path, timestamp: now(), data: { id: id, label: text, lang: lang } }; },
+      film: function (id, ver) { return { eventType: 'film_play', page: path, timestamp: now(), data: { id: id, version: ver, lang: lang } }; },
       exit: function () { return { eventType: 'page_exit', page: path, timestamp: now(), timeOnPage: Math.round(engagedMs() / 1000), scrollDepth: maxScroll }; },
       send: function (evs, beacon) {
         var body = JSON.stringify({ visitorId: visitorId, sessionId: sessionId, events: evs, sessionUpdate: beacon ? { exitPage: path, isBounce: maxScroll < 25 } : undefined });
@@ -132,6 +135,12 @@
     if (el && el.matches('.cp, .pb-cp')) {
       var id = promptId(el); push(T.copy(id, label(el.closest('article, section') && el.closest('article, section').querySelector('h2, h3')) || id)); flush();
       gaEvent('prompt_copy', { prompt_id: id, page_language: lang });
+      return;
+    }
+    if (el && el.hasAttribute('data-film')) {
+      var fid = el.getAttribute('data-film'), ver = el.getAttribute('data-ver') || '';
+      push(T.film(fid, ver)); flush();
+      gaEvent('film_play', { film_id: fid, film_version: ver, page_language: lang });
       return;
     }
     var href = el && el.getAttribute('href'), out = !!href && /^https?:\/\//.test(href) && href.indexOf(location.host) < 0;
